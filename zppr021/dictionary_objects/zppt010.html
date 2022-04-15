@@ -1,0 +1,561 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=GB2312" />
+<title>Dictionary object- ZPPT010</title>
+<style type="text/css">
+  th{text-align:left}
+  .cell{
+     font-family:"Courier New", Courier, monospace;
+     color:#000;
+     font-size:12px;
+     background-color:#F2F4F7;
+  }
+  .cell td { border: thin solid #ccc; }
+</style>
+<style type="text/css">
+  .normal{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px }
+  .footer{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; text-align: center }
+  h2{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+  h3{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:14px; font-weight:800 }
+  .outerTable{
+   background-color:#E0E7ED;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-right-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+  .innerTable{
+   background-color:#F2F4F7;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-bottom-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+</style>
+</head>
+<body>
+  <table class="outerTable">
+    <tr>
+      <td><h2>Table: ZPPT010</h2>
+  <h3>Description: 物料工艺路线发布日志</h3></td>
+    </tr>
+    <tr>
+      <td><!--This is where our main table begins  -->
+<table class="innerTable">
+<tr>
+  <th>Row</th>
+  <th>Field name</th>
+  <th>Position</th>
+  <th>Key</th>
+  <th>Data element</th>
+  <th>Domain</th>
+  <th>Datatype</th>
+  <th>Length</th>
+  <th>Lowercase</th>
+  <th>Domain text</th>
+</tr>
+<tr class="cell">
+  <td> 1</td>
+  <td>MANDT</td>
+  <td>1</td>
+  <td>X</td>
+  <td>MANDT</td>
+  <td>MANDT</td>
+  <td>CLNT</td>
+  <td>3</td>
+  <td>&nbsp;</td>
+  <td>集团</td>
+</tr>
+<tr class="cell">
+  <td> 2</td>
+  <td>ZVERSION</td>
+  <td>2</td>
+  <td>X</td>
+  <td>ZVERSION</td>
+  <td>&nbsp;</td>
+  <td>NUMC</td>
+  <td>11</td>
+  <td>&nbsp;</td>
+  <td>发布版本号</td>
+</tr>
+<tr class="cell">
+  <td> 3</td>
+  <td>WERKS</td>
+  <td>3</td>
+  <td>X</td>
+  <td>WERKS_D</td>
+  <td>WERKS</td>
+  <td>CHAR</td>
+  <td>4</td>
+  <td>&nbsp;</td>
+  <td>工厂</td>
+</tr>
+<tr class="cell">
+  <td> 4</td>
+  <td>MATNR</td>
+  <td>4</td>
+  <td>X</td>
+  <td>MATNR</td>
+  <td>MATNR</td>
+  <td>CHAR</td>
+  <td>40</td>
+  <td>&nbsp;</td>
+  <td>物料编号</td>
+</tr>
+<tr class="cell">
+  <td> 5</td>
+  <td>PLNNR</td>
+  <td>5</td>
+  <td>X</td>
+  <td>PLNNR</td>
+  <td>PLNNR</td>
+  <td>CHAR</td>
+  <td>8</td>
+  <td>&nbsp;</td>
+  <td>任务清单组键值</td>
+</tr>
+<tr class="cell">
+  <td> 6</td>
+  <td>PLNAL</td>
+  <td>6</td>
+  <td>X</td>
+  <td>PLNAL</td>
+  <td>ALTNR</td>
+  <td>CHAR</td>
+  <td>2</td>
+  <td>&nbsp;</td>
+  <td>组计数器</td>
+</tr>
+<tr class="cell">
+  <td> 7</td>
+  <td>VORNR</td>
+  <td>7</td>
+  <td>X</td>
+  <td>VORNR</td>
+  <td>VORNR</td>
+  <td>CHAR</td>
+  <td>4</td>
+  <td>&nbsp;</td>
+  <td>操作/活动编号</td>
+</tr>
+<tr class="cell">
+  <td> 8</td>
+  <td>MAKTX</td>
+  <td>8</td>
+  <td>&nbsp;</td>
+  <td>MAKTX</td>
+  <td>TEXT40</td>
+  <td>CHAR</td>
+  <td>40</td>
+  <td>X</td>
+  <td>物料描述</td>
+</tr>
+<tr class="cell">
+  <td> 9</td>
+  <td>BISMT</td>
+  <td>9</td>
+  <td>&nbsp;</td>
+  <td>BISMT</td>
+  <td>BISMT</td>
+  <td>CHAR</td>
+  <td>40</td>
+  <td>&nbsp;</td>
+  <td>旧物料号</td>
+</tr>
+<tr class="cell">
+  <td>10</td>
+  <td>STEUS</td>
+  <td>10</td>
+  <td>&nbsp;</td>
+  <td>STEUS</td>
+  <td>STEUS</td>
+  <td>CHAR</td>
+  <td>4</td>
+  <td>&nbsp;</td>
+  <td>控制码</td>
+</tr>
+<tr class="cell">
+  <td>11</td>
+  <td>KTSCH</td>
+  <td>11</td>
+  <td>&nbsp;</td>
+  <td>KTSCH</td>
+  <td>KTSCH</td>
+  <td>CHAR</td>
+  <td>7</td>
+  <td>&nbsp;</td>
+  <td>标准文本码</td>
+</tr>
+<tr class="cell">
+  <td>12</td>
+  <td>LTXA1</td>
+  <td>12</td>
+  <td>&nbsp;</td>
+  <td>LTXA1</td>
+  <td>TEXT40</td>
+  <td>CHAR</td>
+  <td>40</td>
+  <td>X</td>
+  <td>工序短文本</td>
+</tr>
+<tr class="cell">
+  <td>13</td>
+  <td>ARBPL</td>
+  <td>13</td>
+  <td>&nbsp;</td>
+  <td>ARBPL</td>
+  <td>ARBPL</td>
+  <td>CHAR</td>
+  <td>8</td>
+  <td>&nbsp;</td>
+  <td>工作中心</td>
+</tr>
+<tr class="cell">
+  <td>14</td>
+  <td>VGW01</td>
+  <td>14</td>
+  <td>&nbsp;</td>
+  <td>VGWRT</td>
+  <td>VGWRT</td>
+  <td>QUAN</td>
+  <td>9</td>
+  <td>&nbsp;</td>
+  <td>标准值</td>
+</tr>
+<tr class="cell">
+  <td>15</td>
+  <td>VGE01</td>
+  <td>15</td>
+  <td>&nbsp;</td>
+  <td>VGWRTEH</td>
+  <td>MEINS</td>
+  <td>UNIT</td>
+  <td>3</td>
+  <td>X</td>
+  <td>标准值计量单位</td>
+</tr>
+<tr class="cell">
+  <td>16</td>
+  <td>VGW02</td>
+  <td>16</td>
+  <td>&nbsp;</td>
+  <td>VGWRT</td>
+  <td>VGWRT</td>
+  <td>QUAN</td>
+  <td>9</td>
+  <td>&nbsp;</td>
+  <td>标准值</td>
+</tr>
+<tr class="cell">
+  <td>17</td>
+  <td>VGE02</td>
+  <td>17</td>
+  <td>&nbsp;</td>
+  <td>VGWRTEH</td>
+  <td>MEINS</td>
+  <td>UNIT</td>
+  <td>3</td>
+  <td>X</td>
+  <td>标准值计量单位</td>
+</tr>
+<tr class="cell">
+  <td>18</td>
+  <td>ANDAT</td>
+  <td>18</td>
+  <td>&nbsp;</td>
+  <td>ANDAT</td>
+  <td>DATUM</td>
+  <td>DATS</td>
+  <td>8</td>
+  <td>&nbsp;</td>
+  <td>日期记录创建于</td>
+</tr>
+<tr class="cell">
+  <td>19</td>
+  <td>ANNAM</td>
+  <td>19</td>
+  <td>&nbsp;</td>
+  <td>ANNAM</td>
+  <td>USNAM</td>
+  <td>CHAR</td>
+  <td>12</td>
+  <td>&nbsp;</td>
+  <td>创建记录的用户</td>
+</tr>
+<tr class="cell">
+  <td>20</td>
+  <td>AEDAT</td>
+  <td>20</td>
+  <td>&nbsp;</td>
+  <td>AEDAT</td>
+  <td>DATUM</td>
+  <td>DATS</td>
+  <td>8</td>
+  <td>&nbsp;</td>
+  <td>最后更改的日期</td>
+</tr>
+<tr class="cell">
+  <td>21</td>
+  <td>AENAM</td>
+  <td>21</td>
+  <td>&nbsp;</td>
+  <td>AENAM</td>
+  <td>USNAM</td>
+  <td>CHAR</td>
+  <td>12</td>
+  <td>&nbsp;</td>
+  <td>更改对象用户的名称</td>
+</tr>
+<tr class="cell">
+  <td>22</td>
+  <td>ZDATE</td>
+  <td>22</td>
+  <td>&nbsp;</td>
+  <td>SYST_DATUM</td>
+  <td>SYDATS</td>
+  <td>DATS</td>
+  <td>8</td>
+  <td>&nbsp;</td>
+  <td>ABAP 系统字段：应用服务器的当前日期</td>
+</tr>
+<tr class="cell">
+  <td>23</td>
+  <td>TIME</td>
+  <td>23</td>
+  <td>&nbsp;</td>
+  <td>SYST_UZEIT</td>
+  <td>SYTIME</td>
+  <td>TIMS</td>
+  <td>6</td>
+  <td>&nbsp;</td>
+  <td>ABAP 系统字段：应用服务器的当前时间</td>
+</tr>
+<tr class="cell">
+  <td>24</td>
+  <td>ERNAM</td>
+  <td>24</td>
+  <td>&nbsp;</td>
+  <td>SYST_UNAME</td>
+  <td>SYCHAR12</td>
+  <td>CHAR</td>
+  <td>12</td>
+  <td>&nbsp;</td>
+  <td>ABAP 系统字段：当前用户的名称</td>
+</tr>
+<tr class="cell">
+  <td>25</td>
+  <td>SAPREL</td>
+  <td>25</td>
+  <td>&nbsp;</td>
+  <td>ZDESAPREV</td>
+  <td>ZDMSAPREV</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>SAP处理标识</td>
+</tr>
+<tr class="cell">
+  <td>26</td>
+  <td>MESGTYPE</td>
+  <td>26</td>
+  <td>&nbsp;</td>
+  <td>BAPI_MTYPE</td>
+  <td>SYCHAR01</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>消息类型: S 成功,E 错误,W 警告,I 信息,A 中断</td>
+</tr>
+<tr class="cell">
+  <td>27</td>
+  <td>RTNMSG</td>
+  <td>27</td>
+  <td>&nbsp;</td>
+  <td>BAPI_MSG</td>
+  <td>TEXT220</td>
+  <td>CHAR</td>
+  <td>220</td>
+  <td>&nbsp;</td>
+  <td>消息文本</td>
+</tr>
+      </table>
+     </td>
+   </tr>
+<br/>
+  <table class="outerTable">
+    <tr>
+      <td><h2>Fixed Domain Values </h2>
+    </tr>
+    <tr>
+      <td><!--This is where our main table begins  -->
+<table class="innerTable">
+<tr>
+  <th>Domain Name</th>
+  <th>Value Low</th>
+  <th>Value High</th>
+  <th>Text</th>
+</tr>
+<tr class="cell">
+  <td>ZDMSAPREV</td>
+  <td>W</td>
+  <td>&nbsp;</td>
+  <td>警告</td>
+</tr>
+<tr class="cell">
+  <td>ZDMSAPREV</td>
+  <td>I</td>
+  <td>&nbsp;</td>
+  <td>信息</td>
+</tr>
+<tr class="cell">
+  <td>ZDMSAPREV</td>
+  <td>S</td>
+  <td>&nbsp;</td>
+  <td>成功</td>
+</tr>
+<tr class="cell">
+  <td>ZDMSAPREV</td>
+  <td>A</td>
+  <td>&nbsp;</td>
+  <td>中断</td>
+</tr>
+<tr class="cell">
+  <td>ZDMSAPREV</td>
+  <td>X</td>
+  <td>&nbsp;</td>
+  <td>失败</td>
+</tr>
+<tr class="cell">
+  <td>ZDMSAPREV</td>
+  <td>E</td>
+  <td>&nbsp;</td>
+  <td>错误</td>
+</tr>
+<tr class="cell">
+  <td>ZDMSAPREV</td>
+  <td>F</td>
+  <td>&nbsp;</td>
+  <td>失败</td>
+</tr>
+<tr class="cell">
+  <td>ZDMSAPREV</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>无</td>
+</tr>
+<tr class="cell">
+  <td>ZDMSAPREV</td>
+  <td>W</td>
+  <td>&nbsp;</td>
+  <td>警告</td>
+</tr>
+<tr class="cell">
+  <td>ZDMSAPREV</td>
+  <td>I</td>
+  <td>&nbsp;</td>
+  <td>信息</td>
+</tr>
+<tr class="cell">
+  <td>ZDMSAPREV</td>
+  <td>S</td>
+  <td>&nbsp;</td>
+  <td>成功</td>
+</tr>
+<tr class="cell">
+  <td>ZDMSAPREV</td>
+  <td>A</td>
+  <td>&nbsp;</td>
+  <td>中断</td>
+</tr>
+<tr class="cell">
+  <td>ZDMSAPREV</td>
+  <td>X</td>
+  <td>&nbsp;</td>
+  <td>失败</td>
+</tr>
+<tr class="cell">
+  <td>ZDMSAPREV</td>
+  <td>E</td>
+  <td>&nbsp;</td>
+  <td>错误</td>
+</tr>
+<tr class="cell">
+  <td>ZDMSAPREV</td>
+  <td>F</td>
+  <td>&nbsp;</td>
+  <td>失败</td>
+</tr>
+<tr class="cell">
+  <td>ZDMSAPREV</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>无</td>
+</tr>
+<tr class="cell">
+  <td>ZDMSAPREV</td>
+  <td>W</td>
+  <td>&nbsp;</td>
+  <td>警告</td>
+</tr>
+<tr class="cell">
+  <td>ZDMSAPREV</td>
+  <td>I</td>
+  <td>&nbsp;</td>
+  <td>信息</td>
+</tr>
+<tr class="cell">
+  <td>ZDMSAPREV</td>
+  <td>S</td>
+  <td>&nbsp;</td>
+  <td>成功</td>
+</tr>
+<tr class="cell">
+  <td>ZDMSAPREV</td>
+  <td>A</td>
+  <td>&nbsp;</td>
+  <td>中断</td>
+</tr>
+<tr class="cell">
+  <td>ZDMSAPREV</td>
+  <td>X</td>
+  <td>&nbsp;</td>
+  <td>失败</td>
+</tr>
+<tr class="cell">
+  <td>ZDMSAPREV</td>
+  <td>E</td>
+  <td>&nbsp;</td>
+  <td>错误</td>
+</tr>
+<tr class="cell">
+  <td>ZDMSAPREV</td>
+  <td>F</td>
+  <td>&nbsp;</td>
+  <td>失败</td>
+</tr>
+<tr class="cell">
+  <td>ZDMSAPREV</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>无</td>
+</tr>
+      </table>
+     </td>
+   </tr>
+   <tr>
+<td class="footer">Extracted by Mass Download version 1.5.2 - E.G.Mellodew. 1998-2022. Sap Release 755</td>
+   </tr>
+</table>
+</body>
+</html>

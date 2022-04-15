@@ -1,0 +1,1357 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=GB2312" />
+<title>ZPPR029</title>
+<style type="text/css">
+.code{ font-family:"Courier New", Courier, monospace; color:#000; font-size:14px; background-color:#F2F4F7 }
+  .codeComment {font-family:"Courier New", Courier, monospace; color:#0000F0; font-size:14px; background-color:#F2F4F7 }
+  .normalBold{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; font-weight:800 }
+  .normalBoldLarge{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+</style>
+<style type="text/css">
+  .normal{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px }
+  .footer{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; text-align: center }
+  h2{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+  h3{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:14px; font-weight:800 }
+  .outerTable{
+   background-color:#E0E7ED;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-right-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+  .innerTable{
+   background-color:#F2F4F7;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-bottom-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+</style>
+</head>
+<body>
+<table class="outerTable">
+  <tr class="normalBoldLarge">
+     <td><h2>Code listing for: ZPPR029</h2>
+<h3> Description: BOM变更历史记录</h3></td>
+   </tr>
+  <tr>
+     <td>
+     <table class="innerTable">
+       <tr>
+          <td>
+   <div class="codeComment">
+************************************************<br />
+<br />
+*&nbsp;&nbsp;PROGRAM&nbsp;ZYY_CHBOM&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*<br />
+*&nbsp;&nbsp;CREATED&nbsp;BY&nbsp;yuanyong,&nbsp;2007.11.31&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*<br />
+*&nbsp;&nbsp;LAST&nbsp;CHANGE&nbsp;BY&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*<br />
+*&nbsp;&nbsp;PURPOSE:按照物料、工厂、时间的选择条件，通过*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;系统内修改凭证的查询和对比，判断BOM&nbsp;*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;的更改是否使用了工程更改进行管理；并*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;且显示更改的内容。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*<br />
+************************************************<br />
+<br />
+   </div>
+   <div class="code">
+REPORT  ZPPR029                       .<br />
+<br />
+TABLES : mast , cdhdr ,makt , mara , cdpos , stas , stpo , stko.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*************ALV&nbsp;报表定义<br />
+   </div>
+   <div class="code">
+TYPE-POOLS: slis.<br />
+DATA:   gd_fieldcat TYPE slis_t_fieldcat_alv.<br />
+DATA:   gd_repid LIKE sy-repid.<br />
+DATA:   sla TYPE slis_layout_alv.<br />
+DATA : allfields TYPE slis_t_fieldcat_alv.<br />
+DATA : wa_allfields TYPE LINE OF slis_t_fieldcat_alv.<br />
+   </div>
+   <div class="codeComment">
+**************ALV&nbsp;报表定义<br />
+<br />
+**************&nbsp;内表及字段定义<br />
+   </div>
+   <div class="code">
+DATA:key1 LIKE cdhdr-objectid.<br />
+DATA:keystpo LIKE cdpos-tabkey.<br />
+DATA:keystas LIKE cdpos-tabkey.<br />
+DATA:key2 LIKE stpo-stlkn.<br />
+DATA:key3 LIKE stpo-stlkn.<br />
+DATA:key6 LIKE cdhdr-objectid.<br />
+DATA:key11 LIKE stas-stlnr.<br />
+DATA:key12 LIKE stpo-stlnr.<br />
+DATA:k_stlal LIKE stas-stlal.<br />
+<br />
+DATA : itab_x TYPE STANDARD TABLE OF stpox WITH HEADER LINE.<br />
+DATA : itab_tmp LIKE TABLE OF itab_x WITH HEADER LINE.<br />
+<br />
+CONSTANTS:<br />
+m TYPE c VALUE 'M'.<br />
+<br />
+DATA: BEGIN OF itab OCCURS 0,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;matnr&nbsp;LIKE&nbsp;mast-matnr,&nbsp;"物料代码<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;werks&nbsp;LIKE&nbsp;mast-werks,&nbsp;"工厂<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stlan&nbsp;LIKE&nbsp;mast-stlan,&nbsp;"BOM用途<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stlal&nbsp;LIKE&nbsp;mast-stlal,&nbsp;"可选的BOM<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;andat&nbsp;LIKE&nbsp;mast-andat,&nbsp;"选择时间段<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mandt&nbsp;LIKE&nbsp;mast-mandt,&nbsp;"集团<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stlnr&nbsp;LIKE&nbsp;mast-stlnr,&nbsp;"BOM<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;END&nbsp;OF&nbsp;itab.<br />
+DATA: itab2 LIKE TABLE OF cdhdr WITH HEADER LINE.<br />
+DATA: cdpos2 LIKE TABLE OF cdpos WITH HEADER LINE.<br />
+<br />
+TYPES: BEGIN OF ty_itab,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fname&nbsp;LIKE&nbsp;cdpos-fname&nbsp;,&nbsp;"&nbsp;change&nbsp;object<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;posnr&nbsp;LIKE&nbsp;stpo-posnr&nbsp;,&nbsp;"行项目号<br />
+   </div>
+   <div class="codeComment">
+*************add&nbsp;by&nbsp;litao&nbsp;20140916*********<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;matnr&nbsp;LIKE&nbsp;mara-matnr,&nbsp;"上层物料号<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;matnr_s&nbsp;LIKE&nbsp;mara-matnr,&nbsp;"散件物料号<br />
+   </div>
+   <div class="codeComment">
+*************add&nbsp;by&nbsp;litao&nbsp;20140916*********<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mtart&nbsp;LIKE&nbsp;mara-mtart,&nbsp;"整机代码<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;chngind&nbsp;LIKE&nbsp;cdpos-chngind,&nbsp;"更改类型<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tabkey&nbsp;LIKE&nbsp;cdpos-tabkey,&nbsp;"表键<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;changenr&nbsp;LIKE&nbsp;cdhdr-changenr,&nbsp;"更改凭证<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;objectid&nbsp;LIKE&nbsp;cdhdr-objectid,&nbsp;"对象值;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;idnrk&nbsp;LIKE&nbsp;stpo-idnrk,&nbsp;"BOM组件<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;datuv&nbsp;LIKE&nbsp;stpo-datuv,&nbsp;"更改有效期<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;udate&nbsp;LIKE&nbsp;cdhdr-udate,&nbsp;"更改日期<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;utime&nbsp;LIKE&nbsp;cdhdr-utime,&nbsp;"更改时间<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;aennr&nbsp;LIKE&nbsp;stpo-aennr,&nbsp;"工程更改号<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;username&nbsp;LIKE&nbsp;cdhdr-username,&nbsp;"更改人<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stlnr&nbsp;LIKE&nbsp;stpo-stlnr,&nbsp;"BOM<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stlkn&nbsp;LIKE&nbsp;stpo-stlkn,&nbsp;"BOM项目节点<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stlal&nbsp;LIKE&nbsp;stas-stlal,&nbsp;"可选的BOM<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;value_new&nbsp;LIKE&nbsp;cdpos-value_new,&nbsp;"更改后的值<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;value_old&nbsp;LIKE&nbsp;cdpos-value_old,&nbsp;"更改前的值<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ch_flag(10)&nbsp;TYPE&nbsp;c,&nbsp;"中文更改标识<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ch_obj(20)&nbsp;TYPE&nbsp;c,&nbsp;"中文更改对象<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;menge&nbsp;LIKE&nbsp;stpo-menge&nbsp;,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;END&nbsp;OF&nbsp;ty_itab.<br />
+<br />
+DATA: BEGIN OF itab_bom OCCURS 0,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xtlnr&nbsp;LIKE&nbsp;stpox-xtlnr&nbsp;,&nbsp;"BOM编号(下一级别)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stufe&nbsp;LIKE&nbsp;stpox-stufe&nbsp;,&nbsp;"层次（在多层&nbsp;BOM&nbsp;展开中）<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;index&nbsp;LIKE&nbsp;sy-index,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;aedat&nbsp;LIKE&nbsp;stpo-aedat,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;aenam&nbsp;LIKE&nbsp;stpo-aenam,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lkenz&nbsp;LIKE&nbsp;stas-lkenz&nbsp;,&nbsp;"删除标识&nbsp;X<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tabname&nbsp;LIKE&nbsp;cdpos-tabname&nbsp;,&nbsp;"cdpos对应表名<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vgknt&nbsp;LIKE&nbsp;stpo-vgknt&nbsp;,&nbsp;"前一节点<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fname&nbsp;LIKE&nbsp;cdpos-fname&nbsp;,&nbsp;"&nbsp;change&nbsp;object<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;posnr&nbsp;LIKE&nbsp;stpo-posnr&nbsp;,&nbsp;"行项目号<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mtart&nbsp;LIKE&nbsp;mara-mtart,&nbsp;"整机代码<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;maktx&nbsp;LIKE&nbsp;makt-maktx,&nbsp;"描述<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;matnr&nbsp;LIKE&nbsp;mast-matnr,&nbsp;"物料代码<br />
+   </div>
+   <div class="codeComment">
+*************add&nbsp;by&nbsp;litao&nbsp;20140916*********<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;matnr_s&nbsp;LIKE&nbsp;mast-matnr,&nbsp;"子件物料代码<br />
+   </div>
+   <div class="codeComment">
+*************add&nbsp;by&nbsp;litao&nbsp;20140916*********<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;werks&nbsp;LIKE&nbsp;mast-werks,&nbsp;"工厂<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stlan&nbsp;LIKE&nbsp;mast-stlan,&nbsp;"BOM用途<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stlal&nbsp;LIKE&nbsp;mast-stlal,&nbsp;"可选的BOM<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;andat&nbsp;LIKE&nbsp;mast-andat,&nbsp;"选择时间段<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mandt&nbsp;LIKE&nbsp;mast-mandt,&nbsp;"集团<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stlnr&nbsp;LIKE&nbsp;mast-stlnr,&nbsp;"BOM<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;aennr&nbsp;LIKE&nbsp;stpo-aennr,&nbsp;"工程更改号<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;annam&nbsp;LIKE&nbsp;stpo-annam,&nbsp;"创建者<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;chngind&nbsp;LIKE&nbsp;cdpos-chngind,&nbsp;"更改类型<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tabkey&nbsp;LIKE&nbsp;cdpos-tabkey,&nbsp;"表键<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;changenr&nbsp;LIKE&nbsp;cdhdr-changenr,&nbsp;"更改凭证<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;objectid&nbsp;LIKE&nbsp;cdhdr-objectid,&nbsp;"对象值<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;datuv&nbsp;LIKE&nbsp;stpo-datuv,&nbsp;"更改有效期<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;udate&nbsp;LIKE&nbsp;cdhdr-udate,&nbsp;"更改日期<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;utime&nbsp;LIKE&nbsp;cdhdr-utime,&nbsp;"更改时间<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;username&nbsp;LIKE&nbsp;cdhdr-username,&nbsp;"更改人<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stlkn&nbsp;LIKE&nbsp;stpo-stlkn,&nbsp;"BOM项目节点<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;idnrk&nbsp;LIKE&nbsp;stpo-idnrk,&nbsp;"BOM组件<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;menge&nbsp;LIKE&nbsp;stpo-menge,&nbsp;"BOM组件数量<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;value_new&nbsp;LIKE&nbsp;cdpos-value_new,&nbsp;"更改后的值<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;value_old&nbsp;LIKE&nbsp;cdpos-value_old,&nbsp;"更改前的值<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sortf&nbsp;LIKE&nbsp;stpo-sortf,&nbsp;"排序字符串<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;potx1&nbsp;LIKE&nbsp;stpo-potx1,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"项目文本1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;potx2&nbsp;LIKE&nbsp;stpo-potx2,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"项目文本2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;del_flag&nbsp;TYPE&nbsp;c,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mod_flag&nbsp;TYPE&nbsp;c,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;add_flag&nbsp;TYPE&nbsp;c,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;all_flag&nbsp;TYPE&nbsp;c,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ch_flag(10)&nbsp;TYPE&nbsp;c,&nbsp;"中文更改标识<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ch_obj(20)&nbsp;TYPE&nbsp;c,&nbsp;"中文更改对象<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;del_tab&nbsp;TYPE&nbsp;TABLE&nbsp;OF&nbsp;ty_itab,&nbsp;"测试内表嵌套<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;add_tab&nbsp;TYPE&nbsp;TABLE&nbsp;OF&nbsp;ty_itab,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mod_tab&nbsp;TYPE&nbsp;TABLE&nbsp;OF&nbsp;ty_itab,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;all_tab&nbsp;TYPE&nbsp;TABLE&nbsp;OF&nbsp;ty_itab,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;END&nbsp;OF&nbsp;itab_bom.<br />
+   </div>
+   <div class="codeComment">
+*用itab_bom6代替itab_bom存储接下来的数据，itab_bom为最终<br />
+   </div>
+   <div class="code">
+DATA: itab_bom2 LIKE TABLE OF itab_bom WITH HEADER LINE.<br />
+DATA: itab_bom3 LIKE TABLE OF itab_bom WITH HEADER LINE.<br />
+DATA: itab_bom4 LIKE TABLE OF itab_bom WITH HEADER LINE.<br />
+DATA: itab_bom5 LIKE TABLE OF itab_bom WITH HEADER LINE.<br />
+DATA: itab_bom6 LIKE TABLE OF itab_bom WITH HEADER LINE.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;7&nbsp;and&nbsp;8&nbsp;use&nbsp;to&nbsp;record&nbsp;modify<br />
+   </div>
+   <div class="code">
+DATA: itab_bom7 LIKE TABLE OF itab_bom WITH HEADER LINE.<br />
+DATA: itab_bom8 LIKE TABLE OF itab_bom WITH HEADER LINE.<br />
+DATA: itab_bom9 LIKE TABLE OF itab_bom WITH HEADER LINE.<br />
+DATA: itab_del LIKE TABLE OF itab_bom WITH HEADER LINE.<br />
+DATA: itab_old LIKE TABLE OF itab_bom WITH HEADER LINE.<br />
+DATA: itab_new LIKE TABLE OF itab_bom WITH HEADER LINE.<br />
+<br />
+<br />
+DATA: old_tab TYPE STANDARD TABLE OF ty_itab WITH HEADER LINE ,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;new_tab&nbsp;TYPE&nbsp;STANDARD&nbsp;TABLE&nbsp;OF&nbsp;ty_itab&nbsp;WITH&nbsp;HEADER&nbsp;LINE&nbsp;,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;del_tab&nbsp;TYPE&nbsp;STANDARD&nbsp;TABLE&nbsp;OF&nbsp;ty_itab&nbsp;WITH&nbsp;HEADER&nbsp;LINE&nbsp;,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;add_tab&nbsp;TYPE&nbsp;STANDARD&nbsp;TABLE&nbsp;OF&nbsp;ty_itab&nbsp;WITH&nbsp;HEADER&nbsp;LINE&nbsp;,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mod_tab&nbsp;TYPE&nbsp;STANDARD&nbsp;TABLE&nbsp;OF&nbsp;ty_itab&nbsp;WITH&nbsp;HEADER&nbsp;LINE&nbsp;,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;all_tab&nbsp;TYPE&nbsp;STANDARD&nbsp;TABLE&nbsp;OF&nbsp;ty_itab&nbsp;WITH&nbsp;HEADER&nbsp;LINE&nbsp;,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;del_tab2&nbsp;TYPE&nbsp;STANDARD&nbsp;TABLE&nbsp;OF&nbsp;ty_itab&nbsp;WITH&nbsp;HEADER&nbsp;LINE&nbsp;,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;add_tab2&nbsp;TYPE&nbsp;STANDARD&nbsp;TABLE&nbsp;OF&nbsp;ty_itab&nbsp;WITH&nbsp;HEADER&nbsp;LINE&nbsp;,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mod_tab2&nbsp;TYPE&nbsp;STANDARD&nbsp;TABLE&nbsp;OF&nbsp;ty_itab&nbsp;WITH&nbsp;HEADER&nbsp;LINE&nbsp;,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_mod&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;STANDARD&nbsp;TABLE&nbsp;OF&nbsp;ty_itab&nbsp;WITH&nbsp;HEADER&nbsp;LINE&nbsp;,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;all_tab2&nbsp;TYPE&nbsp;STANDARD&nbsp;TABLE&nbsp;OF&nbsp;ty_itab&nbsp;WITH&nbsp;HEADER&nbsp;LINE&nbsp;.<br />
+<br />
+   </div>
+   <div class="codeComment">
+************&nbsp;定义查询界面<br />
+   </div>
+   <div class="code">
+SELECT-OPTIONS:<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;s_werks&nbsp;FOR&nbsp;mast-werks&nbsp;DEFAULT&nbsp;'1000'&nbsp;NO-EXTENSION&nbsp;NO&nbsp;INTERVALS,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;s_matnr&nbsp;FOR&nbsp;mast-matnr&nbsp;,&nbsp;"选择物料<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;s_andat&nbsp;FOR&nbsp;mast-andat&nbsp;&nbsp;&nbsp;,&nbsp;"日期<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;s_stlan&nbsp;FOR&nbsp;mast-stlan&nbsp;NO-EXTENSION&nbsp;NO&nbsp;INTERVALS&nbsp;,&nbsp;"BOM用途<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;s_stlal&nbsp;FOR&nbsp;mast-stlal&nbsp;NO-EXTENSION&nbsp;NO&nbsp;INTERVALS&nbsp;.&nbsp;"可选的BOM<br />
+   </div>
+   <div class="codeComment">
+*SELECTION-SCREEN&nbsp;SKIP&nbsp;1.<br />
+   </div>
+   <div class="code">
+PARAMETERS : check1 AS CHECKBOX.<br />
+<br />
+AT SELECTION-SCREEN.<br />
+&nbsp;&nbsp;IF&nbsp;sy-ucomm&nbsp;=&nbsp;'ONLI'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;check1&nbsp;=&nbsp;'X'&nbsp;AND&nbsp;s_stlal[]&nbsp;IS&nbsp;INITIAL&nbsp;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;'查询多层BOM的情况下，请选择可选BOM'&nbsp;TYPE&nbsp;'E'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ELSEIF&nbsp;s_matnr[]&nbsp;IS&nbsp;INITIAL&nbsp;AND&nbsp;s_andat[]&nbsp;IS&nbsp;INITIAL&nbsp;AND&nbsp;s_werks[]<br />
+IS INITIAL<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;s_stlan[]&nbsp;IS&nbsp;INITIAL&nbsp;AND&nbsp;s_stlal[]&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;'将查询出系统中所有的BOM'&nbsp;TYPE&nbsp;'E'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ELSEIF&nbsp;s_matnr[]&nbsp;IS&nbsp;INITIAL&nbsp;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;'请输入物料'&nbsp;TYPE&nbsp;'E'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+<br />
+START-OF-SELECTION.<br />
+&nbsp;&nbsp;IF&nbsp;check1&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;*&nbsp;FROM&nbsp;mast&nbsp;WHERE&nbsp;matnr&nbsp;IN&nbsp;s_matnr&nbsp;AND&nbsp;stlal&nbsp;IN&nbsp;s_stlal&nbsp;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDSELECT.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;EQ&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;select_bom_multi.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ELSE&nbsp;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;'输入的可选BOM不存在...'&nbsp;TYPE&nbsp;'E'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;ELSE&nbsp;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;select_bom_single.<br />
+&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;PERFORM&nbsp;getdata.<br />
+&nbsp;&nbsp;PERFORM&nbsp;fixdata.<br />
+&nbsp;&nbsp;gd_repid&nbsp;=&nbsp;sy-repid.<br />
+&nbsp;&nbsp;PERFORM&nbsp;fieldcat_init&nbsp;USING&nbsp;gd_fieldcat[].<br />
+&nbsp;&nbsp;PERFORM&nbsp;output_data_alv.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;select_bom<br />
+*&---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM select_bom_multi.<br />
+<br />
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;s_matnr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;REFRESH&nbsp;itab_tmp.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'CS_BOM_EXPL_MAT_V2'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ftrel&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'X'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;capid&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'PP01'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;datuv&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;sy-datum<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;emeng&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;1<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mehrs&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'X'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ehndl&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'1'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stlan&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;s_stlan-low<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stlal&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;s_stlal-low<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mtnrv&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;s_matnr-low<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;werks&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;s_werks-low<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TABLES<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stb&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;itab_x<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;alt_not_found&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;call_invalid&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;material_not_found&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;3<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;missing_authorization&nbsp;=&nbsp;4<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;no_bom_found&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;5<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;no_plant_data&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;6<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;no_suitable_bom_found&nbsp;=&nbsp;7<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;conversion_error&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;8<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTHERS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;9.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;LINES&nbsp;OF&nbsp;itab_tmp&nbsp;TO&nbsp;itab_x.<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+   </div>
+   <div class="codeComment">
+*yuanyong&nbsp;2008.05.24&nbsp;删除限制时间项目，该限制是限制创建时间，<br />
+*要更改为修改时间。<br />
+*&nbsp;&nbsp;DELETE&nbsp;itab_x&nbsp;WHERE&nbsp;datuv&nbsp;NOT&nbsp;IN&nbsp;s_andat.<br />
+*删除结束<br />
+<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;itab_x.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MOVE-CORRESPONDING&nbsp;itab_x&nbsp;TO&nbsp;itab_bom.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;itab_bom-matnr&nbsp;=&nbsp;itab_x-idnrk&nbsp;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;itab_bom-maktx&nbsp;=&nbsp;itab_x-ojtxp&nbsp;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;itab_bom.<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;itab_x.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;WRITE&nbsp;:&nbsp;/&nbsp;itab_x-stufe&nbsp;,&nbsp;itab_x-wegxx&nbsp;,&nbsp;itab_x-bmtyp&nbsp;,<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;itab_x-ttidx&nbsp;,&nbsp;itab_x-vwegx&nbsp;,&nbsp;itab_x-xtlnr&nbsp;,&nbsp;itab_x-aenam<br />
+*&nbsp;&nbsp;,&nbsp;itab_x-idnrk.<br />
+*&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+*&nbsp;&nbsp;DELETE&nbsp;ADJACENT&nbsp;DUPLICATES&nbsp;FROM&nbsp;itab_bom&nbsp;COMPARING&nbsp;stufe&nbsp;mtart&nbsp;matnr.<br />
+<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;itab_bom3[]&nbsp;=&nbsp;itab_bom[].<br />
+&nbsp;&nbsp;SORT&nbsp;itab_bom3&nbsp;ASCENDING&nbsp;BY&nbsp;stlnr.<br />
+&nbsp;&nbsp;DELETE&nbsp;ADJACENT&nbsp;DUPLICATES&nbsp;FROM&nbsp;itab_bom3&nbsp;COMPARING&nbsp;stlnr.<br />
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;itab_bom3.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CONCATENATE&nbsp;sy-mandt&nbsp;m&nbsp;itab_bom3-stlnr&nbsp;INTO&nbsp;key1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;*&nbsp;INTO&nbsp;CORRESPONDING&nbsp;FIELDS&nbsp;OF&nbsp;itab_bom2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;cdhdr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;objectclas&nbsp;=&nbsp;'STUE'AND&nbsp;objectid&nbsp;=&nbsp;key1&nbsp;AND&nbsp;tcode&nbsp;&lt;&gt;&nbsp;'CS01'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;itab_bom2.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDSELECT.<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*添加时间限制，该限制为限制修改时间，但可能影响系统运行速度，<br />
+*如果系统运行速度影响过大，可恢复前面限制。<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;DELETE&nbsp;itab_bom2&nbsp;WHERE&nbsp;udate&nbsp;NOT&nbsp;IN&nbsp;s_andat.<br />
+   </div>
+   <div class="codeComment">
+*添加结束<br />
+<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;DELETE&nbsp;itab_bom2&nbsp;WHERE&nbsp;changenr&nbsp;IS&nbsp;INITIAL&nbsp;.<br />
+&nbsp;&nbsp;IF&nbsp;itab_bom2[]&nbsp;IS&nbsp;INITIAL&nbsp;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;'多层BOM没有更改项'&nbsp;TYPE&nbsp;'E'.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+ENDFORM.                    "select_bom_multi<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;select_bom_single<br />
+*&---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM select_bom_single.<br />
+<br />
+&nbsp;&nbsp;SELECT&nbsp;*&nbsp;INTO&nbsp;CORRESPONDING&nbsp;FIELDS&nbsp;OF&nbsp;itab<br />
+&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;mast&nbsp;WHERE&nbsp;matnr&nbsp;IN&nbsp;s_matnr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;werks&nbsp;IN&nbsp;s_werks&nbsp;AND&nbsp;stlan&nbsp;IN&nbsp;s_stlan&nbsp;AND&nbsp;stlal&nbsp;IN&nbsp;s_stlal.<br />
+   </div>
+   <div class="codeComment">
+*WHERE&nbsp;matnr&nbsp;IN&nbsp;s_matnr.<br />
+<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;CONCATENATE&nbsp;itab-mandt&nbsp;m&nbsp;itab-stlnr&nbsp;INTO&nbsp;key1.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;*<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;cdhdr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;APPENDING&nbsp;CORRESPONDING&nbsp;FIELDS&nbsp;OF&nbsp;TABLE&nbsp;itab_bom2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;objectclas&nbsp;=&nbsp;'STUE'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;objectid&nbsp;=&nbsp;key1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;udate&nbsp;IN&nbsp;s_andat&nbsp;AND&nbsp;tcode&nbsp;&lt;&gt;&nbsp;'CS01'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;itab.<br />
+&nbsp;&nbsp;ENDSELECT.&nbsp;"测试循环<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;itab[]&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;'没有数据.'&nbsp;TYPE&nbsp;'E'.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+   </div>
+   <div class="codeComment">
+****&nbsp;输入itab_bom的值<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;SELECT&nbsp;&nbsp;*<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;CORRESPONDING&nbsp;FIELDS&nbsp;OF&nbsp;TABLE&nbsp;itab_bom<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;mast<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LEFT&nbsp;JOIN&nbsp;makt&nbsp;ON&nbsp;(&nbsp;mast~matnr&nbsp;=&nbsp;makt~matnr&nbsp;and&nbsp;spras&nbsp;=&nbsp;sy-langu&nbsp;)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LEFT&nbsp;JOIN&nbsp;mara&nbsp;ON&nbsp;(&nbsp;mast~matnr&nbsp;=&nbsp;mara~matnr&nbsp;)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;mast~matnr&nbsp;IN&nbsp;s_matnr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;mast~werks&nbsp;IN&nbsp;s_werks&nbsp;AND&nbsp;mast~stlan&nbsp;IN&nbsp;s_stlan&nbsp;AND<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mast~stlal&nbsp;IN&nbsp;s_stlal.<br />
+   </div>
+   <div class="codeComment">
+****&nbsp;输入完成<br />
+<br />
+*&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;itab_bom2.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;WRITE&nbsp;:&nbsp;/&nbsp;itab_bom2-matnr&nbsp;,&nbsp;itab_bom2-werks&nbsp;,&nbsp;itab_bom2-stlan&nbsp;,<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;itab_bom2-stlnr&nbsp;,itab_bom2-CHANGENR&nbsp;,&nbsp;itab_bom2-OBJECTID&nbsp;.<br />
+*&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+   </div>
+   <div class="code">
+ENDFORM.                    "select_bom_single<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;getdata<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM getdata .<br />
+<br />
+   </div>
+   <div class="codeComment">
+*通过输入值，取出数据到itab_bom6中<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;SORT&nbsp;itab_bom2&nbsp;ASCENDING&nbsp;BY&nbsp;chngind.<br />
+   </div>
+   <div class="codeComment">
+*test&nbsp;add&nbsp;and&nbsp;modify<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;itab_bom2.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MOVE-CORRESPONDING&nbsp;itab_bom2&nbsp;TO&nbsp;itab_bom6.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;*&nbsp;FROM&nbsp;cdpos<br />
+&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;CORRESPONDING&nbsp;FIELDS&nbsp;OF&nbsp;itab_bom6<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;objectclas&nbsp;=&nbsp;'STUE'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;changenr&nbsp;=&nbsp;itab_bom2-changenr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;objectid&nbsp;=&nbsp;itab_bom2-objectid.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;itab_bom6.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDSELECT.<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+&nbsp;&nbsp;DATA:it_stas&nbsp;LIKE&nbsp;TABLE&nbsp;OF&nbsp;stas&nbsp;WITH&nbsp;HEADER&nbsp;LINE.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;it_stpo&nbsp;like&nbsp;table&nbsp;of&nbsp;stpo&nbsp;with&nbsp;header&nbsp;line&nbsp;.<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;DATA:BEGIN&nbsp;OF&nbsp;it_stpo&nbsp;OCCURS&nbsp;0,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vgknt&nbsp;TYPE&nbsp;stpo-vgknt,mtart&nbsp;TYPE&nbsp;mara-mtart,&nbsp;posnr&nbsp;TYPE&nbsp;stpo-posnr,&nbsp;maktx&nbsp;TYPE&nbsp;makt-maktx,&nbsp;werks&nbsp;TYPE&nbsp;mast-werks,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stlnr&nbsp;TYPE&nbsp;stpo-stlnr,stlan&nbsp;TYPE&nbsp;mast-stlan,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stlkn&nbsp;TYPE&nbsp;stpo-stlkn,idnrk&nbsp;TYPE&nbsp;stpo-idnrk,&nbsp;menge&nbsp;TYPE&nbsp;stpo-menge,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sortf&nbsp;TYPE&nbsp;stpo-sortf,potx1&nbsp;TYPE&nbsp;stpo-potx1,&nbsp;potx2&nbsp;TYPE&nbsp;stpo-potx2,&nbsp;datuv&nbsp;TYPE&nbsp;stpo-datuv,&nbsp;aennr&nbsp;TYPE&nbsp;stpo-aennr,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;END&nbsp;OF&nbsp;it_stpo.<br />
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;itab_bom6.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;DATA:&nbsp;key12&nbsp;TYPE&nbsp;stas-stasz.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;key11&nbsp;=&nbsp;itab_bom6-objectid+4(8).<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;itab_bom6-tabname&nbsp;=&nbsp;'STPO'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;key2&nbsp;=&nbsp;itab_bom6-tabkey+12(8).<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ELSEIF&nbsp;itab_bom6-tabname&nbsp;=&nbsp;'STAS'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;key2&nbsp;=&nbsp;itab_bom6-tabkey+14(8).<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;k_stlal&nbsp;=&nbsp;itab_bom6-tabkey+12(2)&nbsp;.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CONCATENATE&nbsp;'*'&nbsp;itab_bom6-tabkey+12(2)&nbsp;INTO&nbsp;k_stlal.<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;key12&nbsp;=&nbsp;itab_bom6-tabkey+22(8).<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;it_stas&nbsp;WITH&nbsp;KEY&nbsp;stlnr&nbsp;=&nbsp;key11&nbsp;&nbsp;stlal&nbsp;=&nbsp;k_stlal&nbsp;stlkn&nbsp;=&nbsp;key2&nbsp;BINARY&nbsp;SEARCH.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MOVE-CORRESPONDING&nbsp;it_stas&nbsp;TO&nbsp;itab_bom6.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ELSE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;&nbsp;*<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;CORRESPONDING&nbsp;FIELDS&nbsp;OF&nbsp;itab_bom6<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;CORRESPONDING&nbsp;FIELDS&nbsp;OF&nbsp;it_stas<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;stas<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;stlkn&nbsp;=&nbsp;key2&nbsp;AND&nbsp;stlnr&nbsp;=&nbsp;key11&nbsp;AND&nbsp;stasz&nbsp;=&nbsp;key12<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;stlal&nbsp;=&nbsp;k_stlal&nbsp;.<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stlty&nbsp;IN&nbsp;('D','E','K','M','S','T','P')&nbsp;AND<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stlty&nbsp;=&nbsp;'M'&nbsp;and<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stlnr&nbsp;=&nbsp;key11&nbsp;AND&nbsp;stlal&nbsp;=&nbsp;k_stlal&nbsp;AND&nbsp;stlkn&nbsp;=&nbsp;key2.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDSELECT.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MOVE-CORRESPONDING&nbsp;it_stas&nbsp;TO&nbsp;itab_bom6.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;it_stas.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SORT&nbsp;it_stas&nbsp;BY&nbsp;stlnr&nbsp;stlal&nbsp;stlkn.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;it_stpo&nbsp;WITH&nbsp;KEY&nbsp;stlnr&nbsp;=&nbsp;key11&nbsp;stlkn&nbsp;=&nbsp;key2&nbsp;BINARY&nbsp;SEARCH.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MOVE-CORRESPONDING&nbsp;it_stpo&nbsp;TO&nbsp;itab_bom6.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;itab_bom6-chngind&nbsp;=&nbsp;'I'&nbsp;AND&nbsp;itab_bom6-vgknt&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MOVE&nbsp;itab_bom6-menge&nbsp;TO&nbsp;itab_bom6-value_new&nbsp;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CONDENSE&nbsp;itab_bom6-value_new&nbsp;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CONCATENATE&nbsp;'组件：'&nbsp;itab_bom6-idnrk&nbsp;&nbsp;'数量：'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;itab_bom6-value_new&nbsp;INTO&nbsp;itab_bom6-value_new.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MODIFY&nbsp;itab_bom6.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ELSE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;vgknt&nbsp;mtart&nbsp;posnr&nbsp;maktx&nbsp;werks&nbsp;stlan&nbsp;stpo~stlnr&nbsp;stlkn&nbsp;idnrk&nbsp;menge<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sortf&nbsp;potx1&nbsp;potx2&nbsp;datuv&nbsp;aennr<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;CORRESPONDING&nbsp;FIELDS&nbsp;OF&nbsp;itab_bom6<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;CORRESPONDING&nbsp;FIELDS&nbsp;OF&nbsp;it_stpo<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;stpo<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INNER&nbsp;JOIN&nbsp;makt&nbsp;ON&nbsp;(&nbsp;makt~matnr&nbsp;=&nbsp;stpo~idnrk&nbsp;and&nbsp;spras&nbsp;=&nbsp;sy-langu&nbsp;)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INNER&nbsp;JOIN&nbsp;mara&nbsp;ON&nbsp;(&nbsp;mara~matnr&nbsp;=&nbsp;stpo~idnrk&nbsp;)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INNER&nbsp;JOIN&nbsp;mast&nbsp;ON&nbsp;(&nbsp;mast~stlnr&nbsp;=&nbsp;stpo~stlnr&nbsp;)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stpo~stlty&nbsp;IN&nbsp;('D','E','K','M','S','T','P')&nbsp;AND<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stlty&nbsp;=&nbsp;'M'&nbsp;and<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stpo~stlnr&nbsp;=&nbsp;key11&nbsp;AND&nbsp;stpo~stlkn&nbsp;=&nbsp;key2.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDSELECT.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MOVE-CORRESPONDING&nbsp;it_stpo&nbsp;TO&nbsp;itab_bom6.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;it_stpo.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SORT&nbsp;it_stpo&nbsp;BY&nbsp;stlnr&nbsp;stlkn.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;itab_bom6-chngind&nbsp;=&nbsp;'I'&nbsp;AND&nbsp;itab_bom6-vgknt&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MOVE&nbsp;itab_bom6-menge&nbsp;TO&nbsp;itab_bom6-value_new&nbsp;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CONDENSE&nbsp;itab_bom6-value_new&nbsp;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CONCATENATE&nbsp;'组件：'&nbsp;itab_bom6-idnrk&nbsp;&nbsp;'数量：'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;itab_bom6-value_new&nbsp;INTO&nbsp;itab_bom6-value_new.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MODIFY&nbsp;itab_bom6.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;WRITE&nbsp;:&nbsp;/&nbsp;itab_bom6-matnr&nbsp;,&nbsp;itab_bom6-stlal&nbsp;,&nbsp;itab_bom6-stlan&nbsp;,<br />
+*itab_bom6-stlnr&nbsp;,itab_bom6-changenr&nbsp;,<br />
+*itab_bom6-objectid&nbsp;,itab_bom6-stlkn&nbsp;,&nbsp;itab_bom6-chngind.<br />
+**************add&nbsp;by&nbsp;litao&nbsp;20140916*********<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;itab_bom6-fname&nbsp;ne&nbsp;'IDNRK'&nbsp;and&nbsp;itab_bom6-matnr_s&nbsp;eq&nbsp;''.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;itab_bom6-matnr_s&nbsp;=&nbsp;itab_bom6-idnrk.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MODIFY&nbsp;itab_bom6&nbsp;TRANSPORTING&nbsp;matnr_s.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;endif.<br />
+   </div>
+   <div class="codeComment">
+**************add&nbsp;by&nbsp;litao&nbsp;20140916*********<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;itab_bom6&nbsp;WHERE&nbsp;tabname&nbsp;=&nbsp;'STPO'&nbsp;AND&nbsp;chngind&nbsp;=&nbsp;'U'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;key11&nbsp;=&nbsp;itab_bom6-objectid+4(8).<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;stlal&nbsp;FROM&nbsp;stas&nbsp;INTO&nbsp;CORRESPONDING&nbsp;FIELDS&nbsp;OF&nbsp;itab_bom6<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stlty&nbsp;IN&nbsp;('D','E','K','M','S','T','P')&nbsp;AND<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stlty&nbsp;=&nbsp;'M'&nbsp;and<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stlkn&nbsp;=&nbsp;itab_bom6-stlkn&nbsp;AND&nbsp;stlnr&nbsp;=&nbsp;key11&nbsp;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MODIFY&nbsp;itab_bom6.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDSELECT.<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;itab_bom6.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;WRITE&nbsp;:&nbsp;/&nbsp;itab_bom6-matnr&nbsp;,&nbsp;itab_bom6-stlal&nbsp;,&nbsp;itab_bom6-stlan&nbsp;,<br />
+*itab_bom6-stlnr&nbsp;,itab_bom6-changenr&nbsp;,<br />
+*itab_bom6-objectid&nbsp;,itab_bom6-stlkn&nbsp;,&nbsp;itab_bom6-chngind.<br />
+*&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+*&nbsp;delete&nbsp;的第一种情况<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;itab_del[]&nbsp;=&nbsp;itab_bom6[]&nbsp;.<br />
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;itab_bom6.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;itab_bom6-chngind&nbsp;=&nbsp;'D'&nbsp;OR&nbsp;itab_bom6-chngind&nbsp;=&nbsp;'E'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;itab_bom6-chngind&nbsp;=&nbsp;'D'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;itab_bom6-ch_flag&nbsp;=&nbsp;'删除'.&nbsp;"chinese&nbsp;flag<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;itab_bom6-ch_obj&nbsp;=&nbsp;'整行记录'&nbsp;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MODIFY&nbsp;itab_bom6.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;itab_del.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;itab_bom6&nbsp;WITH&nbsp;KEY&nbsp;stlkn&nbsp;=&nbsp;itab_del-vgknt<br />
+&nbsp;&nbsp;&nbsp;&nbsp;lkenz&nbsp;=&nbsp;'X'&nbsp;tabname&nbsp;=&nbsp;'STAS'&nbsp;chngind&nbsp;=&nbsp;'I'&nbsp;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;itab_bom6-chngind&nbsp;=&nbsp;'Y'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MODIFY&nbsp;itab_bom6&nbsp;TRANSPORTING&nbsp;chngind<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;stlkn&nbsp;=&nbsp;itab_del-vgknt<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;lkenz&nbsp;=&nbsp;'X'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;tabname&nbsp;=&nbsp;'STAS'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;chngind&nbsp;=&nbsp;'I'&nbsp;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;itab_del.<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;itab_bom6&nbsp;WHERE&nbsp;stlkn&nbsp;&lt;&gt;&nbsp;itab_del-vgknt<br />
+&nbsp;&nbsp;AND&nbsp;lkenz&nbsp;=&nbsp;'X'&nbsp;AND&nbsp;tabname&nbsp;=&nbsp;'STAS'&nbsp;AND&nbsp;chngind&nbsp;=&nbsp;'I'&nbsp;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;itab_bom6-ch_flag&nbsp;=&nbsp;'删除'.&nbsp;"chinese&nbsp;flag<br />
+&nbsp;&nbsp;&nbsp;&nbsp;itab_bom6-chngind&nbsp;=&nbsp;'D'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;itab_bom6-value_old&nbsp;=&nbsp;itab_bom6-value_new&nbsp;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;itab_bom6-value_new&nbsp;=&nbsp;''&nbsp;.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;itab_bom6-UDATE&nbsp;=&nbsp;itab_bom6-aedat.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;itab_bom6-USERNAME&nbsp;=&nbsp;itab_bom6-aenam.<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;MODIFY&nbsp;itab_bom6.<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;ENDLOOP.<br />
+*&nbsp;End&nbsp;delete<br />
+   </div>
+   <div class="code">
+ENDFORM.                    "getdata<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;getdata<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;fixdata<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM fixdata .<br />
+   </div>
+   <div class="codeComment">
+*测试修改时的节点号<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;itab_bom7[]&nbsp;=&nbsp;itab_bom6[].<br />
+&nbsp;&nbsp;itab_bom8[]&nbsp;=&nbsp;itab_bom6[].<br />
+<br />
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;itab_bom6&nbsp;WHERE&nbsp;(&nbsp;chngind&nbsp;=&nbsp;'I'&nbsp;OR&nbsp;chngind&nbsp;=&nbsp;'Y'&nbsp;)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;vgknt&nbsp;&gt;&nbsp;0&nbsp;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MOVE-CORRESPONDING&nbsp;itab_bom6&nbsp;TO&nbsp;itab_new&nbsp;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;itab_bom7&nbsp;WHERE&nbsp;stlkn&nbsp;=&nbsp;itab_bom6-vgknt&nbsp;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MOVE-CORRESPONDING&nbsp;itab_bom7&nbsp;TO&nbsp;itab_old&nbsp;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;itab_old.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDLOOP.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;itab_new.<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;itab_bom6.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;(&nbsp;itab_bom6-chngind&nbsp;=&nbsp;'I'&nbsp;OR&nbsp;itab_bom6-chngind&nbsp;=&nbsp;'Y'&nbsp;)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;itab_bom6-vgknt&nbsp;&gt;&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;itab_bom6-chngind&nbsp;=&nbsp;'U'&nbsp;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MODIFY&nbsp;itab_bom6.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;itab_bom6-chngind&nbsp;=&nbsp;'Y'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;itab_bom6-chngind&nbsp;=&nbsp;''.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ELSEIF&nbsp;itab_bom6-chngind&nbsp;=&nbsp;'I'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;itab_bom6-ch_flag&nbsp;=&nbsp;'添加'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ELSEIF&nbsp;itab_bom6-chngind&nbsp;=&nbsp;'U'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;itab_bom6-ch_flag&nbsp;=&nbsp;'修改'&nbsp;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MODIFY&nbsp;itab_bom6.<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+   </div>
+   <div class="codeComment">
+*测试修改时的节点号结束<br />
+<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;IF&nbsp;check1&nbsp;&lt;&gt;&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SORT&nbsp;itab_bom&nbsp;ASCENDING&nbsp;BY&nbsp;matnr&nbsp;stlal&nbsp;stlan&nbsp;chngind.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+<br />
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;itab_old.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;itab_new&nbsp;WHERE&nbsp;vgknt&nbsp;=&nbsp;itab_old-stlkn<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;stlal&nbsp;=&nbsp;itab_old-stlal&nbsp;AND&nbsp;objectid&nbsp;=&nbsp;itab_old-objectid.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;itab_new-idnrk&nbsp;&lt;&gt;&nbsp;itab_old-idnrk.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MOVE-CORRESPONDING&nbsp;itab_new&nbsp;TO&nbsp;i_mod&nbsp;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_mod-ch_flag&nbsp;=&nbsp;'修改'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_mod-ch_obj&nbsp;=&nbsp;'组件'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_mod-value_old&nbsp;=&nbsp;itab_old-idnrk.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_mod-value_new&nbsp;=&nbsp;itab_new-idnrk.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CONDENSE&nbsp;i_mod-value_new&nbsp;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CONDENSE&nbsp;i_mod-value_old&nbsp;.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MODIFY&nbsp;i_mod.<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_mod-stlal&nbsp;=&nbsp;itab_old-stlal.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_mod-objectid&nbsp;=&nbsp;itab_old-objectid.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;i_mod.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ELSEIF&nbsp;itab_new-menge&nbsp;&lt;&gt;&nbsp;itab_old-menge.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MOVE-CORRESPONDING&nbsp;itab_new&nbsp;TO&nbsp;i_mod&nbsp;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_mod-ch_flag&nbsp;=&nbsp;'修改'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_mod-ch_obj&nbsp;=&nbsp;'数量'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_mod-value_old&nbsp;=&nbsp;itab_old-menge.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_mod-value_new&nbsp;=&nbsp;itab_new-menge.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CONDENSE&nbsp;i_mod-value_new&nbsp;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CONDENSE&nbsp;i_mod-value_old&nbsp;.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MODIFY&nbsp;i_mod.<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_mod-stlal&nbsp;=&nbsp;itab_old-stlal.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_mod-objectid&nbsp;=&nbsp;itab_old-objectid.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;i_mod.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ELSEIF&nbsp;itab_new-sortf&nbsp;&lt;&gt;&nbsp;itab_old-sortf.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MOVE-CORRESPONDING&nbsp;itab_new&nbsp;TO&nbsp;i_mod&nbsp;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_mod-ch_flag&nbsp;=&nbsp;'修改'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_mod-ch_obj&nbsp;=&nbsp;'排序字符串'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_mod-value_old&nbsp;=&nbsp;itab_old-sortf.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_mod-value_new&nbsp;=&nbsp;itab_new-sortf.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CONDENSE&nbsp;i_mod-value_new&nbsp;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CONDENSE&nbsp;i_mod-value_old&nbsp;.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MODIFY&nbsp;i_mod.<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_mod-stlal&nbsp;=&nbsp;itab_old-stlal.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_mod-objectid&nbsp;=&nbsp;itab_old-objectid.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;i_mod.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ELSEIF&nbsp;itab_new-potx1&nbsp;&lt;&gt;&nbsp;itab_old-potx1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OR&nbsp;itab_new-potx2&nbsp;&lt;&gt;&nbsp;itab_old-potx2.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MOVE-CORRESPONDING&nbsp;itab_new&nbsp;TO&nbsp;i_mod&nbsp;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_mod-ch_flag&nbsp;=&nbsp;'修改'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_mod-ch_obj&nbsp;=&nbsp;'项目文本'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CONCATENATE&nbsp;itab_old-potx1&nbsp;itab_old-potx2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;i_mod-value_old.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CONCATENATE&nbsp;itab_new-potx1&nbsp;itab_new-potx2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;i_mod-value_new.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CONDENSE&nbsp;i_mod-value_new&nbsp;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CONDENSE&nbsp;i_mod-value_old&nbsp;.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MODIFY&nbsp;i_mod.<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_mod-stlal&nbsp;=&nbsp;itab_old-stlal.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_mod-objectid&nbsp;=&nbsp;itab_old-objectid.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;i_mod.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDLOOP.<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;itab_bom.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;itab_bom-index&nbsp;=&nbsp;sy-tabix.<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;CONCATENATE&nbsp;sy-mandt&nbsp;m&nbsp;itab_bom-stlnr&nbsp;INTO&nbsp;key6.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;i_mod&nbsp;WHERE&nbsp;objectid&nbsp;=&nbsp;key6.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MOVE-CORRESPONDING&nbsp;i_mod&nbsp;TO&nbsp;mod_tab2.<br />
+**************add&nbsp;by&nbsp;litao&nbsp;20140916*********<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mod_tab2-matnr&nbsp;=&nbsp;itab_bom-matnr.<br />
+**************add&nbsp;by&nbsp;litao&nbsp;20140916*********<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;mod_tab2.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;itab_bom6&nbsp;WHERE&nbsp;objectid&nbsp;=&nbsp;key6<br />
+&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;chngind&nbsp;IS&nbsp;NOT&nbsp;INITIAL<br />
+&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;stlal&nbsp;=&nbsp;itab_bom-stlal.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;itab_bom6-fname&nbsp;=&nbsp;'MENGE'&nbsp;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;itab_bom6-ch_obj&nbsp;=&nbsp;'数量'&nbsp;.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ELSEIF&nbsp;itab_bom6-fname&nbsp;=&nbsp;'IDNRK'&nbsp;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;itab_bom6-ch_obj&nbsp;=&nbsp;'组件'&nbsp;.<br />
+   </div>
+   <div class="codeComment">
+*************add&nbsp;by&nbsp;litao&nbsp;20140916*********<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;itab_bom6-matnr_s&nbsp;=&nbsp;itab_bom6-value_old.<br />
+   </div>
+   <div class="codeComment">
+*************add&nbsp;by&nbsp;litao&nbsp;20140916*********<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ELSEIF&nbsp;itab_bom6-fname&nbsp;=&nbsp;'SORTF'&nbsp;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;itab_bom6-ch_obj&nbsp;=&nbsp;'排序字符串'&nbsp;.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ELSEIF&nbsp;itab_bom6-fname&nbsp;=&nbsp;'POTX1'&nbsp;OR&nbsp;itab_bom6-fname&nbsp;=&nbsp;'POTX2'&nbsp;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;itab_bom6-ch_obj&nbsp;=&nbsp;'项目文本'&nbsp;.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ELSEIF&nbsp;itab_bom6-fname&nbsp;=&nbsp;'KEY'&nbsp;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;itab_bom6-ch_obj&nbsp;=&nbsp;'整行记录'&nbsp;.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ELSEIF&nbsp;itab_bom6-fname&nbsp;=&nbsp;'MEINS'&nbsp;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;itab_bom6-ch_obj&nbsp;=&nbsp;'组件计量单位'&nbsp;.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ELSE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;itab_bom6-ch_obj&nbsp;=&nbsp;'其他'&nbsp;.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+   </div>
+   <div class="codeComment">
+*************add&nbsp;by&nbsp;litao&nbsp;20140916*********<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;itab_bom6-matnr&nbsp;=&nbsp;itab_bom-matnr.<br />
+   </div>
+   <div class="codeComment">
+*************add&nbsp;by&nbsp;litao&nbsp;20140916*********<br />
+<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MODIFY&nbsp;itab_bom6.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;DELETE&nbsp;itab_bom6&nbsp;WHERE&nbsp;fname&nbsp;=&nbsp;'AENRL'.&nbsp;"删除工程号改变项<br />
+&nbsp;&nbsp;&nbsp;&nbsp;DELETE&nbsp;itab_bom6&nbsp;WHERE&nbsp;fname&nbsp;=&nbsp;'HISTK'.&nbsp;"删除HISTK改变项<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;itab_bom6&nbsp;WHERE&nbsp;objectid&nbsp;=&nbsp;key6<br />
+&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;chngind&nbsp;IS&nbsp;NOT&nbsp;INITIAL<br />
+&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;stlal&nbsp;=&nbsp;itab_bom-stlal.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MOVE-CORRESPONDING&nbsp;itab_bom6&nbsp;TO&nbsp;all_tab.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;all_tab.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;itab_bom6&nbsp;WHERE&nbsp;objectid&nbsp;=&nbsp;key6<br />
+&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;chngind&nbsp;=&nbsp;'U'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;stlal&nbsp;=&nbsp;itab_bom-stlal.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MOVE-CORRESPONDING&nbsp;itab_bom6&nbsp;TO&nbsp;mod_tab.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;mod_tab.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;itab_bom6&nbsp;WHERE&nbsp;objectid&nbsp;=&nbsp;key6<br />
+&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;chngind&nbsp;=&nbsp;'D'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;stlal&nbsp;=&nbsp;itab_bom-stlal.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MOVE-CORRESPONDING&nbsp;itab_bom6&nbsp;TO&nbsp;del_tab.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;del_tab.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;itab_bom6&nbsp;WHERE&nbsp;objectid&nbsp;=&nbsp;key6<br />
+&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;chngind&nbsp;=&nbsp;'D'&nbsp;AND&nbsp;lkenz&nbsp;&lt;&gt;&nbsp;'X'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;stlal&nbsp;=&nbsp;itab_bom-stlal.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MOVE-CORRESPONDING&nbsp;itab_bom6&nbsp;TO&nbsp;del_tab.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;del_tab.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;itab_bom6&nbsp;WHERE&nbsp;objectid&nbsp;=&nbsp;key6<br />
+&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;chngind&nbsp;=&nbsp;'I'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;stlal&nbsp;=&nbsp;itab_bom-stlal.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MOVE-CORRESPONDING&nbsp;itab_bom6&nbsp;TO&nbsp;add_tab.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;add_tab.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;mod_tab2.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MOVE-CORRESPONDING&nbsp;mod_tab2&nbsp;TO&nbsp;mod_tab.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MOVE-CORRESPONDING&nbsp;mod_tab2&nbsp;TO&nbsp;all_tab.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;mod_tab.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;all_tab.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;mod_tab2[].<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;check1&nbsp;=&nbsp;'X'&nbsp;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DELETE&nbsp;all_tab&nbsp;WHERE&nbsp;idnrk&nbsp;&lt;&gt;&nbsp;itab_bom-matnr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DELETE&nbsp;mod_tab&nbsp;WHERE&nbsp;idnrk&nbsp;&lt;&gt;&nbsp;itab_bom-matnr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DELETE&nbsp;del_tab&nbsp;WHERE&nbsp;idnrk&nbsp;&lt;&gt;&nbsp;itab_bom-matnr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DELETE&nbsp;add_tab&nbsp;WHERE&nbsp;idnrk&nbsp;&lt;&gt;&nbsp;itab_bom-matnr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SORT&nbsp;all_tab&nbsp;ASCENDING&nbsp;BY&nbsp;posnr&nbsp;udate&nbsp;utime&nbsp;datuv&nbsp;username&nbsp;mtart<br />
+&nbsp;&nbsp;&nbsp;ch_flag&nbsp;ch_obj&nbsp;value_old&nbsp;value_new&nbsp;aennr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SORT&nbsp;add_tab&nbsp;ASCENDING&nbsp;BY&nbsp;posnr&nbsp;udate&nbsp;utime&nbsp;datuv&nbsp;username&nbsp;mtart<br />
+&nbsp;&nbsp;&nbsp;ch_flag&nbsp;ch_obj&nbsp;value_old&nbsp;value_new&nbsp;aennr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SORT&nbsp;del_tab&nbsp;ASCENDING&nbsp;BY&nbsp;posnr&nbsp;udate&nbsp;utime&nbsp;datuv&nbsp;username&nbsp;mtart<br />
+&nbsp;&nbsp;&nbsp;ch_flag&nbsp;ch_obj&nbsp;value_old&nbsp;value_new&nbsp;aennr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SORT&nbsp;mod_tab&nbsp;ASCENDING&nbsp;BY&nbsp;posnr&nbsp;udate&nbsp;utime&nbsp;datuv&nbsp;username&nbsp;mtart<br />
+&nbsp;&nbsp;&nbsp;ch_flag&nbsp;ch_obj&nbsp;value_old&nbsp;value_new&nbsp;aennr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;DELETE&nbsp;ADJACENT&nbsp;DUPLICATES&nbsp;FROM&nbsp;all_tab&nbsp;COMPARING&nbsp;posnr&nbsp;udate&nbsp;utime<br />
+&nbsp;&nbsp;&nbsp;&nbsp;datuv&nbsp;username&nbsp;mtart&nbsp;ch_flag&nbsp;ch_obj&nbsp;value_old&nbsp;value_new&nbsp;aennr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;DELETE&nbsp;ADJACENT&nbsp;DUPLICATES&nbsp;FROM&nbsp;add_tab&nbsp;COMPARING&nbsp;posnr&nbsp;udate&nbsp;utime<br />
+&nbsp;&nbsp;&nbsp;&nbsp;datuv&nbsp;username&nbsp;mtart&nbsp;ch_flag&nbsp;ch_obj&nbsp;value_old&nbsp;value_new&nbsp;aennr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;DELETE&nbsp;ADJACENT&nbsp;DUPLICATES&nbsp;FROM&nbsp;del_tab&nbsp;COMPARING&nbsp;posnr&nbsp;udate&nbsp;utime<br />
+&nbsp;&nbsp;&nbsp;&nbsp;datuv&nbsp;username&nbsp;mtart&nbsp;ch_flag&nbsp;ch_obj&nbsp;value_old&nbsp;value_new&nbsp;aennr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;DELETE&nbsp;ADJACENT&nbsp;DUPLICATES&nbsp;FROM&nbsp;mod_tab&nbsp;COMPARING&nbsp;posnr&nbsp;udate&nbsp;utime<br />
+&nbsp;&nbsp;&nbsp;&nbsp;datuv&nbsp;username&nbsp;mtart&nbsp;ch_flag&nbsp;ch_obj&nbsp;value_old&nbsp;value_new&nbsp;aennr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;DELETE&nbsp;all_tab&nbsp;WHERE&nbsp;ch_flag&nbsp;=&nbsp;'修改'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;value_old&nbsp;IS&nbsp;INITIAL&nbsp;AND&nbsp;value_new&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;DELETE&nbsp;mod_tab&nbsp;WHERE&nbsp;ch_flag&nbsp;=&nbsp;'修改'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;value_old&nbsp;IS&nbsp;INITIAL&nbsp;AND&nbsp;value_new&nbsp;IS&nbsp;INITIAL.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;all_tab[]&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;itab_bom-all_flag&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;mod_tab[]&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;itab_bom-mod_flag&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;del_tab[]&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;itab_bom-del_flag&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;add_tab[]&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;itab_bom-add_flag&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;itab_bom-all_tab[]&nbsp;=&nbsp;all_tab[].<br />
+&nbsp;&nbsp;&nbsp;&nbsp;itab_bom-add_tab[]&nbsp;=&nbsp;add_tab[].<br />
+&nbsp;&nbsp;&nbsp;&nbsp;itab_bom-del_tab[]&nbsp;=&nbsp;del_tab[].<br />
+&nbsp;&nbsp;&nbsp;&nbsp;itab_bom-mod_tab[]&nbsp;=&nbsp;mod_tab[].<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MODIFY&nbsp;itab_bom.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;all_tab[].<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;add_tab[].<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;del_tab[].<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;mod_tab[].<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;mod_tab2[].<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;check1&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;DELETE&nbsp;itab_bom&nbsp;WHERE&nbsp;all_flag&nbsp;&lt;&gt;&nbsp;'X'&nbsp;AND&nbsp;xtlnr&nbsp;IS&nbsp;INITIAL&nbsp;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;DELETE&nbsp;ADJACENT&nbsp;DUPLICATES&nbsp;FROM&nbsp;itab_bom&nbsp;COMPARING&nbsp;stufe&nbsp;mtart&nbsp;matnr<br />
+&nbsp;stlan&nbsp;stlal&nbsp;werks.<br />
+&nbsp;&nbsp;ELSE&nbsp;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;DELETE&nbsp;itab_bom&nbsp;WHERE&nbsp;all_flag&nbsp;&lt;&gt;&nbsp;'X'&nbsp;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;DELETE&nbsp;ADJACENT&nbsp;DUPLICATES&nbsp;FROM&nbsp;itab_bom&nbsp;COMPARING&nbsp;stufe&nbsp;mtart&nbsp;matnr<br />
+&nbsp;stlan&nbsp;stlal&nbsp;werks.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;itab_bom[]&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;'该选择项目前没有修改记录.'&nbsp;TYPE&nbsp;'E'.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;itab_bom.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;itab_bom-index&nbsp;=&nbsp;sy-tabix.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MODIFY&nbsp;itab_bom.<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+ENDFORM.                    " fixdata<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&--------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;FIELDCAT_INIT<br />
+*&--------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&gt;RT_FIELDCATtext<br />
+*---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM fieldcat_init<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;rt_fieldcat&nbsp;TYPE&nbsp;slis_t_fieldcat_alv.<br />
+<br />
+&nbsp;&nbsp;DATA:&nbsp;ls_fieldcat&nbsp;TYPE&nbsp;slis_fieldcat_alv.<br />
+<br />
+<br />
+&nbsp;&nbsp;CLEAR&nbsp;ls_fieldcat.<br />
+&nbsp;&nbsp;ls_fieldcat-fieldname&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'INDEX'.<br />
+&nbsp;&nbsp;ls_fieldcat-seltext_l&nbsp;&nbsp;&nbsp;=&nbsp;'序号'.<br />
+&nbsp;&nbsp;APPEND&nbsp;ls_fieldcat&nbsp;TO&nbsp;&nbsp;rt_fieldcat.<br />
+<br />
+&nbsp;&nbsp;CLEAR&nbsp;ls_fieldcat.<br />
+&nbsp;&nbsp;ls_fieldcat-fieldname&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'STUFE'.<br />
+&nbsp;&nbsp;ls_fieldcat-seltext_l&nbsp;&nbsp;&nbsp;=&nbsp;'展开层'.<br />
+&nbsp;&nbsp;APPEND&nbsp;ls_fieldcat&nbsp;TO&nbsp;&nbsp;rt_fieldcat.<br />
+<br />
+&nbsp;&nbsp;CLEAR&nbsp;ls_fieldcat.<br />
+&nbsp;&nbsp;ls_fieldcat-fieldname&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'MTART'.<br />
+&nbsp;&nbsp;ls_fieldcat-seltext_l&nbsp;&nbsp;&nbsp;=&nbsp;'物料类型'.<br />
+&nbsp;&nbsp;ls_fieldcat-no_zero&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;APPEND&nbsp;ls_fieldcat&nbsp;TO&nbsp;&nbsp;rt_fieldcat.<br />
+<br />
+&nbsp;&nbsp;CLEAR&nbsp;ls_fieldcat.<br />
+&nbsp;&nbsp;ls_fieldcat-fieldname&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'MATNR'.<br />
+&nbsp;&nbsp;ls_fieldcat-seltext_l&nbsp;&nbsp;&nbsp;=&nbsp;'物料代码'.<br />
+&nbsp;&nbsp;ls_fieldcat-no_zero&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;APPEND&nbsp;ls_fieldcat&nbsp;TO&nbsp;&nbsp;rt_fieldcat.<br />
+<br />
+&nbsp;&nbsp;CLEAR&nbsp;ls_fieldcat.<br />
+&nbsp;&nbsp;ls_fieldcat-fieldname&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'MAKTX'.<br />
+&nbsp;&nbsp;ls_fieldcat-seltext_l&nbsp;&nbsp;&nbsp;=&nbsp;'物料描述'.<br />
+&nbsp;&nbsp;APPEND&nbsp;ls_fieldcat&nbsp;TO&nbsp;&nbsp;rt_fieldcat.<br />
+<br />
+&nbsp;&nbsp;CLEAR&nbsp;ls_fieldcat.<br />
+&nbsp;&nbsp;ls_fieldcat-fieldname&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'STLAN'.<br />
+&nbsp;&nbsp;ls_fieldcat-seltext_l&nbsp;&nbsp;&nbsp;=&nbsp;'BOM用途'.<br />
+&nbsp;&nbsp;APPEND&nbsp;ls_fieldcat&nbsp;TO&nbsp;&nbsp;rt_fieldcat.<br />
+<br />
+&nbsp;&nbsp;CLEAR&nbsp;ls_fieldcat.<br />
+&nbsp;&nbsp;ls_fieldcat-fieldname&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'STLAL'.<br />
+&nbsp;&nbsp;ls_fieldcat-seltext_l&nbsp;&nbsp;&nbsp;=&nbsp;'可选BOM'.<br />
+&nbsp;&nbsp;APPEND&nbsp;ls_fieldcat&nbsp;TO&nbsp;&nbsp;rt_fieldcat.<br />
+<br />
+&nbsp;&nbsp;CLEAR&nbsp;ls_fieldcat.<br />
+&nbsp;&nbsp;ls_fieldcat-fieldname&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'WERKS'.<br />
+&nbsp;&nbsp;ls_fieldcat-seltext_l&nbsp;&nbsp;&nbsp;=&nbsp;'工厂'.<br />
+&nbsp;&nbsp;APPEND&nbsp;ls_fieldcat&nbsp;TO&nbsp;&nbsp;rt_fieldcat.<br />
+<br />
+&nbsp;&nbsp;ls_fieldcat-fieldname&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'ADD_FLAG'.<br />
+&nbsp;&nbsp;ls_fieldcat-seltext_l&nbsp;&nbsp;&nbsp;=&nbsp;'查看添加&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.<br />
+&nbsp;&nbsp;ls_fieldcat-hotspot&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;ls_fieldcat-emphasize&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;APPEND&nbsp;ls_fieldcat&nbsp;TO&nbsp;&nbsp;rt_fieldcat.<br />
+<br />
+&nbsp;&nbsp;ls_fieldcat-fieldname&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'MOD_FLAG'.<br />
+&nbsp;&nbsp;ls_fieldcat-seltext_l&nbsp;&nbsp;&nbsp;=&nbsp;'查看修改&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.<br />
+&nbsp;&nbsp;ls_fieldcat-hotspot&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;ls_fieldcat-emphasize&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;APPEND&nbsp;ls_fieldcat&nbsp;TO&nbsp;&nbsp;rt_fieldcat.<br />
+<br />
+&nbsp;&nbsp;ls_fieldcat-fieldname&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'DEL_FLAG'.<br />
+&nbsp;&nbsp;ls_fieldcat-seltext_l&nbsp;&nbsp;&nbsp;=&nbsp;'查看删除&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.<br />
+&nbsp;&nbsp;ls_fieldcat-hotspot&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;ls_fieldcat-emphasize&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;APPEND&nbsp;ls_fieldcat&nbsp;TO&nbsp;&nbsp;rt_fieldcat.<br />
+<br />
+&nbsp;&nbsp;ls_fieldcat-fieldname&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'ALL_FLAG'.<br />
+&nbsp;&nbsp;ls_fieldcat-seltext_l&nbsp;&nbsp;&nbsp;=&nbsp;'查看全部&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.<br />
+&nbsp;&nbsp;ls_fieldcat-hotspot&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;ls_fieldcat-emphasize&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;APPEND&nbsp;ls_fieldcat&nbsp;TO&nbsp;&nbsp;rt_fieldcat.<br />
+<br />
+ENDFORM.   "fieldcat_init<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&--------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;user_command<br />
+*&--------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&gt;RF_UCOMM&nbsp;&nbsp;&nbsp;text<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&gt;RS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM user_command USING rf_ucomm LIKE sy-ucomm<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rs&nbsp;TYPE&nbsp;slis_selfield.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;rs-fieldname&nbsp;=&nbsp;'MOD_FLAG'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;gd_fieldcat.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;REFRESH&nbsp;gd_fieldcat.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;fieldcat_init_resb&nbsp;USING&nbsp;gd_fieldcat[].<br />
+&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;itab_bom&nbsp;INDEX&nbsp;rs-tabindex.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;output_data_alv_resb&nbsp;TABLES&nbsp;itab_bom-mod_tab.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;rf_ucomm.<br />
+&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;IF&nbsp;rs-fieldname&nbsp;=&nbsp;'ADD_FLAG'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;gd_fieldcat.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;REFRESH&nbsp;gd_fieldcat.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;fieldcat_init_resb&nbsp;USING&nbsp;gd_fieldcat[].<br />
+&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;itab_bom&nbsp;INDEX&nbsp;rs-tabindex.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;output_data_alv_resb&nbsp;TABLES&nbsp;itab_bom-add_tab.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;rf_ucomm.<br />
+&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;IF&nbsp;rs-fieldname&nbsp;=&nbsp;'DEL_FLAG'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;gd_fieldcat.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;REFRESH&nbsp;gd_fieldcat.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;fieldcat_init_resb&nbsp;USING&nbsp;gd_fieldcat[].<br />
+&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;itab_bom&nbsp;INDEX&nbsp;rs-tabindex.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;output_data_alv_resb&nbsp;TABLES&nbsp;itab_bom-del_tab.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;rf_ucomm.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;用全部数据测试超链接<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;IF&nbsp;rs-fieldname&nbsp;=&nbsp;'ALL_FLAG'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;gd_fieldcat.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;REFRESH&nbsp;gd_fieldcat.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;fieldcat_init_resb&nbsp;USING&nbsp;gd_fieldcat[].<br />
+&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;itab_bom&nbsp;INDEX&nbsp;rs-tabindex.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;output_data_alv_resb&nbsp;TABLES&nbsp;itab_bom-all_tab.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;rf_ucomm.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+ENDFORM.                    "user_command<br />
+   </div>
+   <div class="codeComment">
+*&--------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;OUTPUT_DATA_ALV<br />
+*&--------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM output_data_alv.<br />
+<br />
+<br />
+&nbsp;&nbsp;sla-colwidth_optimize&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'REUSE_ALV_GRID_DISPLAY'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_callback_program&nbsp;=&nbsp;gd_repid<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it_fieldcat&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;gd_fieldcat[]<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;I_CALLBACK_pf_status_set&nbsp;=&nbsp;'SET_STATUS'<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_callback_user_command&nbsp;&nbsp;=&nbsp;'USER_COMMAND'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;is_layout&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;sla<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TABLES<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;t_outtab&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;itab_bom.<br />
+<br />
+ENDFORM.                    "OUTPUT_DATA_ALV<br />
+   </div>
+   <div class="codeComment">
+*&--------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;FIELDCAT_INIT_RESB<br />
+*&--------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&gt;RT_FIELDCATtext<br />
+*---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM fieldcat_init_resb<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;rt_fieldcat&nbsp;TYPE&nbsp;slis_t_fieldcat_alv.<br />
+<br />
+&nbsp;&nbsp;DATA:&nbsp;ls_fieldcat&nbsp;TYPE&nbsp;slis_fieldcat_alv.<br />
+<br />
+&nbsp;&nbsp;CLEAR&nbsp;ls_fieldcat.<br />
+&nbsp;&nbsp;ls_fieldcat-fieldname&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'POSNR'.<br />
+&nbsp;&nbsp;ls_fieldcat-seltext_l&nbsp;&nbsp;&nbsp;=&nbsp;'项目号'.<br />
+&nbsp;&nbsp;ls_fieldcat-no_zero&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;APPEND&nbsp;ls_fieldcat&nbsp;TO&nbsp;&nbsp;rt_fieldcat.<br />
+   </div>
+   <div class="codeComment">
+*************add&nbsp;by&nbsp;litao&nbsp;20140916*********<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;ls_fieldcat-fieldname&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'MATNR'.<br />
+&nbsp;&nbsp;ls_fieldcat-seltext_l&nbsp;&nbsp;&nbsp;=&nbsp;'上层物料号'.<br />
+&nbsp;&nbsp;"ls_fieldcat-no_zero&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;APPEND&nbsp;ls_fieldcat&nbsp;TO&nbsp;&nbsp;rt_fieldcat.<br />
+<br />
+&nbsp;&nbsp;ls_fieldcat-fieldname&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'MATNR_S'.<br />
+&nbsp;&nbsp;ls_fieldcat-seltext_l&nbsp;&nbsp;&nbsp;=&nbsp;'散件物料号'.<br />
+&nbsp;&nbsp;ls_fieldcat-no_zero&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;APPEND&nbsp;ls_fieldcat&nbsp;TO&nbsp;&nbsp;rt_fieldcat.<br />
+   </div>
+   <div class="codeComment">
+*************add&nbsp;by&nbsp;litao&nbsp;20140916*********<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;CLEAR&nbsp;ls_fieldcat.<br />
+&nbsp;&nbsp;ls_fieldcat-fieldname&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'MTART'.<br />
+&nbsp;&nbsp;ls_fieldcat-seltext_l&nbsp;&nbsp;&nbsp;=&nbsp;'物料类型'.<br />
+&nbsp;&nbsp;ls_fieldcat-no_zero&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;APPEND&nbsp;ls_fieldcat&nbsp;TO&nbsp;&nbsp;rt_fieldcat.<br />
+<br />
+&nbsp;&nbsp;CLEAR&nbsp;ls_fieldcat.<br />
+&nbsp;&nbsp;ls_fieldcat-fieldname&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'CH_FLAG'.<br />
+&nbsp;&nbsp;ls_fieldcat-seltext_l&nbsp;&nbsp;&nbsp;=&nbsp;'更改类型'.<br />
+&nbsp;&nbsp;APPEND&nbsp;ls_fieldcat&nbsp;TO&nbsp;&nbsp;rt_fieldcat.<br />
+<br />
+&nbsp;&nbsp;CLEAR&nbsp;ls_fieldcat.<br />
+&nbsp;&nbsp;ls_fieldcat-fieldname&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'AENNR'.<br />
+&nbsp;&nbsp;ls_fieldcat-seltext_l&nbsp;&nbsp;&nbsp;=&nbsp;'工程更改号'.<br />
+&nbsp;&nbsp;APPEND&nbsp;ls_fieldcat&nbsp;TO&nbsp;&nbsp;rt_fieldcat.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;CLEAR&nbsp;ls_fieldcat.<br />
+*&nbsp;&nbsp;ls_fieldcat-fieldname&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'IDNRK'.<br />
+*&nbsp;&nbsp;ls_fieldcat-seltext_l&nbsp;&nbsp;&nbsp;=&nbsp;'组件'.<br />
+*&nbsp;&nbsp;APPEND&nbsp;ls_fieldcat&nbsp;TO&nbsp;&nbsp;rt_fieldcat.<br />
+<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;CLEAR&nbsp;ls_fieldcat.<br />
+&nbsp;&nbsp;ls_fieldcat-fieldname&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'CH_OBJ'.<br />
+&nbsp;&nbsp;ls_fieldcat-seltext_l&nbsp;&nbsp;&nbsp;=&nbsp;'更改对象'.<br />
+&nbsp;&nbsp;APPEND&nbsp;ls_fieldcat&nbsp;TO&nbsp;&nbsp;rt_fieldcat.<br />
+<br />
+&nbsp;&nbsp;CLEAR&nbsp;ls_fieldcat.<br />
+&nbsp;&nbsp;ls_fieldcat-fieldname&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'VALUE_OLD'.<br />
+&nbsp;&nbsp;ls_fieldcat-seltext_l&nbsp;&nbsp;&nbsp;=&nbsp;'更改前的值'.<br />
+&nbsp;&nbsp;APPEND&nbsp;ls_fieldcat&nbsp;TO&nbsp;&nbsp;rt_fieldcat.<br />
+<br />
+&nbsp;&nbsp;CLEAR&nbsp;ls_fieldcat.<br />
+&nbsp;&nbsp;ls_fieldcat-fieldname&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'VALUE_NEW'.<br />
+&nbsp;&nbsp;ls_fieldcat-seltext_l&nbsp;&nbsp;&nbsp;=&nbsp;'更改后的值'.<br />
+&nbsp;&nbsp;APPEND&nbsp;ls_fieldcat&nbsp;TO&nbsp;&nbsp;rt_fieldcat.<br />
+<br />
+&nbsp;&nbsp;CLEAR&nbsp;ls_fieldcat.<br />
+&nbsp;&nbsp;ls_fieldcat-fieldname&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'DATUV'.<br />
+&nbsp;&nbsp;ls_fieldcat-seltext_l&nbsp;&nbsp;&nbsp;=&nbsp;'生效日期'.<br />
+&nbsp;&nbsp;APPEND&nbsp;ls_fieldcat&nbsp;TO&nbsp;&nbsp;rt_fieldcat.<br />
+<br />
+&nbsp;&nbsp;CLEAR&nbsp;ls_fieldcat.<br />
+&nbsp;&nbsp;ls_fieldcat-fieldname&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'UDATE'.<br />
+&nbsp;&nbsp;ls_fieldcat-seltext_l&nbsp;&nbsp;&nbsp;=&nbsp;'更改日期'.<br />
+&nbsp;&nbsp;APPEND&nbsp;ls_fieldcat&nbsp;TO&nbsp;&nbsp;rt_fieldcat.<br />
+<br />
+&nbsp;&nbsp;CLEAR&nbsp;ls_fieldcat.<br />
+&nbsp;&nbsp;ls_fieldcat-fieldname&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'UTIME'.<br />
+&nbsp;&nbsp;ls_fieldcat-seltext_l&nbsp;&nbsp;&nbsp;=&nbsp;'更改时间'.<br />
+&nbsp;&nbsp;APPEND&nbsp;ls_fieldcat&nbsp;TO&nbsp;&nbsp;rt_fieldcat.<br />
+<br />
+&nbsp;&nbsp;CLEAR&nbsp;ls_fieldcat.<br />
+&nbsp;&nbsp;ls_fieldcat-fieldname&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'USERNAME'.<br />
+&nbsp;&nbsp;ls_fieldcat-seltext_l&nbsp;&nbsp;&nbsp;=&nbsp;'更改人'.<br />
+&nbsp;&nbsp;APPEND&nbsp;ls_fieldcat&nbsp;TO&nbsp;&nbsp;rt_fieldcat.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;CLEAR&nbsp;ls_fieldcat.<br />
+*&nbsp;&nbsp;ls_fieldcat-fieldname&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'MENGE'.<br />
+*&nbsp;&nbsp;ls_fieldcat-seltext_l&nbsp;&nbsp;&nbsp;=&nbsp;'测试数量'.<br />
+*&nbsp;&nbsp;APPEND&nbsp;ls_fieldcat&nbsp;TO&nbsp;&nbsp;rt_fieldcat.<br />
+<br />
+   </div>
+   <div class="code">
+ENDFORM.   "fieldcat_init<br />
+   </div>
+   <div class="codeComment">
+**&--------------------------------------------------------------------*<br />
+**&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;OUTPUT_DATA_ALV_RESB<br />
+**&--------------------------------------------------------------------*<br />
+**&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+**---------------------------------------------------------------------*<br />
+**&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&gt;A&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+**---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM output_data_alv_resb TABLES a.<br />
+<br />
+&nbsp;&nbsp;sla-colwidth_optimize&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'REUSE_ALV_GRID_DISPLAY'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_callback_program&nbsp;=&nbsp;gd_repid<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it_fieldcat&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;gd_fieldcat[]<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;I_CALLBACK_pf_status_set&nbsp;=&nbsp;'SET_STATUS'<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_callback_user_command&nbsp;&nbsp;=&nbsp;'USER_COMMAND'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;is_layout&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;sla<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TABLES<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;t_outtab&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;a.<br />
+ENDFORM.                    "OUTPUT_DATA_ALV_RESB<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*Selection&nbsp;texts<br />
+*----------------------------------------------------------<br />
+*&nbsp;CHECK1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;查询多层BOM<br />
+*&nbsp;S_ANDAT&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;修改日期<br />
+*&nbsp;S_MATNR&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;物料<br />
+*&nbsp;S_STLAL&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;可选BOM<br />
+*&nbsp;S_STLAN&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;BOM用途<br />
+*&nbsp;S_WERKS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;工厂<br />
+<br />
+<br />
+*Messages<br />
+*----------------------------------------------------------<br />
+*<br />
+*&nbsp;Message&nbsp;class:&nbsp;Hard&nbsp;coded<br />
+*&nbsp;&nbsp;&nbsp;查询多层BOM的情况下，请选择可选BOM<br />
+            </div>
+          </td>
+        </tr>
+      </table>
+      </td>
+      </tr>
+   <tr>
+<td class="footer">Extracted by Mass Download version 1.5.2 - E.G.Mellodew. 1998-2022. Sap Release 755</td>
+   </tr>
+</table>
+</body>
+</html>

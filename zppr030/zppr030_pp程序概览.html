@@ -1,0 +1,327 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=GB2312" />
+<title>ZPPR030</title>
+<style type="text/css">
+.code{ font-family:"Courier New", Courier, monospace; color:#000; font-size:14px; background-color:#F2F4F7 }
+  .codeComment {font-family:"Courier New", Courier, monospace; color:#0000F0; font-size:14px; background-color:#F2F4F7 }
+  .normalBold{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; font-weight:800 }
+  .normalBoldLarge{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+</style>
+<style type="text/css">
+  .normal{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px }
+  .footer{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; text-align: center }
+  h2{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+  h3{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:14px; font-weight:800 }
+  .outerTable{
+   background-color:#E0E7ED;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-right-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+  .innerTable{
+   background-color:#F2F4F7;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-bottom-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+</style>
+</head>
+<body>
+<table class="outerTable">
+  <tr class="normalBoldLarge">
+     <td><h2>Code listing for: ZPPR030</h2>
+<h3> Description: PP程序概览</h3></td>
+   </tr>
+  <tr>
+     <td>
+     <table class="innerTable">
+       <tr>
+          <td>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Report&nbsp;ZPPR030<br />
+*&---------------------------------------------------------------------*<br />
+*&<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+REPORT zppr030.<br />
+SELECTION-SCREEN BEGIN OF SCREEN 100 AS SUBSCREEN  NESTING LEVEL 4.<br />
+&nbsp;&nbsp;SELECTION-SCREEN:&nbsp;BEGIN&nbsp;OF&nbsp;BLOCK&nbsp;b1&nbsp;&nbsp;WITH&nbsp;FRAME,<br />
+&nbsp;&nbsp;PUSHBUTTON&nbsp;/5(30)&nbsp;butt10&nbsp;USER-COMMAND&nbsp;but10&nbsp;,<br />
+&nbsp;&nbsp;PUSHBUTTON&nbsp;/5(30)&nbsp;butt11&nbsp;USER-COMMAND&nbsp;but11&nbsp;,<br />
+&nbsp;&nbsp;PUSHBUTTON&nbsp;/5(30)&nbsp;butt14&nbsp;USER-COMMAND&nbsp;but14&nbsp;,<br />
+&nbsp;&nbsp;PUSHBUTTON&nbsp;/5(30)&nbsp;butt12&nbsp;USER-COMMAND&nbsp;but12,<br />
+&nbsp;&nbsp;PUSHBUTTON&nbsp;/5(30)&nbsp;butt15&nbsp;USER-COMMAND&nbsp;but15&nbsp;,<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;SKIP,<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;PUSHBUTTON&nbsp;/5(30)&nbsp;butt13&nbsp;USER-COMMAND&nbsp;but13,<br />
+&nbsp;&nbsp;PUSHBUTTON&nbsp;/5(30)&nbsp;butt16&nbsp;USER-COMMAND&nbsp;but16&nbsp;.<br />
+&nbsp;&nbsp;SELECTION-SCREEN&nbsp;END&nbsp;OF&nbsp;BLOCK&nbsp;b1.<br />
+SELECTION-SCREEN END OF SCREEN 100.<br />
+<br />
+SELECTION-SCREEN BEGIN OF SCREEN 200 AS SUBSCREEN NESTING LEVEL 4 .<br />
+&nbsp;&nbsp;SELECTION-SCREEN:&nbsp;BEGIN&nbsp;OF&nbsp;BLOCK&nbsp;b2&nbsp;WITH&nbsp;FRAME,<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;SKIP,<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;PUSHBUTTON&nbsp;/5(30)&nbsp;butt21&nbsp;USER-COMMAND&nbsp;but21&nbsp;,<br />
+&nbsp;&nbsp;PUSHBUTTON&nbsp;/5(30)&nbsp;butt22&nbsp;USER-COMMAND&nbsp;but22&nbsp;,<br />
+&nbsp;&nbsp;PUSHBUTTON&nbsp;/5(30)&nbsp;butt23&nbsp;USER-COMMAND&nbsp;but23&nbsp;,<br />
+&nbsp;&nbsp;PUSHBUTTON&nbsp;/5(30)&nbsp;butt24&nbsp;USER-COMMAND&nbsp;but24&nbsp;,<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;SKIP,<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;PUSHBUTTON&nbsp;/5(30)&nbsp;butt25&nbsp;USER-COMMAND&nbsp;but25&nbsp;,<br />
+&nbsp;&nbsp;PUSHBUTTON&nbsp;/5(30)&nbsp;butt26&nbsp;USER-COMMAND&nbsp;but26&nbsp;,<br />
+&nbsp;&nbsp;PUSHBUTTON&nbsp;/5(30)&nbsp;butt27&nbsp;USER-COMMAND&nbsp;but27&nbsp;,<br />
+&nbsp;&nbsp;PUSHBUTTON&nbsp;/5(30)&nbsp;butt28&nbsp;USER-COMMAND&nbsp;but28&nbsp;,<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;SKIP,<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;PUSHBUTTON&nbsp;/5(30)&nbsp;butt29&nbsp;USER-COMMAND&nbsp;but29&nbsp;,<br />
+&nbsp;&nbsp;PUSHBUTTON&nbsp;/5(30)&nbsp;butt210&nbsp;USER-COMMAND&nbsp;but210&nbsp;,<br />
+&nbsp;&nbsp;PUSHBUTTON&nbsp;/5(30)&nbsp;butt211&nbsp;USER-COMMAND&nbsp;but211&nbsp;,<br />
+&nbsp;&nbsp;PUSHBUTTON&nbsp;/5(30)&nbsp;butt212&nbsp;USER-COMMAND&nbsp;but212.<br />
+<br />
+&nbsp;&nbsp;SELECTION-SCREEN&nbsp;END&nbsp;OF&nbsp;BLOCK&nbsp;b2.<br />
+SELECTION-SCREEN END OF SCREEN 200.<br />
+<br />
+SELECTION-SCREEN BEGIN OF SCREEN 300 AS SUBSCREEN.<br />
+&nbsp;&nbsp;SELECTION-SCREEN:&nbsp;BEGIN&nbsp;OF&nbsp;BLOCK&nbsp;b3&nbsp;WITH&nbsp;FRAME,<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;SKIP,<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;PUSHBUTTON&nbsp;/5(30)&nbsp;butt31&nbsp;USER-COMMAND&nbsp;but31&nbsp;,&nbsp;"40是按钮长度<br />
+&nbsp;&nbsp;PUSHBUTTON&nbsp;/5(30)&nbsp;butt32&nbsp;USER-COMMAND&nbsp;but32&nbsp;,<br />
+&nbsp;&nbsp;PUSHBUTTON&nbsp;/5(30)&nbsp;butt33&nbsp;USER-COMMAND&nbsp;but33&nbsp;,<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;SKIP,<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;PUSHBUTTON&nbsp;/5(30)&nbsp;butt34&nbsp;USER-COMMAND&nbsp;but34&nbsp;,<br />
+&nbsp;&nbsp;PUSHBUTTON&nbsp;/5(30)&nbsp;butt35&nbsp;USER-COMMAND&nbsp;but35&nbsp;,<br />
+&nbsp;&nbsp;PUSHBUTTON&nbsp;/5(30)&nbsp;butt36&nbsp;USER-COMMAND&nbsp;but36&nbsp;,<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;SKIP,<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;PUSHBUTTON&nbsp;/5(30)&nbsp;butt37&nbsp;USER-COMMAND&nbsp;but37&nbsp;,<br />
+&nbsp;&nbsp;PUSHBUTTON&nbsp;/5(30)&nbsp;butt38&nbsp;USER-COMMAND&nbsp;but38.<br />
+&nbsp;&nbsp;SELECTION-SCREEN&nbsp;END&nbsp;OF&nbsp;BLOCK&nbsp;b3.<br />
+SELECTION-SCREEN END OF SCREEN 300.<br />
+<br />
+SELECTION-SCREEN:BEGIN OF TABBED BLOCK mytab FOR 10 LINES,<br />
+TAB (20) button1 USER-COMMAND push1,<br />
+TAB (20) button2 USER-COMMAND push2,<br />
+TAB (20) button3 USER-COMMAND push3,<br />
+END OF BLOCK mytab.<br />
+<br />
+INITIALIZATION.<br />
+&nbsp;&nbsp;button1&nbsp;=&nbsp;'生产主数据管理'.<br />
+&nbsp;&nbsp;button2&nbsp;=&nbsp;'生产计划执行管理'.<br />
+&nbsp;&nbsp;button3&nbsp;=&nbsp;'系统集成管理'.<br />
+&nbsp;&nbsp;mytab-prog&nbsp;=&nbsp;sy-repid.<br />
+&nbsp;&nbsp;mytab-dynnr&nbsp;=&nbsp;100.<br />
+&nbsp;&nbsp;mytab-activetab&nbsp;=&nbsp;'tab1'.<br />
+<br />
+&nbsp;&nbsp;"分页签切换<br />
+<br />
+AT SELECTION-SCREEN.<br />
+&nbsp;&nbsp;DATA:&nbsp;lv_zucomm&nbsp;TYPE&nbsp;syst-ucomm.<br />
+lv_zucomm = sy-ucomm.<br />
+&nbsp;&nbsp;CASE&nbsp;sy-dynnr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;1000.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;FORM1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CASE&nbsp;lv_zucomm.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'PUSH1'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mytab-dynnr&nbsp;=&nbsp;100.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mytab-activetab&nbsp;=&nbsp;'button1'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'PUSH2'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mytab-dynnr&nbsp;=&nbsp;200.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mytab-activetab&nbsp;=&nbsp;'button2'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'PUSH3'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mytab-dynnr&nbsp;=&nbsp;300.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mytab-activetab&nbsp;=&nbsp;'button3'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;OTHERS.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDCASE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;100.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;200.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;OTHERS.<br />
+&nbsp;&nbsp;ENDCASE.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*AT&nbsp;SELECTION-SCREEN.<br />
+*&nbsp;相应按钮事件<br />
+   </div>
+   <div class="code">
+DATA: lv_ucomm TYPE syst-ucomm.<br />
+lv_ucomm = sy-ucomm.<br />
+&nbsp;&nbsp;CASE&nbsp;&nbsp;lv_ucomm.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'BUT10'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;TRANSACTION&nbsp;'ZPPR028'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RETURN.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'BUT11'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;TRANSACTION&nbsp;'ZPPR001'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RETURN.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'BUT12'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;TRANSACTION&nbsp;'ZPPR002'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RETURN.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'BUT13'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;TRANSACTION&nbsp;'ZPPR003'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RETURN.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'BUT14'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;TRANSACTION&nbsp;'ZPPR009'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RETURN.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'BUT15'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;TRANSACTION&nbsp;'ZPPR019'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RETURN.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'BUT16'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;TRANSACTION&nbsp;'ZPPR020'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RETURN.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'BUT21'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;TRANSACTION&nbsp;'ZPPR004'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RETURN.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'BUT22'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;TRANSACTION&nbsp;'ZPPR014'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RETURN.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'BUT23'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;TRANSACTION&nbsp;'ZPPR007'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RETURN.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'BUT24'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;TRANSACTION&nbsp;'ZPPR015'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RETURN.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'BUT25'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;TRANSACTION&nbsp;'ZPPR005'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RETURN.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'BUT26'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;TRANSACTION&nbsp;'ZPPR008'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RETURN.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'BUT27'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;TRANSACTION&nbsp;'ZPPR011'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RETURN.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'BUT28'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;TRANSACTION&nbsp;'ZPPR016'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RETURN.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'BUT29'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;TRANSACTION&nbsp;'ZPPR006'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RETURN.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'BUT210'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;TRANSACTION&nbsp;'ZPPR013'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RETURN.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'BUT211'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;TRANSACTION&nbsp;'ZPPR010'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RETURN.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'BUT212'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;TRANSACTION&nbsp;'ZPPR012'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RETURN.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'BUT31'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;TRANSACTION&nbsp;'ZPPR021'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RETURN.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'BUT32'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;TRANSACTION&nbsp;'ZPPR018'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RETURN.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'BUT33'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;TRANSACTION&nbsp;'ZPPR022'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RETURN.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'BUT34'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;TRANSACTION&nbsp;'ZPPR017'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RETURN.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'BUT35'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;TRANSACTION&nbsp;'ZPPR025'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RETURN.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'BUT36'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;TRANSACTION&nbsp;'ZPPR023'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RETURN.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'BUT37'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;TRANSACTION&nbsp;'ZPPR024'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RETURN.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'BUT38'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;TRANSACTION&nbsp;'ZPPR026'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RETURN.<br />
+&nbsp;&nbsp;ENDCASE.<br />
+<br />
+<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*--------------------------------------------------------------*<br />
+*Initialization<br />
+*--------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+INITIALIZATION.<br />
+&nbsp;&nbsp;butt10&nbsp;=&nbsp;'ZPPR028：物料主数据查询'.<br />
+&nbsp;&nbsp;butt11&nbsp;=&nbsp;'ZPPR001：BOM批导'.<br />
+&nbsp;&nbsp;butt12&nbsp;=&nbsp;'ZPPR002：工艺路线批导'.<br />
+&nbsp;&nbsp;butt13&nbsp;=&nbsp;'ZPPR003：生产版本批导'.<br />
+&nbsp;&nbsp;butt14&nbsp;=&nbsp;'ZPPR009：BOM查询'.<br />
+&nbsp;&nbsp;butt15&nbsp;=&nbsp;'ZPPR019：工艺路线批量查询'.<br />
+&nbsp;&nbsp;butt16&nbsp;=&nbsp;'ZPPR020：生产版本查询'.<br />
+&nbsp;&nbsp;butt21&nbsp;=&nbsp;'ZPPR004：生产订单批导'.<br />
+&nbsp;&nbsp;butt22&nbsp;=&nbsp;'ZPPR014：根据销售订单创建生产订单'.<br />
+&nbsp;&nbsp;butt23&nbsp;=&nbsp;'ZPPR007：物料可用性检查'.<br />
+&nbsp;&nbsp;butt24&nbsp;=&nbsp;'ZPPR015：按状态查询订单'.<br />
+&nbsp;&nbsp;butt25&nbsp;=&nbsp;'ZPPR005：计划独立需求导入'.<br />
+&nbsp;&nbsp;butt26&nbsp;=&nbsp;'ZPPR008：总成半成品排产'.<br />
+&nbsp;&nbsp;butt27&nbsp;=&nbsp;'ZPPR011：MRP例外信息查询'.<br />
+&nbsp;&nbsp;butt28&nbsp;=&nbsp;'ZPPR016：入库量-发货量报表'.<br />
+&nbsp;&nbsp;butt29&nbsp;=&nbsp;'ZPPR006：周预测导入'.<br />
+&nbsp;&nbsp;butt210&nbsp;=&nbsp;'ZPPR013：备料中心半成品排产'.<br />
+&nbsp;&nbsp;butt211&nbsp;=&nbsp;'ZPPR010：库存地点批量扩展'.<br />
+&nbsp;&nbsp;butt212&nbsp;=&nbsp;'ZPPR012：零工派工单功能'.<br />
+&nbsp;&nbsp;butt31&nbsp;=&nbsp;'ZPPR021：工艺路线发布'.<br />
+&nbsp;&nbsp;butt32&nbsp;=&nbsp;'ZPPR018：订单预留明细发布'.<br />
+&nbsp;&nbsp;butt33&nbsp;=&nbsp;'ZPPR022：订单报工查询处理'.<br />
+&nbsp;&nbsp;butt34&nbsp;=&nbsp;'ZPPR017：工序文本码发布'.<br />
+&nbsp;&nbsp;butt35&nbsp;=&nbsp;'ZPPR025：订单关闭查询处理'.<br />
+&nbsp;&nbsp;butt36&nbsp;=&nbsp;'ZPPR023：生产订单发布'.<br />
+&nbsp;&nbsp;butt37&nbsp;=&nbsp;'ZPPR024：生产订单发布查询'.<br />
+&nbsp;&nbsp;butt38&nbsp;=&nbsp;'ZPPR026：订单入库过账处理'.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*--------------------------------------------------------------*<br />
+*At&nbsp;Selection-Screen<br />
+*--------------------------------------------------------------*<br />
+            </div>
+          </td>
+        </tr>
+      </table>
+      </td>
+      </tr>
+   <tr>
+<td class="footer">Extracted by Mass Download version 1.5.2 - E.G.Mellodew. 1998-2022. Sap Release 755</td>
+   </tr>
+</table>
+</body>
+</html>

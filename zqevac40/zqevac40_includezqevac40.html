@@ -1,0 +1,342 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=GB2312" />
+<title>ZQEVAC40</title>
+<style type="text/css">
+.code{ font-family:"Courier New", Courier, monospace; color:#000; font-size:14px; background-color:#F2F4F7 }
+  .codeComment {font-family:"Courier New", Courier, monospace; color:#0000F0; font-size:14px; background-color:#F2F4F7 }
+  .normalBold{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; font-weight:800 }
+  .normalBoldLarge{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+</style>
+<style type="text/css">
+  .normal{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px }
+  .footer{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; text-align: center }
+  h2{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+  h3{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:14px; font-weight:800 }
+  .outerTable{
+   background-color:#E0E7ED;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-right-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+  .innerTable{
+   background-color:#F2F4F7;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-bottom-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+</style>
+</head>
+<body>
+<table class="outerTable">
+  <tr class="normalBoldLarge">
+     <td><h2>Code listing for: ZQEVAC40</h2>
+<h3> Description: Include ZQEVAC40</h3></td>
+   </tr>
+  <tr>
+     <td>
+     <table class="innerTable">
+       <tr>
+          <td>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Report&nbsp;ZQEVAC40<br />
+*&---------------------------------------------------------------------*<br />
+*&<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+REPORT zqevac40.<br />
+   </div>
+   <div class="codeComment">
+*----------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;Datendefinitionen<br />
+*----------------------------------------------------------------------*<br />
+*&nbsp;Tabellen<br />
+*----------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+TABLES sscrfields.<br />
+TABLES qals.<br />
+TABLES qave.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*----------------------------------------------------------------------*<br />
+*&nbsp;Konstanten<br />
+   </div>
+   <div class="code">
+CONSTANTS:<br />
+&nbsp;&nbsp;c_rc_0&nbsp;&nbsp;LIKE&nbsp;sy-subrc&nbsp;VALUE&nbsp;0,<br />
+&nbsp;&nbsp;c_rc_4&nbsp;&nbsp;LIKE&nbsp;sy-subrc&nbsp;VALUE&nbsp;4,<br />
+&nbsp;&nbsp;c_rc_20&nbsp;LIKE&nbsp;sy-subrc&nbsp;VALUE&nbsp;20,<br />
+   </div>
+   <div class="codeComment">
+*<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;c_kreuz&nbsp;LIKE&nbsp;qm00-qkz&nbsp;VALUE&nbsp;'X'.<br />
+   </div>
+   <div class="codeComment">
+*<br />
+<br />
+*----------------------------------------------------------------------*<br />
+*&nbsp;Eingabebildschirm<br />
+   </div>
+   <div class="code">
+SELECTION-SCREEN SKIP 2.<br />
+PARAMETERS prueflos  LIKE qals-prueflos MATCHCODE OBJECT qals<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MEMORY&nbsp;ID&nbsp;qls&nbsp;.<br />
+SELECTION-SCREEN SKIP 1.<br />
+SELECTION-SCREEN BEGIN OF BLOCK search WITH FRAME.<br />
+&nbsp;&nbsp;SELECTION-SCREEN&nbsp;BEGIN&nbsp;OF&nbsp;LINE.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SELECTION-SCREEN&nbsp;PUSHBUTTON&nbsp;3(20)&nbsp;TEXT-s01&nbsp;USER-COMMAND&nbsp;sear.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SELECTION-SCREEN&nbsp;PUSHBUTTON&nbsp;40(20)&nbsp;TEXT-s02&nbsp;USER-COMMAND&nbsp;show.<br />
+<br />
+&nbsp;&nbsp;SELECTION-SCREEN&nbsp;END&nbsp;OF&nbsp;LINE.<br />
+SELECTION-SCREEN END OF BLOCK search.<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*----------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+AT SELECTION-SCREEN.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;sscrfields-ucomm&nbsp;EQ&nbsp;'SEAR'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;OR&nbsp;prueflos&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'QELA_START_SELECTION_OF_LOTS'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_selid&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'&nbsp;'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_stat_aenderung&nbsp;=&nbsp;'X'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_stat_ero&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'X'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_stat_frei&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'X'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_stat_ve&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'&nbsp;'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;e_prueflos&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;prueflos<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;no_entry&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;no_selected&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTHERS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;3.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;sscrfields-ucomm&nbsp;EQ&nbsp;'SHOW'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'QSS1_LOT_SHOW'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_prueflos&nbsp;=&nbsp;prueflos.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;CHECK&nbsp;sscrfields-ucomm&nbsp;EQ&nbsp;'ONLI'.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;ab&nbsp;hier&nbsp;mu#&nbsp;Prüflosnummer&nbsp;gefüllt&nbsp;sein.<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;IF&nbsp;prueflos&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;e164(qa).<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Lesen&nbsp;Los<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'ENQUEUE_EQQALS1'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;prueflos&nbsp;=&nbsp;prueflos.<br />
+<br />
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'QPSE_LOT_READ'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_prueflos&nbsp;=&nbsp;prueflos<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;e_qals&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;qals<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;no_lot&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;1.<br />
+&nbsp;&nbsp;IF&nbsp;NOT&nbsp;sy-subrc&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;e102(qa).<br />
+&nbsp;&nbsp;ENDIF.<br />
+   </div>
+   <div class="codeComment">
+*-----------------<br />
+*&nbsp;Prüfen&nbsp;Status<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'QAST_STATUS_CHECK'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_objnr&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;qals-objnr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_status&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'I0218'&nbsp;"Status&nbsp;VE&nbsp;getroffen<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;status_not_activ&nbsp;=&nbsp;1.<br />
+&nbsp;&nbsp;IF&nbsp;NOT&nbsp;sy-subrc&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;e102(qv)&nbsp;WITH&nbsp;qals-prueflos.<br />
+&nbsp;&nbsp;ENDIF.<br />
+   </div>
+   <div class="codeComment">
+*<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'QEVA_UD_READ'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_prueflos&nbsp;=&nbsp;qals-prueflos<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;e_qave&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;qave.<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+START-OF-SELECTION.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Vorgaben&nbsp;sind&nbsp;ok.&nbsp;&nbsp;&nbsp;1.&nbsp;Material&nbsp;Umlagern&nbsp;und&nbsp;Los&nbsp;#ndern<br />
+<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;PERFORM&nbsp;qals_aendern.<br />
+   </div>
+   <div class="codeComment">
+************************************************************************<br />
+*----------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FORM&nbsp;QALS_aendern<br />
+*----------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM qals_aendern.<br />
+   </div>
+   <div class="codeComment">
+*<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;PERFORM&nbsp;status_fix_setzen&nbsp;USING&nbsp;'I0002'&nbsp;c_kreuz.<br />
+&nbsp;&nbsp;PERFORM&nbsp;status_fix_setzen&nbsp;USING&nbsp;'I0216'&nbsp;space.<br />
+&nbsp;&nbsp;PERFORM&nbsp;status_fix_setzen&nbsp;USING&nbsp;'I0217'&nbsp;space.<br />
+&nbsp;&nbsp;PERFORM&nbsp;status_fix_setzen&nbsp;USING&nbsp;'I0218'&nbsp;space.<br />
+&nbsp;&nbsp;CLEAR:&nbsp;qals-stat14.<br />
+&nbsp;&nbsp;CLEAR:&nbsp;qals-stat35.<br />
+&nbsp;&nbsp;CLEAR:&nbsp;qave-vauswahlmg,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;qave-vwerks,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;qave-versionam,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;qave-vcodegrp,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;qave-vcode,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;qave-vbewertung,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;qave-versioncd,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;qave-vfolgeakti,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;qave-qkennzahl.<br />
+   </div>
+   <div class="codeComment">
+*--...&nbsp;verbuchen<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'QEVA_UD_UPDATE'&nbsp;IN&nbsp;UPDATE&nbsp;TASK<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;qals_new&nbsp;=&nbsp;qals<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;qave_new&nbsp;=&nbsp;qave.<br />
+&nbsp;&nbsp;COMMIT&nbsp;WORK.<br />
+&nbsp;&nbsp;MESSAGE&nbsp;s101(qa)&nbsp;WITH&nbsp;qals-prueflos.<br />
+ENDFORM.<br />
+   </div>
+   <div class="codeComment">
+*----------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;STATUS_FIX_SETZEN<br />
+*----------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;Setzen&nbsp;eines&nbsp;Status&nbsp;aufgrund&nbsp;von&nbsp;Voreinstellungen&nbsp;wie&nbsp;QMAT&nbsp;etc.&nbsp;&nbsp;&nbsp;&nbsp;*<br />
+*----------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;--&gt;&nbsp;&nbsp;STATUS&nbsp;&nbsp;&nbsp;&nbsp;Status&nbsp;der&nbsp;gesetzt&nbsp;werden&nbsp;soll<br />
+*&nbsp;&nbsp;--&gt;&nbsp;&nbsp;AKTIV&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Status&nbsp;wird&nbsp;aktiviert&nbsp;sonst&nbsp;deaktiviert<br />
+*----------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM status_fix_setzen USING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;VALUE(status)&nbsp;LIKE&nbsp;tj02-istat<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;VALUE(aktiv)&nbsp;LIKE&nbsp;c_kreuz.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;lokale&nbsp;Tabelle&nbsp;fuer&nbsp;Statusfortschreibung<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;DATA:&nbsp;BEGIN&nbsp;OF&nbsp;l_stattab&nbsp;OCCURS&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INCLUDE&nbsp;STRUCTURE&nbsp;jstat.<br />
+DATA  END OF l_stattab.<br />
+   </div>
+   <div class="codeComment">
+*<br />
+*&nbsp;Falls&nbsp;Objektnr.&nbsp;nicht&nbsp;gefüllt.&nbsp;--&gt;&nbsp;Fehlermeldung&nbsp;!!!<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;IF&nbsp;qals-objnr&nbsp;EQ&nbsp;space.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;e013(qv).<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;Fehlende&nbsp;Objektnr.:&nbsp;Problem&nbsp;fü<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;MOVE&nbsp;status&nbsp;TO&nbsp;l_stattab-stat.<br />
+&nbsp;&nbsp;IF&nbsp;aktiv&nbsp;EQ&nbsp;space.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MOVE&nbsp;c_kreuz&nbsp;TO&nbsp;l_stattab-inact.<br />
+&nbsp;&nbsp;ENDIF.<br />
+   </div>
+   <div class="codeComment">
+*<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;APPEND&nbsp;l_stattab.<br />
+   </div>
+   <div class="codeComment">
+*<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'STATUS_CHANGE_INTERN'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;check_only&nbsp;=&nbsp;space<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;objnr&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;qals-objnr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;TABLES<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;status&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;l_stattab.<br />
+<br />
+ENDFORM.                               " STATUS_FIX_SETZEN<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*Messages<br />
+*----------------------------------------------------------<br />
+*<br />
+*&nbsp;Message&nbsp;class:&nbsp;QA<br />
+*101&nbsp;&nbsp;&nbsp;检验批&nbsp;&&nbsp;&&nbsp;被修改<br />
+*102&nbsp;&nbsp;&nbsp;检验批&nbsp;&&nbsp;还未建立<br />
+*164&nbsp;&nbsp;&nbsp;无检验批可选<br />
+*<br />
+*&nbsp;Message&nbsp;class:&nbsp;QV<br />
+*013&nbsp;&nbsp;&nbsp;丢失的对象数字:&nbsp;状态更新的问题<br />
+*102&nbsp;&nbsp;&nbsp;还未作检验批&nbsp;&&nbsp;的使用决策<br />
+            </div>
+          </td>
+        </tr>
+      </table>
+      </td>
+      </tr>
+   <tr>
+<td class="footer">Extracted by Mass Download version 1.5.2 - E.G.Mellodew. 1998-2022. Sap Release 755</td>
+   </tr>
+</table>
+</body>
+</html>

@@ -1,0 +1,417 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=GB2312" />
+<title>ZPPR024</title>
+<style type="text/css">
+.code{ font-family:"Courier New", Courier, monospace; color:#000; font-size:14px; background-color:#F2F4F7 }
+  .codeComment {font-family:"Courier New", Courier, monospace; color:#0000F0; font-size:14px; background-color:#F2F4F7 }
+  .normalBold{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; font-weight:800 }
+  .normalBoldLarge{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+</style>
+<style type="text/css">
+  .normal{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px }
+  .footer{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; text-align: center }
+  h2{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+  h3{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:14px; font-weight:800 }
+  .outerTable{
+   background-color:#E0E7ED;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-right-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+  .innerTable{
+   background-color:#F2F4F7;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-bottom-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+</style>
+</head>
+<body>
+<table class="outerTable">
+  <tr class="normalBoldLarge">
+     <td><h2>Code listing for: ZPPR024</h2>
+<h3> Description: 生产订单发布查询</h3></td>
+   </tr>
+  <tr>
+     <td>
+     <table class="innerTable">
+       <tr>
+          <td>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Report&nbsp;ZPPR024<br />
+*&---------------------------------------------------------------------*<br />
+*&<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+REPORT zppr024.<br />
+TABLES: zppt005,zppt006,zppt007.<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&----------------------------------------------------------------------&<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;选择屏幕<br />
+*&----------------------------------------------------------------------&<br />
+   </div>
+   <div class="code">
+SELECTION-SCREEN  BEGIN OF BLOCK b1 WITH FRAME TITLE TEXT-001.<br />
+<br />
+&nbsp;&nbsp;PARAMETERS:&nbsp;p_pwerk&nbsp;LIKE&nbsp;&nbsp;zppt005-pwerk&nbsp;OBLIGATORY.&nbsp;"&nbsp;工厂<br />
+<br />
+&nbsp;&nbsp;SELECT-OPTIONS:&nbsp;&nbsp;&nbsp;s_ver&nbsp;FOR&nbsp;zppt005-zversion,&nbsp;&nbsp;"&nbsp;发布版本号<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;s_aufnr&nbsp;&nbsp;FOR&nbsp;zppt005-aufnr,&nbsp;"&nbsp;&nbsp;生产订单<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;s_dauat&nbsp;&nbsp;FOR&nbsp;zppt005-dauat&nbsp;MODIF&nbsp;ID&nbsp;m1,&nbsp;"&nbsp;&nbsp;订单类型<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;s_matnr&nbsp;&nbsp;FOR&nbsp;zppt005-matnr&nbsp;MODIF&nbsp;ID&nbsp;m3,&nbsp;"&nbsp;&nbsp;物料号<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;s_bismt&nbsp;&nbsp;FOR&nbsp;zppt005-bismt&nbsp;MODIF&nbsp;ID&nbsp;m3,&nbsp;"&nbsp;图号<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;s_saprel&nbsp;FOR&nbsp;&nbsp;zppt005-saprel&nbsp;MODIF&nbsp;ID&nbsp;m1,&nbsp;"&nbsp;&nbsp;发布标识<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;s_loekz&nbsp;&nbsp;FOR&nbsp;&nbsp;zppt005-loekz&nbsp;MODIF&nbsp;ID&nbsp;m1.&nbsp;"&nbsp;&nbsp;删除标记<br />
+<br />
+&nbsp;&nbsp;SELECT-OPTIONS&nbsp;:&nbsp;&nbsp;s_aufpl&nbsp;FOR&nbsp;zppt007-aufpl&nbsp;MODIF&nbsp;ID&nbsp;m2,&nbsp;"&nbsp;工艺路线号<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;s_arbpl&nbsp;FOR&nbsp;zppt007-arbpl&nbsp;MODIF&nbsp;ID&nbsp;m2,&nbsp;"&nbsp;&nbsp;工作中心<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;s_ktsch&nbsp;FOR&nbsp;zppt007-ktsch&nbsp;MODIF&nbsp;ID&nbsp;m2.&nbsp;"&nbsp;&nbsp;工序文本号<br />
+<br />
+&nbsp;&nbsp;SELECT-OPTIONS:&nbsp;&nbsp;&nbsp;s_zdate&nbsp;&nbsp;FOR&nbsp;zppt005-zdate.&nbsp;"&nbsp;发布日期<br />
+<br />
+SELECTION-SCREEN END OF BLOCK b1.<br />
+<br />
+<br />
+SELECTION-SCREEN  BEGIN OF BLOCK b2 WITH FRAME TITLE TEXT-002.<br />
+<br />
+&nbsp;&nbsp;PARAMETERS:&nbsp;p1&nbsp;RADIOBUTTON&nbsp;GROUP&nbsp;g1&nbsp;USER-COMMAND&nbsp;click&nbsp;DEFAULT&nbsp;'X'.<br />
+&nbsp;&nbsp;PARAMETERS:&nbsp;p2&nbsp;RADIOBUTTON&nbsp;GROUP&nbsp;g1.<br />
+&nbsp;&nbsp;PARAMETERS:&nbsp;p3&nbsp;RADIOBUTTON&nbsp;GROUP&nbsp;g1.<br />
+<br />
+SELECTION-SCREEN END OF BLOCK b2.<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&----------------------------------------------------------------------&<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;处理屏幕<br />
+*&----------------------------------------------------------------------&<br />
+   </div>
+   <div class="code">
+AT SELECTION-SCREEN OUTPUT.<br />
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;SCREEN.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CASE&nbsp;screen-group1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'M1'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;p2&nbsp;=&nbsp;'X'&nbsp;OR&nbsp;p3&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;screen-active&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'M2'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;p2&nbsp;=&nbsp;'X'&nbsp;OR&nbsp;p1&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;screen-active&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'M3'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;p3&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;screen-active&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;OTHERS.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDCASE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MODIFY&nbsp;SCREEN.<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&----------------------------------------------------------------------&<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;F4帮助<br />
+*&----------------------------------------------------------------------&<br />
+   </div>
+   <div class="code">
+AT SELECTION-SCREEN ON VALUE-REQUEST FOR s_ver-low.<br />
+&nbsp;&nbsp;PERFORM&nbsp;s_ver_f4_help.<br />
+   </div>
+   <div class="codeComment">
+*&----------------------------------------------------------------------&<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;初始化<br />
+*&----------------------------------------------------------------------&<br />
+   </div>
+   <div class="code">
+INITIALIZATION.<br />
+&nbsp;&nbsp;PERFORM&nbsp;init_data.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Form&nbsp;s_ver_f4_help<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM s_ver_f4_help .<br />
+&nbsp;&nbsp;DATA:&nbsp;BEGIN&nbsp;OF&nbsp;ls_version,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;version&nbsp;LIKE&nbsp;zppt005-zversion,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pwerk&nbsp;&nbsp;&nbsp;LIKE&nbsp;zppt005-pwerk,<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;aufnr&nbsp;&nbsp;&nbsp;LIKE&nbsp;zppt005-aufnr,<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;END&nbsp;OF&nbsp;ls_version,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lt_version&nbsp;LIKE&nbsp;TABLE&nbsp;OF&nbsp;ls_version.<br />
+<br />
+&nbsp;&nbsp;SELECT&nbsp;*&nbsp;FROM&nbsp;zppt005&nbsp;INTO&nbsp;CORRESPONDING&nbsp;FIELDS&nbsp;OF&nbsp;TABLE&nbsp;lt_version.<br />
+&nbsp;&nbsp;SORT&nbsp;lt_version&nbsp;BY&nbsp;version.<br />
+&nbsp;&nbsp;DELETE&nbsp;ADJACENT&nbsp;DUPLICATES&nbsp;FROM&nbsp;lt_version&nbsp;COMPARING&nbsp;version.<br />
+<br />
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'F4IF_INT_TABLE_VALUE_REQUEST'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;retfield&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'VERSION'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dynpprog&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;sy-repid<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dynpnr&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;sy-dynnr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dynprofield&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'S_VER'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;value_org&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'S'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;TABLES<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;value_tab&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lt_version<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;parameter_error&nbsp;=&nbsp;1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;no_values_found&nbsp;=&nbsp;2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTHERS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;3.<br />
+ENDFORM.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Form&nbsp;init_data<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM init_data .<br />
+<br />
+&nbsp;&nbsp;p_pwerk&nbsp;=&nbsp;'1000'.<br />
+<br />
+&nbsp;&nbsp;"&nbsp;给版本号赋默认值。<br />
+&nbsp;&nbsp;SELECT&nbsp;SINGLE&nbsp;MAX(&nbsp;zversion&nbsp;)&nbsp;FROM&nbsp;zppt005&nbsp;INTO&nbsp;@DATA(lv_version).<br />
+&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;=&nbsp;0&nbsp;AND&nbsp;lv_version&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;s_ver-sign&nbsp;=&nbsp;'I'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;s_ver-option&nbsp;=&nbsp;'BT'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;s_ver-low&nbsp;=&nbsp;lv_version.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;s_ver.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+<br />
+ENDFORM.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&----------------------------------------------------------------------&<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;主程序<br />
+*&----------------------------------------------------------------------&<br />
+   </div>
+   <div class="code">
+START-OF-SELECTION.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;p1&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM:&nbsp;get_data_01.<br />
+&nbsp;&nbsp;ELSEIF&nbsp;p2&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM:&nbsp;get_data_02.<br />
+&nbsp;&nbsp;ELSEIF&nbsp;p3&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM:&nbsp;get_data_03.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Form&nbsp;get_data_01<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM get_data_01 .<br />
+&nbsp;&nbsp;DATA:&nbsp;gs_out&nbsp;LIKE&nbsp;zppt005,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gt_out&nbsp;LIKE&nbsp;TABLE&nbsp;OF&nbsp;zppt005.<br />
+&nbsp;&nbsp;SELECT&nbsp;*&nbsp;INTO&nbsp;&nbsp;TABLE&nbsp;&nbsp;gt_out&nbsp;FROM&nbsp;zppt005<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;pwerk&nbsp;=&nbsp;p_pwerk<br />
+&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;zversion&nbsp;IN&nbsp;s_ver<br />
+&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;aufnr&nbsp;IN&nbsp;s_aufnr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;dauat&nbsp;IN&nbsp;s_dauat<br />
+&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;matnr&nbsp;IN&nbsp;s_matnr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;bismt&nbsp;IN&nbsp;s_bismt<br />
+&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;saprel&nbsp;IN&nbsp;s_saprel<br />
+&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;loekz&nbsp;&nbsp;IN&nbsp;s_loekz<br />
+&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;zdate&nbsp;&nbsp;IN&nbsp;s_zdate.<br />
+&nbsp;&nbsp;PERFORM:&nbsp;alv_disp&nbsp;TABLES&nbsp;gt_out.<br />
+ENDFORM.<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Form&nbsp;get_data_02<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM get_data_02 .<br />
+&nbsp;&nbsp;DATA:&nbsp;gs_out&nbsp;LIKE&nbsp;zppt006,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gt_out&nbsp;LIKE&nbsp;TABLE&nbsp;OF&nbsp;zppt006.<br />
+<br />
+&nbsp;&nbsp;SELECT&nbsp;*&nbsp;INTO&nbsp;TABLE&nbsp;gt_out&nbsp;FROM&nbsp;zppt006<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;pwerk&nbsp;=&nbsp;p_pwerk<br />
+&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;zversion&nbsp;IN&nbsp;s_ver<br />
+&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;aufnr&nbsp;IN&nbsp;s_aufnr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;matnr&nbsp;IN&nbsp;s_matnr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;bismt&nbsp;IN&nbsp;s_bismt<br />
+&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;zdate&nbsp;IN&nbsp;s_zdate.<br />
+<br />
+<br />
+&nbsp;&nbsp;PERFORM:&nbsp;alv_disp&nbsp;TABLES&nbsp;gt_out.<br />
+<br />
+ENDFORM.<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Form&nbsp;get_data_03<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM get_data_03 .<br />
+&nbsp;&nbsp;DATA:&nbsp;gs_out&nbsp;LIKE&nbsp;zppt007,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gt_out&nbsp;LIKE&nbsp;TABLE&nbsp;OF&nbsp;zppt007.<br />
+<br />
+&nbsp;&nbsp;SELECT&nbsp;*&nbsp;INTO&nbsp;TABLE&nbsp;gt_out&nbsp;FROM&nbsp;zppt007<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;pwerk&nbsp;=&nbsp;p_pwerk<br />
+&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;zversion&nbsp;IN&nbsp;s_ver<br />
+&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;aufnr&nbsp;IN&nbsp;s_aufnr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;aufpl&nbsp;IN&nbsp;s_aufpl<br />
+&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;arbpl&nbsp;IN&nbsp;s_arbpl<br />
+&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;ktsch&nbsp;IN&nbsp;s_ktsch<br />
+&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;zdate&nbsp;IN&nbsp;s_zdate.<br />
+<br />
+&nbsp;&nbsp;PERFORM:&nbsp;alv_disp&nbsp;TABLES&nbsp;gt_out.<br />
+ENDFORM.<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Form&nbsp;alv_disp<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM alv_disp TABLES p_gt_out TYPE STANDARD TABLE..<br />
+&nbsp;&nbsp;DATA:&nbsp;lt_fieldcat&nbsp;TYPE&nbsp;lvc_t_fcat&nbsp;WITH&nbsp;HEADER&nbsp;LINE.<br />
+<br />
+<br />
+&nbsp;&nbsp;DATA:&nbsp;ls_layout_lvc&nbsp;TYPE&nbsp;lvc_s_layo.<br />
+&nbsp;&nbsp;DATA:&nbsp;ls_tabname&nbsp;TYPE&nbsp;tabname.<br />
+<br />
+&nbsp;&nbsp;ls_layout_lvc-cwidth_opt&nbsp;=&nbsp;&nbsp;'X'.<br />
+<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;p1&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_tabname&nbsp;=&nbsp;'ZPPT005'.<br />
+&nbsp;&nbsp;ELSEIF&nbsp;p2&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_tabname&nbsp;=&nbsp;'ZPPT006'.<br />
+&nbsp;&nbsp;ELSEIF&nbsp;p3&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_tabname&nbsp;=&nbsp;'ZPPT007'.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'LVC_FIELDCATALOG_MERGE'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;I_BUFFER_ACTIVE&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_structure_name&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_tabname<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;I_CLIENT_NEVER_DISPLAY&nbsp;=&nbsp;'X'<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;I_BYPASSING_BUFFER&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;I_INTERNAL_TABNAME&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;CHANGING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ct_fieldcat&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lt_fieldcat[]<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;inconsistent_interface&nbsp;=&nbsp;1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;program_error&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTHERS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;3.<br />
+<br />
+" 修改标题文本<br />
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;lt_fieldcat&nbsp;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CASE&nbsp;lt_fieldcat-fieldname.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'AMEIN'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lt_fieldcat-coltext&nbsp;=&nbsp;'订单单位'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'PLNAL'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lt_fieldcat-coltext&nbsp;=&nbsp;'组计数器'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'LOEKZ'&nbsp;OR&nbsp;'XLOEK'&nbsp;OR&nbsp;'DELT'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lt_fieldcat-coltext&nbsp;=&nbsp;'删除标记'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'RGEKZ'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lt_fieldcat-coltext&nbsp;=&nbsp;'标识：反冲'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'SHKZG'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lt_fieldcat-coltext&nbsp;=&nbsp;'借/贷标识'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'RSPOS'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lt_fieldcat-coltext&nbsp;=&nbsp;'行项目号'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'VORNR'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lt_fieldcat-coltext&nbsp;=&nbsp;'操作/活动编号'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;OTHERS.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDCASE.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MODIFY&nbsp;lt_fieldcat.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR:&nbsp;lt_fieldcat.<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+<br />
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'REUSE_ALV_GRID_DISPLAY_LVC'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_structure_name&nbsp;=&nbsp;ls_tabname<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;is_layout_lvc&nbsp;&nbsp;&nbsp;=&nbsp;ls_layout_lvc<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it_fieldcat_lvc&nbsp;=&nbsp;lt_fieldcat[]<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_default&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'X'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_save&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'A'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;TABLES<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;t_outtab&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;p_gt_out<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;program_error&nbsp;&nbsp;&nbsp;=&nbsp;1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTHERS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;2.<br />
+<br />
+ENDFORM.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*Text&nbsp;elements<br />
+*----------------------------------------------------------<br />
+*&nbsp;001&nbsp;选择条件<br />
+*&nbsp;002&nbsp;功能选择<br />
+<br />
+<br />
+*Selection&nbsp;texts<br />
+*----------------------------------------------------------<br />
+*&nbsp;P1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;订单发布数据查询<br />
+*&nbsp;P2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;订单BOM数据查询<br />
+*&nbsp;P3&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;订单工序信息查询<br />
+*&nbsp;P_PWERK&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;工厂<br />
+*&nbsp;S_ARBPL&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;工作中心<br />
+*&nbsp;S_AUFNR&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;生产订单<br />
+*&nbsp;S_AUFPL&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;工艺路线号<br />
+*&nbsp;S_BISMT&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;图号<br />
+*&nbsp;S_DAUAT&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;订单类型<br />
+*&nbsp;S_KTSCH&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;工序文本号<br />
+*&nbsp;S_LOEKZ&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;删除标记<br />
+*&nbsp;S_MATNR&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;物料号<br />
+*&nbsp;S_SAPREL&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;发布标识<br />
+*&nbsp;S_VER&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;发布版本号<br />
+*&nbsp;S_ZDATE&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;发布日期<br />
+            </div>
+          </td>
+        </tr>
+      </table>
+      </td>
+      </tr>
+   <tr>
+<td class="footer">Extracted by Mass Download version 1.5.2 - E.G.Mellodew. 1998-2022. Sap Release 755</td>
+   </tr>
+</table>
+</body>
+</html>
