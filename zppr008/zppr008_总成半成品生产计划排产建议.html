@@ -1,0 +1,2490 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=GB2312" />
+<title>ZPPR008</title>
+<style type="text/css">
+.code{ font-family:"Courier New", Courier, monospace; color:#000; font-size:14px; background-color:#F2F4F7 }
+  .codeComment {font-family:"Courier New", Courier, monospace; color:#0000F0; font-size:14px; background-color:#F2F4F7 }
+  .normalBold{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; font-weight:800 }
+  .normalBoldLarge{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+</style>
+<style type="text/css">
+  .normal{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px }
+  .footer{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; text-align: center }
+  h2{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+  h3{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:14px; font-weight:800 }
+  .outerTable{
+   background-color:#E0E7ED;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-right-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+  .innerTable{
+   background-color:#F2F4F7;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-bottom-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+</style>
+</head>
+<body>
+<table class="outerTable">
+  <tr class="normalBoldLarge">
+     <td><h2>Code listing for: ZPPR008</h2>
+<h3> Description: 总成半成品生产计划排产建议</h3></td>
+   </tr>
+  <tr>
+     <td>
+     <table class="innerTable">
+       <tr>
+          <td>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Report&nbsp;ZPPR008<br />
+*&---------------------------------------------------------------------*<br />
+*&<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+REPORT zppr008.<br />
+TABLES sscrfields.<br />
+TYPES:BEGIN OF ty_out,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;werks&nbsp;&nbsp;&nbsp;TYPE&nbsp;marc-werks,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;matnr&nbsp;&nbsp;&nbsp;TYPE&nbsp;marc-matnr,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;maktx&nbsp;&nbsp;&nbsp;TYPE&nbsp;makt-maktx,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dispo&nbsp;&nbsp;&nbsp;TYPE&nbsp;marc-dispo,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;menge&nbsp;&nbsp;&nbsp;TYPE&nbsp;ekpo-menge,&nbsp;"需求数量<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;datum&nbsp;&nbsp;&nbsp;TYPE&nbsp;sy-datum,&nbsp;&nbsp;&nbsp;"需求日期<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;zstat&nbsp;&nbsp;&nbsp;TYPE&nbsp;c&nbsp;,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"检查标识<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;message&nbsp;TYPE&nbsp;c&nbsp;LENGTH&nbsp;200,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sel,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;END&nbsp;OF&nbsp;ty_out.<br />
+DATA gt_out TYPE TABLE OF ty_out.<br />
+DATA gs_out TYPE          ty_out.<br />
+<br />
+<br />
+DATA gt_excel TYPE TABLE OF alsmex_tabline.<br />
+DATA gs_excel LIKE LINE OF gt_excel.<br />
+<br />
+TYPES:BEGIN OF ty_datum,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;col&nbsp;&nbsp;&nbsp;TYPE&nbsp;kcd_ex_col_n,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;datum&nbsp;TYPE&nbsp;sy-datum,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;END&nbsp;OF&nbsp;ty_datum.<br />
+DATA gt_datum TYPE TABLE OF Ty_datum.<br />
+DATA gs_datum TYPE          ty_datum.<br />
+<br />
+<br />
+TYPES:BEGIN OF ty_data,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;matnr&nbsp;TYPE&nbsp;mara-matnr,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;datum&nbsp;TYPE&nbsp;sy-datum,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;menge&nbsp;TYPE&nbsp;ekpo-menge,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;END&nbsp;OF&nbsp;ty_data.<br />
+DATA gt_data TYPE TABLE OF ty_data.<br />
+DATA gs_data TYPE          ty_data.<br />
+<br />
+<br />
+DATA gt_makt TYPE TABLE OF makt.<br />
+DATA gs_makt TYPE          makt.<br />
+<br />
+TYPES:BEGIN OF ty_marc,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;werks&nbsp;TYPE&nbsp;marc-werks,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;matnr&nbsp;TYPE&nbsp;marc-matnr,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dispo&nbsp;TYPE&nbsp;marc-dispo,<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;webaz&nbsp;TYPE&nbsp;marc-webaz,&nbsp;"生产提前期<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dzeit&nbsp;TYPE&nbsp;marc-dzeit,&nbsp;"自制时间<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;eisbe&nbsp;TYPE&nbsp;marc-eisbe,&nbsp;"安全库存量<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bismt&nbsp;TYPE&nbsp;mara-bismt,&nbsp;"<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fevor&nbsp;TYPE&nbsp;marc-fevor,&nbsp;"<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;txt&nbsp;&nbsp;&nbsp;TYPE&nbsp;t024f-txt,&nbsp;&nbsp;"生产管理员描述<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dsnam&nbsp;TYPE&nbsp;t024d-dsnam,&nbsp;"MRP控制者描述<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;labst&nbsp;TYPE&nbsp;mard-labst,&nbsp;&nbsp;"库存<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;maktx&nbsp;TYPE&nbsp;makt-maktx,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;zzdds&nbsp;TYPE&nbsp;ekpo-menge,&nbsp;"在制订单<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ddyls&nbsp;TYPE&nbsp;ekpo-menge,&nbsp;"订单预留<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xqjhs&nbsp;TYPE&nbsp;ekpo-menge,&nbsp;"需求计划<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xqhzs&nbsp;TYPE&nbsp;ekpo-menge,&nbsp;"需求汇总<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dqzsl&nbsp;TYPE&nbsp;ekpo-menge,&nbsp;"短缺总量<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;END&nbsp;OF&nbsp;ty_marc.<br />
+DATA gt_marc TYPE TABLE OF ty_marc.<br />
+DATA gs_marc TYPE          ty_marc.<br />
+<br />
+DATA gt_mast TYPE TABLE OF mast.<br />
+DATA gs_mast TYPE          mast.<br />
+<br />
+<br />
+TYPES:BEGIN OF ty_bom,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;matnr&nbsp;TYPE&nbsp;mara-matnr,&nbsp;"excel导入物料号&nbsp;MAST-MATNR<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;datum&nbsp;TYPE&nbsp;sy-datum,&nbsp;&nbsp;&nbsp;"excel导入需求日期<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;idnrk&nbsp;TYPE&nbsp;mara-matnr,&nbsp;"BOM&nbsp;组件<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mnglg&nbsp;TYPE&nbsp;ekpo-menge,&nbsp;"BOM展开&nbsp;用量<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;menge&nbsp;TYPE&nbsp;ekpo-menge,&nbsp;"excel导入需求数量<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;webaz&nbsp;TYPE&nbsp;marc-webaz,&nbsp;"生产提前期<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dzeit&nbsp;TYPE&nbsp;marc-dzeit,&nbsp;"自制时间<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;eisbe&nbsp;TYPE&nbsp;marc-eisbe,&nbsp;"安全库存量<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;labst&nbsp;TYPE&nbsp;mard-labst,&nbsp;"库存量<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;date&nbsp;&nbsp;TYPE&nbsp;sy-datum,&nbsp;&nbsp;&nbsp;"导入日期减去&nbsp;-&nbsp;生产提前期&nbsp;-&nbsp;自制时间<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bismt&nbsp;TYPE&nbsp;mara-bismt,&nbsp;"总成半成品图号<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;maktx&nbsp;TYPE&nbsp;makt-maktx,&nbsp;"物料描述<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fevor&nbsp;TYPE&nbsp;marc-fevor,&nbsp;"生产管理员<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;txt&nbsp;&nbsp;&nbsp;TYPE&nbsp;t024f-txt,&nbsp;&nbsp;"生产管理员描述<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dispo&nbsp;TYPE&nbsp;marc-dispo,&nbsp;&nbsp;"MRP控制者<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dsnam&nbsp;TYPE&nbsp;t024d-dsnam,&nbsp;"MRP控制者描述<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;zzdds&nbsp;TYPE&nbsp;ekpo-menge,&nbsp;"在制订单<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ddyls&nbsp;TYPE&nbsp;ekpo-menge,&nbsp;"订单预留<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xqjhs&nbsp;TYPE&nbsp;ekpo-menge,&nbsp;"需求计划<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xqhzs&nbsp;TYPE&nbsp;ekpo-menge,&nbsp;"需求汇总<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dqzsl&nbsp;TYPE&nbsp;ekpo-menge,&nbsp;"短缺总量<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*动态4列数据<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xqsld&nbsp;TYPE&nbsp;ekpo-menge,&nbsp;"20220115&nbsp;需求<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ylsld&nbsp;TYPE&nbsp;ekpo-menge,&nbsp;"20220115&nbsp;预留<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;zzsld&nbsp;TYPE&nbsp;ekpo-menge,&nbsp;"20220115&nbsp;在制<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dqsld&nbsp;TYPE&nbsp;ekpo-menge,&nbsp;"20220115&nbsp;短缺<br />
+<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;END&nbsp;OF&nbsp;ty_bom.<br />
+DATA gt_bom TYPE TABLE OF ty_BOM.<br />
+DATA gs_bom TYPE          ty_BOM.<br />
+DATA gt_bom_IDNRK TYPE TABLE OF ty_BOM.<br />
+DATA gs_bom_IDNRK TYPE          ty_BOM.<br />
+FIELD-SYMBOLS &lt;fs_BOM&gt; TYPE ty_bom.<br />
+<br />
+<br />
+DATA GT_t024f TYPE TABLE OF t024f.<br />
+DATA GS_t024f TYPE          t024f.<br />
+DATA GT_t024d TYPE TABLE OF t024d.<br />
+DATA GS_t024d TYPE          t024d.<br />
+<br />
+<br />
+TYPES:BEGIN OF ty_afpo,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;aufnr&nbsp;TYPE&nbsp;afko-aufnr,&nbsp;"订单号<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gstrp&nbsp;TYPE&nbsp;afko-gstrp,&nbsp;"基本开始日期<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gltrp&nbsp;TYPE&nbsp;afko-gltrp,&nbsp;"基本完成日期<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;matnr&nbsp;TYPE&nbsp;afpo-matnr,&nbsp;"物料<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dauat&nbsp;TYPE&nbsp;afpo-dauat,&nbsp;"订单类型<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;psmng&nbsp;TYPE&nbsp;afpo-psmng,&nbsp;"订单项目计划总数量<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wemng&nbsp;TYPE&nbsp;afpo-wemng,&nbsp;"订单项目已收货数量<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;END&nbsp;OF&nbsp;ty_afpo.<br />
+DATA gt_afpo TYPE TABLE OF ty_afpo.<br />
+DATA gs_afpo TYPE          ty_afpo.<br />
+<br />
+TYPES:BEGIN OF ty_resb,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rsnum&nbsp;TYPE&nbsp;resb-rsnum,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rspos&nbsp;TYPE&nbsp;resb-rspos,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rsart&nbsp;TYPE&nbsp;resb-rsart,<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;matnr&nbsp;TYPE&nbsp;resb-matnr,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bdter&nbsp;TYPE&nbsp;resb-bdter,&nbsp;&nbsp;"需求日期<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bdmng&nbsp;TYPE&nbsp;resb-bdmng,&nbsp;&nbsp;"总需求量<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;enmng&nbsp;TYPE&nbsp;resb-enmng,&nbsp;&nbsp;"已发货量<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;END&nbsp;OF&nbsp;ty_resb.<br />
+DATA gt_resb TYPE TABLE OF ty_resb.<br />
+DATA gs_resb TYPE          ty_resb.<br />
+<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*动态数据显示<br />
+   </div>
+   <div class="code">
+DATA lt_table  TYPE TABLE OF dfies. "字段结构表<br />
+DATA ls_table  TYPE dfies.<br />
+DATA lt_comp   TYPE  abap_component_tab.<br />
+DATA ls_comp   LIKE LINE OF  lt_comp.<br />
+DATA lr_struc  TYPE REF TO cl_abap_structdescr.<br />
+DATA lr_table  TYPE REF TO cl_abap_tabledescr.<br />
+DATA dyn_wa    TYPE REF TO data.<br />
+DATA dyn_table TYPE REF TO data.<br />
+DATA l_string  TYPE string.<br />
+DATA lr_type   TYPE REF TO cl_abap_typedescr.<br />
+FIELD-SYMBOLS: &lt;dyn_table&gt; TYPE STANDARD TABLE,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;dyn_wa&gt;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;any,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;dyn_field&gt;.<br />
+<br />
+<br />
+TYPES:BEGIN OF ty_field,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;name(20)&nbsp;&nbsp;&nbsp;TYPE&nbsp;c,&nbsp;&nbsp;"字段名称<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;table(20)&nbsp;&nbsp;TYPE&nbsp;c,&nbsp;&nbsp;"参考表<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;name_s(20)&nbsp;TYPE&nbsp;c,&nbsp;&nbsp;"参考字段<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text(30)&nbsp;&nbsp;&nbsp;TYPE&nbsp;c,&nbsp;&nbsp;"字段描述<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;END&nbsp;OF&nbsp;ty_field.<br />
+DATA gt_field TYPE TABLE OF ty_field.<br />
+DATA gs_field TYPE          ty_field.<br />
+<br />
+<br />
+DATA Gs_layo TYPE slis_layout_alv.<br />
+DATA Gt_sort TYPE slis_t_sortinfo_alv.<br />
+DATA Gt_fcat TYPE slis_t_fieldcat_alv.<br />
+DATA Gs_fcat TYPE slis_fieldcat_alv.<br />
+DATA Gv_pos  TYPE i.<br />
+<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*EXCEL&nbsp;下载数据<br />
+   </div>
+   <div class="code">
+TYPES:BEGIN OF ty_dow,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;field1&nbsp;&nbsp;TYPE&nbsp;c&nbsp;LENGTH&nbsp;60,&nbsp;&nbsp;"物料<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;field2&nbsp;&nbsp;TYPE&nbsp;c&nbsp;LENGTH&nbsp;60,&nbsp;&nbsp;"图号<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;field3&nbsp;&nbsp;TYPE&nbsp;c&nbsp;LENGTH&nbsp;60,&nbsp;&nbsp;"物料描述<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;field4&nbsp;&nbsp;TYPE&nbsp;c&nbsp;LENGTH&nbsp;60,&nbsp;&nbsp;"生产管理员<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;field5&nbsp;&nbsp;TYPE&nbsp;c&nbsp;LENGTH&nbsp;60,&nbsp;&nbsp;"生产管理员描述<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;field6&nbsp;&nbsp;TYPE&nbsp;c&nbsp;LENGTH&nbsp;60,&nbsp;&nbsp;"生产版本<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;field7&nbsp;&nbsp;TYPE&nbsp;c&nbsp;LENGTH&nbsp;60,&nbsp;&nbsp;"生产开始日期<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;field8&nbsp;&nbsp;TYPE&nbsp;c&nbsp;LENGTH&nbsp;60,&nbsp;&nbsp;"生产结束日期<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;field9&nbsp;&nbsp;TYPE&nbsp;c&nbsp;LENGTH&nbsp;60,&nbsp;&nbsp;"订单数量<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;field10&nbsp;TYPE&nbsp;c&nbsp;LENGTH&nbsp;60,&nbsp;&nbsp;"优先级<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;END&nbsp;OF&nbsp;ty_dow.<br />
+DATA gt_dow TYPE TABLE OF ty_dow.<br />
+DATA gs_dow TYPE          ty_dow.<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+SELECTION-SCREEN FUNCTION KEY 1.<br />
+<br />
+SELECTION-SCREEN BEGIN OF BLOCK b1 WITH FRAME TITLE TEXT-001.<br />
+&nbsp;&nbsp;PARAMETERS:p_werks&nbsp;TYPE&nbsp;marc-werks&nbsp;OBLIGATORY&nbsp;DEFAULT&nbsp;'1000'.<br />
+&nbsp;&nbsp;PARAMETERS:p_file&nbsp;LIKE&nbsp;rlgrap-filename&nbsp;DEFAULT&nbsp;'C:\产品计划模板.xls'&nbsp;OBLIGATORY.<br />
+SELECTION-SCREEN END OF BLOCK b1.<br />
+<br />
+<br />
+AT SELECTION-SCREEN ON VALUE-REQUEST FOR p_file.<br />
+&nbsp;&nbsp;PERFORM&nbsp;f4_filename.<br />
+<br />
+INITIALIZATION.<br />
+&nbsp;&nbsp;PERFORM&nbsp;initial.<br />
+<br />
+<br />
+AT SELECTION-SCREEN.<br />
+&nbsp;&nbsp;PERFORM&nbsp;template_download.<br />
+&nbsp;&nbsp;PERFORM&nbsp;file_exist_check.<br />
+<br />
+<br />
+<br />
+START-OF-SELECTION.<br />
+&nbsp;&nbsp;PERFORM&nbsp;initial_field.<br />
+&nbsp;&nbsp;PERFORM&nbsp;read_excel.<br />
+&nbsp;&nbsp;PERFORM&nbsp;conversion_DATA.<br />
+&nbsp;&nbsp;PERFORM&nbsp;display_data.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;f4_filename<br />
+*&---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM f4_filename.<br />
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'F4_FILENAME'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;program_name&nbsp;&nbsp;=&nbsp;syst-cprog<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dynpro_number&nbsp;=&nbsp;syst-dynnr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;field_name&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'P_FILE'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;file_name&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;p_file.<br />
+ENDFORM.                    "f4_filename<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;initial<br />
+*&---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM initial.<br />
+&nbsp;&nbsp;DATA&nbsp;ls_textfield&nbsp;&nbsp;LIKE&nbsp;smp_dyntxt.<br />
+&nbsp;&nbsp;ls_textfield-text&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;TEXT-s02.<br />
+&nbsp;&nbsp;ls_textfield-icon_id&nbsp;&nbsp;&nbsp;=&nbsp;icon_xls.<br />
+&nbsp;&nbsp;ls_textfield-icon_text&nbsp;=&nbsp;TEXT-s01.<br />
+&nbsp;&nbsp;sscrfields-functxt_01&nbsp;=&nbsp;ls_textfield.<br />
+ENDFORM. "initial<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Form&nbsp;template_download<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;text<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM template_download.<br />
+<br />
+&nbsp;&nbsp;DATA&nbsp;ls_key&nbsp;TYPE&nbsp;wwwdatatab.<br />
+&nbsp;&nbsp;DATA&nbsp;lv_filename&nbsp;TYPE&nbsp;string.<br />
+&nbsp;&nbsp;DATA&nbsp;lv_path&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;string.<br />
+&nbsp;&nbsp;DATA&nbsp;lv_fullpath&nbsp;TYPE&nbsp;string.<br />
+&nbsp;&nbsp;DATA&nbsp;lv_destinat&nbsp;LIKE&nbsp;rlgrap-filename.<br />
+&nbsp;&nbsp;DATA&nbsp;lv_filelen&nbsp;&nbsp;TYPE&nbsp;i.<br />
+&nbsp;&nbsp;DATA&nbsp;lv_action&nbsp;&nbsp;&nbsp;TYPE&nbsp;i.<br />
+&nbsp;&nbsp;DATA&nbsp;lv_rc&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;i.<br />
+&nbsp;&nbsp;DATA&nbsp;lv_file_name&nbsp;TYPE&nbsp;string.<br />
+<br />
+&nbsp;&nbsp;CHECK&nbsp;sy-ucomm&nbsp;=&nbsp;'FC01'.<br />
+<br />
+&nbsp;&nbsp;lv_file_name&nbsp;=&nbsp;'C:\产品计划模板.xls'.<br />
+<br />
+&nbsp;&nbsp;CALL&nbsp;METHOD&nbsp;cl_gui_frontend_services=&gt;file_save_dialog<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;default_file_name&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lv_file_name<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;file_filter&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;cl_gui_frontend_services=&gt;filetype_excel<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CHANGING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;filename&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lv_filename<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;path&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lv_path<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fullpath&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lv_fullpath<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;user_action&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lv_action<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cntl_error&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;error_no_gui&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;not_supported_by_gui&nbsp;=&nbsp;3<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTHERS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;4.<br />
+&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;&lt;&gt;&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;ID&nbsp;sy-msgid&nbsp;TYPE&nbsp;sy-msgty&nbsp;NUMBER&nbsp;sy-msgno<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WITH&nbsp;sy-msgv1&nbsp;sy-msgv2&nbsp;sy-msgv3&nbsp;sy-msgv4.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;CHECK&nbsp;lv_action&nbsp;EQ&nbsp;cl_gui_frontend_services=&gt;action_ok.<br />
+&nbsp;&nbsp;ls_key-relid&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'MI'.<br />
+&nbsp;&nbsp;ls_key-objid&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'ZPPR008'.<br />
+&nbsp;&nbsp;lv_destinat&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lv_fullpath.<br />
+<br />
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'DOWNLOAD_WEB_OBJECT'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;key&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_key<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;destination&nbsp;=&nbsp;lv_destinat<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rc&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lv_rc.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;lv_rc&nbsp;EQ&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;s398(00)&nbsp;WITH&nbsp;'数据模板下载成功'(002).<br />
+&nbsp;&nbsp;ELSE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;e398(00)&nbsp;WITH&nbsp;'数据模板下载失败'(003).<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+ENDFORM.<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Form&nbsp;file_exist_check<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;text<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM file_exist_check.<br />
+<br />
+&nbsp;&nbsp;DATA&nbsp;lv_filename&nbsp;TYPE&nbsp;string.<br />
+&nbsp;&nbsp;DATA&nbsp;lv_result&nbsp;&nbsp;&nbsp;TYPE&nbsp;abap_bool.<br />
+<br />
+&nbsp;&nbsp;CHECK&nbsp;sy-ucomm&nbsp;NE&nbsp;'FC01'&nbsp;AND&nbsp;sy-ucomm&nbsp;NE&nbsp;'U2'.<br />
+<br />
+&nbsp;&nbsp;lv_filename&nbsp;=&nbsp;p_file.<br />
+<br />
+&nbsp;&nbsp;CALL&nbsp;METHOD&nbsp;cl_gui_frontend_services=&gt;file_exist<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;file&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lv_filename<br />
+&nbsp;&nbsp;&nbsp;&nbsp;RECEIVING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;result&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lv_result<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cntl_error&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;error_no_gui&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wrong_parameter&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;3<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;not_supported_by_gui&nbsp;=&nbsp;4<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTHERS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;5.<br />
+&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;&lt;&gt;&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;ID&nbsp;sy-msgid&nbsp;TYPE&nbsp;sy-msgty&nbsp;NUMBER&nbsp;sy-msgno<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WITH&nbsp;sy-msgv1&nbsp;sy-msgv2&nbsp;sy-msgv3&nbsp;sy-msgv4.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;lv_result&nbsp;EQ&nbsp;abap_false.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;e893(ux)&nbsp;WITH&nbsp;p_file.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+ENDFORM.<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Form&nbsp;read_excel<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;text<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM read_excel.<br />
+<br />
+&nbsp;&nbsp;DATA&nbsp;lv_filename&nbsp;TYPE&nbsp;rlgrap-filename.<br />
+&nbsp;&nbsp;DATA&nbsp;:lv_index&nbsp;TYPE&nbsp;i.<br />
+&nbsp;&nbsp;FIELD-SYMBOLS&nbsp;:&nbsp;&lt;fs&gt;&nbsp;TYPE&nbsp;any.<br />
+&nbsp;&nbsp;CLEAR&nbsp;lv_filename.<br />
+&nbsp;&nbsp;lv_filename&nbsp;=&nbsp;p_file.<br />
+<br />
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'ALSM_EXCEL_TO_INTERNAL_TABLE'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;filename&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lv_filename<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_begin_col&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_begin_row&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_end_col&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;256<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_end_row&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;65535<br />
+&nbsp;&nbsp;&nbsp;&nbsp;TABLES<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;intern&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;gt_excel<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;inconsistent_parameters&nbsp;=&nbsp;1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;upload_ole&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTHERS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;3.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;&lt;&gt;&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;ID&nbsp;sy-msgid&nbsp;TYPE&nbsp;sy-msgty&nbsp;NUMBER&nbsp;sy-msgno<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WITH&nbsp;sy-msgv1&nbsp;sy-msgv2&nbsp;sy-msgv3&nbsp;sy-msgv4.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;SORT&nbsp;gt_excel&nbsp;BY&nbsp;row&nbsp;col.<br />
+<br />
+&nbsp;&nbsp;CLEAR:gt_data,Gs_data.<br />
+&nbsp;&nbsp;CLEAR:gs_datum,gt_datum.<br />
+   </div>
+   <div class="codeComment">
+*先取到第一行的日期<br />
+<br />
+<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;gt_excel&nbsp;INTO&nbsp;gs_excel.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;gs_excel-row&nbsp;=&nbsp;1.&nbsp;"抬头日期<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;gs_excel-col&nbsp;=&nbsp;1.<br />
+   </div>
+   <div class="codeComment">
+*物料号<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ELSE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CLEAR:gs_datum.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_datum-col&nbsp;&nbsp;&nbsp;=&nbsp;gs_excel-col.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_datum-datum&nbsp;=&nbsp;gs_excel-value.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;gs_datum&nbsp;TO&nbsp;gt_datum.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ELSE.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;gs_excel-col&nbsp;=&nbsp;1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CLEAR:gs_data.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_data-matnr&nbsp;=&nbsp;gs_excel-value.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;修改&nbsp;&nbsp;*&<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'CONVERSION_EXIT_MATN1_INPUT'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;input&nbsp;&nbsp;=&nbsp;gs_data-matnr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;output&nbsp;=&nbsp;gs_data-matnr.<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ELSE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CLEAR:gs_datum.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;gt_datum&nbsp;INTO&nbsp;gs_datum&nbsp;WITH&nbsp;KEY&nbsp;col&nbsp;=&nbsp;gs_excel-col.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_data-datum&nbsp;=&nbsp;gs_datum-datum.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_data-mENGE&nbsp;=&nbsp;gs_excel-value.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;gs_data&nbsp;TO&nbsp;gt_data.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+ENDFORM.<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Form&nbsp;conversion_DATA<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;text<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM conversion_DATA.<br />
+&nbsp;&nbsp;CLEAR:gt_out.<br />
+<br />
+&nbsp;&nbsp;DATA&nbsp;lt_data&nbsp;TYPE&nbsp;TABLE&nbsp;OF&nbsp;ty_data.<br />
+&nbsp;&nbsp;CLEAR:lt_data.<br />
+&nbsp;&nbsp;lt_data[]&nbsp;=&nbsp;gt_data[].<br />
+&nbsp;&nbsp;SORT&nbsp;lt_data&nbsp;BY&nbsp;matnr.<br />
+&nbsp;&nbsp;DELETE&nbsp;ADJACENT&nbsp;DUPLICATES&nbsp;FROM&nbsp;lt_data&nbsp;COMPARING&nbsp;matnr.<br />
+&nbsp;&nbsp;IF&nbsp;lt_data[]&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;*<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;TABLE&nbsp;gt_makt<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;makt<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FOR&nbsp;ALL&nbsp;ENTRIES&nbsp;IN&nbsp;lt_data<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;matnr&nbsp;=&nbsp;lt_data-matnr.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;werks&nbsp;matnr&nbsp;dispo<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;CORRESPONDING&nbsp;FIELDS&nbsp;OF&nbsp;TABLE&nbsp;gt_marc<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;marc<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FOR&nbsp;ALL&nbsp;ENTRIES&nbsp;IN&nbsp;lt_data<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;matnr&nbsp;=&nbsp;lt_data-matnr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;werks&nbsp;=&nbsp;p_werks.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;*<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;CORRESPONDING&nbsp;FIELDS&nbsp;OF&nbsp;TABLE&nbsp;gt_mast<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;mast<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FOR&nbsp;ALL&nbsp;ENTRIES&nbsp;IN&nbsp;lt_data<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;matnr&nbsp;=&nbsp;lt_data-matnr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;werks&nbsp;=&nbsp;p_werks.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*matnr&nbsp;&nbsp;物料<br />
+*datum&nbsp;&nbsp;日期<br />
+*menge&nbsp;&nbsp;数量<br />
+<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;SORT&nbsp;gt_makt&nbsp;BY&nbsp;matnr.<br />
+&nbsp;&nbsp;SORT&nbsp;gt_marc&nbsp;BY&nbsp;matnr.<br />
+&nbsp;&nbsp;SORT&nbsp;gt_mast&nbsp;BY&nbsp;matnr.<br />
+<br />
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;gt_data&nbsp;INTO&nbsp;gs_data.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR:gs_out.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;gs_out-werks&nbsp;=&nbsp;p_werks.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;gs_out-matnr&nbsp;=&nbsp;gs_data-matnr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;gs_out-datum&nbsp;=&nbsp;gs_data-datum.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;gs_out-menge&nbsp;=&nbsp;gs_data-menge.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR:gs_makt.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;gt_makt&nbsp;INTO&nbsp;gs_makt&nbsp;WITH&nbsp;KEY&nbsp;matnr&nbsp;=&nbsp;gs_data-matnr&nbsp;BINARY&nbsp;SEARCH.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;&lt;&gt;&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_out-zstat&nbsp;&nbsp;&nbsp;=&nbsp;'E'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_out-message&nbsp;=&nbsp;'该物料在系统中不存在，请检查！'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ELSE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_out-maktx&nbsp;=&nbsp;gs_makt-maktx.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;gs_out-zstat&nbsp;&lt;&gt;&nbsp;'E'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CLEAR:gs_marc.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;gt_marc&nbsp;INTO&nbsp;gs_marc&nbsp;WITH&nbsp;KEY&nbsp;matnr&nbsp;=&nbsp;gs_data-matnr&nbsp;BINARY&nbsp;SEARCH.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;&lt;&gt;&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_out-zstat&nbsp;&nbsp;&nbsp;=&nbsp;'E'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_out-message&nbsp;=&nbsp;'该物料在工厂'&nbsp;&&&nbsp;p_werks&nbsp;&&&nbsp;'下不存在，请检查！'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ELSE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_out-dispo&nbsp;=&nbsp;gs_marc-dispo.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;gs_out-zstat&nbsp;&lt;&gt;&nbsp;'E'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CLEAR:GS_mast.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;GT_mast&nbsp;INTO&nbsp;GS_mast&nbsp;WITH&nbsp;KEY&nbsp;matnr&nbsp;=&nbsp;gs_data-matnr&nbsp;BINARY&nbsp;SEARCH.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;&lt;&gt;&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_out-zstat&nbsp;&nbsp;&nbsp;=&nbsp;'E'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_out-message&nbsp;=&nbsp;'该物料在工厂'&nbsp;&&&nbsp;p_werks&nbsp;&&&nbsp;'下不存在BOM，请检查！！'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;gs_out-zstat&nbsp;&lt;&gt;&nbsp;'E'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_out-zstat&nbsp;&nbsp;&nbsp;=&nbsp;'S'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_out-message&nbsp;=&nbsp;'成功！'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;gs_out&nbsp;TO&nbsp;gt_out.<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+<br />
+ENDFORM.<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Form&nbsp;display_data<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;text<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM display_data.<br />
+<br />
+&nbsp;&nbsp;DATA&nbsp;lv_text&nbsp;TYPE&nbsp;&nbsp;string.<br />
+&nbsp;&nbsp;DATA&nbsp;lt_fcat&nbsp;TYPE&nbsp;slis_t_fieldcat_alv.<br />
+&nbsp;&nbsp;DATA&nbsp;ls_layo&nbsp;TYPE&nbsp;slis_layout_alv.<br />
+&nbsp;&nbsp;DATA&nbsp;lt_sort&nbsp;TYPE&nbsp;slis_t_sortinfo_alv.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;gt_out[]&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;s004(sv).<br />
+&nbsp;&nbsp;&nbsp;&nbsp;RETURN.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;lv_text&nbsp;=&nbsp;'正在输出...'.<br />
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'SAPGUI_PROGRESS_INDICATOR'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text&nbsp;=&nbsp;lv_text.<br />
+<br />
+&nbsp;&nbsp;PERFORM&nbsp;grid_layo_set&nbsp;CHANGING&nbsp;&nbsp;ls_layo.<br />
+&nbsp;&nbsp;PERFORM&nbsp;grid_sort_set&nbsp;TABLES&nbsp;&nbsp;&nbsp;&nbsp;lt_sort.<br />
+&nbsp;&nbsp;PERFORM&nbsp;grid_fcat_set&nbsp;CHANGING&nbsp;&nbsp;lt_fcat.<br />
+<br />
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'REUSE_ALV_GRID_DISPLAY'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_callback_program&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;sy-repid<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_callback_pf_status_set&nbsp;=&nbsp;'GRID_PF_STATUS_SET'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_callback_user_command&nbsp;&nbsp;=&nbsp;'GRID_USER_COMMAND'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_callback_top_of_page&nbsp;&nbsp;&nbsp;=&nbsp;'GRID_TOP_OF_PAGE&nbsp;'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;is_layout&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_layo<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it_fieldcat&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lt_fcat<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it_sort&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lt_sort<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_default&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'X'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_save&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'U'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;TABLES<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;t_outtab&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;gt_out<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;program_error&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTHERS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;2.<br />
+&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;&lt;&gt;&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;ID&nbsp;sy-msgid&nbsp;TYPE&nbsp;sy-msgty&nbsp;NUMBER&nbsp;sy-msgno<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WITH&nbsp;sy-msgv1&nbsp;sy-msgv2&nbsp;sy-msgv3&nbsp;sy-msgv4.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+<br />
+ENDFORM.<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;grid_layo_set<br />
+*&---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM grid_layo_set  CHANGING  cs_layo TYPE slis_layout_alv.<br />
+&nbsp;&nbsp;cs_layo-colwidth_optimize&nbsp;&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;cs_layo-box_fieldname&nbsp;=&nbsp;'SEL'.<br />
+ENDFORM.                    "grid_layo_set<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;grid_sort_set<br />
+*&---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM grid_sort_set  TABLES  ct_sort TYPE slis_t_sortinfo_alv.<br />
+&nbsp;&nbsp;DATA&nbsp;ls_sort&nbsp;TYPE&nbsp;slis_sortinfo_alv.<br />
+<br />
+ENDFORM.                    "grid_sort_set<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;grid_pf_status_set<br />
+*&---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM grid_pf_status_set USING rt_extab TYPE slis_t_extab.<br />
+<br />
+&nbsp;&nbsp;SET&nbsp;PF-STATUS&nbsp;'STANDARD_FULLSCREEN'&nbsp;EXCLUDING&nbsp;rt_extab.<br />
+ENDFORM.                    "grid_pf_status_set<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;grid_user_command<br />
+*&---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM grid_top_of_page.<br />
+&nbsp;&nbsp;DATA&nbsp;lv_line&nbsp;TYPE&nbsp;char10.<br />
+&nbsp;&nbsp;DATA&nbsp;lv_tabix&nbsp;TYPE&nbsp;p.<br />
+&nbsp;&nbsp;DATA:&nbsp;lt_header&nbsp;TYPE&nbsp;slis_t_listheader,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lw_header&nbsp;LIKE&nbsp;LINE&nbsp;OF&nbsp;lt_header.<br />
+&nbsp;&nbsp;CLEAR&nbsp;lw_header.<br />
+<br />
+&nbsp;&nbsp;DESCRIBE&nbsp;TABLE&nbsp;gt_out&nbsp;LINES&nbsp;lv_tabix.<br />
+&nbsp;&nbsp;lv_line&nbsp;=&nbsp;lv_tabix.<br />
+&nbsp;&nbsp;lw_header-typ&nbsp;&nbsp;=&nbsp;'S'.<br />
+&nbsp;&nbsp;CONCATENATE&nbsp;TEXT-q01&nbsp;lv_line&nbsp;INTO&nbsp;lw_header-info.<br />
+&nbsp;&nbsp;APPEND&nbsp;lw_header&nbsp;TO&nbsp;lt_header.<br />
+&nbsp;&nbsp;CLEAR&nbsp;lw_header.<br />
+<br />
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'REUSE_ALV_COMMENTARY_WRITE'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it_list_commentary&nbsp;=&nbsp;lt_header.<br />
+&nbsp;&nbsp;"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_logo&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'ENJOYSAP_LOGO'.<br />
+ENDFORM.                    "grid_top_of_page<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;GRID_USER_COMMAND<br />
+*&---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM grid_user_command USING UV_uscomm LIKE sy-ucomm<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;US_selfield&nbsp;TYPE&nbsp;slis_selfield&nbsp;.<br />
+<br />
+&nbsp;&nbsp;DATA&nbsp;lv_line&nbsp;TYPE&nbsp;i.<br />
+&nbsp;&nbsp;DATA&nbsp;wa_out&nbsp;&nbsp;TYPE&nbsp;ty_out.<br />
+&nbsp;&nbsp;lv_line&nbsp;=&nbsp;us_selfield-tabindex.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;CASE&nbsp;UV_uscomm.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'PRINT'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'PROCS'.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;gt_out&nbsp;INTO&nbsp;wa_out&nbsp;WITH&nbsp;KEY&nbsp;zstat&nbsp;=&nbsp;'E'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;'清单中包含有错误不能执行计算，请修改.....'&nbsp;TYPE&nbsp;'E'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ELSE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;process_data.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'&IC1'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;OTHERS.<br />
+&nbsp;&nbsp;ENDCASE.<br />
+<br />
+&nbsp;&nbsp;us_selfield-col_stable&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;us_selfield-row_stable&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;us_selfield-refresh&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'X'.<br />
+<br />
+ENDFORM.                    "FRM_ALV_COMMAND<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;grid_fcat_set<br />
+*&---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM grid_fcat_set  CHANGING ct_fcat TYPE  slis_t_fieldcat_alv.<br />
+&nbsp;&nbsp;DATA&nbsp;ls_fcat&nbsp;TYPE&nbsp;slis_fieldcat_alv.<br />
+&nbsp;&nbsp;DATA&nbsp;lv_pos&nbsp;&nbsp;TYPE&nbsp;i.<br />
+<br />
+<br />
+&nbsp;&nbsp;ct_fcat&nbsp;=&nbsp;VALUE&nbsp;#(<br />
+&nbsp;&nbsp;(&nbsp;fieldname&nbsp;=&nbsp;'WERKS'&nbsp;&nbsp;&nbsp;&nbsp;seltext_l&nbsp;=&nbsp;'工厂'&nbsp;)<br />
+&nbsp;&nbsp;(&nbsp;fieldname&nbsp;=&nbsp;'MATNR'&nbsp;&nbsp;&nbsp;&nbsp;seltext_l&nbsp;=&nbsp;'订货号/成品'&nbsp;ref_fieldname&nbsp;=&nbsp;'MATNR'&nbsp;ref_tabname&nbsp;=&nbsp;'MARA'&nbsp;)<br />
+&nbsp;&nbsp;(&nbsp;fieldname&nbsp;=&nbsp;'MAKTX'&nbsp;&nbsp;&nbsp;&nbsp;seltext_l&nbsp;=&nbsp;'物料描述'&nbsp;)<br />
+&nbsp;&nbsp;(&nbsp;fieldname&nbsp;=&nbsp;'DISPO'&nbsp;&nbsp;&nbsp;&nbsp;seltext_l&nbsp;=&nbsp;'MRP控制者')<br />
+&nbsp;&nbsp;(&nbsp;fieldname&nbsp;=&nbsp;'MENGE'&nbsp;&nbsp;&nbsp;&nbsp;seltext_l&nbsp;=&nbsp;'需求数量'&nbsp;)<br />
+&nbsp;&nbsp;(&nbsp;fieldname&nbsp;=&nbsp;'DATUM'&nbsp;&nbsp;&nbsp;&nbsp;seltext_l&nbsp;=&nbsp;'需求日期'&nbsp;)<br />
+&nbsp;&nbsp;(&nbsp;fieldname&nbsp;=&nbsp;'ZSTAT'&nbsp;&nbsp;&nbsp;&nbsp;seltext_l&nbsp;=&nbsp;'检查标识'&nbsp;)<br />
+&nbsp;&nbsp;(&nbsp;fieldname&nbsp;=&nbsp;'MESSAGE'&nbsp;&nbsp;seltext_l&nbsp;=&nbsp;'检查消息'&nbsp;)<br />
+&nbsp;&nbsp;).<br />
+<br />
+ENDFORM.<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Form&nbsp;process_data<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;text<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM process_data.<br />
+&nbsp;&nbsp;DATA&nbsp;lv_name&nbsp;TYPE&nbsp;string.<br />
+&nbsp;&nbsp;DATA&nbsp;lt_bom&nbsp;TYPE&nbsp;TABLE&nbsp;OF&nbsp;ty_bom.<br />
+&nbsp;&nbsp;DATA&nbsp;ls_bom&nbsp;TYPE&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ty_bom.<br />
+&nbsp;&nbsp;DATA&nbsp;gv_max_datum&nbsp;TYPE&nbsp;sy-datum.<br />
+&nbsp;&nbsp;CLEAR:gv_max_datum.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*MRP控制者描述<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;CLEAR:GT_t024d.<br />
+&nbsp;&nbsp;SELECT&nbsp;*<br />
+&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;TABLE&nbsp;GT_t024d<br />
+&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;t024d<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;werks&nbsp;=&nbsp;p_werks.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*生产管理员描述<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;CLEAR:GT_t024f.<br />
+&nbsp;&nbsp;SELECT&nbsp;*<br />
+&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;TABLE&nbsp;GT_t024f<br />
+&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;t024f<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;werks&nbsp;=&nbsp;p_werks.<br />
+<br />
+&nbsp;&nbsp;BREAK&nbsp;xx-fanlz.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*数据处理<br />
+*&nbsp;根据GT_OUT&nbsp;的数据进行BOM&nbsp;展开&nbsp;汇总<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;CLEAR:gt_bom.<br />
+&nbsp;&nbsp;CLEAR:gt_bom_IDNRK.<br />
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;gt_out&nbsp;INTO&nbsp;gs_out.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;call_bom&nbsp;USING&nbsp;gs_OUT-matnr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_OUT-menge<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_out-datum.<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*根据展开BOM&nbsp;组件查询&nbsp;MARC<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;DATA&nbsp;lt_marc&nbsp;TYPE&nbsp;TABLE&nbsp;OF&nbsp;ty_marc.<br />
+&nbsp;&nbsp;DATA&nbsp;ls_marc&nbsp;TYPE&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ty_marc.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;gt_bom[]&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;marc~werks&nbsp;marc~matnr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;marc~dispo<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;marc~fevor<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;marc~webaz&nbsp;"生产提前期<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;marc~dzeit&nbsp;"自制时间<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;marc~eisbe&nbsp;"安全库存量<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mara~bismt<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;maKT~maktx<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;CORRESPONDING&nbsp;FIELDS&nbsp;OF&nbsp;TABLE&nbsp;lt_marc<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;marc<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INNER&nbsp;JOIN&nbsp;mara&nbsp;ON&nbsp;mara~matnr&nbsp;=&nbsp;marc~matnr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INNER&nbsp;JOIN&nbsp;makt&nbsp;ON&nbsp;makt~matnr&nbsp;=&nbsp;mara~matnr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FOR&nbsp;ALL&nbsp;ENTRIES&nbsp;IN&nbsp;gt_bom<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;marc~matnr&nbsp;=&nbsp;gt_bom-idnrk<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;marc~werks&nbsp;=&nbsp;p_werks<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;makt~spras&nbsp;=&nbsp;sy-langu.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;计算需求日期：excel导入日期&nbsp;-&nbsp;生产提前期&nbsp;-&nbsp;自制日期<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;SORT&nbsp;lt_marc&nbsp;&nbsp;BY&nbsp;matnr.<br />
+&nbsp;&nbsp;SORT&nbsp;GT_t024d&nbsp;BY&nbsp;dispo.<br />
+&nbsp;&nbsp;SORT&nbsp;GT_t024f&nbsp;BY&nbsp;fevor.<br />
+<br />
+<br />
+&nbsp;&nbsp;DATA&nbsp;lt_bom_all&nbsp;TYPE&nbsp;TABLE&nbsp;OF&nbsp;ty_bom.<br />
+&nbsp;&nbsp;DATA&nbsp;ls_bom_all&nbsp;TYPE&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ty_bom.<br />
+&nbsp;&nbsp;CLEAR:lt_bom_all,ls_bom_all.<br />
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;gt_bom&nbsp;ASSIGNING&nbsp;&lt;fs_bom&gt;.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR:ls_marc.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;lt_marc&nbsp;INTO&nbsp;ls_marc&nbsp;WITH&nbsp;KEY&nbsp;matnr&nbsp;=&nbsp;&lt;Fs_bom&gt;-idnrk&nbsp;BINARY&nbsp;SEARCH.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;"需求日期&nbsp;-&nbsp;生产提前期<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;ls_marc-webaz&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;reduce_DATUM&nbsp;USING&nbsp;&lt;fs_bom&gt;-datum<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_marc-webaz<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CHANGING&nbsp;&lt;fs_bom&gt;-date.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ELSE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;fs_bom&gt;-date&nbsp;=&nbsp;&lt;fs_bom&gt;-datum.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;"需求日期&nbsp;-&nbsp;自制时间<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;&lt;fs_bom&gt;-dzeit&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;reduce_DATUM&nbsp;USING&nbsp;&lt;fs_bom&gt;-date<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;fs_bom&gt;-dzeit<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CHANGING&nbsp;&lt;fs_bom&gt;-date.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+*如果计算出来小于&nbsp;系统当前日期&nbsp;，则&nbsp;等于当前日期<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;&lt;fs_bom&gt;-date&nbsp;&lt;&nbsp;sy-datum.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;fs_bom&gt;-date&nbsp;=&nbsp;sy-datum.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*GT_BOM&nbsp;DATE&nbsp;发生变化后&nbsp;需要根据&nbsp;物料+DATE&nbsp;进行汇总<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR:ls_bom_all.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_bom_all-idnrk&nbsp;=&nbsp;&lt;fs_bom&gt;-idnrk.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_bom_all-date&nbsp;&nbsp;=&nbsp;&lt;fs_bom&gt;-date.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_bom_all-mnglg&nbsp;=&nbsp;&lt;fs_bom&gt;-mnglg.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;COLLECT&nbsp;ls_bom_all&nbsp;INTO&nbsp;lt_bom_all.<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*取最大日期<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;gv_max_datum&nbsp;&lt;&nbsp;&lt;fs_bom&gt;-date.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gv_max_datum&nbsp;=&nbsp;&lt;fs_bom&gt;-date.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;lt_marc[]&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+   </div>
+   <div class="codeComment">
+*取预留<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;rsnum&nbsp;rspos&nbsp;&nbsp;rsart<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;matnr&nbsp;bdter<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bdmng&nbsp;enmng<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;CORRESPONDING&nbsp;FIELDS&nbsp;OF&nbsp;TABLE&nbsp;gt_resb<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;resb<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FOR&nbsp;ALL&nbsp;ENTRIES&nbsp;IN&nbsp;lt_marc<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;matnr&nbsp;=&nbsp;lt_marc-matnr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;bdart&nbsp;=&nbsp;'AR'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;xwaok&nbsp;=&nbsp;'X'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;xloek&nbsp;=&nbsp;''<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;dumps&nbsp;=&nbsp;''<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;shkzg&nbsp;=&nbsp;'H'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;kzear&nbsp;=&nbsp;''.<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*在制数据<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;afko~aufnr&nbsp;"订单号<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;afko~gstrp&nbsp;"基本开始日期<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;afko~gltrp&nbsp;"基本完成日期<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;afpo~matnr&nbsp;"物料<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;afpo~dauat&nbsp;"订单类型<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;afpo~psmng&nbsp;"订单项目计划总数量<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;afpo~wemng&nbsp;"订单项目已收货数量<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;CORRESPONDING&nbsp;FIELDS&nbsp;OF&nbsp;TABLE&nbsp;gt_afpo<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;afpo<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INNER&nbsp;JOIN&nbsp;afko&nbsp;ON&nbsp;afko~aufnr&nbsp;=&nbsp;afpo~aufnr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INNER&nbsp;JOIN&nbsp;aufk&nbsp;ON&nbsp;aufk~aufnr&nbsp;=&nbsp;afko~aufnr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INNER&nbsp;JOIN&nbsp;jest&nbsp;ON&nbsp;jest~objnr&nbsp;=&nbsp;aufk~objnr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FOR&nbsp;ALL&nbsp;ENTRIES&nbsp;IN&nbsp;lt_marc<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;afpo~matnr&nbsp;=&nbsp;lt_marc-matnr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;afpo~dwerk&nbsp;=&nbsp;p_werks<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;afpo~dauat&nbsp;IN&nbsp;('Z001','Z002','Z007')<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;jest~stat&nbsp;=&nbsp;'I0002'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;jest~inact&nbsp;=&nbsp;''<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;afko~gltrp&nbsp;&lt;=&nbsp;gv_max_datum.<br />
+<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*汇总&nbsp;在制数量<br />
+*按物料汇总<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;DATA&nbsp;lt_afpo_MATNR&nbsp;TYPE&nbsp;TABLE&nbsp;OF&nbsp;ty_afpo.<br />
+&nbsp;&nbsp;DATA&nbsp;ls_afpo_MATNR&nbsp;TYPE&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ty_afpo.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*按物料+完成日期汇总<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;DATA&nbsp;lt_afpo_DATUM&nbsp;TYPE&nbsp;TABLE&nbsp;OF&nbsp;ty_afpo.<br />
+&nbsp;&nbsp;DATA&nbsp;ls_afpo_DATUM&nbsp;TYPE&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ty_afpo.<br />
+<br />
+&nbsp;&nbsp;CLEAR:lt_afpo_matnr,lt_afpo_datum.<br />
+<br />
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;gt_afpo&nbsp;INTO&nbsp;gs_afpo.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR:ls_afpo_matnr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR:ls_afpo_datum.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_afpo_matnr-matnr&nbsp;=&nbsp;gs_afpo-matnr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_afpo_matnr-psmng&nbsp;=&nbsp;gs_afpo-psmng&nbsp;-&nbsp;gs_afpo-wemng.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;COLLECT&nbsp;ls_afpo_matnr&nbsp;INTO&nbsp;lt_afpo_matnr.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_afpo_DATUM-matnr&nbsp;=&nbsp;gs_afpo-matnr.<br />
+   </div>
+   <div class="codeComment">
+*如果基本完成日期小于当前日期&nbsp;则改了当前日期<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;gs_afpo-gltrp&nbsp;&lt;&nbsp;sy-datum.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_afpo_DATUM-gltrp&nbsp;=&nbsp;sy-datum.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ELSE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_afpo_DATUM-gltrp&nbsp;=&nbsp;gs_afpo-gltrp.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_afpo_DATUM-psmng&nbsp;=&nbsp;gs_afpo-psmng&nbsp;-&nbsp;gs_afpo-wemng.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;COLLECT&nbsp;ls_afpo_DATUM&nbsp;INTO&nbsp;lt_afpo_DATUM.<br />
+<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*汇总预留数量<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;DATA&nbsp;lt_resb_matnr&nbsp;TYPE&nbsp;TABLE&nbsp;OF&nbsp;ty_resb.<br />
+&nbsp;&nbsp;DATA&nbsp;ls_resb_matnr&nbsp;TYPE&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ty_resb.<br />
+<br />
+&nbsp;&nbsp;DATA&nbsp;lt_resb_datum&nbsp;TYPE&nbsp;TABLE&nbsp;OF&nbsp;ty_resb.<br />
+&nbsp;&nbsp;DATA&nbsp;ls_resb_datum&nbsp;TYPE&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ty_resb.<br />
+&nbsp;&nbsp;CLEAR:lt_resb_matnr,lt_resb_DATUM.<br />
+<br />
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;gt_resb&nbsp;INTO&nbsp;gs_resb.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR:ls_marc.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;lt_marc&nbsp;INTO&nbsp;ls_marc&nbsp;WITH&nbsp;KEY&nbsp;matnr&nbsp;=&nbsp;gs_resb-matnr&nbsp;BINARY&nbsp;SEARCH.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*生产提前期<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;ls_marc-webaz&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;reduce_DATUM&nbsp;USING&nbsp;gs_resb-bdter<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_marc-webaz<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CHANGING&nbsp;gs_resb-bdter.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;gs_resb-bdter&nbsp;&gt;&nbsp;gv_max_datum.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CONTINUE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*按物料汇总<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR:ls_resb_matnr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_resb_matnr-matnr&nbsp;=&nbsp;gs_resb-matnr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_resb_matnr-bdmng&nbsp;=&nbsp;gs_resb-bdmng&nbsp;-&nbsp;gs_resb-enmng.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;COLLECT&nbsp;ls_resb_matnr&nbsp;INTO&nbsp;lT_resb_matnr.<br />
+   </div>
+   <div class="codeComment">
+*按物料+日期汇总<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR:ls_resb_datum.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_resb_datum-matnr&nbsp;=&nbsp;gs_resb-matnr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_resb_datum-bdter&nbsp;=&nbsp;gs_resb-bdter.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;ls_resb_datum-bdter&nbsp;&lt;&nbsp;sy-datum.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_resb_datum-bdter&nbsp;=&nbsp;sy-datum.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+   </div>
+   <div class="codeComment">
+**自制时间<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;ls_marc-dzeit&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;reduce_DATUM&nbsp;USING&nbsp;ls_resb_datum-bdter<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_marc-dzeit<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CHANGING&nbsp;ls_resb_datum-bdter.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;ls_resb_datum-bdmng&nbsp;=&nbsp;gs_resb-bdmng&nbsp;-&nbsp;gs_resb-enmng.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;COLLECT&nbsp;ls_resb_DATUM&nbsp;INTO&nbsp;lT_resb_DATUM.<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+<br />
+<br />
+&nbsp;&nbsp;SORT&nbsp;lt_afpo_matnr&nbsp;BY&nbsp;matnr.<br />
+&nbsp;&nbsp;SORT&nbsp;lt_afpo_datum&nbsp;BY&nbsp;matnr&nbsp;gltrp.<br />
+&nbsp;&nbsp;SORT&nbsp;gt_bom&nbsp;BY&nbsp;idnrk.<br />
+&nbsp;&nbsp;SORT&nbsp;gt_bom_IDNRK&nbsp;BY&nbsp;idnrk.<br />
+<br />
+&nbsp;&nbsp;SORT&nbsp;lt_resb_matnr&nbsp;BY&nbsp;matnr.<br />
+&nbsp;&nbsp;SORT&nbsp;lt_resb_datum&nbsp;BY&nbsp;matnr&nbsp;bdter.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;lt_marc&nbsp;ASSIGNING&nbsp;FIELD-SYMBOL(&lt;fs_marc&gt;).<br />
+   </div>
+   <div class="codeComment">
+*MRP控制者描述<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR:GS_t024d.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;GT_t024d&nbsp;INTO&nbsp;GS_t024d<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WITH&nbsp;KEY&nbsp;dispo&nbsp;=&nbsp;&lt;fs_marc&gt;-dispo&nbsp;BINARY&nbsp;SEARCH.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;fs_marc&gt;-dsnam&nbsp;=&nbsp;gs_t024d-dsnam.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*生产管理员描述<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR:GS_t024f.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;GT_t024f&nbsp;INTO&nbsp;GS_t024f<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WITH&nbsp;KEY&nbsp;fevor&nbsp;=&nbsp;&lt;fs_marc&gt;-fevor&nbsp;BINARY&nbsp;SEARCH.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;fs_marc&gt;-txt&nbsp;=&nbsp;gs_t024f-txt.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*库存量<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;SUM(&nbsp;labst&nbsp;)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;&lt;fs_marc&gt;-labst<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;mard<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;werks&nbsp;=&nbsp;p_werks<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;matnr&nbsp;=&nbsp;&lt;fs_marc&gt;-matnr.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*在制订单&nbsp;&nbsp;ZZDDS<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR:ls_afpo_matnr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;lt_afpo_matnr&nbsp;INTO&nbsp;ls_afpo_matnr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WITH&nbsp;KEY&nbsp;matnr&nbsp;=&nbsp;&lt;fs_marc&gt;-matnr&nbsp;BINARY&nbsp;SEARCH.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;fs_marc&gt;-zzdds&nbsp;=&nbsp;ls_afpo_matnr-psmng.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*订单预留&nbsp;&nbsp;DDYLS<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR:ls_resb_matnr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;lt_resb_matnr&nbsp;INTO&nbsp;ls_resb_matnr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WITH&nbsp;KEY&nbsp;matnr&nbsp;=&nbsp;&lt;fs_marc&gt;-matnr&nbsp;BINARY&nbsp;SEARCH.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;fs_marc&gt;-ddyls&nbsp;=&nbsp;ls_resb_matnr-bdmng.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*需求计划&nbsp;&nbsp;XQJHS<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR:gs_bom_IDNRK.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;gt_bom_IDNRK&nbsp;INTO&nbsp;gs_bom_IDNRK<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WITH&nbsp;KEY&nbsp;idnrk&nbsp;=&nbsp;&lt;fs_marc&gt;-matnr&nbsp;BINARY&nbsp;SEARCH.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;fs_marc&gt;-xqjhs&nbsp;=&nbsp;gs_bom_IDNRK-mnglg.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*需求汇总&nbsp;&nbsp;XQHZS&nbsp;=&nbsp;安全库存&nbsp;+&nbsp;需求计划&nbsp;+&nbsp;订单预留<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;fs_marc&gt;-xqhzs&nbsp;=&nbsp;&lt;fs_marc&gt;-eisbe&nbsp;+&nbsp;&lt;fs_marc&gt;-xqjhs&nbsp;+&nbsp;&lt;fs_marc&gt;-ddyls.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*短缺总量&nbsp;&nbsp;DQZSL&nbsp;=&nbsp;库存量&nbsp;+&nbsp;在制订单&nbsp;-&nbsp;(&nbsp;安全库存&nbsp;-&nbsp;订单预留&nbsp;-&nbsp;需求计划&nbsp;)<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;fs_marc&gt;-dqzsl&nbsp;=&nbsp;&lt;fs_marc&gt;-labst&nbsp;+&nbsp;&lt;fs_marc&gt;-zzdds&nbsp;-&nbsp;&lt;fs_marc&gt;-xqhzs.<br />
+<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;DATA&nbsp;lt_bom_all&nbsp;TYPE&nbsp;TABLE&nbsp;OF&nbsp;ty_bom.<br />
+*&nbsp;&nbsp;DATA&nbsp;ls_bom_all&nbsp;TYPE&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ty_bom.<br />
+*&nbsp;&nbsp;CLEAR:lt_bom_all,ls_bom_all.<br />
+*&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;gt_bom&nbsp;ASSIGNING&nbsp;&lt;fs_bom&gt;.<br />
+*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;CLEAR:ls_marc.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;lt_marc&nbsp;INTO&nbsp;ls_marc&nbsp;WITH&nbsp;KEY&nbsp;matnr&nbsp;=&nbsp;&lt;Fs_bom&gt;-idnrk&nbsp;BINARY&nbsp;SEARCH.<br />
+*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;"需求日期&nbsp;-&nbsp;生产提前期<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;ls_marc-webaz&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;reduce_DATUM&nbsp;USING&nbsp;&lt;fs_bom&gt;-datum<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_marc-webaz<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CHANGING&nbsp;&lt;fs_bom&gt;-date.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;ELSE.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;fs_bom&gt;-date&nbsp;=&nbsp;&lt;fs_bom&gt;-datum.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+*<br />
+**&nbsp;&nbsp;&nbsp;&nbsp;"需求日期&nbsp;-&nbsp;自制时间<br />
+**&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;&lt;fs_bom&gt;-dzeit&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+**&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;reduce_DATUM&nbsp;USING&nbsp;&lt;fs_bom&gt;-date<br />
+**&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;fs_bom&gt;-dzeit<br />
+**&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CHANGING&nbsp;&lt;fs_bom&gt;-date.<br />
+**&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+*<br />
+**如果计算出来小于&nbsp;系统当前日期&nbsp;，则&nbsp;等于当前日期<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;&lt;fs_bom&gt;-date&nbsp;&lt;&nbsp;sy-datum.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;fs_bom&gt;-date&nbsp;=&nbsp;sy-datum.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+*<br />
+**GT_BOM&nbsp;DATE&nbsp;发生变化后&nbsp;需要根据&nbsp;物料+DATE&nbsp;进行汇总<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;CLEAR:ls_bom_all.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;ls_bom_all-idnrk&nbsp;=&nbsp;&lt;fs_bom&gt;-idnrk.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;ls_bom_all-date&nbsp;&nbsp;=&nbsp;&lt;fs_bom&gt;-date.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;ls_bom_all-mnglg&nbsp;=&nbsp;&lt;fs_bom&gt;-mnglg.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;COLLECT&nbsp;ls_bom_all&nbsp;INTO&nbsp;lt_bom_all.<br />
+*&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+<br />
+*填充&nbsp;需求为0&nbsp;的日期<br />
+*在制<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;lt_afpo_datum&nbsp;INTO&nbsp;lS_afpo_datum.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR:ls_bom_all.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;lt_bom_all&nbsp;INTO&nbsp;ls_bom_all<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WITH&nbsp;KEY&nbsp;idnrk&nbsp;=&nbsp;ls_afpo_datum-matnr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;date&nbsp;&nbsp;=&nbsp;ls_afpo_datum-gltrp.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;&lt;&gt;&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CLEAR:ls_bom_all.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_bom_all-idnrk&nbsp;=&nbsp;ls_afpo_datum-matnr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_bom_all-date&nbsp;&nbsp;=&nbsp;ls_afpo_datum-gltrp.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;ls_bom_all&nbsp;TO&nbsp;lT_bom_all.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*预留<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;lt_resb_datum&nbsp;INTO&nbsp;ls_resb_datum.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR:ls_bom_all.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;lt_bom_all&nbsp;INTO&nbsp;ls_bom_all<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WITH&nbsp;KEY&nbsp;idnrk&nbsp;=&nbsp;ls_resb_datum-matnr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;date&nbsp;&nbsp;=&nbsp;ls_resb_datum-bdter.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;&lt;&gt;&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CLEAR:ls_bom_all.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_bom_all-idnrk&nbsp;=&nbsp;ls_resb_datum-matnr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_bom_all-date&nbsp;&nbsp;=&nbsp;ls_resb_datum-bdter.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;ls_bom_all&nbsp;TO&nbsp;lT_bom_all.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+***<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;lt_bom_all&nbsp;ASSIGNING&nbsp;FIELD-SYMBOL(&lt;Fs_bom_all&gt;).<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR:ls_marc.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;lt_marc&nbsp;INTO&nbsp;ls_marc&nbsp;WITH&nbsp;KEY&nbsp;matnr&nbsp;=&nbsp;&lt;Fs_bom_all&gt;-idnrk&nbsp;BINARY&nbsp;SEARCH.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;Fs_bom_all&gt;-webaz&nbsp;=&nbsp;ls_marc-webaz.&nbsp;"生产提前期<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;Fs_bom_all&gt;-dzeit&nbsp;=&nbsp;ls_marc-dzeit.&nbsp;"自制时间<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;Fs_bom_all&gt;-eisbe&nbsp;=&nbsp;ls_marc-eisbe.&nbsp;"安全库存量<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;Fs_bom_all&gt;-dispo&nbsp;=&nbsp;ls_marc-dispo.&nbsp;"MRP控制者<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;Fs_bom_all&gt;-fevor&nbsp;=&nbsp;ls_marc-fevor.&nbsp;"生产管理员<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;Fs_bom_all&gt;-bismt&nbsp;=&nbsp;ls_marc-bismt.&nbsp;"总成半成品图号<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;Fs_bom_all&gt;-maktx&nbsp;=&nbsp;ls_marc-maktx.&nbsp;"<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;Fs_bom_all&gt;-txt&nbsp;&nbsp;&nbsp;=&nbsp;ls_marc-txt.&nbsp;&nbsp;&nbsp;"生产管理员描述<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;Fs_bom_all&gt;-dsnam&nbsp;=&nbsp;ls_marc-dsnam.&nbsp;"MRP控制者描述<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;Fs_bom_all&gt;-labst&nbsp;=&nbsp;ls_marc-labst.&nbsp;"MRP控制者描述<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;Fs_bom_all&gt;-ddyls&nbsp;=&nbsp;ls_marc-ddyls.&nbsp;"<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;Fs_bom_all&gt;-zzdds&nbsp;=&nbsp;ls_marc-zzdds.&nbsp;"<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;Fs_bom_all&gt;-xqjhs&nbsp;=&nbsp;ls_marc-xqjhs.&nbsp;"<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;Fs_bom_all&gt;-xqhzs&nbsp;=&nbsp;ls_marc-xqhzs.&nbsp;"<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;Fs_bom_all&gt;-dqzsl&nbsp;=&nbsp;ls_marc-dqzsl.&nbsp;"<br />
+<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;CLEAR:gt_bom[].<br />
+&nbsp;&nbsp;gt_bom[]&nbsp;=&nbsp;lt_bom_all[].<br />
+<br />
+<br />
+&nbsp;&nbsp;SORT&nbsp;gt_bom&nbsp;BY&nbsp;matnr&nbsp;date.<br />
+&nbsp;&nbsp;DATA&nbsp;lv_tabix&nbsp;TYPE&nbsp;sy-tabix.<br />
+&nbsp;&nbsp;DATA&nbsp;lv_mark&nbsp;&nbsp;TYPE&nbsp;c.<br />
+&nbsp;&nbsp;CLEAR:lv_tabix.<br />
+<br />
+<br />
+&nbsp;&nbsp;DATA&nbsp;ws_bom&nbsp;TYPE&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ty_BOM.<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*计算动态的数量<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;CLEAR:lt_bom,ls_bom.<br />
+&nbsp;&nbsp;lt_bom[]&nbsp;=&nbsp;gt_bom[].<br />
+&nbsp;&nbsp;SORT&nbsp;lt_bom&nbsp;BY&nbsp;idnrk.<br />
+&nbsp;&nbsp;DELETE&nbsp;ADJACENT&nbsp;DUPLICATES&nbsp;FROM&nbsp;lt_bom&nbsp;COMPARING&nbsp;idnrk.<br />
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;lt_bom&nbsp;INTO&nbsp;ls_bom.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*动态4列数据<br />
+*20220115&nbsp;需求&nbsp;&nbsp;&nbsp;XQSLD&nbsp;&nbsp;&nbsp;&nbsp;X*<br />
+*20220115&nbsp;预留&nbsp;&nbsp;YLSLD&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Y*<br />
+*20220115&nbsp;在制&nbsp;&nbsp;ZZSLD&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Z*<br />
+*20220115&nbsp;短缺&nbsp;&nbsp;DQSLD&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;D*<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR:lv_mark.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR:ws_bom.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;gt_bom&nbsp;ASSIGNING&nbsp;&lt;fs_bom&gt;&nbsp;WHERE&nbsp;idnrk&nbsp;=&nbsp;ls_bom-idnrk.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;lv_mark&nbsp;IS&nbsp;&nbsp;INITIAL&nbsp;.&nbsp;"第一行<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_mark&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;fs_bom&gt;-xqsld&nbsp;=&nbsp;&lt;fs_bom&gt;-mnglg.&nbsp;"需求<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CLEAR:ls_resb_datum.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;lt_resb_datum&nbsp;INTO&nbsp;ls_resb_datum<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WITH&nbsp;KEY&nbsp;matnr&nbsp;=&nbsp;&lt;fs_bom&gt;-idnrk<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bdter&nbsp;=&nbsp;&lt;fs_bom&gt;-date&nbsp;BINARY&nbsp;SEARCH.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;fs_bom&gt;-ylsld&nbsp;=&nbsp;ls_resb_datum-bdmng.&nbsp;"预留<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CLEAR:LS_afpo_DATUM.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;LT_afpo_DATUM&nbsp;INTO&nbsp;LS_afpo_DATUM<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WITH&nbsp;KEY&nbsp;matnr&nbsp;=&nbsp;&lt;fs_bom&gt;-idnrk<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gltrp&nbsp;=&nbsp;&lt;fs_bom&gt;-date&nbsp;BINARY&nbsp;SEARCH.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;fs_bom&gt;-zzsld&nbsp;=&nbsp;LS_afpo_DATUM-psmng.&nbsp;"在制<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*短缺&nbsp;&nbsp;=&nbsp;库存数量&nbsp;+&nbsp;在制数量&nbsp;-&nbsp;安全库存&nbsp;-&nbsp;需求数量&nbsp;-&nbsp;预留<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;fs_bom&gt;-dqsld&nbsp;=&nbsp;&lt;fs_bom&gt;-labst<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+&nbsp;&lt;fs_bom&gt;-zzsld<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&lt;fs_bom&gt;-eisbe<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&lt;fs_bom&gt;-xqsld<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&lt;fs_bom&gt;-ylsld.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CLEAR:ws_bom.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MOVE-CORRESPONDING&nbsp;&lt;fs_bom&gt;&nbsp;TO&nbsp;ws_bom.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ELSE.<br />
+   </div>
+   <div class="codeComment">
+*拿上一行&nbsp;的数据&nbsp;计算&nbsp;当前行<br />
+<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;fs_bom&gt;-xqsld&nbsp;=&nbsp;&lt;fs_bom&gt;-mnglg.&nbsp;"需求<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CLEAR:ls_resb_datum.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;lt_resb_datum&nbsp;INTO&nbsp;ls_resb_datum<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WITH&nbsp;KEY&nbsp;matnr&nbsp;=&nbsp;&lt;fs_bom&gt;-idnrk<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bdter&nbsp;=&nbsp;&lt;fs_bom&gt;-date&nbsp;BINARY&nbsp;SEARCH.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;fs_bom&gt;-ylsld&nbsp;=&nbsp;ls_resb_datum-bdmng.&nbsp;"预留<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CLEAR:LS_afpo_DATUM.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;LT_afpo_DATUM&nbsp;INTO&nbsp;LS_afpo_DATUM<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WITH&nbsp;KEY&nbsp;matnr&nbsp;=&nbsp;&lt;fs_bom&gt;-idnrk<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gltrp&nbsp;=&nbsp;&lt;fs_bom&gt;-date&nbsp;BINARY&nbsp;SEARCH.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;fs_bom&gt;-zzsld&nbsp;=&nbsp;LS_afpo_DATUM-psmng.&nbsp;"在制<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*短缺&nbsp;&nbsp;=&nbsp;在制数量&nbsp;-&nbsp;需求数量&nbsp;-&nbsp;预留<br />
+<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;ws_bom-dqsld&nbsp;&lt;&nbsp;0.<br />
+   </div>
+   <div class="codeComment">
+*上一行小于0<br />
+*短缺&nbsp;&nbsp;=&nbsp;在制数量&nbsp;-&nbsp;需求数量&nbsp;-&nbsp;预留<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;fs_bom&gt;-dqsld&nbsp;=&nbsp;&lt;fs_bom&gt;-zzsld<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&lt;fs_bom&gt;-xqsld<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&lt;fs_bom&gt;-ylsld.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ELSE.<br />
+   </div>
+   <div class="codeComment">
+*上一行大于0<br />
+*短缺&nbsp;&nbsp;=&nbsp;上一行短缺&nbsp;+&nbsp;在制数量&nbsp;-&nbsp;需求数量&nbsp;-&nbsp;预留<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;fs_bom&gt;-dqsld&nbsp;=&nbsp;&lt;fs_bom&gt;-zzsld<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+&nbsp;ws_bom-dqsld<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&lt;fs_bom&gt;-xqsld<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&lt;fs_bom&gt;-ylsld.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CLEAR:ws_bom.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MOVE-CORRESPONDING&nbsp;&lt;fs_bom&gt;&nbsp;TO&nbsp;ws_bom.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*GT_BOM-DATE&nbsp;在最后输出字段<br />
+*跟GT_BOM-DATE&nbsp;排重后创建内表<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;CLEAR:lt_bom,ls_bom.<br />
+&nbsp;&nbsp;lt_bom[]&nbsp;=&nbsp;gt_bom[].<br />
+&nbsp;&nbsp;SORT&nbsp;lt_bom&nbsp;BY&nbsp;date.<br />
+&nbsp;&nbsp;DELETE&nbsp;ADJACENT&nbsp;DUPLICATES&nbsp;FROM&nbsp;lt_bom&nbsp;COMPARING&nbsp;date.<br />
+<br />
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;lt_bom&nbsp;INTO&nbsp;ls_bom.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR:gS_fiEld.<br />
+   </div>
+   <div class="codeComment">
+*需求<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;gS_fiEld-name&nbsp;&nbsp;&nbsp;=&nbsp;'X'&nbsp;&&&nbsp;ls_bom-date.&nbsp;&nbsp;"字段名称<br />
+&nbsp;&nbsp;&nbsp;&nbsp;gS_fiEld-text&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;ls_bom-date&nbsp;&&&nbsp;'需求'.&nbsp;"字段描述<br />
+&nbsp;&nbsp;&nbsp;&nbsp;gs_field-table&nbsp;&nbsp;=&nbsp;&nbsp;'EKPO'.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"参考表<br />
+&nbsp;&nbsp;&nbsp;&nbsp;gs_field-name_s&nbsp;=&nbsp;&nbsp;'MENGE'.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"参考字段<br />
+&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;GS_fiEld&nbsp;TO&nbsp;GT_fiEld.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*预留<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR:gS_fiEld.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;gS_fiEld-name&nbsp;&nbsp;&nbsp;=&nbsp;'Y'&nbsp;&&&nbsp;ls_bom-date.&nbsp;&nbsp;"字段名称<br />
+&nbsp;&nbsp;&nbsp;&nbsp;gS_fiEld-text&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;ls_bom-date&nbsp;&&&nbsp;'预留'.&nbsp;"字段描述<br />
+&nbsp;&nbsp;&nbsp;&nbsp;gs_field-table&nbsp;&nbsp;=&nbsp;&nbsp;'EKPO'.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"参考表<br />
+&nbsp;&nbsp;&nbsp;&nbsp;gs_field-name_s&nbsp;=&nbsp;&nbsp;'MENGE'.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"参考字段<br />
+&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;GS_fiEld&nbsp;TO&nbsp;GT_fiEld.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*在制<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR:gS_fiEld.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;gS_fiEld-name&nbsp;&nbsp;&nbsp;=&nbsp;'Z'&nbsp;&&&nbsp;ls_bom-date.&nbsp;&nbsp;"字段名称<br />
+&nbsp;&nbsp;&nbsp;&nbsp;gS_fiEld-text&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;ls_bom-date&nbsp;&&&nbsp;'在制'.&nbsp;&nbsp;"字段描述<br />
+&nbsp;&nbsp;&nbsp;&nbsp;gs_field-table&nbsp;&nbsp;=&nbsp;&nbsp;'EKPO'.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"参考表<br />
+&nbsp;&nbsp;&nbsp;&nbsp;gs_field-name_s&nbsp;=&nbsp;&nbsp;'MENGE'.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"参考字段<br />
+&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;GS_fiEld&nbsp;TO&nbsp;GT_fiEld.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*短缺<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR:gS_fiEld.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;gS_fiEld-name&nbsp;&nbsp;&nbsp;=&nbsp;'D'&nbsp;&&&nbsp;ls_bom-date.&nbsp;&nbsp;"字段名称<br />
+&nbsp;&nbsp;&nbsp;&nbsp;gS_fiEld-text&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;ls_bom-date&nbsp;&&&nbsp;'短缺'.&nbsp;"字段描述<br />
+&nbsp;&nbsp;&nbsp;&nbsp;gs_field-table&nbsp;&nbsp;=&nbsp;&nbsp;'EKPO'.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"参考表<br />
+&nbsp;&nbsp;&nbsp;&nbsp;gs_field-name_s&nbsp;=&nbsp;&nbsp;'MENGE'.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"参考字段<br />
+&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;GS_fiEld&nbsp;TO&nbsp;GT_fiEld.<br />
+<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+****************创建动态内部<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;CLEAR:Gv_pos.<br />
+&nbsp;&nbsp;CLEAR:lt_comp,Gt_fcat.<br />
+<br />
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;gt_fiEld&nbsp;INTO&nbsp;gS_fiEld.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*动态生成&nbsp;输出字段<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;add_fcat&nbsp;USING&nbsp;gs_field-name&nbsp;"字段名称<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_field-text&nbsp;&nbsp;"字段描述<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_field-table&nbsp;"参考表<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_field-name_s.&nbsp;"参考字段<br />
+<br />
+   </div>
+   <div class="codeComment">
+*动态生成表结构<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;ADD_comp&nbsp;USING&nbsp;gs_field-name&nbsp;"字段名称<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_field-text&nbsp;&nbsp;"字段描述<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_field-table&nbsp;"参考表<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_field-name_s.&nbsp;"参考字段<br />
+<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*创建结构<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;IF&nbsp;lr_struc&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;METHOD&nbsp;cl_abap_structdescr=&gt;create<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;p_components&nbsp;=&nbsp;lt_comp<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RECEIVING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;p_result&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lr_struc.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*根据结构创建表<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;METHOD&nbsp;cl_abap_tabledescr=&gt;create<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;p_line_type&nbsp;=&nbsp;lr_struc<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RECEIVING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;p_result&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lr_table.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CREATE&nbsp;DATA&nbsp;dyn_wa&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;HANDLE&nbsp;lr_struc.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CREATE&nbsp;DATA&nbsp;dyn_table&nbsp;TYPE&nbsp;HANDLE&nbsp;lr_table.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;ASSIGN&nbsp;dyn_wa-&gt;*&nbsp;TO&nbsp;&lt;dyn_wa&gt;.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;ASSIGN&nbsp;dyn_table-&gt;*&nbsp;TO&nbsp;&lt;dyn_table&gt;.<br />
+*&nbsp;&nbsp;ELSE.<br />
+<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;ASSIGN&nbsp;dyn_wa-&gt;*&nbsp;TO&nbsp;&lt;dyn_wa&gt;.<br />
+&nbsp;&nbsp;ASSIGN&nbsp;dyn_table-&gt;*&nbsp;TO&nbsp;&lt;dyn_table&gt;.<br />
+<br />
+&nbsp;&nbsp;CLEAR:&lt;dyn_table&gt;.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;UNASSIGN&nbsp;&lt;dyn_table&gt;.<br />
+*&nbsp;&nbsp;UNASSIGN&nbsp;&lt;dyn_wa&gt;.<br />
+<br />
+*LOOP&nbsp;数据&nbsp;添加到显示的动态内表里<br />
+*组件&nbsp;排重&nbsp;删除后&nbsp;得到&nbsp;显示的物料行数<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;CLEAR:lt_bom.<br />
+&nbsp;&nbsp;lt_bom[]&nbsp;=&nbsp;gt_bom[].<br />
+&nbsp;&nbsp;SORT&nbsp;lt_bom&nbsp;BY&nbsp;idnrk.<br />
+&nbsp;&nbsp;DELETE&nbsp;ADJACENT&nbsp;DUPLICATES&nbsp;FROM&nbsp;lt_bom&nbsp;COMPARING&nbsp;idnrk.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*排重后的&nbsp;物料行数<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;lt_bom&nbsp;INTO&nbsp;ls_bom.<br />
+   </div>
+   <div class="codeComment">
+*固定字段复制<br />
+<br />
+*第1个字段赋值&nbsp;&nbsp;&nbsp;总半成成品料号<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;Gs_fcat.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;Gt_fcat&nbsp;INTO&nbsp;Gs_fcat&nbsp;INDEX&nbsp;1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ASSIGN&nbsp;COMPONENT&nbsp;Gs_fcat-fieldname&nbsp;OF&nbsp;STRUCTURE&nbsp;&lt;dyn_wa&gt;&nbsp;TO&nbsp;&lt;dyn_field&gt;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;dyn_field&gt;&nbsp;=&nbsp;ls_bom-idnrk.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*第2个字段赋值&nbsp;&nbsp;&nbsp;总成半成品图号<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;Gs_fcat.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;Gt_fcat&nbsp;INTO&nbsp;Gs_fcat&nbsp;INDEX&nbsp;2.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ASSIGN&nbsp;COMPONENT&nbsp;Gs_fcat-fieldname&nbsp;OF&nbsp;STRUCTURE&nbsp;&lt;dyn_wa&gt;&nbsp;TO&nbsp;&lt;dyn_field&gt;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;dyn_field&gt;&nbsp;=&nbsp;ls_bom-bismt.<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*第3个字段赋值&nbsp;&nbsp;&nbsp;物料描述<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;Gs_fcat.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;Gt_fcat&nbsp;INTO&nbsp;Gs_fcat&nbsp;INDEX&nbsp;3.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ASSIGN&nbsp;COMPONENT&nbsp;Gs_fcat-fieldname&nbsp;OF&nbsp;STRUCTURE&nbsp;&lt;dyn_wa&gt;&nbsp;TO&nbsp;&lt;dyn_field&gt;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;dyn_field&gt;&nbsp;=&nbsp;ls_bom-maktx.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*第4个字段赋值&nbsp;&nbsp;&nbsp;生产管理员<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;Gs_fcat.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;Gt_fcat&nbsp;INTO&nbsp;Gs_fcat&nbsp;INDEX&nbsp;4.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ASSIGN&nbsp;COMPONENT&nbsp;Gs_fcat-fieldname&nbsp;OF&nbsp;STRUCTURE&nbsp;&lt;dyn_wa&gt;&nbsp;TO&nbsp;&lt;dyn_field&gt;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;dyn_field&gt;&nbsp;=&nbsp;ls_bom-fevor.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*第5个字段赋值&nbsp;&nbsp;&nbsp;生产管理员描述<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;Gs_fcat.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;Gt_fcat&nbsp;INTO&nbsp;Gs_fcat&nbsp;INDEX&nbsp;5.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ASSIGN&nbsp;COMPONENT&nbsp;Gs_fcat-fieldname&nbsp;OF&nbsp;STRUCTURE&nbsp;&lt;dyn_wa&gt;&nbsp;TO&nbsp;&lt;dyn_field&gt;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;dyn_field&gt;&nbsp;=&nbsp;ls_bom-txt.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*第6个字段赋值&nbsp;&nbsp;&nbsp;MRP控制者<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;Gs_fcat.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;Gt_fcat&nbsp;INTO&nbsp;Gs_fcat&nbsp;INDEX&nbsp;6.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ASSIGN&nbsp;COMPONENT&nbsp;Gs_fcat-fieldname&nbsp;OF&nbsp;STRUCTURE&nbsp;&lt;dyn_wa&gt;&nbsp;TO&nbsp;&lt;dyn_field&gt;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;dyn_field&gt;&nbsp;=&nbsp;ls_bom-dispo.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*第7个字段赋值&nbsp;&nbsp;MRP控制者描述<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;Gs_fcat.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;Gt_fcat&nbsp;INTO&nbsp;Gs_fcat&nbsp;INDEX&nbsp;7.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ASSIGN&nbsp;COMPONENT&nbsp;Gs_fcat-fieldname&nbsp;OF&nbsp;STRUCTURE&nbsp;&lt;dyn_wa&gt;&nbsp;TO&nbsp;&lt;dyn_field&gt;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;dyn_field&gt;&nbsp;=&nbsp;ls_bom-dsnam.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*第8个字段赋值&nbsp;&nbsp;&nbsp;生产提前期<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;Gs_fcat.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;Gt_fcat&nbsp;INTO&nbsp;Gs_fcat&nbsp;INDEX&nbsp;8.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ASSIGN&nbsp;COMPONENT&nbsp;Gs_fcat-fieldname&nbsp;OF&nbsp;STRUCTURE&nbsp;&lt;dyn_wa&gt;&nbsp;TO&nbsp;&lt;dyn_field&gt;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;dyn_field&gt;&nbsp;=&nbsp;ls_bom-webaz.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*第9个字段赋值&nbsp;&nbsp;&nbsp;自制时间<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;Gs_fcat.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;Gt_fcat&nbsp;INTO&nbsp;Gs_fcat&nbsp;INDEX&nbsp;9.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ASSIGN&nbsp;COMPONENT&nbsp;Gs_fcat-fieldname&nbsp;OF&nbsp;STRUCTURE&nbsp;&lt;dyn_wa&gt;&nbsp;TO&nbsp;&lt;dyn_field&gt;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;dyn_field&gt;&nbsp;=&nbsp;ls_bom-dzeit.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*第10个字段赋值&nbsp;&nbsp;安全库存<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;Gs_fcat.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;Gt_fcat&nbsp;INTO&nbsp;Gs_fcat&nbsp;INDEX&nbsp;10.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ASSIGN&nbsp;COMPONENT&nbsp;Gs_fcat-fieldname&nbsp;OF&nbsp;STRUCTURE&nbsp;&lt;dyn_wa&gt;&nbsp;TO&nbsp;&lt;dyn_field&gt;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;dyn_field&gt;&nbsp;=&nbsp;ls_bom-eisbe.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*第11个字段赋值&nbsp;&nbsp;&nbsp;库存量<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;Gs_fcat.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;Gt_fcat&nbsp;INTO&nbsp;Gs_fcat&nbsp;INDEX&nbsp;11.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ASSIGN&nbsp;COMPONENT&nbsp;Gs_fcat-fieldname&nbsp;OF&nbsp;STRUCTURE&nbsp;&lt;dyn_wa&gt;&nbsp;TO&nbsp;&lt;dyn_field&gt;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;dyn_field&gt;&nbsp;=&nbsp;ls_bom-labst.<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*第12个字段赋值&nbsp;&nbsp;在制订单&nbsp;&nbsp;ZZDDS<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;Gs_fcat.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;Gt_fcat&nbsp;INTO&nbsp;Gs_fcat&nbsp;INDEX&nbsp;12.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ASSIGN&nbsp;COMPONENT&nbsp;Gs_fcat-fieldname&nbsp;OF&nbsp;STRUCTURE&nbsp;&lt;dyn_wa&gt;&nbsp;TO&nbsp;&lt;dyn_field&gt;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;dyn_field&gt;&nbsp;=&nbsp;ls_bom-zzdds.<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*第13个字段赋值&nbsp;&nbsp;订单预留&nbsp;&nbsp;DDYLS<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;Gs_fcat.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;Gt_fcat&nbsp;INTO&nbsp;Gs_fcat&nbsp;INDEX&nbsp;13.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ASSIGN&nbsp;COMPONENT&nbsp;Gs_fcat-fieldname&nbsp;OF&nbsp;STRUCTURE&nbsp;&lt;dyn_wa&gt;&nbsp;TO&nbsp;&lt;dyn_field&gt;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;dyn_field&gt;&nbsp;=&nbsp;ls_bom-ddyls.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*第14个字段赋值&nbsp;&nbsp;需求计划&nbsp;&nbsp;XQJHS<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;Gs_fcat.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;Gt_fcat&nbsp;INTO&nbsp;Gs_fcat&nbsp;INDEX&nbsp;14.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ASSIGN&nbsp;COMPONENT&nbsp;Gs_fcat-fieldname&nbsp;OF&nbsp;STRUCTURE&nbsp;&lt;dyn_wa&gt;&nbsp;TO&nbsp;&lt;dyn_field&gt;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;dyn_field&gt;&nbsp;=&nbsp;ls_bom-xqjhs.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*第15个字段赋值&nbsp;&nbsp;需求汇总&nbsp;&nbsp;XQHZS<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;Gs_fcat.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;Gt_fcat&nbsp;INTO&nbsp;Gs_fcat&nbsp;INDEX&nbsp;15.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ASSIGN&nbsp;COMPONENT&nbsp;Gs_fcat-fieldname&nbsp;OF&nbsp;STRUCTURE&nbsp;&lt;dyn_wa&gt;&nbsp;TO&nbsp;&lt;dyn_field&gt;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;dyn_field&gt;&nbsp;=&nbsp;ls_bom-xqhzs.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*第16个字段赋值&nbsp;&nbsp;短缺总量&nbsp;&nbsp;DQZSL<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;Gs_fcat.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;Gt_fcat&nbsp;INTO&nbsp;Gs_fcat&nbsp;INDEX&nbsp;16.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ASSIGN&nbsp;COMPONENT&nbsp;Gs_fcat-fieldname&nbsp;OF&nbsp;STRUCTURE&nbsp;&lt;dyn_wa&gt;&nbsp;TO&nbsp;&lt;dyn_field&gt;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;dyn_field&gt;&nbsp;=&nbsp;ls_bom-dqzsl.<br />
+<br />
+   </div>
+   <div class="codeComment">
+****动态值&nbsp;根据组件物料号<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;gt_bom&nbsp;INTO&nbsp;gs_bom&nbsp;WHERE&nbsp;idnrk&nbsp;=&nbsp;ls_bom-idnrk.<br />
+   </div>
+   <div class="codeComment">
+*动态4列数据<br />
+<br />
+*xqsld&nbsp;TYPE&nbsp;ekpo-menge,&nbsp;"20220115&nbsp;需求<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;Gs_fcat.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;lv_name.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CONCATENATE&nbsp;'X'&nbsp;gs_bom-date&nbsp;INTO&nbsp;lv_name.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;Gt_fcat&nbsp;INTO&nbsp;Gs_fcat&nbsp;&nbsp;WITH&nbsp;&nbsp;KEY&nbsp;fieldname&nbsp;=&nbsp;lv_name.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ASSIGN&nbsp;COMPONENT&nbsp;Gs_fcat-fieldname&nbsp;OF&nbsp;STRUCTURE&nbsp;&lt;dyn_wa&gt;&nbsp;TO&nbsp;&lt;dyn_field&gt;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;dyn_field&gt;&nbsp;=&nbsp;gs_bom-xqsld.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*ylsld&nbsp;TYPE&nbsp;ekpo-menge,&nbsp;"20220115&nbsp;预留<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;Gs_fcat.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;lv_name.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CONCATENATE&nbsp;'Y'&nbsp;gs_bom-date&nbsp;INTO&nbsp;lv_name.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;Gt_fcat&nbsp;INTO&nbsp;Gs_fcat&nbsp;&nbsp;WITH&nbsp;&nbsp;KEY&nbsp;fieldname&nbsp;=&nbsp;lv_name.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ASSIGN&nbsp;COMPONENT&nbsp;Gs_fcat-fieldname&nbsp;OF&nbsp;STRUCTURE&nbsp;&lt;dyn_wa&gt;&nbsp;TO&nbsp;&lt;dyn_field&gt;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;dyn_field&gt;&nbsp;=&nbsp;gs_bom-ylsld.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*zzsld&nbsp;TYPE&nbsp;ekpo-menge,&nbsp;"20220115&nbsp;在制<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;Gs_fcat.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;lv_name.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CONCATENATE&nbsp;'Z'&nbsp;gs_bom-date&nbsp;INTO&nbsp;lv_name.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;Gt_fcat&nbsp;INTO&nbsp;Gs_fcat&nbsp;&nbsp;WITH&nbsp;&nbsp;KEY&nbsp;fieldname&nbsp;=&nbsp;lv_name.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ASSIGN&nbsp;COMPONENT&nbsp;Gs_fcat-fieldname&nbsp;OF&nbsp;STRUCTURE&nbsp;&lt;dyn_wa&gt;&nbsp;TO&nbsp;&lt;dyn_field&gt;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;dyn_field&gt;&nbsp;=&nbsp;gs_bom-zzsld.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*dqsld&nbsp;TYPE&nbsp;ekpo-menge,&nbsp;"20220115&nbsp;短缺<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;Gs_fcat.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;lv_name.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CONCATENATE&nbsp;'D'&nbsp;gs_bom-date&nbsp;INTO&nbsp;lv_name.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;Gt_fcat&nbsp;INTO&nbsp;Gs_fcat&nbsp;&nbsp;WITH&nbsp;&nbsp;KEY&nbsp;fieldname&nbsp;=&nbsp;lv_name.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ASSIGN&nbsp;COMPONENT&nbsp;Gs_fcat-fieldname&nbsp;OF&nbsp;STRUCTURE&nbsp;&lt;dyn_wa&gt;&nbsp;TO&nbsp;&lt;dyn_field&gt;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;dyn_field&gt;&nbsp;=&nbsp;gs_bom-dqsld.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;&lt;dyn_wa&gt;&nbsp;TO&nbsp;&lt;dyn_table&gt;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;&lt;dyn_wa&gt;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;Gs_fcat.<br />
+<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+<br />
+&nbsp;&nbsp;Gs_layo-colwidth_optimize&nbsp;&nbsp;=&nbsp;'X'.<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*ALV&nbsp;输出<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;IF&nbsp;&lt;dyn_table&gt;&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;s004(sv).<br />
+&nbsp;&nbsp;&nbsp;&nbsp;RETURN.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'REUSE_ALV_GRID_DISPLAY'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_callback_program&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;sy-repid<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_callback_user_command&nbsp;&nbsp;=&nbsp;'GRID_USER_COMMAND_DT'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_callback_pf_status_set&nbsp;=&nbsp;'GRID_PF_STATUS_SET_DT'<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_callback_top_of_page&nbsp;&nbsp;&nbsp;=&nbsp;'GRID_TOP_OF_PAGE_DT'<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it_fieldcat&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;Gt_fcat<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;is_layout&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;Gs_layo<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it_sort&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;Gt_sort<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_save&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'A'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;TABLES<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;t_outtab&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&lt;dyn_table&gt;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;program_error&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTHERS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;2.<br />
+&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;&lt;&gt;&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;ID&nbsp;sy-msgid&nbsp;TYPE&nbsp;sy-msgty&nbsp;NUMBER&nbsp;sy-msgno<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WITH&nbsp;sy-msgv1&nbsp;sy-msgv2&nbsp;sy-msgv3&nbsp;sy-msgv4.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+ENDFORM.<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Form&nbsp;call_bom<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;text<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM call_bom  USING UV_matnr uv_menge uv_datum.<br />
+&nbsp;&nbsp;DATA&nbsp;lt_stb&nbsp;TYPE&nbsp;TABLE&nbsp;OF&nbsp;stpox.<br />
+&nbsp;&nbsp;DATA&nbsp;ls_stb&nbsp;TYPE&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stpox.<br />
+&nbsp;&nbsp;DATA&nbsp;lt_mat&nbsp;TYPE&nbsp;TABLE&nbsp;OF&nbsp;cscmat.<br />
+&nbsp;&nbsp;DATA&nbsp;ls_mat&nbsp;TYPE&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cscmat.<br />
+&nbsp;&nbsp;CLEAR:lt_stb,lt_mat.<br />
+&nbsp;&nbsp;CLEAR:ls_stb,ls_mat.<br />
+<br />
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'CS_BOM_EXPL_MAT_V2'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;capid&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'PP01'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;BOM应用<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;datuv&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;sy-datum&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;有效起始日<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ehndl&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'1'<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;emeng&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;uv_menge&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;需求数量<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mehrs&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'X'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;多层展开<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mmory&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'1'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;是否使用缓存<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mtnrv&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;Uv_matnr&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;展开物料号<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stlan&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'1'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;BOM用途<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;werks&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;P_werks&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;物料所在工厂<br />
+&nbsp;&nbsp;&nbsp;&nbsp;TABLES<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stb&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lt_stb<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;matcat&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lt_mat<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;alt_not_found&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;call_invalid&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;material_not_found&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;3<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;missing_authorization&nbsp;=&nbsp;4<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;no_bom_found&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;5<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;no_plant_data&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;6<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;no_suitable_bom_found&nbsp;=&nbsp;7<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;conversion_error&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;8<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTHERS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;9.<br />
+<br />
+<br />
+&nbsp;&nbsp;DATA&nbsp;lv_dispo&nbsp;TYPE&nbsp;marc-dispo.<br />
+<br />
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;lt_stb&nbsp;INTO&nbsp;ls_stb.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*只要DISPO=&nbsp;M02的组件<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR:lV_dispo.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;SINGLE&nbsp;dispo<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;lv_dispo<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;marc<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;werks&nbsp;=&nbsp;p_werks<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;matnr&nbsp;=&nbsp;ls_stb-idnrk.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;lv_dispo&nbsp;&lt;&gt;&nbsp;'M02'&nbsp;AND&nbsp;lv_dispo&nbsp;&lt;&gt;&nbsp;'M04'&nbsp;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CONTINUE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR:gs_bom.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;gs_bom-matnr&nbsp;=&nbsp;uv_matnr.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;gs_bom-menge&nbsp;=&nbsp;uv_MENGE.<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;gs_bom-datum&nbsp;=&nbsp;uv_DATUM.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;gs_bom-idnrk&nbsp;=&nbsp;ls_stb-idnrk.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;gs_bom-mnglg&nbsp;=&nbsp;ls_stb-mnglg.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;COLLECT&nbsp;gs_bom&nbsp;INTO&nbsp;gt_bom.<br />
+<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR:gs_bom_idnrk.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;gs_bom_IDNRK-idnrk&nbsp;=&nbsp;ls_stb-idnrk.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;gs_bom_IDNRK-mnglg&nbsp;=&nbsp;ls_stb-mnglg.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;COLLECT&nbsp;gs_bom_IDNRK&nbsp;INTO&nbsp;gt_bom_IDNRK.<br />
+<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+ENDFORM.<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Form&nbsp;reduce_DATUM<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;text<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM reduce_DATUM  USING    UV_datum<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;UV_webaz<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CHANGING&nbsp;CV_date.<br />
+<br />
+&nbsp;&nbsp;DATA&nbsp;lv_day&nbsp;TYPE&nbsp;t5a4a-dlydy.<br />
+&nbsp;&nbsp;CLEAR:lv_day.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;UV_webaz&nbsp;&lt;=&nbsp;99.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;lv_day&nbsp;=&nbsp;UV_webaz.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'RP_CALC_DATE_IN_INTERVAL'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;date&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;UV_datum&nbsp;&nbsp;&nbsp;&nbsp;"日期<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;days&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lv_day&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"天数<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;months&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"月数<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;signum&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'-'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;years&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"年数<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;calc_date&nbsp;=&nbsp;CV_date.<br />
+<br />
+&nbsp;&nbsp;ELSE.<br />
+<br />
+<br />
+<br />
+<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+<br />
+ENDFORM.<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Form&nbsp;initial_field<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;text<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM initial_field.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*动态内表&nbsp;前面固定字段<br />
+<br />
+*总半成成品料号<br />
+*MARA-BISMT&nbsp;总成半成品图号<br />
+*MAKT-MAKTX&nbsp;物料描述<br />
+*MARC-FEVOR&nbsp;生产管理员<br />
+*T024F-TXT&nbsp;&nbsp;生产管理员描述<br />
+*MARC-DISPO&nbsp;MRP控制者<br />
+*T024D-DSNAM&nbsp;MRP控制者描述<br />
+<br />
+*MARC-WEBAZ&nbsp;&nbsp;生产提前期<br />
+*MARC-DZEIT&nbsp;&nbsp;自制时间<br />
+*MARC-EISBE&nbsp;&nbsp;安全库存<br />
+*MARD-LABST&nbsp;&nbsp;库存量<br />
+<br />
+*在制订单&nbsp;&nbsp;ZZDDS<br />
+*订单预留&nbsp;&nbsp;DDYLS<br />
+*需求计划&nbsp;&nbsp;XQJHS<br />
+*需求汇总&nbsp;&nbsp;XQHZS<br />
+*短缺总量&nbsp;&nbsp;DQZSL<br />
+<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;gt_fiEld&nbsp;=&nbsp;VALUE&nbsp;#(<br />
+&nbsp;&nbsp;(&nbsp;name&nbsp;=&nbsp;'MATNR'&nbsp;&nbsp;&nbsp;&nbsp;table&nbsp;=&nbsp;'MARA'&nbsp;&nbsp;name_s&nbsp;=&nbsp;'MATNR'&nbsp;text&nbsp;=&nbsp;'总半成成品料号'&nbsp;)<br />
+&nbsp;&nbsp;(&nbsp;name&nbsp;=&nbsp;'BISMT'&nbsp;&nbsp;&nbsp;&nbsp;table&nbsp;=&nbsp;'MARA'&nbsp;&nbsp;name_s&nbsp;=&nbsp;'BISMT'&nbsp;text&nbsp;=&nbsp;'总成半成品图号'&nbsp;)<br />
+&nbsp;&nbsp;(&nbsp;name&nbsp;=&nbsp;'MAKTX'&nbsp;&nbsp;&nbsp;&nbsp;table&nbsp;=&nbsp;'MAKT'&nbsp;&nbsp;name_s&nbsp;=&nbsp;'MAKTX'&nbsp;text&nbsp;=&nbsp;'物料描述'&nbsp;)<br />
+&nbsp;&nbsp;(&nbsp;name&nbsp;=&nbsp;'FEVOR'&nbsp;&nbsp;&nbsp;&nbsp;table&nbsp;=&nbsp;'MARC'&nbsp;&nbsp;name_s&nbsp;=&nbsp;'FEVOR'&nbsp;text&nbsp;=&nbsp;'生产管理员'&nbsp;)<br />
+&nbsp;&nbsp;(&nbsp;name&nbsp;=&nbsp;'TXT'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;table&nbsp;=&nbsp;'T024F'&nbsp;name_s&nbsp;=&nbsp;'TXT'&nbsp;&nbsp;&nbsp;text&nbsp;=&nbsp;'生产管理员描述'&nbsp;)<br />
+&nbsp;&nbsp;(&nbsp;name&nbsp;=&nbsp;'DISPO'&nbsp;&nbsp;&nbsp;&nbsp;table&nbsp;=&nbsp;'MARC'&nbsp;&nbsp;name_s&nbsp;=&nbsp;'DISPO'&nbsp;text&nbsp;=&nbsp;'MRP控制者'&nbsp;)<br />
+&nbsp;&nbsp;(&nbsp;name&nbsp;=&nbsp;'DSNAM'&nbsp;&nbsp;&nbsp;&nbsp;table&nbsp;=&nbsp;'T024D'&nbsp;name_s&nbsp;=&nbsp;'DSNAM'&nbsp;text&nbsp;=&nbsp;'MRP控制者描述'&nbsp;)<br />
+&nbsp;&nbsp;(&nbsp;name&nbsp;=&nbsp;'WEBAZ'&nbsp;&nbsp;&nbsp;&nbsp;table&nbsp;=&nbsp;'MARC'&nbsp;&nbsp;name_s&nbsp;=&nbsp;'WEBAZ'&nbsp;text&nbsp;=&nbsp;'生产提前期'&nbsp;)<br />
+&nbsp;&nbsp;(&nbsp;name&nbsp;=&nbsp;'DZEIT'&nbsp;&nbsp;&nbsp;&nbsp;table&nbsp;=&nbsp;'MARC'&nbsp;&nbsp;name_s&nbsp;=&nbsp;'DZEIT'&nbsp;text&nbsp;=&nbsp;'自制时间'&nbsp;)<br />
+&nbsp;&nbsp;(&nbsp;name&nbsp;=&nbsp;'EISBE'&nbsp;&nbsp;&nbsp;&nbsp;table&nbsp;=&nbsp;'MARC'&nbsp;&nbsp;name_s&nbsp;=&nbsp;'EISBE'&nbsp;text&nbsp;=&nbsp;'安全库存'&nbsp;)<br />
+&nbsp;&nbsp;(&nbsp;name&nbsp;=&nbsp;'LABST'&nbsp;&nbsp;&nbsp;&nbsp;table&nbsp;=&nbsp;'MARD'&nbsp;&nbsp;name_s&nbsp;=&nbsp;'LABST'&nbsp;text&nbsp;=&nbsp;'库存量'&nbsp;)<br />
+&nbsp;&nbsp;(&nbsp;name&nbsp;=&nbsp;'ZZDDS'&nbsp;&nbsp;&nbsp;&nbsp;table&nbsp;=&nbsp;'AFPO'&nbsp;&nbsp;name_s&nbsp;=&nbsp;'PSMNG'&nbsp;text&nbsp;=&nbsp;'在制订单'&nbsp;)<br />
+&nbsp;&nbsp;(&nbsp;name&nbsp;=&nbsp;'DDYLS'&nbsp;&nbsp;&nbsp;&nbsp;table&nbsp;=&nbsp;'RESB'&nbsp;&nbsp;name_s&nbsp;=&nbsp;'BDMNG'&nbsp;text&nbsp;=&nbsp;'订单预留'&nbsp;)<br />
+&nbsp;&nbsp;(&nbsp;name&nbsp;=&nbsp;'XQJHS'&nbsp;&nbsp;&nbsp;&nbsp;table&nbsp;=&nbsp;'RESB'&nbsp;&nbsp;name_s&nbsp;=&nbsp;'ENMNG'&nbsp;text&nbsp;=&nbsp;'需求计划'&nbsp;)<br />
+&nbsp;&nbsp;(&nbsp;name&nbsp;=&nbsp;'XQHZS'&nbsp;&nbsp;&nbsp;&nbsp;table&nbsp;=&nbsp;'EKPO'&nbsp;&nbsp;name_s&nbsp;=&nbsp;'MENGE'&nbsp;text&nbsp;=&nbsp;'需求汇总'&nbsp;)<br />
+&nbsp;&nbsp;(&nbsp;name&nbsp;=&nbsp;'DQZSL'&nbsp;&nbsp;&nbsp;&nbsp;table&nbsp;=&nbsp;'EKPO'&nbsp;&nbsp;name_s&nbsp;=&nbsp;'MENGE'&nbsp;text&nbsp;=&nbsp;'短缺总量'&nbsp;)<br />
+<br />
+&nbsp;&nbsp;).<br />
+<br />
+ENDFORM.<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Form&nbsp;add_fcat<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;text<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM add_fcat  USING    UV_name<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;UV_text<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;UV_table<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;UV_name_s.<br />
+<br />
+&nbsp;&nbsp;ADD&nbsp;1&nbsp;TO&nbsp;Gv_pos.<br />
+<br />
+&nbsp;&nbsp;CLEAR&nbsp;Gs_fcat.<br />
+&nbsp;&nbsp;Gs_fcat-col_pos&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;Gv_pos.<br />
+&nbsp;&nbsp;Gs_fcat-fieldname&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;UV_name.<br />
+&nbsp;&nbsp;Gs_fcat-seltext_l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;UV_text.<br />
+&nbsp;&nbsp;Gs_fcat-seltext_M&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;UV_text.<br />
+&nbsp;&nbsp;Gs_fcat-seltext_S&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;UV_text.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;Gs_fcat-ref_tabname&nbsp;&nbsp;&nbsp;=&nbsp;uv_table.<br />
+*&nbsp;&nbsp;Gs_fcat-ref_fieldname&nbsp;=&nbsp;UV_name_s.<br />
+<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;APPEND&nbsp;Gs_fcat&nbsp;TO&nbsp;Gt_fcat.<br />
+<br />
+ENDFORM.<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Form&nbsp;ADD_comp<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;text<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM ADD_comp  USING    UV_name<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;UV_text<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;UV_table<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;UV_name_s.<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+**循环字段表创建结构<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;CLEAR:l_string.<br />
+&nbsp;&nbsp;CLEAR:ls_comp.<br />
+&nbsp;&nbsp;CLEAR:lr_type.<br />
+<br />
+&nbsp;&nbsp;CONCATENATE&nbsp;UV_table&nbsp;'-'&nbsp;UV_name_s&nbsp;INTO&nbsp;l_string.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*读取字段类型<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;CALL&nbsp;METHOD&nbsp;cl_abap_datadescr=&gt;describe_by_name<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;p_name&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;l_string<br />
+&nbsp;&nbsp;&nbsp;&nbsp;RECEIVING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;p_descr_ref&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lr_type<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;type_not_found&nbsp;=&nbsp;1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTHERS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;2.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;&lt;&gt;&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;ID&nbsp;sy-msgid&nbsp;TYPE&nbsp;sy-msgty&nbsp;NUMBER&nbsp;sy-msgno<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WITH&nbsp;sy-msgv1&nbsp;sy-msgv2&nbsp;sy-msgv3&nbsp;sy-msgv4.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;ls_comp-type&nbsp;?=&nbsp;lr_type.<br />
+&nbsp;&nbsp;ls_comp-name&nbsp;=&nbsp;UV_name.<br />
+&nbsp;&nbsp;APPEND&nbsp;ls_comp&nbsp;TO&nbsp;lt_comp.<br />
+&nbsp;&nbsp;CLEAR&nbsp;ls_comp.<br />
+<br />
+ENDFORM.<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;grid_pf_status_set<br />
+*&---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM grid_pf_status_set_DT USING rt_extab TYPE slis_t_extab.<br />
+<br />
+&nbsp;&nbsp;SET&nbsp;PF-STATUS&nbsp;'STANDARD_DT'&nbsp;EXCLUDING&nbsp;rt_extab.<br />
+ENDFORM.                    "grid_pf_status_set<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;GRID_USER_COMMAND<br />
+*&---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM grid_user_command_DT USING UV_uscomm LIKE sy-ucomm<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;US_selfield&nbsp;TYPE&nbsp;slis_selfield&nbsp;.<br />
+<br />
+&nbsp;&nbsp;DATA&nbsp;lv_line&nbsp;TYPE&nbsp;i.<br />
+&nbsp;&nbsp;DATA&nbsp;wa_out&nbsp;&nbsp;TYPE&nbsp;ty_out.<br />
+&nbsp;&nbsp;lv_line&nbsp;=&nbsp;us_selfield-tabindex.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;CASE&nbsp;UV_uscomm.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'PRINT'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'EXCEL'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;dowload_excel.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'&IC1'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;OTHERS.<br />
+&nbsp;&nbsp;ENDCASE.<br />
+<br />
+&nbsp;&nbsp;us_selfield-col_stable&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;us_selfield-row_stable&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;us_selfield-refresh&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'X'.<br />
+<br />
+ENDFORM.                    "FRM_ALV_COMMAND<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Form&nbsp;dowload_excel<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;text<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM dowload_excel.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*下载&nbsp;短缺的数量<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;DATA&nbsp;LV_file&nbsp;TYPE&nbsp;rlgrap-filename.<br />
+&nbsp;&nbsp;CLEAR:LV_file.<br />
+<br />
+&nbsp;&nbsp;BREAK&nbsp;xx-fanlz.<br />
+<br />
+&nbsp;&nbsp;PERFORM&nbsp;data_get.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;gt_dow[]&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;get_fiLE&nbsp;CHANGING&nbsp;LV_file.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;download_data&nbsp;USING&nbsp;LV_file&nbsp;gt_dow.<br />
+<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+ENDFORM.<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;download_data<br />
+*&---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM download_data USING p_pv1 TYPE rlgrap-filename<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pv3&nbsp;TYPE&nbsp;STANDARD&nbsp;TABLE.<br />
+&nbsp;&nbsp;DATA&nbsp;lv_fname&nbsp;TYPE&nbsp;string.<br />
+<br />
+&nbsp;&nbsp;lv_fname&nbsp;=&nbsp;p_pv1.<br />
+<br />
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'GUI_DOWNLOAD'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;filename&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lv_fname<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;filetype&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'DAT'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;codepage&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'4103'&nbsp;&nbsp;"Unicode<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;write_bom&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'X'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"<br />
+&nbsp;&nbsp;&nbsp;&nbsp;TABLES<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;data_tab&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;pv3[]<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;file_write_error&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;no_batch&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gui_refuse_filetransfer&nbsp;=&nbsp;3<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;invalid_type&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;4<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;no_authority&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;5<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;unknown_error&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;6<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;header_not_allowed&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;7<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;separator_not_allowed&nbsp;&nbsp;&nbsp;=&nbsp;8<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;filesize_not_allowed&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;9<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;header_too_long&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;10<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dp_error_create&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;11<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dp_error_send&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;12<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dp_error_write&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;13<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;unknown_dp_error&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;14<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;access_denied&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;15<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dp_out_of_memory&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;16<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;disk_full&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;17<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dp_timeout&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;18<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;file_not_found&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;19<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dataprovider_exception&nbsp;&nbsp;=&nbsp;20<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;control_flush_error&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;21<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTHERS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;22.<br />
+<br />
+ENDFORM.                    " DOWNLOAD_DATA<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Form&nbsp;get_fiLE<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;text<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM get_fiLE CHANGING cv_file TYPE rlgrap-filename.<br />
+&nbsp;&nbsp;DATA:lv_rc&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;i,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_filename&nbsp;TYPE&nbsp;string,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_path&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;string,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_fullpath&nbsp;TYPE&nbsp;string.<br />
+<br />
+&nbsp;&nbsp;CALL&nbsp;METHOD&nbsp;cl_gui_frontend_services=&gt;file_save_dialog<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;window_title&nbsp;=&nbsp;'选择文件'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;file_filter&nbsp;&nbsp;=&nbsp;'(*.xlsx;*.xls)|*.xlsx;*.xls|'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CHANGING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;filename&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lv_filename<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;path&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lv_path<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fullpath&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lv_fullpath<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTHERS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;5.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;EQ&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;cv_file&nbsp;=&nbsp;lv_fullpath.<br />
+&nbsp;&nbsp;ENDIF.<br />
+ENDFORM.                    "FRM_GET_FILE_PATH<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Form&nbsp;data_get<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;text<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM data_get.<br />
+   </div>
+   <div class="codeComment">
+*EXCEL&nbsp;下载数据<br />
+*TYPES:BEGIN&nbsp;OF&nbsp;ty_dow,<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;field1&nbsp;&nbsp;TYPE&nbsp;c&nbsp;LENGTH&nbsp;60,&nbsp;&nbsp;"物料<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;field2&nbsp;&nbsp;TYPE&nbsp;c&nbsp;LENGTH&nbsp;60,&nbsp;&nbsp;"图号<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;field3&nbsp;&nbsp;TYPE&nbsp;c&nbsp;LENGTH&nbsp;60,&nbsp;&nbsp;"物料描述<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;field4&nbsp;&nbsp;TYPE&nbsp;c&nbsp;LENGTH&nbsp;60,&nbsp;&nbsp;"生产管理员<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;field5&nbsp;&nbsp;TYPE&nbsp;c&nbsp;LENGTH&nbsp;60,&nbsp;&nbsp;"生产管理员描述<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;field6&nbsp;&nbsp;TYPE&nbsp;c&nbsp;LENGTH&nbsp;60,&nbsp;&nbsp;"生产版本<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;field7&nbsp;&nbsp;TYPE&nbsp;c&nbsp;LENGTH&nbsp;60,&nbsp;&nbsp;"生产开始日期<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;field8&nbsp;&nbsp;TYPE&nbsp;c&nbsp;LENGTH&nbsp;60,&nbsp;&nbsp;"生产结束日期<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;field9&nbsp;&nbsp;TYPE&nbsp;c&nbsp;LENGTH&nbsp;60,&nbsp;&nbsp;"订单数量<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;field10&nbsp;TYPE&nbsp;c&nbsp;LENGTH&nbsp;60,&nbsp;&nbsp;"优先级<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;END&nbsp;OF&nbsp;ty_dow.<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;CLEAR:gt_dow.<br />
+<br />
+&nbsp;&nbsp;DATA&nbsp;lv_verid&nbsp;TYPE&nbsp;mkal-verid.<br />
+&nbsp;&nbsp;CLEAR:lv_verid.<br />
+<br />
+&nbsp;&nbsp;DATA&nbsp;lt_bom&nbsp;TYPE&nbsp;TABLE&nbsp;OF&nbsp;ty_bom.<br />
+&nbsp;&nbsp;DATA&nbsp;ls_bom&nbsp;TYPE&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ty_bom.<br />
+&nbsp;&nbsp;CLEAR:lt_bom,ls_bom.<br />
+<br />
+&nbsp;&nbsp;lt_bom[]&nbsp;=&nbsp;gt_bom[].<br />
+<br />
+&nbsp;&nbsp;DELETE&nbsp;lt_bom&nbsp;WHERE&nbsp;dqsld&nbsp;&gt;=&nbsp;0.<br />
+<br />
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;lt_bom&nbsp;INTO&nbsp;ls_bom.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;gt_dow[]&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CLEAR:gs_dow.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_dow-field1&nbsp;&nbsp;=&nbsp;'物料'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_dow-field2&nbsp;&nbsp;=&nbsp;'图号'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_dow-field3&nbsp;&nbsp;=&nbsp;'物料描述'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_dow-field4&nbsp;&nbsp;=&nbsp;'生产管理员'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_dow-field5&nbsp;&nbsp;=&nbsp;'生产管理员描述'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_dow-field6&nbsp;&nbsp;=&nbsp;'生产版本'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_dow-field7&nbsp;&nbsp;=&nbsp;'生产开始日期'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_dow-field8&nbsp;&nbsp;=&nbsp;'生产结束日期'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_dow-field9&nbsp;&nbsp;=&nbsp;'订单数量'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_dow-field10&nbsp;=&nbsp;'优先级'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;gs_dow&nbsp;TO&nbsp;gt_dow.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR:gs_dow.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;gs_dow-field1&nbsp;&nbsp;=&nbsp;ls_bom-idnrk.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;gs_dow-field2&nbsp;&nbsp;=&nbsp;ls_bom-bismt.&nbsp;"图号<br />
+&nbsp;&nbsp;&nbsp;&nbsp;gs_dow-field3&nbsp;&nbsp;=&nbsp;ls_bom-maktx.&nbsp;"物料描述<br />
+&nbsp;&nbsp;&nbsp;&nbsp;gs_dow-field4&nbsp;&nbsp;=&nbsp;ls_bom-fevor.&nbsp;"生产管理员<br />
+&nbsp;&nbsp;&nbsp;&nbsp;gs_dow-field5&nbsp;&nbsp;=&nbsp;ls_bom-txt.&nbsp;&nbsp;&nbsp;"生产管理员描述<br />
+&nbsp;&nbsp;&nbsp;&nbsp;gs_dow-field8&nbsp;&nbsp;=&nbsp;ls_bom-date.&nbsp;&nbsp;&nbsp;"生产结束日期<br />
+<br />
+   </div>
+   <div class="codeComment">
+*生产提前期<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;ls_bom-dzeit&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;reduce_DATUM&nbsp;USING&nbsp;ls_bom-date<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_bom-dzeit<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CHANGING&nbsp;ls_bom-date.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR:lv_verid.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;SINGLE&nbsp;verid<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;lv_verid<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;mkal<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;matnr&nbsp;=&nbsp;LS_bom-idnrk<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;werks&nbsp;=&nbsp;p_werks<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;adatu&nbsp;&lt;=&nbsp;ls_bom-date<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;bdatu&nbsp;&gt;=&nbsp;ls_bom-date.<br />
+<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;gs_dow-field6&nbsp;&nbsp;=&nbsp;lv_verid.&nbsp;&nbsp;&nbsp;"生产版本<br />
+&nbsp;&nbsp;&nbsp;&nbsp;gs_dow-field7&nbsp;&nbsp;=&nbsp;ls_bom-date.&nbsp;&nbsp;&nbsp;"生产开始日期<br />
+&nbsp;&nbsp;&nbsp;&nbsp;gs_dow-field9&nbsp;&nbsp;=&nbsp;abs(&nbsp;ls_bom-dqsld&nbsp;).&nbsp;&nbsp;&nbsp;"订单数量<br />
+&nbsp;&nbsp;&nbsp;&nbsp;gs_dow-field10&nbsp;=&nbsp;''.&nbsp;&nbsp;&nbsp;"优先级<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;gs_dow&nbsp;TO&nbsp;gt_dow.<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+ENDFORM.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*Text&nbsp;elements<br />
+*----------------------------------------------------------<br />
+*&nbsp;001&nbsp;输入参数<br />
+*&nbsp;S01&nbsp;模板下载<br />
+*&nbsp;S02&nbsp;模板下载<br />
+<br />
+<br />
+*Selection&nbsp;texts<br />
+*----------------------------------------------------------<br />
+*&nbsp;P_FILE&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;文件名　<br />
+*&nbsp;P_WERKS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;工厂<br />
+<br />
+<br />
+*Messages<br />
+*----------------------------------------------------------<br />
+*<br />
+*&nbsp;Message&nbsp;class:&nbsp;00<br />
+*398&nbsp;&nbsp;&nbsp;&&nbsp;&&nbsp;&&nbsp;&<br />
+*<br />
+*&nbsp;Message&nbsp;class:&nbsp;Hard&nbsp;coded<br />
+*&nbsp;&nbsp;&nbsp;清单中包含有错误不能执行计算，请修改.....<br />
+*<br />
+*&nbsp;Message&nbsp;class:&nbsp;SV<br />
+*004&nbsp;&nbsp;&nbsp;未找到与选择条件相匹配的条目。<br />
+*<br />
+*&nbsp;Message&nbsp;class:&nbsp;UX<br />
+*893&nbsp;&nbsp;&nbsp;不能处理&nbsp;Excel&nbsp;文件&nbsp;&<br />
+            </div>
+          </td>
+        </tr>
+      </table>
+      </td>
+      </tr>
+   <tr>
+<td class="footer">Extracted by Mass Download version 1.5.2 - E.G.Mellodew. 1998-2022. Sap Release 755</td>
+   </tr>
+</table>
+</body>
+</html>

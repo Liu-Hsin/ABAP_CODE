@@ -1,0 +1,2385 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=GB2312" />
+<title>Dictionary object- ZMMT005</title>
+<style type="text/css">
+  th{text-align:left}
+  .cell{
+     font-family:"Courier New", Courier, monospace;
+     color:#000;
+     font-size:12px;
+     background-color:#F2F4F7;
+  }
+  .cell td { border: thin solid #ccc; }
+</style>
+<style type="text/css">
+  .normal{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px }
+  .footer{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; text-align: center }
+  h2{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+  h3{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:14px; font-weight:800 }
+  .outerTable{
+   background-color:#E0E7ED;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-right-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+  .innerTable{
+   background-color:#F2F4F7;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-bottom-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+</style>
+</head>
+<body>
+  <table class="outerTable">
+    <tr>
+      <td><h2>Table: ZMMT005</h2>
+  <h3>Description: MES物料主数据同步日志</h3></td>
+    </tr>
+    <tr>
+      <td><!--This is where our main table begins  -->
+<table class="innerTable">
+<tr>
+  <th>Row</th>
+  <th>Field name</th>
+  <th>Position</th>
+  <th>Key</th>
+  <th>Data element</th>
+  <th>Domain</th>
+  <th>Datatype</th>
+  <th>Length</th>
+  <th>Lowercase</th>
+  <th>Domain text</th>
+</tr>
+<tr class="cell">
+  <td> 1</td>
+  <td>MANDT</td>
+  <td>1</td>
+  <td>X</td>
+  <td>MANDT</td>
+  <td>MANDT</td>
+  <td>CLNT</td>
+  <td>3</td>
+  <td>&nbsp;</td>
+  <td>集团</td>
+</tr>
+<tr class="cell">
+  <td> 2</td>
+  <td>UUID</td>
+  <td>2</td>
+  <td>X</td>
+  <td>GUID_32</td>
+  <td>SYSUUID_C</td>
+  <td>CHAR</td>
+  <td>32</td>
+  <td>&nbsp;</td>
+  <td>'CHAR' 格式的大写的 GUID</td>
+</tr>
+<tr class="cell">
+  <td> 3</td>
+  <td>MATNR</td>
+  <td>3</td>
+  <td>X</td>
+  <td>MATNR</td>
+  <td>MATNR</td>
+  <td>CHAR</td>
+  <td>40</td>
+  <td>&nbsp;</td>
+  <td>物料编号</td>
+</tr>
+<tr class="cell">
+  <td> 4</td>
+  <td>MAKTX</td>
+  <td>4</td>
+  <td>&nbsp;</td>
+  <td>MAKTX</td>
+  <td>TEXT40</td>
+  <td>CHAR</td>
+  <td>40</td>
+  <td>X</td>
+  <td>物料描述</td>
+</tr>
+<tr class="cell">
+  <td> 5</td>
+  <td>BISMT</td>
+  <td>5</td>
+  <td>&nbsp;</td>
+  <td>BISMT</td>
+  <td>BISMT</td>
+  <td>CHAR</td>
+  <td>40</td>
+  <td>&nbsp;</td>
+  <td>旧物料号</td>
+</tr>
+<tr class="cell">
+  <td> 6</td>
+  <td>MTART</td>
+  <td>6</td>
+  <td>&nbsp;</td>
+  <td>MTART</td>
+  <td>MTART</td>
+  <td>CHAR</td>
+  <td>4</td>
+  <td>&nbsp;</td>
+  <td>物料类型</td>
+</tr>
+<tr class="cell">
+  <td> 7</td>
+  <td>MTBEZ</td>
+  <td>7</td>
+  <td>&nbsp;</td>
+  <td>MTBEZ</td>
+  <td>TEXT25</td>
+  <td>CHAR</td>
+  <td>25</td>
+  <td>X</td>
+  <td>物料类型的描述</td>
+</tr>
+<tr class="cell">
+  <td> 8</td>
+  <td>MEINS</td>
+  <td>8</td>
+  <td>&nbsp;</td>
+  <td>MEINS</td>
+  <td>MEINS</td>
+  <td>UNIT</td>
+  <td>3</td>
+  <td>X</td>
+  <td>基本计量单位</td>
+</tr>
+<tr class="cell">
+  <td> 9</td>
+  <td>MSEH61</td>
+  <td>9</td>
+  <td>&nbsp;</td>
+  <td>MSEH6</td>
+  <td>MSEH6</td>
+  <td>CHAR</td>
+  <td>6</td>
+  <td>X</td>
+  <td>技术格式中的外部计量单位(6-字符)</td>
+</tr>
+<tr class="cell">
+  <td>10</td>
+  <td>MATKL</td>
+  <td>10</td>
+  <td>&nbsp;</td>
+  <td>MATKL</td>
+  <td>MATKL</td>
+  <td>CHAR</td>
+  <td>9</td>
+  <td>&nbsp;</td>
+  <td>物料组</td>
+</tr>
+<tr class="cell">
+  <td>11</td>
+  <td>WGBEZ</td>
+  <td>11</td>
+  <td>&nbsp;</td>
+  <td>WGBEZ</td>
+  <td>TEXT20</td>
+  <td>CHAR</td>
+  <td>20</td>
+  <td>X</td>
+  <td>物料组描述</td>
+</tr>
+<tr class="cell">
+  <td>12</td>
+  <td>GROES</td>
+  <td>12</td>
+  <td>&nbsp;</td>
+  <td>GROES</td>
+  <td>CHAR32</td>
+  <td>CHAR</td>
+  <td>32</td>
+  <td>&nbsp;</td>
+  <td>大小/量纲</td>
+</tr>
+<tr class="cell">
+  <td>13</td>
+  <td>BRGEW</td>
+  <td>13</td>
+  <td>&nbsp;</td>
+  <td>BRGEW</td>
+  <td>MENG13</td>
+  <td>QUAN</td>
+  <td>13</td>
+  <td>&nbsp;</td>
+  <td>毛重</td>
+</tr>
+<tr class="cell">
+  <td>14</td>
+  <td>NTGEW</td>
+  <td>14</td>
+  <td>&nbsp;</td>
+  <td>NTGEW</td>
+  <td>MENG13</td>
+  <td>QUAN</td>
+  <td>13</td>
+  <td>&nbsp;</td>
+  <td>净重</td>
+</tr>
+<tr class="cell">
+  <td>15</td>
+  <td>GEWEI</td>
+  <td>15</td>
+  <td>&nbsp;</td>
+  <td>GEWEI</td>
+  <td>MEINS</td>
+  <td>UNIT</td>
+  <td>3</td>
+  <td>X</td>
+  <td>重量单位</td>
+</tr>
+<tr class="cell">
+  <td>16</td>
+  <td>MSEH62</td>
+  <td>16</td>
+  <td>&nbsp;</td>
+  <td>MSEH6</td>
+  <td>MSEH6</td>
+  <td>CHAR</td>
+  <td>6</td>
+  <td>X</td>
+  <td>技术格式中的外部计量单位(6-字符)</td>
+</tr>
+<tr class="cell">
+  <td>17</td>
+  <td>SPART</td>
+  <td>17</td>
+  <td>&nbsp;</td>
+  <td>SPART</td>
+  <td>SPART</td>
+  <td>CHAR</td>
+  <td>2</td>
+  <td>&nbsp;</td>
+  <td>产品组</td>
+</tr>
+<tr class="cell">
+  <td>18</td>
+  <td>VTEXT</td>
+  <td>18</td>
+  <td>&nbsp;</td>
+  <td>VTXTK</td>
+  <td>TEXT20</td>
+  <td>CHAR</td>
+  <td>20</td>
+  <td>X</td>
+  <td>名称</td>
+</tr>
+<tr class="cell">
+  <td>19</td>
+  <td>LVORM</td>
+  <td>19</td>
+  <td>&nbsp;</td>
+  <td>LVOMA</td>
+  <td>XFELD</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>在客户级标记要删除的物料</td>
+</tr>
+<tr class="cell">
+  <td>20</td>
+  <td>WERKS</td>
+  <td>20</td>
+  <td>&nbsp;</td>
+  <td>WERKS_D</td>
+  <td>WERKS</td>
+  <td>CHAR</td>
+  <td>4</td>
+  <td>&nbsp;</td>
+  <td>工厂</td>
+</tr>
+<tr class="cell">
+  <td>21</td>
+  <td>XCHPF</td>
+  <td>21</td>
+  <td>&nbsp;</td>
+  <td>XCHPF</td>
+  <td>XFELD</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>批次管理需求标识</td>
+</tr>
+<tr class="cell">
+  <td>22</td>
+  <td>DISGR</td>
+  <td>22</td>
+  <td>&nbsp;</td>
+  <td>DISGR</td>
+  <td>DISGR</td>
+  <td>CHAR</td>
+  <td>4</td>
+  <td>&nbsp;</td>
+  <td>MRP 组</td>
+</tr>
+<tr class="cell">
+  <td>23</td>
+  <td>TEXT40</td>
+  <td>23</td>
+  <td>&nbsp;</td>
+  <td>TEXT40</td>
+  <td>TEXT40</td>
+  <td>CHAR</td>
+  <td>40</td>
+  <td>X</td>
+  <td>文本，40 个字符长</td>
+</tr>
+<tr class="cell">
+  <td>24</td>
+  <td>DISPO</td>
+  <td>24</td>
+  <td>&nbsp;</td>
+  <td>DISPO</td>
+  <td>DISPO</td>
+  <td>CHAR</td>
+  <td>3</td>
+  <td>&nbsp;</td>
+  <td>物料需求计划控制员</td>
+</tr>
+<tr class="cell">
+  <td>25</td>
+  <td>DSNAM</td>
+  <td>25</td>
+  <td>&nbsp;</td>
+  <td>DSNAM</td>
+  <td>TEXT18</td>
+  <td>CHAR</td>
+  <td>18</td>
+  <td>X</td>
+  <td>控制者名称</td>
+</tr>
+<tr class="cell">
+  <td>26</td>
+  <td>BESKZ</td>
+  <td>26</td>
+  <td>&nbsp;</td>
+  <td>BESKZ</td>
+  <td>BESKZ</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>采购类型</td>
+</tr>
+<tr class="cell">
+  <td>27</td>
+  <td>SOBSL</td>
+  <td>27</td>
+  <td>&nbsp;</td>
+  <td>SOBSL</td>
+  <td>SOBSL</td>
+  <td>CHAR</td>
+  <td>2</td>
+  <td>&nbsp;</td>
+  <td>特殊采购类型</td>
+</tr>
+<tr class="cell">
+  <td>28</td>
+  <td>LTEXT</td>
+  <td>28</td>
+  <td>&nbsp;</td>
+  <td>LTEXT</td>
+  <td>TEXT40</td>
+  <td>CHAR</td>
+  <td>40</td>
+  <td>X</td>
+  <td>长文本</td>
+</tr>
+<tr class="cell">
+  <td>29</td>
+  <td>LGPRO</td>
+  <td>29</td>
+  <td>&nbsp;</td>
+  <td>LGPRO</td>
+  <td>LGORT</td>
+  <td>CHAR</td>
+  <td>4</td>
+  <td>&nbsp;</td>
+  <td>发货存储地点</td>
+</tr>
+<tr class="cell">
+  <td>30</td>
+  <td>LGOBE1</td>
+  <td>30</td>
+  <td>&nbsp;</td>
+  <td>LGOBE</td>
+  <td>TEXT16</td>
+  <td>CHAR</td>
+  <td>16</td>
+  <td>X</td>
+  <td>仓储地点的描述</td>
+</tr>
+<tr class="cell">
+  <td>31</td>
+  <td>LGFSB</td>
+  <td>31</td>
+  <td>&nbsp;</td>
+  <td>LGFSB</td>
+  <td>LGORT</td>
+  <td>CHAR</td>
+  <td>4</td>
+  <td>&nbsp;</td>
+  <td>外部采购的缺省存储地点</td>
+</tr>
+<tr class="cell">
+  <td>32</td>
+  <td>LGOBE2</td>
+  <td>32</td>
+  <td>&nbsp;</td>
+  <td>LGOBE</td>
+  <td>TEXT16</td>
+  <td>CHAR</td>
+  <td>16</td>
+  <td>X</td>
+  <td>仓储地点的描述</td>
+</tr>
+<tr class="cell">
+  <td>33</td>
+  <td>DZEIT</td>
+  <td>33</td>
+  <td>&nbsp;</td>
+  <td>DZEIT</td>
+  <td>DEC3</td>
+  <td>DEC</td>
+  <td>3</td>
+  <td>&nbsp;</td>
+  <td>厂内生产时间</td>
+</tr>
+<tr class="cell">
+  <td>34</td>
+  <td>RGEKZ</td>
+  <td>34</td>
+  <td>&nbsp;</td>
+  <td>RGEKM</td>
+  <td>RGEKM</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>标识：反冲</td>
+</tr>
+<tr class="cell">
+  <td>35</td>
+  <td>SCHGT</td>
+  <td>35</td>
+  <td>&nbsp;</td>
+  <td>SCHGT</td>
+  <td>XFELD</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>指示符：散装物料</td>
+</tr>
+<tr class="cell">
+  <td>36</td>
+  <td>EISBE</td>
+  <td>36</td>
+  <td>&nbsp;</td>
+  <td>EISBE</td>
+  <td>MENG13</td>
+  <td>QUAN</td>
+  <td>13</td>
+  <td>&nbsp;</td>
+  <td>安全库存</td>
+</tr>
+<tr class="cell">
+  <td>37</td>
+  <td>FEVOR</td>
+  <td>37</td>
+  <td>&nbsp;</td>
+  <td>FEVOR</td>
+  <td>FEVOR</td>
+  <td>CHAR</td>
+  <td>3</td>
+  <td>&nbsp;</td>
+  <td>生产主管</td>
+</tr>
+<tr class="cell">
+  <td>38</td>
+  <td>TXT</td>
+  <td>38</td>
+  <td>&nbsp;</td>
+  <td>DISPTXT</td>
+  <td>TEXT30</td>
+  <td>CHAR</td>
+  <td>30</td>
+  <td>X</td>
+  <td>负责计划员组描述</td>
+</tr>
+<tr class="cell">
+  <td>39</td>
+  <td>LVORM1</td>
+  <td>39</td>
+  <td>&nbsp;</td>
+  <td>LVOWK</td>
+  <td>XFELD</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>在工厂级别将物料标记为删除</td>
+</tr>
+<tr class="cell">
+  <td>40</td>
+  <td>SAPREL</td>
+  <td>40</td>
+  <td>&nbsp;</td>
+  <td>ZDESAPREV</td>
+  <td>ZDMSAPREV</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>SAP处理标识</td>
+</tr>
+<tr class="cell">
+  <td>41</td>
+  <td>MESMSGTPE</td>
+  <td>41</td>
+  <td>&nbsp;</td>
+  <td>BAPI_MTYPE</td>
+  <td>SYCHAR01</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>消息类型: S 成功,E 错误,W 警告,I 信息,A 中断</td>
+</tr>
+<tr class="cell">
+  <td>42</td>
+  <td>RTNMSG</td>
+  <td>42</td>
+  <td>&nbsp;</td>
+  <td>BAPI_MSG</td>
+  <td>TEXT220</td>
+  <td>CHAR</td>
+  <td>220</td>
+  <td>&nbsp;</td>
+  <td>消息文本</td>
+</tr>
+<tr class="cell">
+  <td>43</td>
+  <td>ZDATE</td>
+  <td>43</td>
+  <td>&nbsp;</td>
+  <td>SYST_DATUM</td>
+  <td>SYDATS</td>
+  <td>DATS</td>
+  <td>8</td>
+  <td>&nbsp;</td>
+  <td>ABAP 系统字段：应用服务器的当前日期</td>
+</tr>
+<tr class="cell">
+  <td>44</td>
+  <td>ZTIME</td>
+  <td>44</td>
+  <td>&nbsp;</td>
+  <td>SYST_UZEIT</td>
+  <td>SYTIME</td>
+  <td>TIMS</td>
+  <td>6</td>
+  <td>&nbsp;</td>
+  <td>ABAP 系统字段：应用服务器的当前时间</td>
+</tr>
+<tr class="cell">
+  <td>45</td>
+  <td>ZBNAME</td>
+  <td>45</td>
+  <td>&nbsp;</td>
+  <td>SYST_UNAME</td>
+  <td>SYCHAR12</td>
+  <td>CHAR</td>
+  <td>12</td>
+  <td>&nbsp;</td>
+  <td>ABAP 系统字段：当前用户的名称</td>
+</tr>
+      </table>
+     </td>
+   </tr>
+<br/>
+  <table class="outerTable">
+    <tr>
+      <td><h2>Fixed Domain Values </h2>
+    </tr>
+    <tr>
+      <td><!--This is where our main table begins  -->
+<table class="innerTable">
+<tr>
+  <th>Domain Name</th>
+  <th>Value Low</th>
+  <th>Value High</th>
+  <th>Text</th>
+</tr>
+<tr class="cell">
+  <td>XFELD</td>
+  <td>X</td>
+  <td>&nbsp;</td>
+  <td>是</td>
+</tr>
+<tr class="cell">
+  <td>XFELD</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>否</td>
+</tr>
+<tr class="cell">
+  <td>XFELD</td>
+  <td>X</td>
+  <td>&nbsp;</td>
+  <td>是</td>
+</tr>
+<tr class="cell">
+  <td>XFELD</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>否</td>
+</tr>
+<tr class="cell">
+  <td>XFELD</td>
+  <td>X</td>
+  <td>&nbsp;</td>
+  <td>是</td>
+</tr>
+<tr class="cell">
+  <td>XFELD</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>否</td>
+</tr>
+<tr class="cell">
+  <td>XFELD</td>
+  <td>X</td>
+  <td>&nbsp;</td>
+  <td>是</td>
+</tr>
+<tr class="cell">
+  <td>XFELD</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>否</td>
+</tr>
+<tr class="cell">
+  <td>XFELD</td>
+  <td>X</td>
+  <td>&nbsp;</td>
+  <td>是</td>
+</tr>
+<tr class="cell">
+  <td>XFELD</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>否</td>
+</tr>
+<tr class="cell">
+  <td>XFELD</td>
+  <td>X</td>
+  <td>&nbsp;</td>
+  <td>是</td>
+</tr>
+<tr class="cell">
+  <td>XFELD</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>否</td>
+</tr>
+<tr class="cell">
+  <td>XFELD</td>
+  <td>X</td>
+  <td>&nbsp;</td>
+  <td>是</td>
+</tr>
+<tr class="cell">
+  <td>XFELD</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>否</td>
+</tr>
+<tr class="cell">
+  <td>XFELD</td>
+  <td>X</td>
+  <td>&nbsp;</td>
+  <td>是</td>
+</tr>
+<tr class="cell">
+  <td>XFELD</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>否</td>
+</tr>
+<tr class="cell">
+  <td>XFELD</td>
+  <td>X</td>
+  <td>&nbsp;</td>
+  <td>是</td>
+</tr>
+<tr class="cell">
+  <td>XFELD</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>否</td>
+</tr>
+<tr class="cell">
+  <td>XFELD</td>
+  <td>X</td>
+  <td>&nbsp;</td>
+  <td>是</td>
+</tr>
+<tr class="cell">
+  <td>XFELD</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>否</td>
+</tr>
+<tr class="cell">
+  <td>XFELD</td>
+  <td>X</td>
+  <td>&nbsp;</td>
+  <td>是</td>
+</tr>
+<tr class="cell">
+  <td>XFELD</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>否</td>
+</tr>
+<tr class="cell">
+  <td>XFELD</td>
+  <td>X</td>
+  <td>&nbsp;</td>
+  <td>是</td>
+</tr>
+<tr class="cell">
+  <td>XFELD</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>否</td>
+</tr>
+<tr class="cell">
+  <td>XFELD</td>
+  <td>X</td>
+  <td>&nbsp;</td>
+  <td>是</td>
+</tr>
+<tr class="cell">
+  <td>XFELD</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>否</td>
+</tr>
+<tr class="cell">
+  <td>XFELD</td>
+  <td>X</td>
+  <td>&nbsp;</td>
+  <td>是</td>
+</tr>
+<tr class="cell">
+  <td>XFELD</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>否</td>
+</tr>
+<tr class="cell">
+  <td>BESKZ</td>
+  <td>E</td>
+  <td>&nbsp;</td>
+  <td>自制生产</td>
+</tr>
+<tr class="cell">
+  <td>BESKZ</td>
+  <td>F</td>
+  <td>&nbsp;</td>
+  <td>外部采购</td>
+</tr>
+<tr class="cell">
+  <td>BESKZ</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>没有购买</td>
+</tr>
+<tr class="cell">
+  <td>BESKZ</td>
+  <td>X</td>
+  <td>&nbsp;</td>
+  <td>两种采购类型</td>
+</tr>
+<tr class="cell">
+  <td>XFELD</td>
+  <td>X</td>
+  <td>&nbsp;</td>
+  <td>是</td>
+</tr>
+<tr class="cell">
+  <td>XFELD</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>否</td>
+</tr>
+<tr class="cell">
+  <td>XFELD</td>
+  <td>X</td>
+  <td>&nbsp;</td>
+  <td>是</td>
+</tr>
+<tr class="cell">
+  <td>XFELD</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>否</td>
+</tr>
+<tr class="cell">
+  <td>BESKZ</td>
+  <td>E</td>
+  <td>&nbsp;</td>
+  <td>自制生产</td>
+</tr>
+<tr class="cell">
+  <td>BESKZ</td>
+  <td>F</td>
+  <td>&nbsp;</td>
+  <td>外部采购</td>
+</tr>
+<tr class="cell">
+  <td>BESKZ</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>没有购买</td>
+</tr>
+<tr class="cell">
+  <td>BESKZ</td>
+  <td>X</td>
+  <td>&nbsp;</td>
+  <td>两种采购类型</td>
+</tr>
+<tr class="cell">
+  <td>XFELD</td>
+  <td>X</td>
+  <td>&nbsp;</td>
+  <td>是</td>
+</tr>
+<tr class="cell">
+  <td>XFELD</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>否</td>
+</tr>
+<tr class="cell">
+  <td>XFELD</td>
+  <td>X</td>
+  <td>&nbsp;</td>
+  <td>是</td>
+</tr>
+<tr class="cell">
+  <td>XFELD</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>否</td>
+</tr>
+<tr class="cell">
+  <td>BESKZ</td>
+  <td>E</td>
+  <td>&nbsp;</td>
+  <td>自制生产</td>
+</tr>
+<tr class="cell">
+  <td>BESKZ</td>
+  <td>F</td>
+  <td>&nbsp;</td>
+  <td>外部采购</td>
+</tr>
+<tr class="cell">
+  <td>BESKZ</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>没有购买</td>
+</tr>
+<tr class="cell">
+  <td>BESKZ</td>
+  <td>X</td>
+  <td>&nbsp;</td>
+  <td>两种采购类型</td>
+</tr>
+<tr class="cell">
+  <td>XFELD</td>
+  <td>X</td>
+  <td>&nbsp;</td>
+  <td>是</td>
+</tr>
+<tr class="cell">
+  <td>XFELD</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>否</td>
+</tr>
+<tr class="cell">
+  <td>XFELD</td>
+  <td>X</td>
+  <td>&nbsp;</td>
+  <td>是</td>
+</tr>
+<tr class="cell">
+  <td>XFELD</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>否</td>
+</tr>
+<tr class="cell">
+  <td>BESKZ</td>
+  <td>E</td>
+  <td>&nbsp;</td>
+  <td>自制生产</td>
+</tr>
+<tr class="cell">
+  <td>BESKZ</td>
+  <td>F</td>
+  <td>&nbsp;</td>
+  <td>外部采购</td>
+</tr>
+<tr class="cell">
+  <td>BESKZ</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>没有购买</td>
+</tr>
+<tr class="cell">
+  <td>BESKZ</td>
+  <td>X</td>
+  <td>&nbsp;</td>
+  <td>两种采购类型</td>
+</tr>
+<tr class="cell">
+  <td>XFELD</td>
+  <td>X</td>
+  <td>&nbsp;</td>
+  <td>是</td>
+</tr>
+<tr class="cell">
+  <td>XFELD</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>否</td>
+</tr>
+<tr class="cell">
+  <td>XFELD</td>
+  <td>X</td>
+  <td>&nbsp;</td>
+  <td>是</td>
+</tr>
+<tr class="cell">
+  <td>XFELD</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>否</td>
+</tr>
+<tr class="cell">
+  <td>BESKZ</td>
+  <td>E</td>
+  <td>&nbsp;</td>
+  <td>自制生产</td>
+</tr>
+<tr class="cell">
+  <td>BESKZ</td>
+  <td>F</td>
+  <td>&nbsp;</td>
+  <td>外部采购</td>
+</tr>
+<tr class="cell">
+  <td>BESKZ</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>没有购买</td>
+</tr>
+<tr class="cell">
+  <td>BESKZ</td>
+  <td>X</td>
+  <td>&nbsp;</td>
+  <td>两种采购类型</td>
+</tr>
+<tr class="cell">
+  <td>XFELD</td>
+  <td>X</td>
+  <td>&nbsp;</td>
+  <td>是</td>
+</tr>
+<tr class="cell">
+  <td>XFELD</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>否</td>
+</tr>
+<tr class="cell">
+  <td>XFELD</td>
+  <td>X</td>
+  <td>&nbsp;</td>
+  <td>是</td>
+</tr>
+<tr class="cell">
+  <td>XFELD</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>否</td>
+</tr>
+<tr class="cell">
+  <td>BESKZ</td>
+  <td>E</td>
+  <td>&nbsp;</td>
+  <td>自制生产</td>
+</tr>
+<tr class="cell">
+  <td>BESKZ</td>
+  <td>F</td>
+  <td>&nbsp;</td>
+  <td>外部采购</td>
+</tr>
+<tr class="cell">
+  <td>BESKZ</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>没有购买</td>
+</tr>
+<tr class="cell">
+  <td>BESKZ</td>
+  <td>X</td>
+  <td>&nbsp;</td>
+  <td>两种采购类型</td>
+</tr>
+<tr class="cell">
+  <td>XFELD</td>
+  <td>X</td>
+  <td>&nbsp;</td>
+  <td>是</td>
+</tr>
+<tr class="cell">
+  <td>XFELD</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>否</td>
+</tr>
+<tr class="cell">
+  <td>XFELD</td>
+  <td>X</td>
+  <td>&nbsp;</td>
+  <td>是</td>
+</tr>
+<tr class="cell">
+  <td>XFELD</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>否</td>
+</tr>
+<tr class="cell">
+  <td>BESKZ</td>
+  <td>E</td>
+  <td>&nbsp;</td>
+  <td>自制生产</td>
+</tr>
+<tr class="cell">
+  <td>BESKZ</td>
+  <td>F</td>
+  <td>&nbsp;</td>
+  <td>外部采购</td>
+</tr>
+<tr class="cell">
+  <td>BESKZ</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>没有购买</td>
+</tr>
+<tr class="cell">
+  <td>BESKZ</td>
+  <td>X</td>
+  <td>&nbsp;</td>
+  <td>两种采购类型</td>
+</tr>
+<tr class="cell">
+  <td>XFELD</td>
+  <td>X</td>
+  <td>&nbsp;</td>
+  <td>是</td>
+</tr>
+<tr class="cell">
+  <td>XFELD</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>否</td>
+</tr>
+<tr class="cell">
+  <td>XFELD</td>
+  <td>X</td>
+  <td>&nbsp;</td>
+  <td>是</td>
+</tr>
+<tr class="cell">
+  <td>XFELD</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>否</td>
+</tr>
+<tr class="cell">
+  <td>BESKZ</td>
+  <td>E</td>
+  <td>&nbsp;</td>
+  <td>自制生产</td>
+</tr>
+<tr class="cell">
+  <td>BESKZ</td>
+  <td>F</td>
+  <td>&nbsp;</td>
+  <td>外部采购</td>
+</tr>
+<tr class="cell">
+  <td>BESKZ</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>没有购买</td>
+</tr>
+<tr class="cell">
+  <td>BESKZ</td>
+  <td>X</td>
+  <td>&nbsp;</td>
+  <td>两种采购类型</td>
+</tr>
+<tr class="cell">
+  <td>XFELD</td>
+  <td>X</td>
+  <td>&nbsp;</td>
+  <td>是</td>
+</tr>
+<tr class="cell">
+  <td>XFELD</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>否</td>
+</tr>
+<tr class="cell">
+  <td>XFELD</td>
+  <td>X</td>
+  <td>&nbsp;</td>
+  <td>是</td>
+</tr>
+<tr class="cell">
+  <td>XFELD</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>否</td>
+</tr>
+<tr class="cell">
+  <td>BESKZ</td>
+  <td>E</td>
+  <td>&nbsp;</td>
+  <td>自制生产</td>
+</tr>
+<tr class="cell">
+  <td>BESKZ</td>
+  <td>F</td>
+  <td>&nbsp;</td>
+  <td>外部采购</td>
+</tr>
+<tr class="cell">
+  <td>BESKZ</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>没有购买</td>
+</tr>
+<tr class="cell">
+  <td>BESKZ</td>
+  <td>X</td>
+  <td>&nbsp;</td>
+  <td>两种采购类型</td>
+</tr>
+<tr class="cell">
+  <td>RGEKM</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>始终反冲</td>
+</tr>
+<tr class="cell">
+  <td>RGEKM</td>
+  <td>2</td>
+  <td>&nbsp;</td>
+  <td>工作中心决定是否反冲</td>
+</tr>
+<tr class="cell">
+  <td>XFELD</td>
+  <td>X</td>
+  <td>&nbsp;</td>
+  <td>是</td>
+</tr>
+<tr class="cell">
+  <td>XFELD</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>否</td>
+</tr>
+<tr class="cell">
+  <td>XFELD</td>
+  <td>X</td>
+  <td>&nbsp;</td>
+  <td>是</td>
+</tr>
+<tr class="cell">
+  <td>XFELD</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>否</td>
+</tr>
+<tr class="cell">
+  <td>BESKZ</td>
+  <td>E</td>
+  <td>&nbsp;</td>
+  <td>自制生产</td>
+</tr>
+<tr class="cell">
+  <td>BESKZ</td>
+  <td>F</td>
+  <td>&nbsp;</td>
+  <td>外部采购</td>
+</tr>
+<tr class="cell">
+  <td>BESKZ</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>没有购买</td>
+</tr>
+<tr class="cell">
+  <td>BESKZ</td>
+  <td>X</td>
+  <td>&nbsp;</td>
+  <td>两种采购类型</td>
+</tr>
+<tr class="cell">
+  <td>RGEKM</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>始终反冲</td>
+</tr>
+<tr class="cell">
+  <td>RGEKM</td>
+  <td>2</td>
+  <td>&nbsp;</td>
+  <td>工作中心决定是否反冲</td>
+</tr>
+<tr class="cell">
+  <td>XFELD</td>
+  <td>X</td>
+  <td>&nbsp;</td>
+  <td>是</td>
+</tr>
+<tr class="cell">
+  <td>XFELD</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>否</td>
+</tr>
+<tr class="cell">
+  <td>XFELD</td>
+  <td>X</td>
+  <td>&nbsp;</td>
+  <td>是</td>
+</tr>
+<tr class="cell">
+  <td>XFELD</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>否</td>
+</tr>
+<tr class="cell">
+  <td>XFELD</td>
+  <td>X</td>
+  <td>&nbsp;</td>
+  <td>是</td>
+</tr>
+<tr class="cell">
+  <td>XFELD</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>否</td>
+</tr>
+<tr class="cell">
+  <td>BESKZ</td>
+  <td>E</td>
+  <td>&nbsp;</td>
+  <td>自制生产</td>
+</tr>
+<tr class="cell">
+  <td>BESKZ</td>
+  <td>F</td>
+  <td>&nbsp;</td>
+  <td>外部采购</td>
+</tr>
+<tr class="cell">
+  <td>BESKZ</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>没有购买</td>
+</tr>
+<tr class="cell">
+  <td>BESKZ</td>
+  <td>X</td>
+  <td>&nbsp;</td>
+  <td>两种采购类型</td>
+</tr>
+<tr class="cell">
+  <td>RGEKM</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>始终反冲</td>
+</tr>
+<tr class="cell">
+  <td>RGEKM</td>
+  <td>2</td>
+  <td>&nbsp;</td>
+  <td>工作中心决定是否反冲</td>
+</tr>
+<tr class="cell">
+  <td>XFELD</td>
+  <td>X</td>
+  <td>&nbsp;</td>
+  <td>是</td>
+</tr>
+<tr class="cell">
+  <td>XFELD</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>否</td>
+</tr>
+<tr class="cell">
+  <td>XFELD</td>
+  <td>X</td>
+  <td>&nbsp;</td>
+  <td>是</td>
+</tr>
+<tr class="cell">
+  <td>XFELD</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>否</td>
+</tr>
+<tr class="cell">
+  <td>XFELD</td>
+  <td>X</td>
+  <td>&nbsp;</td>
+  <td>是</td>
+</tr>
+<tr class="cell">
+  <td>XFELD</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>否</td>
+</tr>
+<tr class="cell">
+  <td>BESKZ</td>
+  <td>E</td>
+  <td>&nbsp;</td>
+  <td>自制生产</td>
+</tr>
+<tr class="cell">
+  <td>BESKZ</td>
+  <td>F</td>
+  <td>&nbsp;</td>
+  <td>外部采购</td>
+</tr>
+<tr class="cell">
+  <td>BESKZ</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>没有购买</td>
+</tr>
+<tr class="cell">
+  <td>BESKZ</td>
+  <td>X</td>
+  <td>&nbsp;</td>
+  <td>两种采购类型</td>
+</tr>
+<tr class="cell">
+  <td>RGEKM</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>始终反冲</td>
+</tr>
+<tr class="cell">
+  <td>RGEKM</td>
+  <td>2</td>
+  <td>&nbsp;</td>
+  <td>工作中心决定是否反冲</td>
+</tr>
+<tr class="cell">
+  <td>XFELD</td>
+  <td>X</td>
+  <td>&nbsp;</td>
+  <td>是</td>
+</tr>
+<tr class="cell">
+  <td>XFELD</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>否</td>
+</tr>
+<tr class="cell">
+  <td>XFELD</td>
+  <td>X</td>
+  <td>&nbsp;</td>
+  <td>是</td>
+</tr>
+<tr class="cell">
+  <td>XFELD</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>否</td>
+</tr>
+<tr class="cell">
+  <td>XFELD</td>
+  <td>X</td>
+  <td>&nbsp;</td>
+  <td>是</td>
+</tr>
+<tr class="cell">
+  <td>XFELD</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>否</td>
+</tr>
+<tr class="cell">
+  <td>BESKZ</td>
+  <td>E</td>
+  <td>&nbsp;</td>
+  <td>自制生产</td>
+</tr>
+<tr class="cell">
+  <td>BESKZ</td>
+  <td>F</td>
+  <td>&nbsp;</td>
+  <td>外部采购</td>
+</tr>
+<tr class="cell">
+  <td>BESKZ</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>没有购买</td>
+</tr>
+<tr class="cell">
+  <td>BESKZ</td>
+  <td>X</td>
+  <td>&nbsp;</td>
+  <td>两种采购类型</td>
+</tr>
+<tr class="cell">
+  <td>RGEKM</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>始终反冲</td>
+</tr>
+<tr class="cell">
+  <td>RGEKM</td>
+  <td>2</td>
+  <td>&nbsp;</td>
+  <td>工作中心决定是否反冲</td>
+</tr>
+<tr class="cell">
+  <td>XFELD</td>
+  <td>X</td>
+  <td>&nbsp;</td>
+  <td>是</td>
+</tr>
+<tr class="cell">
+  <td>XFELD</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>否</td>
+</tr>
+<tr class="cell">
+  <td>XFELD</td>
+  <td>X</td>
+  <td>&nbsp;</td>
+  <td>是</td>
+</tr>
+<tr class="cell">
+  <td>XFELD</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>否</td>
+</tr>
+<tr class="cell">
+  <td>XFELD</td>
+  <td>X</td>
+  <td>&nbsp;</td>
+  <td>是</td>
+</tr>
+<tr class="cell">
+  <td>XFELD</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>否</td>
+</tr>
+<tr class="cell">
+  <td>BESKZ</td>
+  <td>E</td>
+  <td>&nbsp;</td>
+  <td>自制生产</td>
+</tr>
+<tr class="cell">
+  <td>BESKZ</td>
+  <td>F</td>
+  <td>&nbsp;</td>
+  <td>外部采购</td>
+</tr>
+<tr class="cell">
+  <td>BESKZ</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>没有购买</td>
+</tr>
+<tr class="cell">
+  <td>BESKZ</td>
+  <td>X</td>
+  <td>&nbsp;</td>
+  <td>两种采购类型</td>
+</tr>
+<tr class="cell">
+  <td>RGEKM</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>始终反冲</td>
+</tr>
+<tr class="cell">
+  <td>RGEKM</td>
+  <td>2</td>
+  <td>&nbsp;</td>
+  <td>工作中心决定是否反冲</td>
+</tr>
+<tr class="cell">
+  <td>XFELD</td>
+  <td>X</td>
+  <td>&nbsp;</td>
+  <td>是</td>
+</tr>
+<tr class="cell">
+  <td>XFELD</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>否</td>
+</tr>
+<tr class="cell">
+  <td>XFELD</td>
+  <td>X</td>
+  <td>&nbsp;</td>
+  <td>是</td>
+</tr>
+<tr class="cell">
+  <td>XFELD</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>否</td>
+</tr>
+<tr class="cell">
+  <td>XFELD</td>
+  <td>X</td>
+  <td>&nbsp;</td>
+  <td>是</td>
+</tr>
+<tr class="cell">
+  <td>XFELD</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>否</td>
+</tr>
+<tr class="cell">
+  <td>XFELD</td>
+  <td>X</td>
+  <td>&nbsp;</td>
+  <td>是</td>
+</tr>
+<tr class="cell">
+  <td>XFELD</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>否</td>
+</tr>
+<tr class="cell">
+  <td>BESKZ</td>
+  <td>E</td>
+  <td>&nbsp;</td>
+  <td>自制生产</td>
+</tr>
+<tr class="cell">
+  <td>BESKZ</td>
+  <td>F</td>
+  <td>&nbsp;</td>
+  <td>外部采购</td>
+</tr>
+<tr class="cell">
+  <td>BESKZ</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>没有购买</td>
+</tr>
+<tr class="cell">
+  <td>BESKZ</td>
+  <td>X</td>
+  <td>&nbsp;</td>
+  <td>两种采购类型</td>
+</tr>
+<tr class="cell">
+  <td>RGEKM</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>始终反冲</td>
+</tr>
+<tr class="cell">
+  <td>RGEKM</td>
+  <td>2</td>
+  <td>&nbsp;</td>
+  <td>工作中心决定是否反冲</td>
+</tr>
+<tr class="cell">
+  <td>XFELD</td>
+  <td>X</td>
+  <td>&nbsp;</td>
+  <td>是</td>
+</tr>
+<tr class="cell">
+  <td>XFELD</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>否</td>
+</tr>
+<tr class="cell">
+  <td>XFELD</td>
+  <td>X</td>
+  <td>&nbsp;</td>
+  <td>是</td>
+</tr>
+<tr class="cell">
+  <td>XFELD</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>否</td>
+</tr>
+<tr class="cell">
+  <td>ZDMSAPREV</td>
+  <td>W</td>
+  <td>&nbsp;</td>
+  <td>警告</td>
+</tr>
+<tr class="cell">
+  <td>ZDMSAPREV</td>
+  <td>I</td>
+  <td>&nbsp;</td>
+  <td>信息</td>
+</tr>
+<tr class="cell">
+  <td>ZDMSAPREV</td>
+  <td>S</td>
+  <td>&nbsp;</td>
+  <td>成功</td>
+</tr>
+<tr class="cell">
+  <td>ZDMSAPREV</td>
+  <td>A</td>
+  <td>&nbsp;</td>
+  <td>中断</td>
+</tr>
+<tr class="cell">
+  <td>ZDMSAPREV</td>
+  <td>X</td>
+  <td>&nbsp;</td>
+  <td>失败</td>
+</tr>
+<tr class="cell">
+  <td>ZDMSAPREV</td>
+  <td>E</td>
+  <td>&nbsp;</td>
+  <td>错误</td>
+</tr>
+<tr class="cell">
+  <td>ZDMSAPREV</td>
+  <td>F</td>
+  <td>&nbsp;</td>
+  <td>失败</td>
+</tr>
+<tr class="cell">
+  <td>ZDMSAPREV</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>无</td>
+</tr>
+<tr class="cell">
+  <td>XFELD</td>
+  <td>X</td>
+  <td>&nbsp;</td>
+  <td>是</td>
+</tr>
+<tr class="cell">
+  <td>XFELD</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>否</td>
+</tr>
+<tr class="cell">
+  <td>XFELD</td>
+  <td>X</td>
+  <td>&nbsp;</td>
+  <td>是</td>
+</tr>
+<tr class="cell">
+  <td>XFELD</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>否</td>
+</tr>
+<tr class="cell">
+  <td>BESKZ</td>
+  <td>E</td>
+  <td>&nbsp;</td>
+  <td>自制生产</td>
+</tr>
+<tr class="cell">
+  <td>BESKZ</td>
+  <td>F</td>
+  <td>&nbsp;</td>
+  <td>外部采购</td>
+</tr>
+<tr class="cell">
+  <td>BESKZ</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>没有购买</td>
+</tr>
+<tr class="cell">
+  <td>BESKZ</td>
+  <td>X</td>
+  <td>&nbsp;</td>
+  <td>两种采购类型</td>
+</tr>
+<tr class="cell">
+  <td>RGEKM</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>始终反冲</td>
+</tr>
+<tr class="cell">
+  <td>RGEKM</td>
+  <td>2</td>
+  <td>&nbsp;</td>
+  <td>工作中心决定是否反冲</td>
+</tr>
+<tr class="cell">
+  <td>XFELD</td>
+  <td>X</td>
+  <td>&nbsp;</td>
+  <td>是</td>
+</tr>
+<tr class="cell">
+  <td>XFELD</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>否</td>
+</tr>
+<tr class="cell">
+  <td>XFELD</td>
+  <td>X</td>
+  <td>&nbsp;</td>
+  <td>是</td>
+</tr>
+<tr class="cell">
+  <td>XFELD</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>否</td>
+</tr>
+<tr class="cell">
+  <td>ZDMSAPREV</td>
+  <td>W</td>
+  <td>&nbsp;</td>
+  <td>警告</td>
+</tr>
+<tr class="cell">
+  <td>ZDMSAPREV</td>
+  <td>I</td>
+  <td>&nbsp;</td>
+  <td>信息</td>
+</tr>
+<tr class="cell">
+  <td>ZDMSAPREV</td>
+  <td>S</td>
+  <td>&nbsp;</td>
+  <td>成功</td>
+</tr>
+<tr class="cell">
+  <td>ZDMSAPREV</td>
+  <td>A</td>
+  <td>&nbsp;</td>
+  <td>中断</td>
+</tr>
+<tr class="cell">
+  <td>ZDMSAPREV</td>
+  <td>X</td>
+  <td>&nbsp;</td>
+  <td>失败</td>
+</tr>
+<tr class="cell">
+  <td>ZDMSAPREV</td>
+  <td>E</td>
+  <td>&nbsp;</td>
+  <td>错误</td>
+</tr>
+<tr class="cell">
+  <td>ZDMSAPREV</td>
+  <td>F</td>
+  <td>&nbsp;</td>
+  <td>失败</td>
+</tr>
+<tr class="cell">
+  <td>ZDMSAPREV</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>无</td>
+</tr>
+<tr class="cell">
+  <td>XFELD</td>
+  <td>X</td>
+  <td>&nbsp;</td>
+  <td>是</td>
+</tr>
+<tr class="cell">
+  <td>XFELD</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>否</td>
+</tr>
+<tr class="cell">
+  <td>XFELD</td>
+  <td>X</td>
+  <td>&nbsp;</td>
+  <td>是</td>
+</tr>
+<tr class="cell">
+  <td>XFELD</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>否</td>
+</tr>
+<tr class="cell">
+  <td>BESKZ</td>
+  <td>E</td>
+  <td>&nbsp;</td>
+  <td>自制生产</td>
+</tr>
+<tr class="cell">
+  <td>BESKZ</td>
+  <td>F</td>
+  <td>&nbsp;</td>
+  <td>外部采购</td>
+</tr>
+<tr class="cell">
+  <td>BESKZ</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>没有购买</td>
+</tr>
+<tr class="cell">
+  <td>BESKZ</td>
+  <td>X</td>
+  <td>&nbsp;</td>
+  <td>两种采购类型</td>
+</tr>
+<tr class="cell">
+  <td>RGEKM</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>始终反冲</td>
+</tr>
+<tr class="cell">
+  <td>RGEKM</td>
+  <td>2</td>
+  <td>&nbsp;</td>
+  <td>工作中心决定是否反冲</td>
+</tr>
+<tr class="cell">
+  <td>XFELD</td>
+  <td>X</td>
+  <td>&nbsp;</td>
+  <td>是</td>
+</tr>
+<tr class="cell">
+  <td>XFELD</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>否</td>
+</tr>
+<tr class="cell">
+  <td>XFELD</td>
+  <td>X</td>
+  <td>&nbsp;</td>
+  <td>是</td>
+</tr>
+<tr class="cell">
+  <td>XFELD</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>否</td>
+</tr>
+<tr class="cell">
+  <td>ZDMSAPREV</td>
+  <td>W</td>
+  <td>&nbsp;</td>
+  <td>警告</td>
+</tr>
+<tr class="cell">
+  <td>ZDMSAPREV</td>
+  <td>I</td>
+  <td>&nbsp;</td>
+  <td>信息</td>
+</tr>
+<tr class="cell">
+  <td>ZDMSAPREV</td>
+  <td>S</td>
+  <td>&nbsp;</td>
+  <td>成功</td>
+</tr>
+<tr class="cell">
+  <td>ZDMSAPREV</td>
+  <td>A</td>
+  <td>&nbsp;</td>
+  <td>中断</td>
+</tr>
+<tr class="cell">
+  <td>ZDMSAPREV</td>
+  <td>X</td>
+  <td>&nbsp;</td>
+  <td>失败</td>
+</tr>
+<tr class="cell">
+  <td>ZDMSAPREV</td>
+  <td>E</td>
+  <td>&nbsp;</td>
+  <td>错误</td>
+</tr>
+<tr class="cell">
+  <td>ZDMSAPREV</td>
+  <td>F</td>
+  <td>&nbsp;</td>
+  <td>失败</td>
+</tr>
+<tr class="cell">
+  <td>ZDMSAPREV</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>无</td>
+</tr>
+<tr class="cell">
+  <td>XFELD</td>
+  <td>X</td>
+  <td>&nbsp;</td>
+  <td>是</td>
+</tr>
+<tr class="cell">
+  <td>XFELD</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>否</td>
+</tr>
+<tr class="cell">
+  <td>XFELD</td>
+  <td>X</td>
+  <td>&nbsp;</td>
+  <td>是</td>
+</tr>
+<tr class="cell">
+  <td>XFELD</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>否</td>
+</tr>
+<tr class="cell">
+  <td>BESKZ</td>
+  <td>E</td>
+  <td>&nbsp;</td>
+  <td>自制生产</td>
+</tr>
+<tr class="cell">
+  <td>BESKZ</td>
+  <td>F</td>
+  <td>&nbsp;</td>
+  <td>外部采购</td>
+</tr>
+<tr class="cell">
+  <td>BESKZ</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>没有购买</td>
+</tr>
+<tr class="cell">
+  <td>BESKZ</td>
+  <td>X</td>
+  <td>&nbsp;</td>
+  <td>两种采购类型</td>
+</tr>
+<tr class="cell">
+  <td>RGEKM</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>始终反冲</td>
+</tr>
+<tr class="cell">
+  <td>RGEKM</td>
+  <td>2</td>
+  <td>&nbsp;</td>
+  <td>工作中心决定是否反冲</td>
+</tr>
+<tr class="cell">
+  <td>XFELD</td>
+  <td>X</td>
+  <td>&nbsp;</td>
+  <td>是</td>
+</tr>
+<tr class="cell">
+  <td>XFELD</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>否</td>
+</tr>
+<tr class="cell">
+  <td>XFELD</td>
+  <td>X</td>
+  <td>&nbsp;</td>
+  <td>是</td>
+</tr>
+<tr class="cell">
+  <td>XFELD</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>否</td>
+</tr>
+<tr class="cell">
+  <td>ZDMSAPREV</td>
+  <td>W</td>
+  <td>&nbsp;</td>
+  <td>警告</td>
+</tr>
+<tr class="cell">
+  <td>ZDMSAPREV</td>
+  <td>I</td>
+  <td>&nbsp;</td>
+  <td>信息</td>
+</tr>
+<tr class="cell">
+  <td>ZDMSAPREV</td>
+  <td>S</td>
+  <td>&nbsp;</td>
+  <td>成功</td>
+</tr>
+<tr class="cell">
+  <td>ZDMSAPREV</td>
+  <td>A</td>
+  <td>&nbsp;</td>
+  <td>中断</td>
+</tr>
+<tr class="cell">
+  <td>ZDMSAPREV</td>
+  <td>X</td>
+  <td>&nbsp;</td>
+  <td>失败</td>
+</tr>
+<tr class="cell">
+  <td>ZDMSAPREV</td>
+  <td>E</td>
+  <td>&nbsp;</td>
+  <td>错误</td>
+</tr>
+<tr class="cell">
+  <td>ZDMSAPREV</td>
+  <td>F</td>
+  <td>&nbsp;</td>
+  <td>失败</td>
+</tr>
+<tr class="cell">
+  <td>ZDMSAPREV</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>无</td>
+</tr>
+<tr class="cell">
+  <td>XFELD</td>
+  <td>X</td>
+  <td>&nbsp;</td>
+  <td>是</td>
+</tr>
+<tr class="cell">
+  <td>XFELD</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>否</td>
+</tr>
+<tr class="cell">
+  <td>XFELD</td>
+  <td>X</td>
+  <td>&nbsp;</td>
+  <td>是</td>
+</tr>
+<tr class="cell">
+  <td>XFELD</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>否</td>
+</tr>
+<tr class="cell">
+  <td>BESKZ</td>
+  <td>E</td>
+  <td>&nbsp;</td>
+  <td>自制生产</td>
+</tr>
+<tr class="cell">
+  <td>BESKZ</td>
+  <td>F</td>
+  <td>&nbsp;</td>
+  <td>外部采购</td>
+</tr>
+<tr class="cell">
+  <td>BESKZ</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>没有购买</td>
+</tr>
+<tr class="cell">
+  <td>BESKZ</td>
+  <td>X</td>
+  <td>&nbsp;</td>
+  <td>两种采购类型</td>
+</tr>
+<tr class="cell">
+  <td>RGEKM</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>始终反冲</td>
+</tr>
+<tr class="cell">
+  <td>RGEKM</td>
+  <td>2</td>
+  <td>&nbsp;</td>
+  <td>工作中心决定是否反冲</td>
+</tr>
+<tr class="cell">
+  <td>XFELD</td>
+  <td>X</td>
+  <td>&nbsp;</td>
+  <td>是</td>
+</tr>
+<tr class="cell">
+  <td>XFELD</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>否</td>
+</tr>
+<tr class="cell">
+  <td>XFELD</td>
+  <td>X</td>
+  <td>&nbsp;</td>
+  <td>是</td>
+</tr>
+<tr class="cell">
+  <td>XFELD</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>否</td>
+</tr>
+<tr class="cell">
+  <td>ZDMSAPREV</td>
+  <td>W</td>
+  <td>&nbsp;</td>
+  <td>警告</td>
+</tr>
+<tr class="cell">
+  <td>ZDMSAPREV</td>
+  <td>I</td>
+  <td>&nbsp;</td>
+  <td>信息</td>
+</tr>
+<tr class="cell">
+  <td>ZDMSAPREV</td>
+  <td>S</td>
+  <td>&nbsp;</td>
+  <td>成功</td>
+</tr>
+<tr class="cell">
+  <td>ZDMSAPREV</td>
+  <td>A</td>
+  <td>&nbsp;</td>
+  <td>中断</td>
+</tr>
+<tr class="cell">
+  <td>ZDMSAPREV</td>
+  <td>X</td>
+  <td>&nbsp;</td>
+  <td>失败</td>
+</tr>
+<tr class="cell">
+  <td>ZDMSAPREV</td>
+  <td>E</td>
+  <td>&nbsp;</td>
+  <td>错误</td>
+</tr>
+<tr class="cell">
+  <td>ZDMSAPREV</td>
+  <td>F</td>
+  <td>&nbsp;</td>
+  <td>失败</td>
+</tr>
+<tr class="cell">
+  <td>ZDMSAPREV</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>无</td>
+</tr>
+<tr class="cell">
+  <td>XFELD</td>
+  <td>X</td>
+  <td>&nbsp;</td>
+  <td>是</td>
+</tr>
+<tr class="cell">
+  <td>XFELD</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>否</td>
+</tr>
+<tr class="cell">
+  <td>XFELD</td>
+  <td>X</td>
+  <td>&nbsp;</td>
+  <td>是</td>
+</tr>
+<tr class="cell">
+  <td>XFELD</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>否</td>
+</tr>
+<tr class="cell">
+  <td>BESKZ</td>
+  <td>E</td>
+  <td>&nbsp;</td>
+  <td>自制生产</td>
+</tr>
+<tr class="cell">
+  <td>BESKZ</td>
+  <td>F</td>
+  <td>&nbsp;</td>
+  <td>外部采购</td>
+</tr>
+<tr class="cell">
+  <td>BESKZ</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>没有购买</td>
+</tr>
+<tr class="cell">
+  <td>BESKZ</td>
+  <td>X</td>
+  <td>&nbsp;</td>
+  <td>两种采购类型</td>
+</tr>
+<tr class="cell">
+  <td>RGEKM</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>始终反冲</td>
+</tr>
+<tr class="cell">
+  <td>RGEKM</td>
+  <td>2</td>
+  <td>&nbsp;</td>
+  <td>工作中心决定是否反冲</td>
+</tr>
+<tr class="cell">
+  <td>XFELD</td>
+  <td>X</td>
+  <td>&nbsp;</td>
+  <td>是</td>
+</tr>
+<tr class="cell">
+  <td>XFELD</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>否</td>
+</tr>
+<tr class="cell">
+  <td>XFELD</td>
+  <td>X</td>
+  <td>&nbsp;</td>
+  <td>是</td>
+</tr>
+<tr class="cell">
+  <td>XFELD</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>否</td>
+</tr>
+<tr class="cell">
+  <td>ZDMSAPREV</td>
+  <td>W</td>
+  <td>&nbsp;</td>
+  <td>警告</td>
+</tr>
+<tr class="cell">
+  <td>ZDMSAPREV</td>
+  <td>I</td>
+  <td>&nbsp;</td>
+  <td>信息</td>
+</tr>
+<tr class="cell">
+  <td>ZDMSAPREV</td>
+  <td>S</td>
+  <td>&nbsp;</td>
+  <td>成功</td>
+</tr>
+<tr class="cell">
+  <td>ZDMSAPREV</td>
+  <td>A</td>
+  <td>&nbsp;</td>
+  <td>中断</td>
+</tr>
+<tr class="cell">
+  <td>ZDMSAPREV</td>
+  <td>X</td>
+  <td>&nbsp;</td>
+  <td>失败</td>
+</tr>
+<tr class="cell">
+  <td>ZDMSAPREV</td>
+  <td>E</td>
+  <td>&nbsp;</td>
+  <td>错误</td>
+</tr>
+<tr class="cell">
+  <td>ZDMSAPREV</td>
+  <td>F</td>
+  <td>&nbsp;</td>
+  <td>失败</td>
+</tr>
+<tr class="cell">
+  <td>ZDMSAPREV</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>无</td>
+</tr>
+      </table>
+     </td>
+   </tr>
+   <tr>
+<td class="footer">Extracted by Mass Download version 1.5.2 - E.G.Mellodew. 1998-2022. Sap Release 755</td>
+   </tr>
+</table>
+</body>
+</html>

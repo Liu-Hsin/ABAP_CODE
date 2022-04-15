@@ -1,0 +1,825 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=GB2312" />
+<title>Dictionary object- ZPPT003</title>
+<style type="text/css">
+  th{text-align:left}
+  .cell{
+     font-family:"Courier New", Courier, monospace;
+     color:#000;
+     font-size:12px;
+     background-color:#F2F4F7;
+  }
+  .cell td { border: thin solid #ccc; }
+</style>
+<style type="text/css">
+  .normal{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px }
+  .footer{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; text-align: center }
+  h2{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+  h3{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:14px; font-weight:800 }
+  .outerTable{
+   background-color:#E0E7ED;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-right-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+  .innerTable{
+   background-color:#F2F4F7;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-bottom-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+</style>
+</head>
+<body>
+  <table class="outerTable">
+    <tr>
+      <td><h2>Table: ZPPT003</h2>
+  <h3>Description: 周预测计划导入及数量差异表</h3></td>
+    </tr>
+    <tr>
+      <td><!--This is where our main table begins  -->
+<table class="innerTable">
+<tr>
+  <th>Row</th>
+  <th>Field name</th>
+  <th>Position</th>
+  <th>Key</th>
+  <th>Data element</th>
+  <th>Domain</th>
+  <th>Datatype</th>
+  <th>Length</th>
+  <th>Lowercase</th>
+  <th>Domain text</th>
+</tr>
+<tr class="cell">
+  <td> 1</td>
+  <td>MANDT</td>
+  <td>1</td>
+  <td>X</td>
+  <td>MANDT</td>
+  <td>MANDT</td>
+  <td>CLNT</td>
+  <td>3</td>
+  <td>&nbsp;</td>
+  <td>集团</td>
+</tr>
+<tr class="cell">
+  <td> 2</td>
+  <td>ZVERSION</td>
+  <td>2</td>
+  <td>X</td>
+  <td>ZVERSION</td>
+  <td>&nbsp;</td>
+  <td>NUMC</td>
+  <td>11</td>
+  <td>&nbsp;</td>
+  <td>发布版本号</td>
+</tr>
+<tr class="cell">
+  <td> 3</td>
+  <td>WERKS</td>
+  <td>3</td>
+  <td>X</td>
+  <td>WERKS_D</td>
+  <td>WERKS</td>
+  <td>CHAR</td>
+  <td>4</td>
+  <td>&nbsp;</td>
+  <td>工厂</td>
+</tr>
+<tr class="cell">
+  <td> 4</td>
+  <td>ZMATNR1</td>
+  <td>4</td>
+  <td>X</td>
+  <td>ZMATNR1</td>
+  <td>MATNR</td>
+  <td>CHAR</td>
+  <td>40</td>
+  <td>&nbsp;</td>
+  <td>产品料号</td>
+</tr>
+<tr class="cell">
+  <td> 5</td>
+  <td>ZPLNDAT</td>
+  <td>5</td>
+  <td>X</td>
+  <td>ZPLNDAT</td>
+  <td>DATUM</td>
+  <td>DATS</td>
+  <td>8</td>
+  <td>&nbsp;</td>
+  <td>计划日期</td>
+</tr>
+<tr class="cell">
+  <td> 6</td>
+  <td>ZBISMT1</td>
+  <td>6</td>
+  <td>&nbsp;</td>
+  <td>ZBISMT1</td>
+  <td>BISMT</td>
+  <td>CHAR</td>
+  <td>40</td>
+  <td>&nbsp;</td>
+  <td>产品图号</td>
+</tr>
+<tr class="cell">
+  <td> 7</td>
+  <td>ZMAKTX1</td>
+  <td>7</td>
+  <td>&nbsp;</td>
+  <td>ZMAKTX1</td>
+  <td>TEXT40</td>
+  <td>CHAR</td>
+  <td>40</td>
+  <td>X</td>
+  <td>产品描述</td>
+</tr>
+<tr class="cell">
+  <td> 8</td>
+  <td>ZINDCTR</td>
+  <td>8</td>
+  <td>&nbsp;</td>
+  <td>ZINDCTR</td>
+  <td>ZINDCTR</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>差异标识</td>
+</tr>
+<tr class="cell">
+  <td> 9</td>
+  <td>ZPRCTGE</td>
+  <td>9</td>
+  <td>&nbsp;</td>
+  <td>ZPRCTGE</td>
+  <td>&nbsp;</td>
+  <td>DEC</td>
+  <td>5</td>
+  <td>&nbsp;</td>
+  <td>增加/减少百分比</td>
+</tr>
+<tr class="cell">
+  <td>10</td>
+  <td>ZDIFQUAN</td>
+  <td>10</td>
+  <td>&nbsp;</td>
+  <td>ZDIFQUAN</td>
+  <td>MENGE</td>
+  <td>QUAN</td>
+  <td>13</td>
+  <td>&nbsp;</td>
+  <td>差异数量</td>
+</tr>
+<tr class="cell">
+  <td>11</td>
+  <td>ZMATNR2</td>
+  <td>11</td>
+  <td>&nbsp;</td>
+  <td>ZMATNR2</td>
+  <td>MATNR</td>
+  <td>CHAR</td>
+  <td>40</td>
+  <td>&nbsp;</td>
+  <td>订货号料号</td>
+</tr>
+<tr class="cell">
+  <td>12</td>
+  <td>ZBISMT2</td>
+  <td>12</td>
+  <td>&nbsp;</td>
+  <td>ZBISMT2</td>
+  <td>BISMT</td>
+  <td>CHAR</td>
+  <td>40</td>
+  <td>&nbsp;</td>
+  <td>客户订货号</td>
+</tr>
+<tr class="cell">
+  <td>13</td>
+  <td>ZMAKTX2</td>
+  <td>13</td>
+  <td>&nbsp;</td>
+  <td>ZMAKTX2</td>
+  <td>TEXT40</td>
+  <td>CHAR</td>
+  <td>40</td>
+  <td>X</td>
+  <td>订货号描述</td>
+</tr>
+<tr class="cell">
+  <td>14</td>
+  <td>BESKZ</td>
+  <td>14</td>
+  <td>&nbsp;</td>
+  <td>BESKZ</td>
+  <td>BESKZ</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>采购类型</td>
+</tr>
+<tr class="cell">
+  <td>15</td>
+  <td>ZQUANTY</td>
+  <td>15</td>
+  <td>&nbsp;</td>
+  <td>ZQUANTY</td>
+  <td>MENGE</td>
+  <td>QUAN</td>
+  <td>13</td>
+  <td>&nbsp;</td>
+  <td>计划数量</td>
+</tr>
+<tr class="cell">
+  <td>16</td>
+  <td>MEINS</td>
+  <td>16</td>
+  <td>&nbsp;</td>
+  <td>MEINS</td>
+  <td>MEINS</td>
+  <td>UNIT</td>
+  <td>3</td>
+  <td>X</td>
+  <td>基本计量单位</td>
+</tr>
+<tr class="cell">
+  <td>17</td>
+  <td>ZDATE</td>
+  <td>17</td>
+  <td>&nbsp;</td>
+  <td>ZDATE</td>
+  <td>DATUM</td>
+  <td>DATS</td>
+  <td>8</td>
+  <td>&nbsp;</td>
+  <td>导入系统日期</td>
+</tr>
+<tr class="cell">
+  <td>18</td>
+  <td>ZTIME</td>
+  <td>18</td>
+  <td>&nbsp;</td>
+  <td>ZTIME</td>
+  <td>UZEIT</td>
+  <td>TIMS</td>
+  <td>6</td>
+  <td>&nbsp;</td>
+  <td>导入系统时间</td>
+</tr>
+<tr class="cell">
+  <td>19</td>
+  <td>ZERNAM</td>
+  <td>19</td>
+  <td>&nbsp;</td>
+  <td>ZERNAM</td>
+  <td>UNAME</td>
+  <td>CHAR</td>
+  <td>12</td>
+  <td>&nbsp;</td>
+  <td>操作用户</td>
+</tr>
+      </table>
+     </td>
+   </tr>
+<br/>
+  <table class="outerTable">
+    <tr>
+      <td><h2>Fixed Domain Values </h2>
+    </tr>
+    <tr>
+      <td><!--This is where our main table begins  -->
+<table class="innerTable">
+<tr>
+  <th>Domain Name</th>
+  <th>Value Low</th>
+  <th>Value High</th>
+  <th>Text</th>
+</tr>
+<tr class="cell">
+  <td>ZINDCTR</td>
+  <td>A</td>
+  <td>&nbsp;</td>
+  <td>新增</td>
+</tr>
+<tr class="cell">
+  <td>ZINDCTR</td>
+  <td>D</td>
+  <td>&nbsp;</td>
+  <td>删除</td>
+</tr>
+<tr class="cell">
+  <td>ZINDCTR</td>
+  <td>I</td>
+  <td>&nbsp;</td>
+  <td>增加</td>
+</tr>
+<tr class="cell">
+  <td>ZINDCTR</td>
+  <td>R</td>
+  <td>&nbsp;</td>
+  <td>减少</td>
+</tr>
+<tr class="cell">
+  <td>ZINDCTR</td>
+  <td>E</td>
+  <td>&nbsp;</td>
+  <td>相等</td>
+</tr>
+<tr class="cell">
+  <td>ZINDCTR</td>
+  <td>A</td>
+  <td>&nbsp;</td>
+  <td>新增</td>
+</tr>
+<tr class="cell">
+  <td>ZINDCTR</td>
+  <td>D</td>
+  <td>&nbsp;</td>
+  <td>删除</td>
+</tr>
+<tr class="cell">
+  <td>ZINDCTR</td>
+  <td>I</td>
+  <td>&nbsp;</td>
+  <td>增加</td>
+</tr>
+<tr class="cell">
+  <td>ZINDCTR</td>
+  <td>R</td>
+  <td>&nbsp;</td>
+  <td>减少</td>
+</tr>
+<tr class="cell">
+  <td>ZINDCTR</td>
+  <td>E</td>
+  <td>&nbsp;</td>
+  <td>相等</td>
+</tr>
+<tr class="cell">
+  <td>ZINDCTR</td>
+  <td>A</td>
+  <td>&nbsp;</td>
+  <td>新增</td>
+</tr>
+<tr class="cell">
+  <td>ZINDCTR</td>
+  <td>D</td>
+  <td>&nbsp;</td>
+  <td>删除</td>
+</tr>
+<tr class="cell">
+  <td>ZINDCTR</td>
+  <td>I</td>
+  <td>&nbsp;</td>
+  <td>增加</td>
+</tr>
+<tr class="cell">
+  <td>ZINDCTR</td>
+  <td>R</td>
+  <td>&nbsp;</td>
+  <td>减少</td>
+</tr>
+<tr class="cell">
+  <td>ZINDCTR</td>
+  <td>E</td>
+  <td>&nbsp;</td>
+  <td>相等</td>
+</tr>
+<tr class="cell">
+  <td>ZINDCTR</td>
+  <td>A</td>
+  <td>&nbsp;</td>
+  <td>新增</td>
+</tr>
+<tr class="cell">
+  <td>ZINDCTR</td>
+  <td>D</td>
+  <td>&nbsp;</td>
+  <td>删除</td>
+</tr>
+<tr class="cell">
+  <td>ZINDCTR</td>
+  <td>I</td>
+  <td>&nbsp;</td>
+  <td>增加</td>
+</tr>
+<tr class="cell">
+  <td>ZINDCTR</td>
+  <td>R</td>
+  <td>&nbsp;</td>
+  <td>减少</td>
+</tr>
+<tr class="cell">
+  <td>ZINDCTR</td>
+  <td>E</td>
+  <td>&nbsp;</td>
+  <td>相等</td>
+</tr>
+<tr class="cell">
+  <td>ZINDCTR</td>
+  <td>A</td>
+  <td>&nbsp;</td>
+  <td>新增</td>
+</tr>
+<tr class="cell">
+  <td>ZINDCTR</td>
+  <td>D</td>
+  <td>&nbsp;</td>
+  <td>删除</td>
+</tr>
+<tr class="cell">
+  <td>ZINDCTR</td>
+  <td>I</td>
+  <td>&nbsp;</td>
+  <td>增加</td>
+</tr>
+<tr class="cell">
+  <td>ZINDCTR</td>
+  <td>R</td>
+  <td>&nbsp;</td>
+  <td>减少</td>
+</tr>
+<tr class="cell">
+  <td>ZINDCTR</td>
+  <td>E</td>
+  <td>&nbsp;</td>
+  <td>相等</td>
+</tr>
+<tr class="cell">
+  <td>ZINDCTR</td>
+  <td>A</td>
+  <td>&nbsp;</td>
+  <td>新增</td>
+</tr>
+<tr class="cell">
+  <td>ZINDCTR</td>
+  <td>D</td>
+  <td>&nbsp;</td>
+  <td>删除</td>
+</tr>
+<tr class="cell">
+  <td>ZINDCTR</td>
+  <td>I</td>
+  <td>&nbsp;</td>
+  <td>增加</td>
+</tr>
+<tr class="cell">
+  <td>ZINDCTR</td>
+  <td>R</td>
+  <td>&nbsp;</td>
+  <td>减少</td>
+</tr>
+<tr class="cell">
+  <td>ZINDCTR</td>
+  <td>E</td>
+  <td>&nbsp;</td>
+  <td>相等</td>
+</tr>
+<tr class="cell">
+  <td>ZINDCTR</td>
+  <td>A</td>
+  <td>&nbsp;</td>
+  <td>新增</td>
+</tr>
+<tr class="cell">
+  <td>ZINDCTR</td>
+  <td>D</td>
+  <td>&nbsp;</td>
+  <td>删除</td>
+</tr>
+<tr class="cell">
+  <td>ZINDCTR</td>
+  <td>I</td>
+  <td>&nbsp;</td>
+  <td>增加</td>
+</tr>
+<tr class="cell">
+  <td>ZINDCTR</td>
+  <td>R</td>
+  <td>&nbsp;</td>
+  <td>减少</td>
+</tr>
+<tr class="cell">
+  <td>ZINDCTR</td>
+  <td>E</td>
+  <td>&nbsp;</td>
+  <td>相等</td>
+</tr>
+<tr class="cell">
+  <td>BESKZ</td>
+  <td>E</td>
+  <td>&nbsp;</td>
+  <td>自制生产</td>
+</tr>
+<tr class="cell">
+  <td>BESKZ</td>
+  <td>F</td>
+  <td>&nbsp;</td>
+  <td>外部采购</td>
+</tr>
+<tr class="cell">
+  <td>BESKZ</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>没有购买</td>
+</tr>
+<tr class="cell">
+  <td>BESKZ</td>
+  <td>X</td>
+  <td>&nbsp;</td>
+  <td>两种采购类型</td>
+</tr>
+<tr class="cell">
+  <td>ZINDCTR</td>
+  <td>A</td>
+  <td>&nbsp;</td>
+  <td>新增</td>
+</tr>
+<tr class="cell">
+  <td>ZINDCTR</td>
+  <td>D</td>
+  <td>&nbsp;</td>
+  <td>删除</td>
+</tr>
+<tr class="cell">
+  <td>ZINDCTR</td>
+  <td>I</td>
+  <td>&nbsp;</td>
+  <td>增加</td>
+</tr>
+<tr class="cell">
+  <td>ZINDCTR</td>
+  <td>R</td>
+  <td>&nbsp;</td>
+  <td>减少</td>
+</tr>
+<tr class="cell">
+  <td>ZINDCTR</td>
+  <td>E</td>
+  <td>&nbsp;</td>
+  <td>相等</td>
+</tr>
+<tr class="cell">
+  <td>BESKZ</td>
+  <td>E</td>
+  <td>&nbsp;</td>
+  <td>自制生产</td>
+</tr>
+<tr class="cell">
+  <td>BESKZ</td>
+  <td>F</td>
+  <td>&nbsp;</td>
+  <td>外部采购</td>
+</tr>
+<tr class="cell">
+  <td>BESKZ</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>没有购买</td>
+</tr>
+<tr class="cell">
+  <td>BESKZ</td>
+  <td>X</td>
+  <td>&nbsp;</td>
+  <td>两种采购类型</td>
+</tr>
+<tr class="cell">
+  <td>ZINDCTR</td>
+  <td>A</td>
+  <td>&nbsp;</td>
+  <td>新增</td>
+</tr>
+<tr class="cell">
+  <td>ZINDCTR</td>
+  <td>D</td>
+  <td>&nbsp;</td>
+  <td>删除</td>
+</tr>
+<tr class="cell">
+  <td>ZINDCTR</td>
+  <td>I</td>
+  <td>&nbsp;</td>
+  <td>增加</td>
+</tr>
+<tr class="cell">
+  <td>ZINDCTR</td>
+  <td>R</td>
+  <td>&nbsp;</td>
+  <td>减少</td>
+</tr>
+<tr class="cell">
+  <td>ZINDCTR</td>
+  <td>E</td>
+  <td>&nbsp;</td>
+  <td>相等</td>
+</tr>
+<tr class="cell">
+  <td>BESKZ</td>
+  <td>E</td>
+  <td>&nbsp;</td>
+  <td>自制生产</td>
+</tr>
+<tr class="cell">
+  <td>BESKZ</td>
+  <td>F</td>
+  <td>&nbsp;</td>
+  <td>外部采购</td>
+</tr>
+<tr class="cell">
+  <td>BESKZ</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>没有购买</td>
+</tr>
+<tr class="cell">
+  <td>BESKZ</td>
+  <td>X</td>
+  <td>&nbsp;</td>
+  <td>两种采购类型</td>
+</tr>
+<tr class="cell">
+  <td>ZINDCTR</td>
+  <td>A</td>
+  <td>&nbsp;</td>
+  <td>新增</td>
+</tr>
+<tr class="cell">
+  <td>ZINDCTR</td>
+  <td>D</td>
+  <td>&nbsp;</td>
+  <td>删除</td>
+</tr>
+<tr class="cell">
+  <td>ZINDCTR</td>
+  <td>I</td>
+  <td>&nbsp;</td>
+  <td>增加</td>
+</tr>
+<tr class="cell">
+  <td>ZINDCTR</td>
+  <td>R</td>
+  <td>&nbsp;</td>
+  <td>减少</td>
+</tr>
+<tr class="cell">
+  <td>ZINDCTR</td>
+  <td>E</td>
+  <td>&nbsp;</td>
+  <td>相等</td>
+</tr>
+<tr class="cell">
+  <td>BESKZ</td>
+  <td>E</td>
+  <td>&nbsp;</td>
+  <td>自制生产</td>
+</tr>
+<tr class="cell">
+  <td>BESKZ</td>
+  <td>F</td>
+  <td>&nbsp;</td>
+  <td>外部采购</td>
+</tr>
+<tr class="cell">
+  <td>BESKZ</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>没有购买</td>
+</tr>
+<tr class="cell">
+  <td>BESKZ</td>
+  <td>X</td>
+  <td>&nbsp;</td>
+  <td>两种采购类型</td>
+</tr>
+<tr class="cell">
+  <td>ZINDCTR</td>
+  <td>A</td>
+  <td>&nbsp;</td>
+  <td>新增</td>
+</tr>
+<tr class="cell">
+  <td>ZINDCTR</td>
+  <td>D</td>
+  <td>&nbsp;</td>
+  <td>删除</td>
+</tr>
+<tr class="cell">
+  <td>ZINDCTR</td>
+  <td>I</td>
+  <td>&nbsp;</td>
+  <td>增加</td>
+</tr>
+<tr class="cell">
+  <td>ZINDCTR</td>
+  <td>R</td>
+  <td>&nbsp;</td>
+  <td>减少</td>
+</tr>
+<tr class="cell">
+  <td>ZINDCTR</td>
+  <td>E</td>
+  <td>&nbsp;</td>
+  <td>相等</td>
+</tr>
+<tr class="cell">
+  <td>BESKZ</td>
+  <td>E</td>
+  <td>&nbsp;</td>
+  <td>自制生产</td>
+</tr>
+<tr class="cell">
+  <td>BESKZ</td>
+  <td>F</td>
+  <td>&nbsp;</td>
+  <td>外部采购</td>
+</tr>
+<tr class="cell">
+  <td>BESKZ</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>没有购买</td>
+</tr>
+<tr class="cell">
+  <td>BESKZ</td>
+  <td>X</td>
+  <td>&nbsp;</td>
+  <td>两种采购类型</td>
+</tr>
+<tr class="cell">
+  <td>ZINDCTR</td>
+  <td>A</td>
+  <td>&nbsp;</td>
+  <td>新增</td>
+</tr>
+<tr class="cell">
+  <td>ZINDCTR</td>
+  <td>D</td>
+  <td>&nbsp;</td>
+  <td>删除</td>
+</tr>
+<tr class="cell">
+  <td>ZINDCTR</td>
+  <td>I</td>
+  <td>&nbsp;</td>
+  <td>增加</td>
+</tr>
+<tr class="cell">
+  <td>ZINDCTR</td>
+  <td>R</td>
+  <td>&nbsp;</td>
+  <td>减少</td>
+</tr>
+<tr class="cell">
+  <td>ZINDCTR</td>
+  <td>E</td>
+  <td>&nbsp;</td>
+  <td>相等</td>
+</tr>
+<tr class="cell">
+  <td>BESKZ</td>
+  <td>E</td>
+  <td>&nbsp;</td>
+  <td>自制生产</td>
+</tr>
+<tr class="cell">
+  <td>BESKZ</td>
+  <td>F</td>
+  <td>&nbsp;</td>
+  <td>外部采购</td>
+</tr>
+<tr class="cell">
+  <td>BESKZ</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>没有购买</td>
+</tr>
+<tr class="cell">
+  <td>BESKZ</td>
+  <td>X</td>
+  <td>&nbsp;</td>
+  <td>两种采购类型</td>
+</tr>
+      </table>
+     </td>
+   </tr>
+   <tr>
+<td class="footer">Extracted by Mass Download version 1.5.2 - E.G.Mellodew. 1998-2022. Sap Release 755</td>
+   </tr>
+</table>
+</body>
+</html>

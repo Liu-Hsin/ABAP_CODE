@@ -1,0 +1,1157 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=GB2312" />
+<title>ZPPR0011</title>
+<style type="text/css">
+.code{ font-family:"Courier New", Courier, monospace; color:#000; font-size:14px; background-color:#F2F4F7 }
+  .codeComment {font-family:"Courier New", Courier, monospace; color:#0000F0; font-size:14px; background-color:#F2F4F7 }
+  .normalBold{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; font-weight:800 }
+  .normalBoldLarge{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+</style>
+<style type="text/css">
+  .normal{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px }
+  .footer{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; text-align: center }
+  h2{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+  h3{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:14px; font-weight:800 }
+  .outerTable{
+   background-color:#E0E7ED;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-right-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+  .innerTable{
+   background-color:#F2F4F7;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-bottom-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+</style>
+</head>
+<body>
+<table class="outerTable">
+  <tr class="normalBoldLarge">
+     <td><h2>Code listing for: ZPPR0011</h2>
+<h3> Description: MRP例外信息查询报表</h3></td>
+   </tr>
+  <tr>
+     <td>
+     <table class="innerTable">
+       <tr>
+          <td>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Report&nbsp;ZPPR0011<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*<br />
+*&&nbsp;Author&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;Vincent&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*<br />
+*&&nbsp;Create&nbsp;Date&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;20220110&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*<br />
+*&&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;例外信息报表&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*<br />
+*&&nbsp;&lt;Function&nbsp;Spec&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&gt;&nbsp;ZPPR0011&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*<br />
+*&&nbsp;Tcode&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:<br />
+*&&nbsp;Modifications&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*<br />
+*&&nbsp;&nbsp;&nbsp;Date&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Programmer&nbsp;&nbsp;&nbsp;&lt;Request&nbsp;No.&gt;&nbsp;&nbsp;&nbsp;&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*<br />
+*&&nbsp;&nbsp;&nbsp;2022/01/10&nbsp;&nbsp;Vincent&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;DS4K900101&gt;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;创建&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+REPORT zppr0011 MESSAGE-ID zmd.<br />
+<br />
+   </div>
+   <div class="codeComment">
+************************************************************************<br />
+*&nbsp;VARIABLES&nbsp;DEFINITIONS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*<br />
+************************************************************************<br />
+<br />
+*–&gt;&nbsp;Type-Pools<br />
+   </div>
+   <div class="code">
+TYPE-POOLS: m61x.<br />
+TYPE-POOLS: slis.<br />
+   </div>
+   <div class="codeComment">
+*–&gt;&nbsp;DB-Table<br />
+   </div>
+   <div class="code">
+TABLES: marc, mara, mdma, eord, pgmi, mkal,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;t000md,&nbsp;mdlv,&nbsp;t458a,&nbsp;t458b,&nbsp;t458c,&nbsp;t458d.<br />
+   </div>
+   <div class="codeComment">
+*–&gt;&nbsp;Data&nbsp;definitions<br />
+   </div>
+   <div class="code">
+CONSTANTS: memo_id_md07(10) TYPE c VALUE 'START_MD07'.<br />
+   </div>
+   <div class="codeComment">
+*–&gt;&nbsp;Structures&nbsp;and&nbsp;Data<br />
+   </div>
+   <div class="code">
+DATA: rm61r LIKE rm61r.<br />
+DATA:  l_bertx LIKE rm61r-bertx.<br />
+   </div>
+   <div class="codeComment">
+*–&gt;&nbsp;Table&nbsp;of&nbsp;selected&nbsp;materials<br />
+   </div>
+   <div class="code">
+DATA: BEGIN OF mdmwx OCCURS 0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INCLUDE&nbsp;STRUCTURE&nbsp;mdmw.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"material&nbsp;/&nbsp;plant&nbsp;/&nbsp;MRP&nbsp;area<br />
+DATA: END OF mdmwx.<br />
+   </div>
+   <div class="codeComment">
+*–&gt;&nbsp;Table&nbsp;of&nbsp;selected&nbsp;materials<br />
+   </div>
+   <div class="code">
+TYPES: BEGIN OF it_md07,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;matnr&nbsp;LIKE&nbsp;mdmw-matnr,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;werks&nbsp;LIKE&nbsp;mdmw-werks,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;berid&nbsp;LIKE&nbsp;mdmw-berid,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bertx&nbsp;LIKE&nbsp;mdmw-bertx,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;END&nbsp;OF&nbsp;it_md07.<br />
+TYPES: tb_md07_h TYPE STANDARD TABLE OF it_md07.<br />
+DATA: tb_md07  TYPE tb_md07_h WITH HEADER LINE,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tb1_md07&nbsp;TYPE&nbsp;tb_md07_h&nbsp;WITH&nbsp;HEADER&nbsp;LINE,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tb2_md07&nbsp;TYPE&nbsp;tb_md07_h&nbsp;WITH&nbsp;HEADER&nbsp;LINE,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tb3_md07&nbsp;TYPE&nbsp;tb_md07_h&nbsp;WITH&nbsp;HEADER&nbsp;LINE.<br />
+<br />
+DATA it_mdezx TYPE STANDARD TABLE OF mdez WITH HEADER LINE.<br />
+DATA it_MT61D TYPE STANDARD TABLE OF mt61d WITH HEADER LINE.<br />
+<br />
+TYPES: BEGIN OF it_disp,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;matnr&nbsp;LIKE&nbsp;marc-matnr,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bismt&nbsp;LIKE&nbsp;mara-bismt,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;werks&nbsp;LIKE&nbsp;marc-werks,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;berid&nbsp;LIKE&nbsp;mdmw-berid,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bertx&nbsp;LIKE&nbsp;mdmw-bertx,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;maktx&nbsp;LIKE&nbsp;makt-maktx,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mtart&nbsp;LIKE&nbsp;mara-mtart,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;matkl&nbsp;LIKE&nbsp;mara-matkl,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;meins&nbsp;LIKE&nbsp;mara-meins,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dismm&nbsp;LIKE&nbsp;marc-dismm,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;beskz&nbsp;LIKE&nbsp;marc-beskz,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sobsl&nbsp;LIKE&nbsp;marc-sobsl,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dispo&nbsp;LIKE&nbsp;marc-dispo,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ekgrp&nbsp;LIKE&nbsp;marc-ekgrp,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dat00&nbsp;LIKE&nbsp;it_mdezx-dat00,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;delb0&nbsp;LIKE&nbsp;it_mdezx-delb0,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;extra&nbsp;LIKE&nbsp;it_mdezx-extra,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;auskt&nbsp;LIKE&nbsp;it_mdezx-auskt,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;umdat&nbsp;LIKE&nbsp;it_mdezx-umdat,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mng01&nbsp;LIKE&nbsp;it_mdezx-mng01,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;END&nbsp;OF&nbsp;it_disp.<br />
+<br />
+TYPES: tb_disph TYPE STANDARD TABLE OF it_disp.<br />
+DATA: tb_disp1 TYPE tb_disph WITH HEADER LINE.<br />
+<br />
+TYPES: BEGIN OF tp_T458,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;auskt&nbsp;&nbsp;LIKE&nbsp;t458a-auskt,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;auslt&nbsp;&nbsp;LIKE&nbsp;t458b-auslt,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;selgp&nbsp;&nbsp;LIKE&nbsp;t458a-selgp,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text40&nbsp;LIKE&nbsp;t458d-text40,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;aussl&nbsp;&nbsp;LIKE&nbsp;t458a-aussl,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;END&nbsp;OF&nbsp;tp_T458.<br />
+<br />
+TYPES: BEGIN OF tp_T458F,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;auskt&nbsp;LIKE&nbsp;t458a-auskt,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;END&nbsp;OF&nbsp;tp_T458F.<br />
+<br />
+TYPES: tp_tbl_T458 TYPE STANDARD TABLE OF tp_T458.<br />
+TYPES: tp_tbF_T458 TYPE STANDARD TABLE OF tp_T458F.<br />
+DATA: t_T458 TYPE tp_tbl_T458 WITH HEADER LINE.<br />
+DATA: t_T458F TYPE tp_tbF_T458 WITH HEADER LINE.<br />
+<br />
+DATA: BEGIN OF i_fields OCCURS 10.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INCLUDE&nbsp;STRUCTURE&nbsp;help_value.<br />
+DATA: END OF i_fields.<br />
+<br />
+DATA: BEGIN OF i_values OCCURS 10,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;line(80),<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;END&nbsp;OF&nbsp;i_values.<br />
+<br />
+CLEAR i_fields. REFRESH i_fields.<br />
+CLEAR i_values. REFRESH i_values.<br />
+<br />
+   </div>
+   <div class="codeComment">
+************************************************************************<br />
+*&nbsp;CONSTANTS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*<br />
+************************************************************************<br />
+   </div>
+   <div class="code">
+CONSTANTS:<br />
+&nbsp;&nbsp;c_x(1)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;VALUE&nbsp;&nbsp;'X',<br />
+&nbsp;&nbsp;c_status(8)&nbsp;VALUE&nbsp;&nbsp;'TRSTATUS',<br />
+&nbsp;&nbsp;c_1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;c&nbsp;VALUE&nbsp;&nbsp;'1',<br />
+&nbsp;&nbsp;c_marca(5)&nbsp;&nbsp;TYPE&nbsp;c&nbsp;VALUE&nbsp;'MARCA',<br />
+&nbsp;&nbsp;c_pfs(6)&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;c&nbsp;VALUE&nbsp;&nbsp;'STATUS',<br />
+&nbsp;&nbsp;c_usc(12)&nbsp;&nbsp;&nbsp;TYPE&nbsp;c&nbsp;VALUE&nbsp;'USER_COMMAND',<br />
+&nbsp;&nbsp;c_bot(4)&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;c&nbsp;VALUE&nbsp;&nbsp;&nbsp;'&DEL',<br />
+&nbsp;&nbsp;c_w&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;c&nbsp;VALUE&nbsp;&nbsp;&nbsp;'W'.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Data&nbsp;for&nbsp;the&nbsp;alv&nbsp;–&nbsp;PO&nbsp;Final&nbsp;Display<br />
+   </div>
+   <div class="code">
+DATA: gt_fieldcat TYPE slis_t_fieldcat_alv,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wa_layout&nbsp;&nbsp;&nbsp;TYPE&nbsp;slis_layout_alv,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;v_repid&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;sy-repid,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;t_events&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;slis_t_event.<br />
+<br />
+   </div>
+   <div class="codeComment">
+************************************************************************<br />
+*&nbsp;INTERNAL&nbsp;TABLES&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*<br />
+************************************************************************<br />
+<br />
+*&nbsp;Vendor&nbsp;Truck&nbsp;–&nbsp;Unit&nbsp;Conversion<br />
+   </div>
+   <div class="code">
+DATA: e_subrc LIKE sy-subrc.<br />
+<br />
+DATA:<br />
+   </div>
+   <div class="codeComment">
+*Variables&nbsp;for&nbsp;screen&nbsp;1001<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;p_ucomm&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;sy-ucomm,<br />
+&nbsp;&nbsp;pw_selfield&nbsp;TYPE&nbsp;slis_selfield.<br />
+<br />
+   </div>
+   <div class="codeComment">
+************************************************************************<br />
+*&nbsp;SELECT-OPTIONS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*<br />
+************************************************************************<br />
+<br />
+   </div>
+   <div class="code">
+START-OF-SELECTION.<br />
+<br />
+&nbsp;&nbsp;SELECTION-SCREEN:&nbsp;BEGIN&nbsp;OF&nbsp;BLOCK&nbsp;a0&nbsp;WITH&nbsp;FRAME&nbsp;TITLE&nbsp;TEXT-000.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SELECT-OPTIONS:<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;s_AUSKT&nbsp;FOR&nbsp;t458a-auskt,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Exception&nbsp;Message<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;s_SELGP&nbsp;FOR&nbsp;t458c-selgp.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Exception&nbsp;Group<br />
+&nbsp;&nbsp;SELECTION-SCREEN:&nbsp;END&nbsp;OF&nbsp;BLOCK&nbsp;a0.<br />
+<br />
+&nbsp;&nbsp;SELECTION-SCREEN:&nbsp;BEGIN&nbsp;OF&nbsp;BLOCK&nbsp;a1&nbsp;WITH&nbsp;FRAME&nbsp;TITLE&nbsp;TEXT-001.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SELECT-OPTIONS:<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;s_werks&nbsp;FOR&nbsp;rm61r-werks&nbsp;OBLIGATORY&nbsp;DEFAULT&nbsp;1000,&nbsp;&nbsp;"Plant<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;s_berid&nbsp;FOR&nbsp;rm61r-berid.&nbsp;&nbsp;"MRP&nbsp;area<br />
+&nbsp;&nbsp;SELECTION-SCREEN:&nbsp;END&nbsp;OF&nbsp;BLOCK&nbsp;a1.<br />
+<br />
+&nbsp;&nbsp;SELECTION-SCREEN:&nbsp;BEGIN&nbsp;OF&nbsp;BLOCK&nbsp;a2&nbsp;WITH&nbsp;FRAME&nbsp;TITLE&nbsp;TEXT-002.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SELECTION-SCREEN&nbsp;BEGIN&nbsp;OF&nbsp;LINE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PARAMETERS:&nbsp;chk_mat&nbsp;RADIOBUTTON&nbsp;GROUP&nbsp;rad1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SELECTION-SCREEN&nbsp;COMMENT&nbsp;3(27)&nbsp;TEXT-r01.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SELECTION-SCREEN&nbsp;END&nbsp;OF&nbsp;LINE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SELECT-OPTIONS:<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;s_matnr&nbsp;FOR&nbsp;rm61r-matnr.&nbsp;&nbsp;"Material<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SELECTION-SCREEN&nbsp;BEGIN&nbsp;OF&nbsp;LINE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PARAMETERS:&nbsp;chk_ven&nbsp;RADIOBUTTON&nbsp;GROUP&nbsp;rad1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SELECTION-SCREEN&nbsp;COMMENT&nbsp;3(39)&nbsp;TEXT-r02.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SELECTION-SCREEN&nbsp;END&nbsp;OF&nbsp;LINE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SELECT-OPTIONS:<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;s_lifnr&nbsp;FOR&nbsp;eord-lifnr.&nbsp;&nbsp;&nbsp;"Vendor<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SELECTION-SCREEN&nbsp;BEGIN&nbsp;OF&nbsp;LINE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PARAMETERS:&nbsp;chk_pro&nbsp;RADIOBUTTON&nbsp;GROUP&nbsp;rad1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SELECTION-SCREEN&nbsp;COMMENT&nbsp;3(32)&nbsp;TEXT-r03.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SELECTION-SCREEN&nbsp;END&nbsp;OF&nbsp;LINE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SELECT-OPTIONS:<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;s_prgrp&nbsp;FOR&nbsp;pgmi-prgrp.&nbsp;&nbsp;&nbsp;"Product&nbsp;Group<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SELECTION-SCREEN&nbsp;BEGIN&nbsp;OF&nbsp;LINE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PARAMETERS:&nbsp;chk_lin&nbsp;RADIOBUTTON&nbsp;GROUP&nbsp;rad1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SELECTION-SCREEN&nbsp;COMMENT&nbsp;3(60)&nbsp;TEXT-r04.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SELECTION-SCREEN&nbsp;END&nbsp;OF&nbsp;LINE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SELECT-OPTIONS:<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;s_mdv01&nbsp;FOR&nbsp;mkal-mdv01.&nbsp;&nbsp;&nbsp;"Production&nbsp;Line<br />
+&nbsp;&nbsp;SELECTION-SCREEN:&nbsp;END&nbsp;OF&nbsp;BLOCK&nbsp;a2.<br />
+<br />
+&nbsp;&nbsp;SELECTION-SCREEN:&nbsp;BEGIN&nbsp;OF&nbsp;BLOCK&nbsp;a3&nbsp;WITH&nbsp;FRAME&nbsp;TITLE&nbsp;TEXT-003.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SELECT-OPTIONS:<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;s_bismt&nbsp;FOR&nbsp;mara-bismt,&nbsp;&nbsp;&nbsp;"&nbsp;Old&nbsp;material<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;s_matkl&nbsp;FOR&nbsp;mara-matkl,&nbsp;&nbsp;&nbsp;"Material&nbsp;group<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;s_dispo&nbsp;FOR&nbsp;rm61r-dispo,&nbsp;&nbsp;"MRP&nbsp;controller<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;s_ekgrp&nbsp;FOR&nbsp;marc-ekgrp,&nbsp;&nbsp;&nbsp;"Purchasing&nbsp;Group<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;s_beskz&nbsp;FOR&nbsp;rm61r-beskz,&nbsp;&nbsp;"Procurement&nbsp;Type<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;s_sobsl&nbsp;FOR&nbsp;rm61r-sobsl,&nbsp;&nbsp;"Special&nbsp;procurement&nbsp;type<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;s_dismm&nbsp;FOR&nbsp;rm61r-dismm,&nbsp;&nbsp;"MRP&nbsp;Type<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;s_mmsta&nbsp;FOR&nbsp;rm61r-mmsta,&nbsp;&nbsp;"Plant-Specific&nbsp;Material&nbsp;Status<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;s_maabc&nbsp;FOR&nbsp;rm61r-maabc.&nbsp;&nbsp;"ABC&nbsp;indicator<br />
+&nbsp;&nbsp;SELECTION-SCREEN:&nbsp;END&nbsp;OF&nbsp;BLOCK&nbsp;a3.<br />
+<br />
+   </div>
+   <div class="codeComment">
+************************************************************************<br />
+*&nbsp;PERFORMANCE&nbsp;CHECKS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*<br />
+************************************************************************<br />
+<br />
+*–&gt;&nbsp;MRP-Area&nbsp;active&nbsp;?<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;PERFORM&nbsp;read_t000md.<br />
+&nbsp;&nbsp;IF&nbsp;NOT&nbsp;s_berid&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;t000md-disfg&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;i001(zmd).<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXIT.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*–&gt;&nbsp;根据供应商的货源清单查询物料<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;IF&nbsp;chk_ven&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;s_lifnr&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;i000&nbsp;WITH&nbsp;TEXT-t00.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXIT.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*–&gt;&nbsp;根据产品组进行检查<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;IF&nbsp;chk_pro&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;s_prgrp&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;i000&nbsp;WITH&nbsp;TEXT-t01.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXIT.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*–&gt;&nbsp;Performance&nbsp;Check&nbsp;for&nbsp;Material&nbsp;Selection&nbsp;by&nbsp;Production&nbsp;Version<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;IF&nbsp;chk_lin&nbsp;=&nbsp;&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;s_mdv01&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;i000&nbsp;WITH&nbsp;TEXT-t02.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXIT.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*–&gt;&nbsp;Performance&nbsp;Check&nbsp;for&nbsp;Material&nbsp;Selection&nbsp;by&nbsp;Production&nbsp;Version<br />
+*IF&nbsp;s_AUSKT&nbsp;IS&nbsp;INITIAL&nbsp;AND&nbsp;s_SELGP&nbsp;IS&nbsp;INITIAL.<br />
+*&nbsp;&nbsp;MESSAGE&nbsp;I000&nbsp;WITH&nbsp;TEXT-T03.<br />
+*&nbsp;&nbsp;EXIT.<br />
+*ENDIF.<br />
+<br />
+   </div>
+   <div class="code">
+END-OF-SELECTION.<br />
+<br />
+AT SELECTION-SCREEN ON VALUE-REQUEST FOR s_AUSKT-low.<br />
+&nbsp;&nbsp;PERFORM&nbsp;exc_matchcode&nbsp;USING&nbsp;s_AUSKT-low.<br />
+<br />
+AT SELECTION-SCREEN ON VALUE-REQUEST FOR s_AUSKT-high.<br />
+&nbsp;&nbsp;PERFORM&nbsp;exc_matchcode&nbsp;USING&nbsp;s_AUSKT-low.<br />
+<br />
+   </div>
+   <div class="codeComment">
+************************************************************************<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;START&nbsp;OF&nbsp;MAIN&nbsp;PROGRAM&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*<br />
+************************************************************************<br />
+<br />
+   </div>
+   <div class="code">
+START-OF-SELECTION.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*–&gt;&nbsp;Select&nbsp;all&nbsp;materials&nbsp;by&nbsp;source&nbsp;list<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;IF&nbsp;chk_ven&nbsp;=&nbsp;&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;s_berid&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;a~matnr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;b~werks<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;TABLE&nbsp;tb_md07<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;eord&nbsp;AS&nbsp;a<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INNER&nbsp;JOIN&nbsp;marc&nbsp;AS&nbsp;b&nbsp;ON&nbsp;a~matnr&nbsp;=&nbsp;b~matnr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;a~werks&nbsp;=&nbsp;b~werks<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INNER&nbsp;JOIN&nbsp;mara&nbsp;AS&nbsp;c&nbsp;ON&nbsp;a~matnr&nbsp;=&nbsp;c~matnr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;b~werks&nbsp;IN&nbsp;s_werks&nbsp;&nbsp;AND&nbsp;a~lifnr&nbsp;IN&nbsp;s_lifnr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;a~vdatu&nbsp;&lt;=&nbsp;sy-datum&nbsp;AND&nbsp;a~bdatu&nbsp;&gt;=&nbsp;sy-datum<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;b~dispo&nbsp;IN&nbsp;s_dispo&nbsp;&nbsp;AND&nbsp;b~beskz&nbsp;IN&nbsp;s_beskz<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;b~sobsl&nbsp;IN&nbsp;s_sobsl&nbsp;AND&nbsp;b~dismm&nbsp;IN&nbsp;s_dismm<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;b~mmsta&nbsp;IN&nbsp;s_mmsta&nbsp;AND&nbsp;b~maabc&nbsp;IN&nbsp;s_maabc<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;b~ekgrp&nbsp;IN&nbsp;s_ekgrp&nbsp;AND&nbsp;c~matkl&nbsp;IN&nbsp;s_matkl<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ELSE.<br />
+   </div>
+   <div class="codeComment">
+*–&gt;&nbsp;Select&nbsp;all&nbsp;materials&nbsp;in&nbsp;MRP&nbsp;Areas&nbsp;other&nbsp;than&nbsp;plant&nbsp;MRP&nbsp;Area<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;NOT&nbsp;s_berid&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;a~matnr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;b~werks<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;c~berid<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;TABLE&nbsp;tb_md07<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;eord&nbsp;AS&nbsp;a<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INNER&nbsp;JOIN&nbsp;marc&nbsp;AS&nbsp;b&nbsp;ON&nbsp;a~matnr&nbsp;=&nbsp;b~matnr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;a~werks&nbsp;=&nbsp;b~werks<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INNER&nbsp;JOIN&nbsp;mdma&nbsp;AS&nbsp;c&nbsp;ON&nbsp;a~matnr&nbsp;=&nbsp;c~matnr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;a~werks&nbsp;=&nbsp;c~werks<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INNER&nbsp;JOIN&nbsp;mara&nbsp;AS&nbsp;d&nbsp;ON&nbsp;a~matnr&nbsp;=&nbsp;d~matnr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;b~werks&nbsp;IN&nbsp;s_werks&nbsp;&nbsp;AND&nbsp;a~lifnr&nbsp;IN&nbsp;s_lifnr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;a~vdatu&nbsp;&lt;=&nbsp;sy-datum&nbsp;AND&nbsp;a~bdatu&nbsp;&gt;=&nbsp;sy-datum<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;b~dispo&nbsp;IN&nbsp;s_dispo&nbsp;&nbsp;AND&nbsp;b~beskz&nbsp;IN&nbsp;s_beskz<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;b~sobsl&nbsp;IN&nbsp;s_sobsl&nbsp;AND&nbsp;b~dismm&nbsp;IN&nbsp;s_dismm<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;b~mmsta&nbsp;IN&nbsp;s_mmsta&nbsp;AND&nbsp;b~maabc&nbsp;IN&nbsp;s_maabc<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;b~ekgrp&nbsp;IN&nbsp;s_ekgrp&nbsp;AND&nbsp;d~matkl&nbsp;IN&nbsp;s_matkl<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;c~berid&nbsp;IN&nbsp;s_berid&nbsp;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*–&gt;&nbsp;Select&nbsp;all&nbsp;materials&nbsp;by&nbsp;material<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;IF&nbsp;chk_mat&nbsp;=&nbsp;&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;s_berid&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;a~matnr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;a~werks<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;TABLE&nbsp;tb_md07<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;marc&nbsp;AS&nbsp;a<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INNER&nbsp;JOIN&nbsp;mara&nbsp;AS&nbsp;b&nbsp;ON&nbsp;a~matnr&nbsp;=&nbsp;b~matnr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;a~werks&nbsp;IN&nbsp;s_werks&nbsp;AND&nbsp;a~dispo&nbsp;IN&nbsp;s_dispo<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;a~beskz&nbsp;IN&nbsp;s_beskz&nbsp;AND&nbsp;a~sobsl&nbsp;IN&nbsp;s_sobsl<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;a~dismm&nbsp;IN&nbsp;s_dismm&nbsp;AND&nbsp;a~mmsta&nbsp;IN&nbsp;s_mmsta<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;a~maabc&nbsp;IN&nbsp;s_maabc&nbsp;AND&nbsp;a~matnr&nbsp;IN&nbsp;s_matnr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;a~ekgrp&nbsp;IN&nbsp;s_ekgrp&nbsp;AND&nbsp;b~matkl&nbsp;IN&nbsp;s_matkl<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ELSE.<br />
+   </div>
+   <div class="codeComment">
+*–&gt;&nbsp;Select&nbsp;all&nbsp;materials&nbsp;in&nbsp;MRP&nbsp;Areas&nbsp;other&nbsp;than&nbsp;plant&nbsp;MRP&nbsp;Area<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;NOT&nbsp;s_berid&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;a~matnr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;a~werks<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;b~berid<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;TABLE&nbsp;tb_md07<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;marc&nbsp;AS&nbsp;a<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INNER&nbsp;JOIN&nbsp;mdma&nbsp;AS&nbsp;b&nbsp;ON&nbsp;a~matnr&nbsp;=&nbsp;b~matnr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;a~werks&nbsp;=&nbsp;b~werks<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INNER&nbsp;JOIN&nbsp;mara&nbsp;AS&nbsp;c&nbsp;ON&nbsp;a~matnr&nbsp;=&nbsp;c~matnr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;a~werks&nbsp;IN&nbsp;s_werks&nbsp;AND&nbsp;a~dispo&nbsp;IN&nbsp;s_dispo<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;a~beskz&nbsp;IN&nbsp;s_beskz&nbsp;AND&nbsp;a~sobsl&nbsp;IN&nbsp;s_sobsl<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;a~dismm&nbsp;IN&nbsp;s_dismm&nbsp;AND&nbsp;a~mmsta&nbsp;IN&nbsp;s_mmsta<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;a~maabc&nbsp;IN&nbsp;s_maabc&nbsp;AND&nbsp;b~berid&nbsp;IN&nbsp;s_berid<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;a~matnr&nbsp;IN&nbsp;s_matnr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;a~ekgrp&nbsp;IN&nbsp;s_ekgrp&nbsp;AND&nbsp;c~matkl&nbsp;IN&nbsp;s_matkl<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*–&gt;&nbsp;Select&nbsp;all&nbsp;materials&nbsp;by&nbsp;product&nbsp;group<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;IF&nbsp;chk_pro&nbsp;=&nbsp;&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;s_berid&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;a~nrmit<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;a~wemit<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;TABLE&nbsp;tb1_md07<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;pgmi&nbsp;AS&nbsp;a<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;a~werks&nbsp;IN&nbsp;s_werks&nbsp;AND&nbsp;a~prgrp&nbsp;IN&nbsp;s_prgrp.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SORT&nbsp;tb1_md07&nbsp;BY&nbsp;werks&nbsp;matnr.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;tb1_md07.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;SINGLE&nbsp;matnr&nbsp;werks<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;marc&nbsp;INTO&nbsp;(tb2_md07-matnr,&nbsp;tb2_md07-werks)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;matnr&nbsp;=&nbsp;tb1_md07-matnr&nbsp;AND&nbsp;werks&nbsp;=&nbsp;tb1_md07-werks<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;dispo&nbsp;IN&nbsp;s_dispo&nbsp;AND&nbsp;beskz&nbsp;IN&nbsp;s_beskz<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;sobsl&nbsp;IN&nbsp;s_sobsl&nbsp;AND&nbsp;dismm&nbsp;IN&nbsp;s_dismm<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;mmsta&nbsp;IN&nbsp;s_mmsta&nbsp;AND&nbsp;maabc&nbsp;IN&nbsp;s_maabc<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;ekgrp&nbsp;IN&nbsp;s_ekgrp.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;tb2_md07.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SORT&nbsp;tb2_md07&nbsp;BY&nbsp;werks&nbsp;matnr.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;tb2_md07.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;SINGLE&nbsp;matnr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;mara&nbsp;INTO&nbsp;(tb_md07-matnr)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;matnr&nbsp;=&nbsp;tb2_md07-matnr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;matkl&nbsp;IN&nbsp;s_matkl.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tb_md07-werks&nbsp;=&nbsp;tb2_md07-werks.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;tb_md07.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ELSE.<br />
+   </div>
+   <div class="codeComment">
+*–&gt;&nbsp;Select&nbsp;all&nbsp;materials&nbsp;in&nbsp;MRP&nbsp;Areas&nbsp;other&nbsp;than&nbsp;plant&nbsp;MRP&nbsp;Area<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;NOT&nbsp;s_berid&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;a~nrmit<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;a~wemit<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;TABLE&nbsp;tb1_md07<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;pgmi&nbsp;AS&nbsp;a<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;a~werks&nbsp;IN&nbsp;s_werks&nbsp;AND&nbsp;a~prgrp&nbsp;IN&nbsp;s_prgrp.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;tb1_md07.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;SINGLE&nbsp;matnr&nbsp;werks<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;marc&nbsp;INTO&nbsp;(tb2_md07-matnr,&nbsp;tb2_md07-werks)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;matnr&nbsp;=&nbsp;tb1_md07-matnr&nbsp;AND&nbsp;werks&nbsp;=&nbsp;tb1_md07-werks<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;dispo&nbsp;IN&nbsp;s_dispo&nbsp;AND&nbsp;beskz&nbsp;IN&nbsp;s_beskz<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;sobsl&nbsp;IN&nbsp;s_sobsl&nbsp;AND&nbsp;dismm&nbsp;IN&nbsp;s_dismm<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;mmsta&nbsp;IN&nbsp;s_mmsta&nbsp;AND&nbsp;maabc&nbsp;IN&nbsp;s_maabc<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;ekgrp&nbsp;IN&nbsp;s_ekgrp.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;tb2_md07.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SORT&nbsp;tb2_md07&nbsp;BY&nbsp;werks&nbsp;matnr.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;tb2_md07.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;SINGLE&nbsp;matnr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;mara&nbsp;INTO&nbsp;(tb_md07-matnr)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;matnr&nbsp;=&nbsp;tb2_md07-matnr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;matkl&nbsp;IN&nbsp;s_matkl.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tb_md07-werks&nbsp;=&nbsp;tb2_md07-werks.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;tb_md07.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*–&gt;&nbsp;Select&nbsp;all&nbsp;materials&nbsp;by&nbsp;production&nbsp;line<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;IF&nbsp;chk_lin&nbsp;=&nbsp;&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;s_berid&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;a~matnr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;b~werks<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;TABLE&nbsp;tb_md07<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;mkal&nbsp;AS&nbsp;a<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INNER&nbsp;JOIN&nbsp;marc&nbsp;AS&nbsp;b&nbsp;ON&nbsp;a~matnr&nbsp;=&nbsp;b~matnr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;a~werks&nbsp;=&nbsp;b~werks<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INNER&nbsp;JOIN&nbsp;mara&nbsp;AS&nbsp;c&nbsp;ON&nbsp;a~matnr&nbsp;=&nbsp;c~matnr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;b~werks&nbsp;IN&nbsp;s_werks&nbsp;&nbsp;AND&nbsp;a~mdv01&nbsp;IN&nbsp;s_mdv01<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;a~adatu&nbsp;&lt;=&nbsp;sy-datum&nbsp;AND&nbsp;a~bdatu&nbsp;&gt;=&nbsp;sy-datum<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;b~dispo&nbsp;IN&nbsp;s_dispo&nbsp;&nbsp;AND&nbsp;b~beskz&nbsp;IN&nbsp;s_beskz<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;b~sobsl&nbsp;IN&nbsp;s_sobsl&nbsp;AND&nbsp;b~dismm&nbsp;IN&nbsp;s_dismm<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;b~mmsta&nbsp;IN&nbsp;s_mmsta&nbsp;AND&nbsp;b~maabc&nbsp;IN&nbsp;s_maabc<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;b~ekgrp&nbsp;IN&nbsp;s_ekgrp&nbsp;AND&nbsp;c~matkl&nbsp;IN&nbsp;s_matkl<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ELSE.<br />
+   </div>
+   <div class="codeComment">
+*–&gt;&nbsp;Select&nbsp;all&nbsp;materials&nbsp;in&nbsp;MRP&nbsp;Areas&nbsp;other&nbsp;than&nbsp;plant&nbsp;MRP&nbsp;Area<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;NOT&nbsp;s_berid&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;a~matnr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;b~werks<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;c~berid<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;TABLE&nbsp;tb_md07<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;mkal&nbsp;AS&nbsp;a<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INNER&nbsp;JOIN&nbsp;marc&nbsp;AS&nbsp;b&nbsp;ON&nbsp;a~matnr&nbsp;=&nbsp;b~matnr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;a~werks&nbsp;=&nbsp;b~werks<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INNER&nbsp;JOIN&nbsp;mdma&nbsp;AS&nbsp;c&nbsp;ON&nbsp;a~matnr&nbsp;=&nbsp;c~matnr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;a~werks&nbsp;=&nbsp;c~werks<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INNER&nbsp;JOIN&nbsp;mara&nbsp;AS&nbsp;d&nbsp;ON&nbsp;a~matnr&nbsp;=&nbsp;d~matnr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;b~werks&nbsp;IN&nbsp;s_werks&nbsp;&nbsp;AND&nbsp;a~mdv01&nbsp;IN&nbsp;s_mdv01<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;a~adatu&nbsp;&lt;=&nbsp;sy-datum&nbsp;AND&nbsp;a~bdatu&nbsp;&gt;=&nbsp;sy-datum<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;b~dispo&nbsp;IN&nbsp;s_dispo&nbsp;&nbsp;AND&nbsp;b~beskz&nbsp;IN&nbsp;s_beskz<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;b~sobsl&nbsp;IN&nbsp;s_sobsl&nbsp;AND&nbsp;b~dismm&nbsp;IN&nbsp;s_dismm<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;b~mmsta&nbsp;IN&nbsp;s_mmsta&nbsp;AND&nbsp;b~maabc&nbsp;IN&nbsp;s_maabc<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;c~berid&nbsp;IN&nbsp;s_berid<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;b~ekgrp&nbsp;IN&nbsp;s_ekgrp&nbsp;AND&nbsp;d~matkl&nbsp;IN&nbsp;s_matkl<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Exception&nbsp;Groups<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;SELECT&nbsp;auskt<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;CORRESPONDING&nbsp;FIELDS&nbsp;OF&nbsp;TABLE&nbsp;t_t458F<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;t458a<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;auskt&nbsp;IN&nbsp;s_auskt&nbsp;AND&nbsp;selgp&nbsp;IN&nbsp;s_selgp.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*–&gt;&nbsp;Check:&nbsp;Selektion&nbsp;nichtleer<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;IF&nbsp;tb_md07[]&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;e085(61).<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+END-OF-SELECTION.<br />
+<br />
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;tb_md07.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;NOT&nbsp;tb_md07-matnr&nbsp;IS&nbsp;INITIAL&nbsp;AND&nbsp;NOT&nbsp;tb_md07-werks&nbsp;IS&nbsp;INITIAL.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;REFRESH&nbsp;it_mdezx.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;REFRESH&nbsp;it_MT61D.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'MD_STOCK_REQUIREMENTS_LIST_API'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;matnr&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;tb_md07-matnr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;werks&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;tb_md07-werks<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;e_mt61d&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;it_MT61D<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TABLES<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mdezx&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;it_mdezx<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;material_plant_not_found&nbsp;=&nbsp;1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;plant_not_found&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTHERS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;3.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;NOT&nbsp;it_mdezx[]&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;t_t458f.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;it_mdezx&nbsp;WHERE&nbsp;auskt&nbsp;=&nbsp;t_t458F-auskt.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tb_disp1-matnr&nbsp;=&nbsp;tb_md07-matnr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tb_disp1-werks&nbsp;=&nbsp;tb_md07-werks.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tb_disp1-berid&nbsp;=&nbsp;tb_md07-berid.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tb_disp1-bertx&nbsp;=&nbsp;tb_md07-bertx.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tb_disp1-maktx&nbsp;=&nbsp;it_mt61d-maktx.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tb_disp1-mtart&nbsp;=&nbsp;it_mt61d-mtart.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tb_disp1-matkl&nbsp;=&nbsp;it_mt61d-matkl.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tb_disp1-meins&nbsp;=&nbsp;it_mt61d-meins.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tb_disp1-dismm&nbsp;=&nbsp;it_mt61d-dismm.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tb_disp1-beskz&nbsp;=&nbsp;it_mt61d-beskz.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tb_disp1-sobsl&nbsp;=&nbsp;it_mt61d-sobsl.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tb_disp1-dispo&nbsp;=&nbsp;it_mt61d-dispo.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tb_disp1-ekgrp&nbsp;=&nbsp;it_mt61d-ekgrp.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tb_disp1-dat00&nbsp;=&nbsp;it_mdezx-dat00.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tb_disp1-delb0&nbsp;=&nbsp;it_mdezx-delb0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tb_disp1-extra&nbsp;=&nbsp;it_mdezx-extra.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tb_disp1-auskt&nbsp;=&nbsp;it_mdezx-auskt.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tb_disp1-umdat&nbsp;=&nbsp;it_mdezx-umdat.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tb_disp1-mng01&nbsp;=&nbsp;it_mdezx-mng01.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;tb_disp1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDLOOP.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDLOOP.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;tb_disp1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;it_MT61D.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;it_mdezx.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;REFRESH&nbsp;it_mdezx.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;REFRESH&nbsp;it_MT61D.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+   </div>
+   <div class="codeComment">
+******ADD&nbsp;DATO&nbsp;TO&nbsp;IT2******<br />
+*–&gt;&nbsp;Check:&nbsp;Selektion&nbsp;nichtleer<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;IF&nbsp;tb_disp1[]&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;e085(61).<br />
+&nbsp;&nbsp;ELSE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;alv.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+   </div>
+   <div class="codeComment">
+************************************************************************<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;END&nbsp;OF&nbsp;MAIN&nbsp;PROGRAM&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*<br />
+************************************************************************<br />
+<br />
+*&———————————————————————*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;read_t000md<br />
+*&———————————————————————*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*———————————————————————-*<br />
+*&nbsp;&nbsp;–&gt;&nbsp;&nbsp;p1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*&nbsp;&nbsp;&lt;–&nbsp;&nbsp;p2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*———————————————————————-*<br />
+*———————————————————————-*<br />
+*&nbsp;&nbsp;&nbsp;Has&nbsp;to&nbsp;be&nbsp;called&nbsp;at&nbsp;the&nbsp;beginning&nbsp;of&nbsp;the&nbsp;transaction<br />
+*&nbsp;&nbsp;&nbsp;T000md-disfg&nbsp;:&nbsp;flag&nbsp;MRP&nbsp;area&nbsp;functionality&nbsp;is&nbsp;active<br />
+*———————————————————————-*<br />
+   </div>
+   <div class="code">
+FORM read_t000md.<br />
+&nbsp;&nbsp;STATICS:<br />
+&nbsp;&nbsp;&nbsp;&nbsp;done_flag,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;l_t000md&nbsp;LIKE&nbsp;t000md.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Puffer<br />
+&nbsp;&nbsp;IF&nbsp;done_flag&nbsp;IS&nbsp;INITIAL.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;check&nbsp;done_flag&nbsp;is&nbsp;initial.<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;SINGLE&nbsp;*&nbsp;FROM&nbsp;t000md.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;&lt;&gt;&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;t000md.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;done_flag&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;l_t000md&nbsp;=&nbsp;t000md.<br />
+&nbsp;&nbsp;ELSE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;t000md&nbsp;=&nbsp;l_t000md.<br />
+&nbsp;&nbsp;ENDIF.<br />
+ENDFORM.                               "read_t000md<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&———————————————————————*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;alv<br />
+*&———————————————————————*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*———————————————————————-*<br />
+*&nbsp;&nbsp;–&gt;&nbsp;&nbsp;p1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*&nbsp;&nbsp;&lt;–&nbsp;&nbsp;p2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*———————————————————————-*<br />
+   </div>
+   <div class="code">
+FORM alv.<br />
+<br />
+&nbsp;&nbsp;PERFORM&nbsp;xinit_fieldcat.<br />
+&nbsp;&nbsp;PERFORM&nbsp;xinit_layout.<br />
+&nbsp;&nbsp;PERFORM&nbsp;xlist.<br />
+ENDFORM.                    "alv<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&———————————————————————*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;xinit_layout<br />
+*&———————————————————————*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*———————————————————————-*<br />
+*&nbsp;&nbsp;–&gt;&nbsp;&nbsp;p1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*&nbsp;&nbsp;&lt;–&nbsp;&nbsp;p2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*———————————————————————-*<br />
+   </div>
+   <div class="code">
+FORM xinit_layout.<br />
+<br />
+&nbsp;&nbsp;wa_layout-zebra&nbsp;=&nbsp;c_x.<br />
+&nbsp;&nbsp;wa_layout-colwidth_optimize&nbsp;=&nbsp;c_x.<br />
+&nbsp;&nbsp;wa_layout-box_fieldname&nbsp;=&nbsp;'&nbsp;'.<br />
+&nbsp;&nbsp;wa_layout-expand_fieldname&nbsp;=&nbsp;c_x.<br />
+<br />
+ENDFORM.                    "init_layout<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&———————————————————————*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;xinit_fieldcat<br />
+*&———————————————————————*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*———————————————————————-*<br />
+*&nbsp;&nbsp;–&gt;&nbsp;&nbsp;p1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*&nbsp;&nbsp;&lt;–&nbsp;&nbsp;p2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*———————————————————————-*<br />
+   </div>
+   <div class="code">
+FORM xinit_fieldcat.<br />
+<br />
+&nbsp;&nbsp;DATA:&nbsp;wa_fieldcat&nbsp;TYPE&nbsp;slis_fieldcat_alv,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sum&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;i.<br />
+<br />
+&nbsp;&nbsp;REFRESH&nbsp;gt_fieldcat.<br />
+&nbsp;&nbsp;CLEAR:&nbsp;wa_fieldcat.<br />
+&nbsp;&nbsp;sum&nbsp;=&nbsp;c_1.<br />
+<br />
+&nbsp;&nbsp;wa_fieldcat-fieldname&nbsp;=&nbsp;&nbsp;'MATNR'.<br />
+&nbsp;&nbsp;wa_fieldcat-tabname&nbsp;=&nbsp;'TB_DISP1'.<br />
+&nbsp;&nbsp;wa_fieldcat-ref_fieldname&nbsp;=&nbsp;'MATNR'.<br />
+&nbsp;&nbsp;wa_fieldcat-ref_tabname&nbsp;=&nbsp;'MARC'.<br />
+&nbsp;&nbsp;wa_fieldcat-col_pos&nbsp;=&nbsp;sum.<br />
+&nbsp;&nbsp;APPEND&nbsp;wa_fieldcat&nbsp;TO&nbsp;gt_fieldcat&nbsp;.<br />
+&nbsp;&nbsp;CLEAR:&nbsp;wa_fieldcat.<br />
+&nbsp;&nbsp;sum&nbsp;=&nbsp;sum&nbsp;+&nbsp;c_1.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;wa_fieldcat-fieldname&nbsp;=&nbsp;&nbsp;'BISMT'.<br />
+*&nbsp;&nbsp;wa_fieldcat-tabname&nbsp;=&nbsp;'TB_DISP1'.<br />
+*&nbsp;&nbsp;wa_fieldcat-ref_fieldname&nbsp;=&nbsp;'BISMT'.<br />
+*&nbsp;&nbsp;wa_fieldcat-ref_tabname&nbsp;=&nbsp;'MARA'.<br />
+*&nbsp;&nbsp;wa_fieldcat-col_pos&nbsp;=&nbsp;sum.<br />
+*&nbsp;&nbsp;APPEND&nbsp;wa_fieldcat&nbsp;TO&nbsp;gt_fieldcat&nbsp;.<br />
+*&nbsp;&nbsp;CLEAR:&nbsp;wa_fieldcat.<br />
+*&nbsp;&nbsp;sum&nbsp;=&nbsp;sum&nbsp;+&nbsp;c_1.<br />
+<br />
+<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;wa_fieldcat-fieldname&nbsp;=&nbsp;'MAKTX'.<br />
+&nbsp;&nbsp;wa_fieldcat-tabname&nbsp;=&nbsp;'TB_DISP1'.<br />
+&nbsp;&nbsp;wa_fieldcat-ref_fieldname&nbsp;=&nbsp;'MAKTX'.<br />
+&nbsp;&nbsp;wa_fieldcat-ref_tabname&nbsp;=&nbsp;'MAKT'.<br />
+&nbsp;&nbsp;wa_fieldcat-col_pos&nbsp;=&nbsp;sum.<br />
+&nbsp;&nbsp;APPEND&nbsp;wa_fieldcat&nbsp;TO&nbsp;gt_fieldcat&nbsp;.<br />
+&nbsp;&nbsp;CLEAR:&nbsp;wa_fieldcat.<br />
+&nbsp;&nbsp;sum&nbsp;=&nbsp;sum&nbsp;+&nbsp;c_1.<br />
+<br />
+&nbsp;&nbsp;wa_fieldcat-fieldname&nbsp;=&nbsp;'WERKS'.<br />
+&nbsp;&nbsp;wa_fieldcat-tabname&nbsp;=&nbsp;'TB_DISP1'.<br />
+&nbsp;&nbsp;wa_fieldcat-ref_fieldname&nbsp;=&nbsp;&nbsp;'WERKS'.<br />
+&nbsp;&nbsp;wa_fieldcat-ref_tabname&nbsp;=&nbsp;'MARC'.<br />
+&nbsp;&nbsp;wa_fieldcat-col_pos&nbsp;=&nbsp;sum.<br />
+&nbsp;&nbsp;APPEND&nbsp;wa_fieldcat&nbsp;TO&nbsp;gt_fieldcat&nbsp;.<br />
+&nbsp;&nbsp;CLEAR:&nbsp;wa_fieldcat.<br />
+&nbsp;&nbsp;sum&nbsp;=&nbsp;sum&nbsp;+&nbsp;c_1.<br />
+<br />
+&nbsp;&nbsp;wa_fieldcat-fieldname&nbsp;=&nbsp;'DAT00'.<br />
+&nbsp;&nbsp;wa_fieldcat-tabname&nbsp;=&nbsp;'TB_DISP1'.<br />
+&nbsp;&nbsp;wa_fieldcat-ref_fieldname&nbsp;=&nbsp;'DAT00'.<br />
+&nbsp;&nbsp;wa_fieldcat-ref_tabname&nbsp;=&nbsp;'MDEZ'.<br />
+&nbsp;&nbsp;wa_fieldcat-col_pos&nbsp;=&nbsp;sum.<br />
+&nbsp;&nbsp;APPEND&nbsp;wa_fieldcat&nbsp;TO&nbsp;gt_fieldcat&nbsp;.<br />
+&nbsp;&nbsp;CLEAR:&nbsp;wa_fieldcat.<br />
+&nbsp;&nbsp;sum&nbsp;=&nbsp;sum&nbsp;+&nbsp;c_1.<br />
+<br />
+&nbsp;&nbsp;wa_fieldcat-fieldname&nbsp;=&nbsp;'DELB0'.<br />
+&nbsp;&nbsp;wa_fieldcat-tabname&nbsp;=&nbsp;'TB_DISP1'.<br />
+&nbsp;&nbsp;wa_fieldcat-ref_fieldname&nbsp;=&nbsp;'DELB0'.<br />
+&nbsp;&nbsp;wa_fieldcat-ref_tabname&nbsp;=&nbsp;'MDEZ'.<br />
+&nbsp;&nbsp;wa_fieldcat-col_pos&nbsp;=&nbsp;sum.<br />
+&nbsp;&nbsp;APPEND&nbsp;wa_fieldcat&nbsp;TO&nbsp;gt_fieldcat&nbsp;.<br />
+&nbsp;&nbsp;CLEAR:&nbsp;wa_fieldcat.<br />
+&nbsp;&nbsp;sum&nbsp;=&nbsp;sum&nbsp;+&nbsp;c_1.<br />
+<br />
+&nbsp;&nbsp;wa_fieldcat-fieldname&nbsp;=&nbsp;'EXTRA'.<br />
+&nbsp;&nbsp;wa_fieldcat-tabname&nbsp;=&nbsp;'TB_DISP1'.<br />
+&nbsp;&nbsp;wa_fieldcat-ref_fieldname&nbsp;=&nbsp;'EXTRA'.<br />
+&nbsp;&nbsp;wa_fieldcat-ref_tabname&nbsp;=&nbsp;'MDEZ'.<br />
+&nbsp;&nbsp;wa_fieldcat-col_pos&nbsp;=&nbsp;sum.<br />
+&nbsp;&nbsp;APPEND&nbsp;wa_fieldcat&nbsp;TO&nbsp;gt_fieldcat&nbsp;.<br />
+&nbsp;&nbsp;CLEAR:&nbsp;wa_fieldcat.<br />
+&nbsp;&nbsp;sum&nbsp;=&nbsp;sum&nbsp;+&nbsp;c_1.<br />
+<br />
+&nbsp;&nbsp;wa_fieldcat-fieldname&nbsp;=&nbsp;'AUSKT'.<br />
+&nbsp;&nbsp;wa_fieldcat-tabname&nbsp;=&nbsp;'TB_DISP1'.<br />
+&nbsp;&nbsp;wa_fieldcat-ref_fieldname&nbsp;=&nbsp;'AUSKT'.<br />
+&nbsp;&nbsp;wa_fieldcat-ref_tabname&nbsp;=&nbsp;'MDEZ'.<br />
+&nbsp;&nbsp;wa_fieldcat-col_pos&nbsp;=&nbsp;sum.<br />
+&nbsp;&nbsp;APPEND&nbsp;wa_fieldcat&nbsp;TO&nbsp;gt_fieldcat&nbsp;.<br />
+&nbsp;&nbsp;CLEAR:&nbsp;wa_fieldcat.<br />
+&nbsp;&nbsp;sum&nbsp;=&nbsp;sum&nbsp;+&nbsp;c_1.<br />
+<br />
+&nbsp;&nbsp;wa_fieldcat-fieldname&nbsp;=&nbsp;'UMDAT'.<br />
+&nbsp;&nbsp;wa_fieldcat-tabname&nbsp;=&nbsp;'TB_DISP'.<br />
+&nbsp;&nbsp;wa_fieldcat-ref_fieldname&nbsp;=&nbsp;'UMDAT'.<br />
+&nbsp;&nbsp;wa_fieldcat-ref_tabname&nbsp;=&nbsp;'MDEZ'.<br />
+&nbsp;&nbsp;wa_fieldcat-col_pos&nbsp;=&nbsp;sum.<br />
+&nbsp;&nbsp;APPEND&nbsp;wa_fieldcat&nbsp;TO&nbsp;gt_fieldcat&nbsp;.<br />
+&nbsp;&nbsp;CLEAR:&nbsp;wa_fieldcat.<br />
+&nbsp;&nbsp;sum&nbsp;=&nbsp;sum&nbsp;+&nbsp;c_1.<br />
+<br />
+&nbsp;&nbsp;wa_fieldcat-fieldname&nbsp;=&nbsp;'MNG01'.<br />
+&nbsp;&nbsp;wa_fieldcat-tabname&nbsp;=&nbsp;'TB_DISP1'.<br />
+&nbsp;&nbsp;wa_fieldcat-ref_fieldname&nbsp;=&nbsp;'MNG01'.<br />
+&nbsp;&nbsp;wa_fieldcat-ref_tabname&nbsp;=&nbsp;'MDEZ'.<br />
+&nbsp;&nbsp;wa_fieldcat-col_pos&nbsp;=&nbsp;sum.<br />
+&nbsp;&nbsp;APPEND&nbsp;wa_fieldcat&nbsp;TO&nbsp;gt_fieldcat&nbsp;.<br />
+&nbsp;&nbsp;CLEAR:&nbsp;wa_fieldcat.<br />
+&nbsp;&nbsp;sum&nbsp;=&nbsp;sum&nbsp;+&nbsp;c_1.<br />
+<br />
+&nbsp;&nbsp;wa_fieldcat-fieldname&nbsp;=&nbsp;'MTART'.<br />
+&nbsp;&nbsp;wa_fieldcat-tabname&nbsp;=&nbsp;'TB_DISP1'.<br />
+&nbsp;&nbsp;wa_fieldcat-ref_fieldname&nbsp;=&nbsp;'MTART'.<br />
+&nbsp;&nbsp;wa_fieldcat-ref_tabname&nbsp;=&nbsp;'MARA'.<br />
+&nbsp;&nbsp;wa_fieldcat-col_pos&nbsp;=&nbsp;sum.<br />
+&nbsp;&nbsp;APPEND&nbsp;wa_fieldcat&nbsp;TO&nbsp;gt_fieldcat&nbsp;.<br />
+&nbsp;&nbsp;CLEAR:&nbsp;wa_fieldcat.<br />
+&nbsp;&nbsp;sum&nbsp;=&nbsp;sum&nbsp;+&nbsp;c_1.<br />
+<br />
+&nbsp;&nbsp;wa_fieldcat-fieldname&nbsp;=&nbsp;'MATKL'.<br />
+&nbsp;&nbsp;wa_fieldcat-tabname&nbsp;=&nbsp;'TB_DISP1'.<br />
+&nbsp;&nbsp;wa_fieldcat-ref_fieldname&nbsp;=&nbsp;'MATKL'.<br />
+&nbsp;&nbsp;wa_fieldcat-ref_tabname&nbsp;=&nbsp;'MARA'.<br />
+&nbsp;&nbsp;wa_fieldcat-col_pos&nbsp;=&nbsp;sum.<br />
+&nbsp;&nbsp;APPEND&nbsp;wa_fieldcat&nbsp;TO&nbsp;gt_fieldcat&nbsp;.<br />
+&nbsp;&nbsp;CLEAR:&nbsp;wa_fieldcat.<br />
+&nbsp;&nbsp;sum&nbsp;=&nbsp;sum&nbsp;+&nbsp;c_1.<br />
+<br />
+&nbsp;&nbsp;wa_fieldcat-fieldname&nbsp;=&nbsp;'MEINS'.<br />
+&nbsp;&nbsp;wa_fieldcat-tabname&nbsp;=&nbsp;'TB_DISP1'.<br />
+&nbsp;&nbsp;wa_fieldcat-ref_fieldname&nbsp;=&nbsp;'MEINS'.<br />
+&nbsp;&nbsp;wa_fieldcat-ref_tabname&nbsp;=&nbsp;'MARA'.<br />
+&nbsp;&nbsp;wa_fieldcat-col_pos&nbsp;=&nbsp;sum.<br />
+&nbsp;&nbsp;APPEND&nbsp;wa_fieldcat&nbsp;TO&nbsp;gt_fieldcat&nbsp;.<br />
+&nbsp;&nbsp;CLEAR:&nbsp;wa_fieldcat.<br />
+&nbsp;&nbsp;sum&nbsp;=&nbsp;sum&nbsp;+&nbsp;c_1.<br />
+<br />
+&nbsp;&nbsp;wa_fieldcat-fieldname&nbsp;=&nbsp;'DISMM'.<br />
+&nbsp;&nbsp;wa_fieldcat-tabname&nbsp;=&nbsp;'TB_DISP1'.<br />
+&nbsp;&nbsp;wa_fieldcat-ref_fieldname&nbsp;=&nbsp;'DISMM'.<br />
+&nbsp;&nbsp;wa_fieldcat-ref_tabname&nbsp;=&nbsp;'MARC'.<br />
+&nbsp;&nbsp;wa_fieldcat-col_pos&nbsp;=&nbsp;sum.<br />
+&nbsp;&nbsp;APPEND&nbsp;wa_fieldcat&nbsp;TO&nbsp;gt_fieldcat&nbsp;.<br />
+&nbsp;&nbsp;CLEAR:&nbsp;wa_fieldcat.<br />
+&nbsp;&nbsp;sum&nbsp;=&nbsp;sum&nbsp;+&nbsp;c_1.<br />
+<br />
+&nbsp;&nbsp;wa_fieldcat-fieldname&nbsp;=&nbsp;'BESKZ'.<br />
+&nbsp;&nbsp;wa_fieldcat-tabname&nbsp;=&nbsp;'TB_DISP1'.<br />
+&nbsp;&nbsp;wa_fieldcat-ref_fieldname&nbsp;=&nbsp;'BESKZ'.<br />
+&nbsp;&nbsp;wa_fieldcat-ref_tabname&nbsp;=&nbsp;'MARC'.<br />
+&nbsp;&nbsp;wa_fieldcat-col_pos&nbsp;=&nbsp;sum.<br />
+&nbsp;&nbsp;APPEND&nbsp;wa_fieldcat&nbsp;TO&nbsp;gt_fieldcat&nbsp;.<br />
+&nbsp;&nbsp;CLEAR:&nbsp;wa_fieldcat.<br />
+&nbsp;&nbsp;sum&nbsp;=&nbsp;sum&nbsp;+&nbsp;c_1.<br />
+<br />
+&nbsp;&nbsp;wa_fieldcat-fieldname&nbsp;=&nbsp;'SOBSL'.<br />
+&nbsp;&nbsp;wa_fieldcat-tabname&nbsp;=&nbsp;'TB_DISP1'.<br />
+&nbsp;&nbsp;wa_fieldcat-ref_fieldname&nbsp;=&nbsp;'SOBSL'.<br />
+&nbsp;&nbsp;wa_fieldcat-ref_tabname&nbsp;=&nbsp;'MARC'.<br />
+&nbsp;&nbsp;wa_fieldcat-col_pos&nbsp;=&nbsp;sum.<br />
+&nbsp;&nbsp;APPEND&nbsp;wa_fieldcat&nbsp;TO&nbsp;gt_fieldcat&nbsp;.<br />
+&nbsp;&nbsp;CLEAR:&nbsp;wa_fieldcat.<br />
+&nbsp;&nbsp;sum&nbsp;=&nbsp;sum&nbsp;+&nbsp;c_1.<br />
+<br />
+&nbsp;&nbsp;wa_fieldcat-fieldname&nbsp;=&nbsp;'DISPO'.<br />
+&nbsp;&nbsp;wa_fieldcat-tabname&nbsp;=&nbsp;'TB_DISP1'.<br />
+&nbsp;&nbsp;wa_fieldcat-ref_fieldname&nbsp;=&nbsp;'DISPO'.<br />
+&nbsp;&nbsp;wa_fieldcat-ref_tabname&nbsp;=&nbsp;'MARC'.<br />
+&nbsp;&nbsp;wa_fieldcat-col_pos&nbsp;=&nbsp;sum.<br />
+&nbsp;&nbsp;APPEND&nbsp;wa_fieldcat&nbsp;TO&nbsp;gt_fieldcat&nbsp;.<br />
+&nbsp;&nbsp;CLEAR:&nbsp;wa_fieldcat.<br />
+&nbsp;&nbsp;sum&nbsp;=&nbsp;sum&nbsp;+&nbsp;c_1.<br />
+<br />
+&nbsp;&nbsp;wa_fieldcat-fieldname&nbsp;=&nbsp;'EKGRP'.<br />
+&nbsp;&nbsp;wa_fieldcat-tabname&nbsp;=&nbsp;'TB_DISP1'.<br />
+&nbsp;&nbsp;wa_fieldcat-ref_fieldname&nbsp;=&nbsp;'EKGRP'.<br />
+&nbsp;&nbsp;wa_fieldcat-ref_tabname&nbsp;=&nbsp;'MARC'.<br />
+&nbsp;&nbsp;wa_fieldcat-col_pos&nbsp;=&nbsp;sum.<br />
+&nbsp;&nbsp;APPEND&nbsp;wa_fieldcat&nbsp;TO&nbsp;gt_fieldcat&nbsp;.<br />
+&nbsp;&nbsp;CLEAR:&nbsp;wa_fieldcat.<br />
+&nbsp;&nbsp;sum&nbsp;=&nbsp;sum&nbsp;+&nbsp;c_1.<br />
+<br />
+ENDFORM.                    "init_fieldcat<br />
+   </div>
+   <div class="codeComment">
+*&———————————————————————*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;xlist<br />
+*&———————————————————————*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*———————————————————————-*<br />
+*&nbsp;&nbsp;–&gt;&nbsp;&nbsp;p1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*&nbsp;&nbsp;&lt;–&nbsp;&nbsp;p2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*———————————————————————-*<br />
+   </div>
+   <div class="code">
+FORM xlist.<br />
+<br />
+&nbsp;&nbsp;v_repid&nbsp;=&nbsp;sy-repid.<br />
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'REUSE_ALV_GRID_DISPLAY'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_callback_pf_status_set&nbsp;=&nbsp;'PF_STATUS_SET'<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_callback_program&nbsp;=&nbsp;v_repid<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_callback_user_command&nbsp;&nbsp;=&nbsp;'USER_COMMAND'<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;is_layout&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;wa_layout<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it_fieldcat&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;gt_fieldcat<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it_events&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;t_events[]<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;TABLES<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;t_outtab&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;tb_disp1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;program_error&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTHERS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;2.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;&lt;&gt;&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;i000&nbsp;WITH&nbsp;TEXT-t14.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+ENDFORM.                    "list<br />
+<br />
+   </div>
+   <div class="codeComment">
+************************************************************************<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Start&nbsp;of&nbsp;ALV&nbsp;and&nbsp;FORMs&nbsp;for&nbsp;Generated&nbsp;PO&nbsp;and&nbsp;error&nbsp;log&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*<br />
+************************************************************************<br />
+<br />
+   </div>
+   <div class="code">
+FORM exc_matchcode USING ys_AUSKT.<br />
+<br />
+&nbsp;&nbsp;FREE:&nbsp;i_fields,&nbsp;i_values.<br />
+&nbsp;&nbsp;CLEAR&nbsp;i_fields.<br />
+&nbsp;&nbsp;i_fields-tabname&nbsp;=&nbsp;'T458A'.<br />
+&nbsp;&nbsp;i_fields-fieldname&nbsp;=&nbsp;'AUSKT'.<br />
+&nbsp;&nbsp;i_fields-selectflag&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;APPEND&nbsp;i_fields.<br />
+&nbsp;&nbsp;CLEAR&nbsp;i_fields.<br />
+&nbsp;&nbsp;i_fields-tabname&nbsp;=&nbsp;'T458B'.<br />
+&nbsp;&nbsp;i_fields-fieldname&nbsp;=&nbsp;'AUSLT'.<br />
+&nbsp;&nbsp;APPEND&nbsp;i_fields.<br />
+&nbsp;&nbsp;CLEAR&nbsp;i_fields.<br />
+&nbsp;&nbsp;i_fields-tabname&nbsp;=&nbsp;'T458A'.<br />
+&nbsp;&nbsp;i_fields-fieldname&nbsp;=&nbsp;'SELGP'.<br />
+&nbsp;&nbsp;APPEND&nbsp;i_fields.<br />
+&nbsp;&nbsp;CLEAR&nbsp;i_fields.<br />
+&nbsp;&nbsp;i_fields-tabname&nbsp;=&nbsp;'T458D'.<br />
+&nbsp;&nbsp;i_fields-fieldname&nbsp;=&nbsp;'TEXT40'.<br />
+&nbsp;&nbsp;APPEND&nbsp;i_fields.<br />
+&nbsp;&nbsp;CLEAR&nbsp;i_fields.<br />
+<br />
+&nbsp;&nbsp;SELECT&nbsp;a~auskt<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;c~auslt<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;a~selgp<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;b~text40<br />
+&nbsp;&nbsp;INTO&nbsp;CORRESPONDING&nbsp;FIELDS&nbsp;OF&nbsp;TABLE&nbsp;t_t458<br />
+&nbsp;&nbsp;FROM&nbsp;t458a&nbsp;AS&nbsp;a&nbsp;INNER&nbsp;JOIN&nbsp;t458d&nbsp;AS&nbsp;b<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ON&nbsp;a~selgp&nbsp;=&nbsp;b~selgp<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INNER&nbsp;JOIN&nbsp;t458b&nbsp;AS&nbsp;c<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ON&nbsp;a~aussl&nbsp;=&nbsp;c~aussl<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;c~spras&nbsp;=&nbsp;sy-langu&nbsp;AND&nbsp;b~spras&nbsp;=&nbsp;sy-langu.<br />
+<br />
+&nbsp;&nbsp;SORT&nbsp;t_T458&nbsp;ASCENDING&nbsp;BY&nbsp;auskt.<br />
+<br />
+&nbsp;&nbsp;DELETE&nbsp;ADJACENT&nbsp;DUPLICATES&nbsp;FROM&nbsp;t_t458&nbsp;COMPARING&nbsp;auskt.<br />
+<br />
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;t_T458.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;i_values-line&nbsp;=&nbsp;t_T458-auskt.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;i_values.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;i_values-line&nbsp;=&nbsp;t_T458-auslt.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;i_values.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;i_values-line&nbsp;=&nbsp;t_T458-selgp.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;i_values.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;i_values-line&nbsp;=&nbsp;t_T458-text40.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;i_values.<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'HELP_VALUES_GET_WITH_TABLE'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;title_in_values_list&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;TEXT-l00<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;titel&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;TEXT-l00<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;select_value&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ys_AUSKT<br />
+&nbsp;&nbsp;&nbsp;&nbsp;TABLES<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fields&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;i_fields<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;valuetab&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;i_values<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;field_not_in_ddic&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;01<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;more_then_one_selectfield&nbsp;=&nbsp;02<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;no_selectfield&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;03.<br />
+<br />
+ENDFORM.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*Text&nbsp;elements<br />
+*----------------------------------------------------------<br />
+*&nbsp;000&nbsp;例外信息<br />
+*&nbsp;001&nbsp;工厂/MRP区域<br />
+*&nbsp;002&nbsp;物料主数据<br />
+*&nbsp;003&nbsp;物料选择项<br />
+*&nbsp;R01&nbsp;根据物料选择<br />
+*&nbsp;R02&nbsp;根据供应商<br />
+*&nbsp;R03&nbsp;根据产品组<br />
+*&nbsp;R04&nbsp;根据生产版本<br />
+*&nbsp;T00&nbsp;供应商<br />
+*&nbsp;T01&nbsp;产品组<br />
+*&nbsp;T02&nbsp;产线/工作中心<br />
+*&nbsp;T03&nbsp;物料描述<br />
+*&nbsp;T04&nbsp;生产主管<br />
+*&nbsp;T05&nbsp;生产主管姓名<br />
+*&nbsp;T06&nbsp;生产版本<br />
+*&nbsp;T07&nbsp;基本开始日期<br />
+*&nbsp;T08&nbsp;基本完成日期<br />
+*&nbsp;T09&nbsp;总订单数量<br />
+*&nbsp;T10&nbsp;订单优先级<br />
+*&nbsp;T11&nbsp;优先级描述<br />
+*&nbsp;T12&nbsp;消息<br />
+*&nbsp;T13&nbsp;处理标识<br />
+*&nbsp;T14&nbsp;工厂<br />
+*&nbsp;T15&nbsp;订单类型<br />
+*&nbsp;T16&nbsp;订单编号<br />
+<br />
+<br />
+*Selection&nbsp;texts<br />
+*----------------------------------------------------------<br />
+*&nbsp;S_AUSKT&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;例外消息<br />
+*&nbsp;S_BERID&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MRP区域<br />
+*&nbsp;S_BESKZ&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;采购类型<br />
+*&nbsp;S_BISMT&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;图号<br />
+*&nbsp;S_DISMM&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MRP类型<br />
+*&nbsp;S_DISPO&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MRP控制者<br />
+*&nbsp;S_EKGRP&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;采购组<br />
+*&nbsp;S_LIFNR&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;供应商<br />
+*&nbsp;S_MAABC&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ABC标识<br />
+*&nbsp;S_MATKL&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;物料组<br />
+*&nbsp;S_MATNR&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;物料编码<br />
+*&nbsp;S_MDV01&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;产线/工作中心<br />
+*&nbsp;S_MMSTA&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;工厂状态<br />
+*&nbsp;S_PRGRP&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;产品组<br />
+*&nbsp;S_SELGP&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;例外消息组<br />
+*&nbsp;S_SOBSL&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;特殊采购类型<br />
+*&nbsp;S_WERKS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;工厂<br />
+<br />
+<br />
+*Messages<br />
+*----------------------------------------------------------<br />
+*<br />
+*&nbsp;Message&nbsp;class:&nbsp;61<br />
+*085&nbsp;&nbsp;&nbsp;对于此选择元素不存在<br />
+*<br />
+*&nbsp;Message&nbsp;class:&nbsp;ZMD<br />
+*000&nbsp;&nbsp;&nbsp;以下参数不能为空：<br />
+*001&nbsp;&nbsp;&nbsp;MRP区域未激活！<br />
+            </div>
+          </td>
+        </tr>
+      </table>
+      </td>
+      </tr>
+   <tr>
+<td class="footer">Extracted by Mass Download version 1.5.2 - E.G.Mellodew. 1998-2022. Sap Release 755</td>
+   </tr>
+</table>
+</body>
+</html>

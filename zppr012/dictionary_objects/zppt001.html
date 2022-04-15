@@ -1,0 +1,1227 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=GB2312" />
+<title>Dictionary object- ZPPT001</title>
+<style type="text/css">
+  th{text-align:left}
+  .cell{
+     font-family:"Courier New", Courier, monospace;
+     color:#000;
+     font-size:12px;
+     background-color:#F2F4F7;
+  }
+  .cell td { border: thin solid #ccc; }
+</style>
+<style type="text/css">
+  .normal{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px }
+  .footer{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; text-align: center }
+  h2{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+  h3{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:14px; font-weight:800 }
+  .outerTable{
+   background-color:#E0E7ED;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-right-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+  .innerTable{
+   background-color:#F2F4F7;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-bottom-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+</style>
+</head>
+<body>
+  <table class="outerTable">
+    <tr>
+      <td><h2>Table: ZPPT001</h2>
+  <h3>Description: 业务关键字段控制表</h3></td>
+    </tr>
+    <tr>
+      <td><!--This is where our main table begins  -->
+<table class="innerTable">
+<tr>
+  <th>Row</th>
+  <th>Field name</th>
+  <th>Position</th>
+  <th>Key</th>
+  <th>Data element</th>
+  <th>Domain</th>
+  <th>Datatype</th>
+  <th>Length</th>
+  <th>Lowercase</th>
+  <th>Domain text</th>
+</tr>
+<tr class="cell">
+  <td> 1</td>
+  <td>MANDT</td>
+  <td>1</td>
+  <td>X</td>
+  <td>MANDT</td>
+  <td>MANDT</td>
+  <td>CLNT</td>
+  <td>3</td>
+  <td>&nbsp;</td>
+  <td>集团</td>
+</tr>
+<tr class="cell">
+  <td> 2</td>
+  <td>ITEM</td>
+  <td>2</td>
+  <td>X</td>
+  <td>ZDEITEM</td>
+  <td>&nbsp;</td>
+  <td>NUMC</td>
+  <td>4</td>
+  <td>&nbsp;</td>
+  <td>行号</td>
+</tr>
+<tr class="cell">
+  <td> 3</td>
+  <td>WERKS</td>
+  <td>3</td>
+  <td>&nbsp;</td>
+  <td>WERKS_D</td>
+  <td>WERKS</td>
+  <td>CHAR</td>
+  <td>4</td>
+  <td>&nbsp;</td>
+  <td>工厂</td>
+</tr>
+<tr class="cell">
+  <td> 4</td>
+  <td>CTRCT</td>
+  <td>4</td>
+  <td>&nbsp;</td>
+  <td>ZDECTRCT</td>
+  <td>ZDECTRCT</td>
+  <td>CHAR</td>
+  <td>3</td>
+  <td>&nbsp;</td>
+  <td>控制类型</td>
+</tr>
+<tr class="cell">
+  <td> 5</td>
+  <td>MTART</td>
+  <td>5</td>
+  <td>&nbsp;</td>
+  <td>MTART</td>
+  <td>MTART</td>
+  <td>CHAR</td>
+  <td>4</td>
+  <td>&nbsp;</td>
+  <td>物料类型</td>
+</tr>
+<tr class="cell">
+  <td> 6</td>
+  <td>MATKL</td>
+  <td>6</td>
+  <td>&nbsp;</td>
+  <td>MATKL</td>
+  <td>MATKL</td>
+  <td>CHAR</td>
+  <td>9</td>
+  <td>&nbsp;</td>
+  <td>物料组</td>
+</tr>
+<tr class="cell">
+  <td> 7</td>
+  <td>EKGRP</td>
+  <td>7</td>
+  <td>&nbsp;</td>
+  <td>EKGRP</td>
+  <td>EKGRP</td>
+  <td>CHAR</td>
+  <td>3</td>
+  <td>&nbsp;</td>
+  <td>采购组</td>
+</tr>
+<tr class="cell">
+  <td> 8</td>
+  <td>DISPO</td>
+  <td>8</td>
+  <td>&nbsp;</td>
+  <td>DISPO</td>
+  <td>DISPO</td>
+  <td>CHAR</td>
+  <td>3</td>
+  <td>&nbsp;</td>
+  <td>物料需求计划控制员</td>
+</tr>
+<tr class="cell">
+  <td> 9</td>
+  <td>BSART</td>
+  <td>9</td>
+  <td>&nbsp;</td>
+  <td>BSART</td>
+  <td>BSART</td>
+  <td>CHAR</td>
+  <td>4</td>
+  <td>&nbsp;</td>
+  <td>订单类型（采购）</td>
+</tr>
+<tr class="cell">
+  <td>10</td>
+  <td>AUART</td>
+  <td>10</td>
+  <td>&nbsp;</td>
+  <td>AUFART</td>
+  <td>AUFART</td>
+  <td>CHAR</td>
+  <td>4</td>
+  <td>&nbsp;</td>
+  <td>订单类型</td>
+</tr>
+<tr class="cell">
+  <td>11</td>
+  <td>KTOKK</td>
+  <td>11</td>
+  <td>&nbsp;</td>
+  <td>KTOKK</td>
+  <td>KTOKK</td>
+  <td>CHAR</td>
+  <td>4</td>
+  <td>&nbsp;</td>
+  <td>供应商帐户组</td>
+</tr>
+<tr class="cell">
+  <td>12</td>
+  <td>CTGRY</td>
+  <td>12</td>
+  <td>&nbsp;</td>
+  <td>ZDECTG</td>
+  <td>ZDECTG</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>类别</td>
+</tr>
+<tr class="cell">
+  <td>13</td>
+  <td>BNAME</td>
+  <td>13</td>
+  <td>&nbsp;</td>
+  <td>UNAME</td>
+  <td>UNAME</td>
+  <td>CHAR</td>
+  <td>12</td>
+  <td>&nbsp;</td>
+  <td>用户名</td>
+</tr>
+<tr class="cell">
+  <td>14</td>
+  <td>KONTY</td>
+  <td>14</td>
+  <td>&nbsp;</td>
+  <td>KONTY</td>
+  <td>J_OBART_LD</td>
+  <td>CHAR</td>
+  <td>2</td>
+  <td>&nbsp;</td>
+  <td>科目分配种类</td>
+</tr>
+<tr class="cell">
+  <td>15</td>
+  <td>HKONT</td>
+  <td>15</td>
+  <td>&nbsp;</td>
+  <td>HKONT</td>
+  <td>SAKNR</td>
+  <td>CHAR</td>
+  <td>10</td>
+  <td>&nbsp;</td>
+  <td>总账科目</td>
+</tr>
+<tr class="cell">
+  <td>16</td>
+  <td>KOSTL</td>
+  <td>16</td>
+  <td>&nbsp;</td>
+  <td>KOSTL</td>
+  <td>KOSTL</td>
+  <td>CHAR</td>
+  <td>10</td>
+  <td>&nbsp;</td>
+  <td>成本中心</td>
+</tr>
+      </table>
+     </td>
+   </tr>
+<br/>
+  <table class="outerTable">
+    <tr>
+      <td><h2>Fixed Domain Values </h2>
+    </tr>
+    <tr>
+      <td><!--This is where our main table begins  -->
+<table class="innerTable">
+<tr>
+  <th>Domain Name</th>
+  <th>Value Low</th>
+  <th>Value High</th>
+  <th>Text</th>
+</tr>
+<tr class="cell">
+  <td>ZDECTRCT</td>
+  <td>X01</td>
+  <td>&nbsp;</td>
+  <td>物料类型</td>
+</tr>
+<tr class="cell">
+  <td>ZDECTRCT</td>
+  <td>X02</td>
+  <td>&nbsp;</td>
+  <td>物料组</td>
+</tr>
+<tr class="cell">
+  <td>ZDECTRCT</td>
+  <td>X03</td>
+  <td>&nbsp;</td>
+  <td>采购组</td>
+</tr>
+<tr class="cell">
+  <td>ZDECTRCT</td>
+  <td>X04</td>
+  <td>&nbsp;</td>
+  <td>MRP控制者</td>
+</tr>
+<tr class="cell">
+  <td>ZDECTRCT</td>
+  <td>X05</td>
+  <td>&nbsp;</td>
+  <td>采购订单类型</td>
+</tr>
+<tr class="cell">
+  <td>ZDECTRCT</td>
+  <td>X06</td>
+  <td>&nbsp;</td>
+  <td>生产订单类型</td>
+</tr>
+<tr class="cell">
+  <td>ZDECTRCT</td>
+  <td>X07</td>
+  <td>&nbsp;</td>
+  <td>供应商账户组</td>
+</tr>
+<tr class="cell">
+  <td>ZDECTRCT</td>
+  <td>X08</td>
+  <td>&nbsp;</td>
+  <td>零工维护权限</td>
+</tr>
+<tr class="cell">
+  <td>ZDECTRCT</td>
+  <td>X09</td>
+  <td>&nbsp;</td>
+  <td>结算规则控制</td>
+</tr>
+<tr class="cell">
+  <td>ZDECTRCT</td>
+  <td>X01</td>
+  <td>&nbsp;</td>
+  <td>物料类型</td>
+</tr>
+<tr class="cell">
+  <td>ZDECTRCT</td>
+  <td>X02</td>
+  <td>&nbsp;</td>
+  <td>物料组</td>
+</tr>
+<tr class="cell">
+  <td>ZDECTRCT</td>
+  <td>X03</td>
+  <td>&nbsp;</td>
+  <td>采购组</td>
+</tr>
+<tr class="cell">
+  <td>ZDECTRCT</td>
+  <td>X04</td>
+  <td>&nbsp;</td>
+  <td>MRP控制者</td>
+</tr>
+<tr class="cell">
+  <td>ZDECTRCT</td>
+  <td>X05</td>
+  <td>&nbsp;</td>
+  <td>采购订单类型</td>
+</tr>
+<tr class="cell">
+  <td>ZDECTRCT</td>
+  <td>X06</td>
+  <td>&nbsp;</td>
+  <td>生产订单类型</td>
+</tr>
+<tr class="cell">
+  <td>ZDECTRCT</td>
+  <td>X07</td>
+  <td>&nbsp;</td>
+  <td>供应商账户组</td>
+</tr>
+<tr class="cell">
+  <td>ZDECTRCT</td>
+  <td>X08</td>
+  <td>&nbsp;</td>
+  <td>零工维护权限</td>
+</tr>
+<tr class="cell">
+  <td>ZDECTRCT</td>
+  <td>X09</td>
+  <td>&nbsp;</td>
+  <td>结算规则控制</td>
+</tr>
+<tr class="cell">
+  <td>ZDECTRCT</td>
+  <td>X01</td>
+  <td>&nbsp;</td>
+  <td>物料类型</td>
+</tr>
+<tr class="cell">
+  <td>ZDECTRCT</td>
+  <td>X02</td>
+  <td>&nbsp;</td>
+  <td>物料组</td>
+</tr>
+<tr class="cell">
+  <td>ZDECTRCT</td>
+  <td>X03</td>
+  <td>&nbsp;</td>
+  <td>采购组</td>
+</tr>
+<tr class="cell">
+  <td>ZDECTRCT</td>
+  <td>X04</td>
+  <td>&nbsp;</td>
+  <td>MRP控制者</td>
+</tr>
+<tr class="cell">
+  <td>ZDECTRCT</td>
+  <td>X05</td>
+  <td>&nbsp;</td>
+  <td>采购订单类型</td>
+</tr>
+<tr class="cell">
+  <td>ZDECTRCT</td>
+  <td>X06</td>
+  <td>&nbsp;</td>
+  <td>生产订单类型</td>
+</tr>
+<tr class="cell">
+  <td>ZDECTRCT</td>
+  <td>X07</td>
+  <td>&nbsp;</td>
+  <td>供应商账户组</td>
+</tr>
+<tr class="cell">
+  <td>ZDECTRCT</td>
+  <td>X08</td>
+  <td>&nbsp;</td>
+  <td>零工维护权限</td>
+</tr>
+<tr class="cell">
+  <td>ZDECTRCT</td>
+  <td>X09</td>
+  <td>&nbsp;</td>
+  <td>结算规则控制</td>
+</tr>
+<tr class="cell">
+  <td>ZDECTRCT</td>
+  <td>X01</td>
+  <td>&nbsp;</td>
+  <td>物料类型</td>
+</tr>
+<tr class="cell">
+  <td>ZDECTRCT</td>
+  <td>X02</td>
+  <td>&nbsp;</td>
+  <td>物料组</td>
+</tr>
+<tr class="cell">
+  <td>ZDECTRCT</td>
+  <td>X03</td>
+  <td>&nbsp;</td>
+  <td>采购组</td>
+</tr>
+<tr class="cell">
+  <td>ZDECTRCT</td>
+  <td>X04</td>
+  <td>&nbsp;</td>
+  <td>MRP控制者</td>
+</tr>
+<tr class="cell">
+  <td>ZDECTRCT</td>
+  <td>X05</td>
+  <td>&nbsp;</td>
+  <td>采购订单类型</td>
+</tr>
+<tr class="cell">
+  <td>ZDECTRCT</td>
+  <td>X06</td>
+  <td>&nbsp;</td>
+  <td>生产订单类型</td>
+</tr>
+<tr class="cell">
+  <td>ZDECTRCT</td>
+  <td>X07</td>
+  <td>&nbsp;</td>
+  <td>供应商账户组</td>
+</tr>
+<tr class="cell">
+  <td>ZDECTRCT</td>
+  <td>X08</td>
+  <td>&nbsp;</td>
+  <td>零工维护权限</td>
+</tr>
+<tr class="cell">
+  <td>ZDECTRCT</td>
+  <td>X09</td>
+  <td>&nbsp;</td>
+  <td>结算规则控制</td>
+</tr>
+<tr class="cell">
+  <td>ZDECTRCT</td>
+  <td>X01</td>
+  <td>&nbsp;</td>
+  <td>物料类型</td>
+</tr>
+<tr class="cell">
+  <td>ZDECTRCT</td>
+  <td>X02</td>
+  <td>&nbsp;</td>
+  <td>物料组</td>
+</tr>
+<tr class="cell">
+  <td>ZDECTRCT</td>
+  <td>X03</td>
+  <td>&nbsp;</td>
+  <td>采购组</td>
+</tr>
+<tr class="cell">
+  <td>ZDECTRCT</td>
+  <td>X04</td>
+  <td>&nbsp;</td>
+  <td>MRP控制者</td>
+</tr>
+<tr class="cell">
+  <td>ZDECTRCT</td>
+  <td>X05</td>
+  <td>&nbsp;</td>
+  <td>采购订单类型</td>
+</tr>
+<tr class="cell">
+  <td>ZDECTRCT</td>
+  <td>X06</td>
+  <td>&nbsp;</td>
+  <td>生产订单类型</td>
+</tr>
+<tr class="cell">
+  <td>ZDECTRCT</td>
+  <td>X07</td>
+  <td>&nbsp;</td>
+  <td>供应商账户组</td>
+</tr>
+<tr class="cell">
+  <td>ZDECTRCT</td>
+  <td>X08</td>
+  <td>&nbsp;</td>
+  <td>零工维护权限</td>
+</tr>
+<tr class="cell">
+  <td>ZDECTRCT</td>
+  <td>X09</td>
+  <td>&nbsp;</td>
+  <td>结算规则控制</td>
+</tr>
+<tr class="cell">
+  <td>ZDECTRCT</td>
+  <td>X01</td>
+  <td>&nbsp;</td>
+  <td>物料类型</td>
+</tr>
+<tr class="cell">
+  <td>ZDECTRCT</td>
+  <td>X02</td>
+  <td>&nbsp;</td>
+  <td>物料组</td>
+</tr>
+<tr class="cell">
+  <td>ZDECTRCT</td>
+  <td>X03</td>
+  <td>&nbsp;</td>
+  <td>采购组</td>
+</tr>
+<tr class="cell">
+  <td>ZDECTRCT</td>
+  <td>X04</td>
+  <td>&nbsp;</td>
+  <td>MRP控制者</td>
+</tr>
+<tr class="cell">
+  <td>ZDECTRCT</td>
+  <td>X05</td>
+  <td>&nbsp;</td>
+  <td>采购订单类型</td>
+</tr>
+<tr class="cell">
+  <td>ZDECTRCT</td>
+  <td>X06</td>
+  <td>&nbsp;</td>
+  <td>生产订单类型</td>
+</tr>
+<tr class="cell">
+  <td>ZDECTRCT</td>
+  <td>X07</td>
+  <td>&nbsp;</td>
+  <td>供应商账户组</td>
+</tr>
+<tr class="cell">
+  <td>ZDECTRCT</td>
+  <td>X08</td>
+  <td>&nbsp;</td>
+  <td>零工维护权限</td>
+</tr>
+<tr class="cell">
+  <td>ZDECTRCT</td>
+  <td>X09</td>
+  <td>&nbsp;</td>
+  <td>结算规则控制</td>
+</tr>
+<tr class="cell">
+  <td>ZDECTRCT</td>
+  <td>X01</td>
+  <td>&nbsp;</td>
+  <td>物料类型</td>
+</tr>
+<tr class="cell">
+  <td>ZDECTRCT</td>
+  <td>X02</td>
+  <td>&nbsp;</td>
+  <td>物料组</td>
+</tr>
+<tr class="cell">
+  <td>ZDECTRCT</td>
+  <td>X03</td>
+  <td>&nbsp;</td>
+  <td>采购组</td>
+</tr>
+<tr class="cell">
+  <td>ZDECTRCT</td>
+  <td>X04</td>
+  <td>&nbsp;</td>
+  <td>MRP控制者</td>
+</tr>
+<tr class="cell">
+  <td>ZDECTRCT</td>
+  <td>X05</td>
+  <td>&nbsp;</td>
+  <td>采购订单类型</td>
+</tr>
+<tr class="cell">
+  <td>ZDECTRCT</td>
+  <td>X06</td>
+  <td>&nbsp;</td>
+  <td>生产订单类型</td>
+</tr>
+<tr class="cell">
+  <td>ZDECTRCT</td>
+  <td>X07</td>
+  <td>&nbsp;</td>
+  <td>供应商账户组</td>
+</tr>
+<tr class="cell">
+  <td>ZDECTRCT</td>
+  <td>X08</td>
+  <td>&nbsp;</td>
+  <td>零工维护权限</td>
+</tr>
+<tr class="cell">
+  <td>ZDECTRCT</td>
+  <td>X09</td>
+  <td>&nbsp;</td>
+  <td>结算规则控制</td>
+</tr>
+<tr class="cell">
+  <td>ZDECTRCT</td>
+  <td>X01</td>
+  <td>&nbsp;</td>
+  <td>物料类型</td>
+</tr>
+<tr class="cell">
+  <td>ZDECTRCT</td>
+  <td>X02</td>
+  <td>&nbsp;</td>
+  <td>物料组</td>
+</tr>
+<tr class="cell">
+  <td>ZDECTRCT</td>
+  <td>X03</td>
+  <td>&nbsp;</td>
+  <td>采购组</td>
+</tr>
+<tr class="cell">
+  <td>ZDECTRCT</td>
+  <td>X04</td>
+  <td>&nbsp;</td>
+  <td>MRP控制者</td>
+</tr>
+<tr class="cell">
+  <td>ZDECTRCT</td>
+  <td>X05</td>
+  <td>&nbsp;</td>
+  <td>采购订单类型</td>
+</tr>
+<tr class="cell">
+  <td>ZDECTRCT</td>
+  <td>X06</td>
+  <td>&nbsp;</td>
+  <td>生产订单类型</td>
+</tr>
+<tr class="cell">
+  <td>ZDECTRCT</td>
+  <td>X07</td>
+  <td>&nbsp;</td>
+  <td>供应商账户组</td>
+</tr>
+<tr class="cell">
+  <td>ZDECTRCT</td>
+  <td>X08</td>
+  <td>&nbsp;</td>
+  <td>零工维护权限</td>
+</tr>
+<tr class="cell">
+  <td>ZDECTRCT</td>
+  <td>X09</td>
+  <td>&nbsp;</td>
+  <td>结算规则控制</td>
+</tr>
+<tr class="cell">
+  <td>ZDECTRCT</td>
+  <td>X01</td>
+  <td>&nbsp;</td>
+  <td>物料类型</td>
+</tr>
+<tr class="cell">
+  <td>ZDECTRCT</td>
+  <td>X02</td>
+  <td>&nbsp;</td>
+  <td>物料组</td>
+</tr>
+<tr class="cell">
+  <td>ZDECTRCT</td>
+  <td>X03</td>
+  <td>&nbsp;</td>
+  <td>采购组</td>
+</tr>
+<tr class="cell">
+  <td>ZDECTRCT</td>
+  <td>X04</td>
+  <td>&nbsp;</td>
+  <td>MRP控制者</td>
+</tr>
+<tr class="cell">
+  <td>ZDECTRCT</td>
+  <td>X05</td>
+  <td>&nbsp;</td>
+  <td>采购订单类型</td>
+</tr>
+<tr class="cell">
+  <td>ZDECTRCT</td>
+  <td>X06</td>
+  <td>&nbsp;</td>
+  <td>生产订单类型</td>
+</tr>
+<tr class="cell">
+  <td>ZDECTRCT</td>
+  <td>X07</td>
+  <td>&nbsp;</td>
+  <td>供应商账户组</td>
+</tr>
+<tr class="cell">
+  <td>ZDECTRCT</td>
+  <td>X08</td>
+  <td>&nbsp;</td>
+  <td>零工维护权限</td>
+</tr>
+<tr class="cell">
+  <td>ZDECTRCT</td>
+  <td>X09</td>
+  <td>&nbsp;</td>
+  <td>结算规则控制</td>
+</tr>
+<tr class="cell">
+  <td>ZDECTG</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>帮忙类</td>
+</tr>
+<tr class="cell">
+  <td>ZDECTG</td>
+  <td>2</td>
+  <td>&nbsp;</td>
+  <td>车间现场类</td>
+</tr>
+<tr class="cell">
+  <td>ZDECTG</td>
+  <td>3</td>
+  <td>&nbsp;</td>
+  <td>培训及活动类</td>
+</tr>
+<tr class="cell">
+  <td>ZDECTG</td>
+  <td>4</td>
+  <td>&nbsp;</td>
+  <td>维修服务类</td>
+</tr>
+<tr class="cell">
+  <td>ZDECTG</td>
+  <td>5</td>
+  <td>&nbsp;</td>
+  <td>工装夹具制作</td>
+</tr>
+<tr class="cell">
+  <td>ZDECTG</td>
+  <td>6</td>
+  <td>&nbsp;</td>
+  <td>下地种菜类</td>
+</tr>
+<tr class="cell">
+  <td>ZDECTG</td>
+  <td>7</td>
+  <td>&nbsp;</td>
+  <td>产品返修精整类</td>
+</tr>
+<tr class="cell">
+  <td>ZDECTG</td>
+  <td>8</td>
+  <td>&nbsp;</td>
+  <td>设备地基预埋件等</td>
+</tr>
+<tr class="cell">
+  <td>ZDECTRCT</td>
+  <td>X01</td>
+  <td>&nbsp;</td>
+  <td>物料类型</td>
+</tr>
+<tr class="cell">
+  <td>ZDECTRCT</td>
+  <td>X02</td>
+  <td>&nbsp;</td>
+  <td>物料组</td>
+</tr>
+<tr class="cell">
+  <td>ZDECTRCT</td>
+  <td>X03</td>
+  <td>&nbsp;</td>
+  <td>采购组</td>
+</tr>
+<tr class="cell">
+  <td>ZDECTRCT</td>
+  <td>X04</td>
+  <td>&nbsp;</td>
+  <td>MRP控制者</td>
+</tr>
+<tr class="cell">
+  <td>ZDECTRCT</td>
+  <td>X05</td>
+  <td>&nbsp;</td>
+  <td>采购订单类型</td>
+</tr>
+<tr class="cell">
+  <td>ZDECTRCT</td>
+  <td>X06</td>
+  <td>&nbsp;</td>
+  <td>生产订单类型</td>
+</tr>
+<tr class="cell">
+  <td>ZDECTRCT</td>
+  <td>X07</td>
+  <td>&nbsp;</td>
+  <td>供应商账户组</td>
+</tr>
+<tr class="cell">
+  <td>ZDECTRCT</td>
+  <td>X08</td>
+  <td>&nbsp;</td>
+  <td>零工维护权限</td>
+</tr>
+<tr class="cell">
+  <td>ZDECTRCT</td>
+  <td>X09</td>
+  <td>&nbsp;</td>
+  <td>结算规则控制</td>
+</tr>
+<tr class="cell">
+  <td>ZDECTG</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>帮忙类</td>
+</tr>
+<tr class="cell">
+  <td>ZDECTG</td>
+  <td>2</td>
+  <td>&nbsp;</td>
+  <td>车间现场类</td>
+</tr>
+<tr class="cell">
+  <td>ZDECTG</td>
+  <td>3</td>
+  <td>&nbsp;</td>
+  <td>培训及活动类</td>
+</tr>
+<tr class="cell">
+  <td>ZDECTG</td>
+  <td>4</td>
+  <td>&nbsp;</td>
+  <td>维修服务类</td>
+</tr>
+<tr class="cell">
+  <td>ZDECTG</td>
+  <td>5</td>
+  <td>&nbsp;</td>
+  <td>工装夹具制作</td>
+</tr>
+<tr class="cell">
+  <td>ZDECTG</td>
+  <td>6</td>
+  <td>&nbsp;</td>
+  <td>下地种菜类</td>
+</tr>
+<tr class="cell">
+  <td>ZDECTG</td>
+  <td>7</td>
+  <td>&nbsp;</td>
+  <td>产品返修精整类</td>
+</tr>
+<tr class="cell">
+  <td>ZDECTG</td>
+  <td>8</td>
+  <td>&nbsp;</td>
+  <td>设备地基预埋件等</td>
+</tr>
+<tr class="cell">
+  <td>ZDECTRCT</td>
+  <td>X01</td>
+  <td>&nbsp;</td>
+  <td>物料类型</td>
+</tr>
+<tr class="cell">
+  <td>ZDECTRCT</td>
+  <td>X02</td>
+  <td>&nbsp;</td>
+  <td>物料组</td>
+</tr>
+<tr class="cell">
+  <td>ZDECTRCT</td>
+  <td>X03</td>
+  <td>&nbsp;</td>
+  <td>采购组</td>
+</tr>
+<tr class="cell">
+  <td>ZDECTRCT</td>
+  <td>X04</td>
+  <td>&nbsp;</td>
+  <td>MRP控制者</td>
+</tr>
+<tr class="cell">
+  <td>ZDECTRCT</td>
+  <td>X05</td>
+  <td>&nbsp;</td>
+  <td>采购订单类型</td>
+</tr>
+<tr class="cell">
+  <td>ZDECTRCT</td>
+  <td>X06</td>
+  <td>&nbsp;</td>
+  <td>生产订单类型</td>
+</tr>
+<tr class="cell">
+  <td>ZDECTRCT</td>
+  <td>X07</td>
+  <td>&nbsp;</td>
+  <td>供应商账户组</td>
+</tr>
+<tr class="cell">
+  <td>ZDECTRCT</td>
+  <td>X08</td>
+  <td>&nbsp;</td>
+  <td>零工维护权限</td>
+</tr>
+<tr class="cell">
+  <td>ZDECTRCT</td>
+  <td>X09</td>
+  <td>&nbsp;</td>
+  <td>结算规则控制</td>
+</tr>
+<tr class="cell">
+  <td>ZDECTG</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>帮忙类</td>
+</tr>
+<tr class="cell">
+  <td>ZDECTG</td>
+  <td>2</td>
+  <td>&nbsp;</td>
+  <td>车间现场类</td>
+</tr>
+<tr class="cell">
+  <td>ZDECTG</td>
+  <td>3</td>
+  <td>&nbsp;</td>
+  <td>培训及活动类</td>
+</tr>
+<tr class="cell">
+  <td>ZDECTG</td>
+  <td>4</td>
+  <td>&nbsp;</td>
+  <td>维修服务类</td>
+</tr>
+<tr class="cell">
+  <td>ZDECTG</td>
+  <td>5</td>
+  <td>&nbsp;</td>
+  <td>工装夹具制作</td>
+</tr>
+<tr class="cell">
+  <td>ZDECTG</td>
+  <td>6</td>
+  <td>&nbsp;</td>
+  <td>下地种菜类</td>
+</tr>
+<tr class="cell">
+  <td>ZDECTG</td>
+  <td>7</td>
+  <td>&nbsp;</td>
+  <td>产品返修精整类</td>
+</tr>
+<tr class="cell">
+  <td>ZDECTG</td>
+  <td>8</td>
+  <td>&nbsp;</td>
+  <td>设备地基预埋件等</td>
+</tr>
+<tr class="cell">
+  <td>ZDECTRCT</td>
+  <td>X01</td>
+  <td>&nbsp;</td>
+  <td>物料类型</td>
+</tr>
+<tr class="cell">
+  <td>ZDECTRCT</td>
+  <td>X02</td>
+  <td>&nbsp;</td>
+  <td>物料组</td>
+</tr>
+<tr class="cell">
+  <td>ZDECTRCT</td>
+  <td>X03</td>
+  <td>&nbsp;</td>
+  <td>采购组</td>
+</tr>
+<tr class="cell">
+  <td>ZDECTRCT</td>
+  <td>X04</td>
+  <td>&nbsp;</td>
+  <td>MRP控制者</td>
+</tr>
+<tr class="cell">
+  <td>ZDECTRCT</td>
+  <td>X05</td>
+  <td>&nbsp;</td>
+  <td>采购订单类型</td>
+</tr>
+<tr class="cell">
+  <td>ZDECTRCT</td>
+  <td>X06</td>
+  <td>&nbsp;</td>
+  <td>生产订单类型</td>
+</tr>
+<tr class="cell">
+  <td>ZDECTRCT</td>
+  <td>X07</td>
+  <td>&nbsp;</td>
+  <td>供应商账户组</td>
+</tr>
+<tr class="cell">
+  <td>ZDECTRCT</td>
+  <td>X08</td>
+  <td>&nbsp;</td>
+  <td>零工维护权限</td>
+</tr>
+<tr class="cell">
+  <td>ZDECTRCT</td>
+  <td>X09</td>
+  <td>&nbsp;</td>
+  <td>结算规则控制</td>
+</tr>
+<tr class="cell">
+  <td>ZDECTG</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>帮忙类</td>
+</tr>
+<tr class="cell">
+  <td>ZDECTG</td>
+  <td>2</td>
+  <td>&nbsp;</td>
+  <td>车间现场类</td>
+</tr>
+<tr class="cell">
+  <td>ZDECTG</td>
+  <td>3</td>
+  <td>&nbsp;</td>
+  <td>培训及活动类</td>
+</tr>
+<tr class="cell">
+  <td>ZDECTG</td>
+  <td>4</td>
+  <td>&nbsp;</td>
+  <td>维修服务类</td>
+</tr>
+<tr class="cell">
+  <td>ZDECTG</td>
+  <td>5</td>
+  <td>&nbsp;</td>
+  <td>工装夹具制作</td>
+</tr>
+<tr class="cell">
+  <td>ZDECTG</td>
+  <td>6</td>
+  <td>&nbsp;</td>
+  <td>下地种菜类</td>
+</tr>
+<tr class="cell">
+  <td>ZDECTG</td>
+  <td>7</td>
+  <td>&nbsp;</td>
+  <td>产品返修精整类</td>
+</tr>
+<tr class="cell">
+  <td>ZDECTG</td>
+  <td>8</td>
+  <td>&nbsp;</td>
+  <td>设备地基预埋件等</td>
+</tr>
+<tr class="cell">
+  <td>ZDECTRCT</td>
+  <td>X01</td>
+  <td>&nbsp;</td>
+  <td>物料类型</td>
+</tr>
+<tr class="cell">
+  <td>ZDECTRCT</td>
+  <td>X02</td>
+  <td>&nbsp;</td>
+  <td>物料组</td>
+</tr>
+<tr class="cell">
+  <td>ZDECTRCT</td>
+  <td>X03</td>
+  <td>&nbsp;</td>
+  <td>采购组</td>
+</tr>
+<tr class="cell">
+  <td>ZDECTRCT</td>
+  <td>X04</td>
+  <td>&nbsp;</td>
+  <td>MRP控制者</td>
+</tr>
+<tr class="cell">
+  <td>ZDECTRCT</td>
+  <td>X05</td>
+  <td>&nbsp;</td>
+  <td>采购订单类型</td>
+</tr>
+<tr class="cell">
+  <td>ZDECTRCT</td>
+  <td>X06</td>
+  <td>&nbsp;</td>
+  <td>生产订单类型</td>
+</tr>
+<tr class="cell">
+  <td>ZDECTRCT</td>
+  <td>X07</td>
+  <td>&nbsp;</td>
+  <td>供应商账户组</td>
+</tr>
+<tr class="cell">
+  <td>ZDECTRCT</td>
+  <td>X08</td>
+  <td>&nbsp;</td>
+  <td>零工维护权限</td>
+</tr>
+<tr class="cell">
+  <td>ZDECTRCT</td>
+  <td>X09</td>
+  <td>&nbsp;</td>
+  <td>结算规则控制</td>
+</tr>
+<tr class="cell">
+  <td>ZDECTG</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>帮忙类</td>
+</tr>
+<tr class="cell">
+  <td>ZDECTG</td>
+  <td>2</td>
+  <td>&nbsp;</td>
+  <td>车间现场类</td>
+</tr>
+<tr class="cell">
+  <td>ZDECTG</td>
+  <td>3</td>
+  <td>&nbsp;</td>
+  <td>培训及活动类</td>
+</tr>
+<tr class="cell">
+  <td>ZDECTG</td>
+  <td>4</td>
+  <td>&nbsp;</td>
+  <td>维修服务类</td>
+</tr>
+<tr class="cell">
+  <td>ZDECTG</td>
+  <td>5</td>
+  <td>&nbsp;</td>
+  <td>工装夹具制作</td>
+</tr>
+<tr class="cell">
+  <td>ZDECTG</td>
+  <td>6</td>
+  <td>&nbsp;</td>
+  <td>下地种菜类</td>
+</tr>
+<tr class="cell">
+  <td>ZDECTG</td>
+  <td>7</td>
+  <td>&nbsp;</td>
+  <td>产品返修精整类</td>
+</tr>
+<tr class="cell">
+  <td>ZDECTG</td>
+  <td>8</td>
+  <td>&nbsp;</td>
+  <td>设备地基预埋件等</td>
+</tr>
+      </table>
+     </td>
+   </tr>
+   <tr>
+<td class="footer">Extracted by Mass Download version 1.5.2 - E.G.Mellodew. 1998-2022. Sap Release 755</td>
+   </tr>
+</table>
+</body>
+</html>
