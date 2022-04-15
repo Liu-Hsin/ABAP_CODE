@@ -1,0 +1,161 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=GB2312" />
+<title>ZQMR0001</title>
+<style type="text/css">
+.code{ font-family:"Courier New", Courier, monospace; color:#000; font-size:14px; background-color:#F2F4F7 }
+  .codeComment {font-family:"Courier New", Courier, monospace; color:#0000F0; font-size:14px; background-color:#F2F4F7 }
+  .normalBold{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; font-weight:800 }
+  .normalBoldLarge{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+</style>
+<style type="text/css">
+  .normal{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px }
+  .footer{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; text-align: center }
+  h2{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+  h3{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:14px; font-weight:800 }
+  .outerTable{
+   background-color:#E0E7ED;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-right-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+  .innerTable{
+   background-color:#F2F4F7;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-bottom-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+</style>
+</head>
+<body>
+<table class="outerTable">
+  <tr class="normalBoldLarge">
+     <td><h2>Code listing for: ZQMR0001</h2>
+<h3> Description: 检验特性批导程序</h3></td>
+   </tr>
+  <tr>
+     <td>
+     <table class="innerTable">
+       <tr>
+          <td>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Report&nbsp;ZQMR0001<br />
+*&---------------------------------------------------------------------*<br />
+*&<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+REPORT zqmr0001 MESSAGE-ID zqm001.<br />
+<br />
+include <a href ="zqmr0001_top.html">zqmr0001_top</a>.<br />
+include <a href ="zqmr0001_sel.html">zqmr0001_sel</a>.<br />
+include <a href ="zqmr0001_frm.html">zqmr0001_frm</a>.<br />
+include <a href ="zqmr0001_i01.html">zqmr0001_i01</a>.<br />
+include <a href ="zqmr0001_o01.html">zqmr0001_o01</a>.<br />
+<br />
+<br />
+AT SELECTION-SCREEN ON VALUE-REQUEST FOR p_file.<br />
+<br />
+&nbsp;&nbsp;PERFORM&nbsp;frm_filename_find&nbsp;CHANGING&nbsp;p_file.<br />
+<br />
+INITIALIZATION.<br />
+&nbsp;&nbsp;sscrfields-functxt_01&nbsp;=&nbsp;TEXT-002.<br />
+<br />
+<br />
+AT SELECTION-SCREEN.<br />
+&nbsp;&nbsp;DATA:&nbsp;lv_template&nbsp;TYPE&nbsp;sy-tcode,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_tmp_name&nbsp;TYPE&nbsp;string.<br />
+&nbsp;&nbsp;CASE&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;p_rd1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_template&nbsp;=&nbsp;'ZQMR001'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_tmp_name&nbsp;=&nbsp;TEXT-003.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;p_rd2.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_template&nbsp;=&nbsp;'ZQMR001A'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_tmp_name&nbsp;=&nbsp;TEXT-007.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;OTHERS.<br />
+&nbsp;&nbsp;ENDCASE.<br />
+<br />
+&nbsp;&nbsp;CASE&nbsp;sscrfields-ucomm.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'FC01'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;NOT&nbsp;lv_template&nbsp;IS&nbsp;INITIAL&nbsp;AND&nbsp;lv_tmp_name&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;frm_download_template&nbsp;USING&nbsp;&nbsp;lv_tmp_name<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_template.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;ENDCASE.<br />
+<br />
+START-OF-SELECTION.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;p_file&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;s000&nbsp;WITH&nbsp;&nbsp;TEXT-004&nbsp;&nbsp;DISPLAY&nbsp;LIKE&nbsp;'E'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;LEAVE&nbsp;LIST-PROCESSING.<br />
+&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;PERFORM&nbsp;frm_excel_to_sap&nbsp;.<br />
+<br />
+&nbsp;&nbsp;DATA:&nbsp;lv_error.<br />
+&nbsp;&nbsp;PERFORM&nbsp;frm_check_data&nbsp;&nbsp;CHANGING&nbsp;lv_error.<br />
+&nbsp;&nbsp;IF&nbsp;lv_error&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;LEAVE&nbsp;LIST-PROCESSING.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+END-OF-SELECTION.<br />
+&nbsp;&nbsp;PERFORM&nbsp;frm_alv_display.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*GUI&nbsp;Texts<br />
+*----------------------------------------------------------<br />
+*&nbsp;ZTITLE_9000&nbsp;--&gt;&nbsp;检验计划批导程序<br />
+<br />
+*Text&nbsp;elements<br />
+*----------------------------------------------------------<br />
+*&nbsp;001&nbsp;选择条件<br />
+*&nbsp;002&nbsp;模板下载<br />
+*&nbsp;003&nbsp;定量-特性检验批导模板<br />
+*&nbsp;004&nbsp;文件名字段不能为空<br />
+*&nbsp;005&nbsp;导入模板为空，请维护数据！<br />
+*&nbsp;006&nbsp;模板数据已上载成功<br />
+*&nbsp;007&nbsp;定性-特性检验批导模板<br />
+<br />
+<br />
+*Selection&nbsp;texts<br />
+*----------------------------------------------------------<br />
+*&nbsp;P_FILE&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;批量导入<br />
+*&nbsp;P_RD1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;定量<br />
+*&nbsp;P_RD2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;定性<br />
+<br />
+<br />
+*Messages<br />
+*----------------------------------------------------------<br />
+*<br />
+*&nbsp;Message&nbsp;class:&nbsp;ZQM001<br />
+*000&nbsp;&nbsp;&nbsp;&&nbsp;&&nbsp;&&nbsp;&<br />
+*001&nbsp;&nbsp;&nbsp;模板标记的必输字段不能为空！<br />
+*002&nbsp;&nbsp;&nbsp;主文件检验特性&nbsp;&&nbsp;已经存在，请勿重复创建&nbsp;！<br />
+*005&nbsp;&nbsp;&nbsp;请先选定要处理的数据行<br />
+*020&nbsp;&nbsp;&nbsp;您没有&1&2的权限<br />
+            </div>
+          </td>
+        </tr>
+      </table>
+      </td>
+      </tr>
+   <tr>
+<td class="footer">Extracted by Mass Download version 1.5.2 - E.G.Mellodew. 1998-2022. Sap Release 755</td>
+   </tr>
+</table>
+</body>
+</html>

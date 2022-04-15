@@ -1,0 +1,1053 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=GB2312" />
+<title>ZQMT0002_FRM</title>
+<style type="text/css">
+.code{ font-family:"Courier New", Courier, monospace; color:#000; font-size:14px; background-color:#F2F4F7 }
+  .codeComment {font-family:"Courier New", Courier, monospace; color:#0000F0; font-size:14px; background-color:#F2F4F7 }
+  .normalBold{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; font-weight:800 }
+  .normalBoldLarge{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+</style>
+<style type="text/css">
+  .normal{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px }
+  .footer{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; text-align: center }
+  h2{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+  h3{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:14px; font-weight:800 }
+  .outerTable{
+   background-color:#E0E7ED;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-right-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+  .innerTable{
+   background-color:#F2F4F7;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-bottom-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+</style>
+</head>
+<body>
+<table class="outerTable">
+  <tr class="normalBoldLarge">
+     <td><h2>Code listing for: ZQMT0002_FRM</h2>
+<h3> Description: Include ZQMT0002_FRM</h3></td>
+   </tr>
+  <tr>
+     <td>
+     <table class="innerTable">
+       <tr>
+          <td>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;包含&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ZQMT0002_FRM<br />
+*&---------------------------------------------------------------------*<br />
+<br />
+   </div>
+   <div class="code">
+FORM frm_filename_find CHANGING xc_file.<br />
+<br />
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'WS_FILENAME_GET'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mask&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;',EXCEL&nbsp;FILE,*.XLS;*.XLSX;'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mode&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'O'&nbsp;"S为保存，O为打开<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;filename&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;xc_file<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;inv_winsys&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;no_batch&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;selection_cancel&nbsp;=&nbsp;3<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;selection_error&nbsp;&nbsp;=&nbsp;4<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTHERS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;5.<br />
+<br />
+<br />
+ENDFORM. " FRM_FILENAME_FIND<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;frm_download_template<br />
+*&---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM frm_download_template USING VALUE(pv_fname) TYPE string<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;VALUE(pv_objid).<br />
+<br />
+<br />
+&nbsp;&nbsp;DATA:&nbsp;lw_objdata&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;wwwdatatab,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lw_mime&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;w3mime,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"w_filename&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;string,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_fullpath&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;string&nbsp;VALUE&nbsp;'C:/TEMP/',<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_path&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;string&nbsp;VALUE&nbsp;'C:/TEMP/',<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_destination&nbsp;LIKE&nbsp;rlgrap-filename,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_objnam&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;string,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_rc&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;sy-subrc,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_errtxt&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;string,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_dest&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;sapb-sappfad,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_action&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;i.<br />
+<br />
+&nbsp;&nbsp;CALL&nbsp;METHOD&nbsp;cl_gui_frontend_services=&gt;file_save_dialog<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;window_title&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'下载导入模板'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;default_extension&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'XLS;XLSX'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;default_file_name&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;pv_fname<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;file_filter&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'EXCEL文件|*.XLSX;*.XLS'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CHANGING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;filename&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;pv_fname<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;path&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lv_path<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fullpath&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lv_fullpath<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;user_action&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lv_action<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cntl_error&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;error_no_gui&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;not_supported_by_gui&nbsp;=&nbsp;3<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTHERS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;4.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;=&nbsp;0&nbsp;AND&nbsp;lv_action&nbsp;EQ&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;lv_dest&nbsp;=&nbsp;lv_fullpath.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CONDENSE&nbsp;lv_objnam&nbsp;NO-GAPS.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;SINGLE&nbsp;relid<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;objid<br />
+&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;CORRESPONDING&nbsp;FIELDS&nbsp;OF&nbsp;lw_objdata<br />
+&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;wwwdata<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;srtf2&nbsp;=&nbsp;0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;relid&nbsp;=&nbsp;'MI'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;objid&nbsp;=&nbsp;pv_objid.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;NE&nbsp;0&nbsp;OR&nbsp;lw_objdata-objid&nbsp;EQ&nbsp;space.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CONCATENATE&nbsp;&nbsp;'模板文件'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_objnam<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'不存在'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;lv_errtxt.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;lv_errtxt&nbsp;TYPE&nbsp;'I'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;lv_destination&nbsp;=&nbsp;lv_dest.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'DOWNLOAD_WEB_OBJECT'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;key&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lw_objdata<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;destination&nbsp;=&nbsp;lv_destination<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rc&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lv_rc.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;lv_rc&nbsp;NE&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CONCATENATE&nbsp;'模板文件：'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_objnam<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'下载失败'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;lv_errtxt.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;lv_errtxt&nbsp;TYPE&nbsp;'E'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+ENDFORM. . "FRM_DOWNLOAD_TEMPLATE<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;frm_open_excel_file<br />
+*&---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&gt;IC_FILE&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM frm_open_excel_file USING ic_file.<br />
+   </div>
+   <div class="codeComment">
+*******数据定义*******<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;TYPE-POOLS:ole2.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"OLE声明<br />
+&nbsp;&nbsp;DATA:lo_excel&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;ole2_object,&nbsp;&nbsp;&nbsp;"EXCEL应用程序<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lo_workbooks&nbsp;TYPE&nbsp;ole2_object,&nbsp;&nbsp;&nbsp;"EXCEL文件窗口<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lo_workbook&nbsp;&nbsp;TYPE&nbsp;ole2_object,&nbsp;&nbsp;&nbsp;"EXCEL文件<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lo_sheet&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;ole2_object.&nbsp;&nbsp;&nbsp;"EXCEL&nbsp;文件的SHEET页<br />
+   </div>
+   <div class="codeComment">
+*******初始化*******<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;DATA:lc_file&nbsp;&nbsp;&nbsp;TYPE&nbsp;string,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lc_result&nbsp;TYPE&nbsp;c.&nbsp;"标识:&nbsp;空表示文件不存在;否则,表示存在<br />
+   </div>
+   <div class="codeComment">
+*******程序主体*******<br />
+**判断文件是否存在<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;lc_file&nbsp;=&nbsp;ic_file.<br />
+&nbsp;&nbsp;CLEAR&nbsp;lc_result.<br />
+&nbsp;&nbsp;CALL&nbsp;METHOD&nbsp;cl_gui_frontend_services=&gt;file_exist<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;file&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lc_file<br />
+&nbsp;&nbsp;&nbsp;&nbsp;RECEIVING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;result&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lc_result<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cntl_error&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;error_no_gui&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wrong_parameter&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;3<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;not_supported_by_gui&nbsp;=&nbsp;4<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTHERS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;5.<br />
+&nbsp;&nbsp;IF&nbsp;lc_result&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;e000&nbsp;WITH&nbsp;'指定的文件不存在！'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXIT.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+   </div>
+   <div class="codeComment">
+**打开EXCEL文件<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;CREATE&nbsp;OBJECT&nbsp;lo_excel&nbsp;'EXCEL.APPLICATION'.<br />
+&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;NE&nbsp;0&nbsp;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CREATE&nbsp;OBJECT&nbsp;lo_excel&nbsp;'ET.APPLICATION'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;NE&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;e000&nbsp;WITH&nbsp;'无法创建OLE&nbsp;OBJECT,请检查是否安装金山WPS或微软Office!'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;ENDIF&nbsp;.<br />
+&nbsp;&nbsp;CALL&nbsp;METHOD&nbsp;OF<br />
+&nbsp;&nbsp;&nbsp;&nbsp;lo_excel<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'WORKBOOKS'&nbsp;=&nbsp;lo_workbooks.<br />
+&nbsp;&nbsp;CALL&nbsp;METHOD&nbsp;OF<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lo_workbooks<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'OPEN'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lo_workbook<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ic_file.<br />
+&nbsp;&nbsp;CALL&nbsp;METHOD&nbsp;OF<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lo_workbook<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'WORKSHEETS'&nbsp;=&nbsp;lo_sheet<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;1.<br />
+<br />
+   </div>
+   <div class="codeComment">
+**&nbsp;&nbsp;SET&nbsp;PROPERTY&nbsp;OF&nbsp;WORKBOOK&nbsp;'SAVED'&nbsp;=&nbsp;1.<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;SET&nbsp;PROPERTY&nbsp;OF&nbsp;lo_excel&nbsp;'VISIBLE'&nbsp;=&nbsp;1.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;CALL&nbsp;METHOD&nbsp;OF&nbsp;WORKBOOK&nbsp;'SAVE'.<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;FREE&nbsp;OBJECT:<br />
+&nbsp;&nbsp;lo_excel,lo_workbooks,lo_workbook.&nbsp;&nbsp;&nbsp;",SHEET,RANGE,CELL.<br />
+<br />
+ENDFORM. " FRM_OPEN_EXCEL_FILE<br />
+<br />
+FORM frm_excel_to_sap .<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;p_file&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;s000&nbsp;WITH&nbsp;&nbsp;TEXT-004&nbsp;&nbsp;DISPLAY&nbsp;LIKE&nbsp;'E'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;LEAVE&nbsp;LIST-PROCESSING.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*******数据定义*******<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;FIELD-SYMBOLS:&lt;l_feld&gt;&nbsp;.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"文件的导入中用<br />
+&nbsp;&nbsp;DATA:&nbsp;lt_excel&nbsp;TYPE&nbsp;STANDARD&nbsp;TABLE&nbsp;OF&nbsp;alsmex_tabline,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lw_excel&nbsp;TYPE&nbsp;alsmex_tabline.<br />
+&nbsp;&nbsp;DATA:&nbsp;lv_col&nbsp;TYPE&nbsp;i,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"列号<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_row&nbsp;TYPE&nbsp;i.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"行号<br />
+<br />
+<br />
+&nbsp;&nbsp;lv_col&nbsp;=&nbsp;'25'.<br />
+<br />
+   </div>
+   <div class="codeComment">
+**从源文件中读取到的数据<br />
+<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;CLEAR:&nbsp;lt_excel.<br />
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'ALSM_EXCEL_TO_INTERNAL_TABLE'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;filename&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;p_file<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_begin_col&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_begin_row&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;5<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_end_col&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lv_col<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_end_row&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;65536<br />
+&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;iv_sheetidx&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lv_do_num<br />
+&nbsp;&nbsp;&nbsp;&nbsp;TABLES<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;intern&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lt_excel<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;inconsistent_parameters&nbsp;=&nbsp;1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;upload_ole&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTHERS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;3.<br />
+&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;&lt;&gt;&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;e000&nbsp;WITH&nbsp;'打开源文件失败！'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXIT.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+***将数据整理到内表中<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;DATA:&nbsp;lv_type&nbsp;TYPE&nbsp;tabname&nbsp;VALUE&nbsp;'TS_PLKO'.<br />
+&nbsp;&nbsp;SORT&nbsp;lt_excel&nbsp;BY&nbsp;row&nbsp;col.<br />
+&nbsp;&nbsp;PERFORM&nbsp;frm_excel_to_dyntable&nbsp;&nbsp;&nbsp;TABLES&nbsp;&nbsp;lt_excel[]<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;&nbsp;lv_type.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;NOT&nbsp;&lt;dyn_table&gt;[]&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;gt_plko&nbsp;=&nbsp;&lt;dyn_table&gt;.<br />
+&nbsp;&nbsp;ELSE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;s000&nbsp;DISPLAY&nbsp;LIKE&nbsp;'E'&nbsp;WITH&nbsp;TEXT-005.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;STOP.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+ENDFORM. "frm_excel_to_sap<br />
+<br />
+FORM frm_excel_to_dyntable  TABLES pt_excel TYPE tt_excel<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;VALUE(pv_type)&nbsp;TYPE&nbsp;tabname.<br />
+   </div>
+   <div class="codeComment">
+*创建动态表结构<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;CREATE&nbsp;DATA&nbsp;dyn_table&nbsp;TYPE&nbsp;TABLE&nbsp;OF&nbsp;(pv_type).<br />
+   </div>
+   <div class="codeComment">
+*创建动态内表<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;ASSIGN&nbsp;dyn_table-&gt;*&nbsp;TO&nbsp;&lt;dyn_table&gt;.<br />
+   </div>
+   <div class="codeComment">
+*创建动态工作区结构<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;CREATE&nbsp;DATA&nbsp;dyn_wa&nbsp;LIKE&nbsp;LINE&nbsp;OF&nbsp;&lt;dyn_table&gt;.<br />
+   </div>
+   <div class="codeComment">
+*创建动态工作区<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;ASSIGN&nbsp;dyn_wa-&gt;*&nbsp;TO&nbsp;&lt;dyn_wa&gt;.<br />
+<br />
+&nbsp;&nbsp;FIELD-SYMBOLS:&nbsp;&lt;l_feld&gt;.<br />
+&nbsp;&nbsp;DATA:&nbsp;lw_excel&nbsp;TYPE&nbsp;alsmex_tabline.<br />
+&nbsp;&nbsp;DATA:&nbsp;lv_col&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;i.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"列号<br />
+<br />
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;pt_excel&nbsp;INTO&nbsp;lw_excel.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;定位列<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR:&nbsp;lv_col.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;lv_col&nbsp;=&nbsp;lw_excel-col&nbsp;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ASSIGN&nbsp;COMPONENT&nbsp;lv_col&nbsp;OF&nbsp;STRUCTURE&nbsp;&lt;dyn_wa&gt;&nbsp;TO&nbsp;&lt;l_feld&gt;&nbsp;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;&lt;l_feld&gt;&nbsp;IS&nbsp;ASSIGNED.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;l_feld&gt;&nbsp;=&nbsp;lw_excel-value&nbsp;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;AT&nbsp;END&nbsp;OF&nbsp;row&nbsp;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;&lt;dyn_wa&gt;&nbsp;&nbsp;TO&nbsp;&lt;dyn_table&gt;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CLEAR:&nbsp;&lt;dyn_wa&gt;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDAT.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR:&nbsp;lw_excel.<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+ENDFORM. " FRM_EXCEL_TO_DYNTABLE<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;FRM_ALV_DISPLAY<br />
+*&---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;--&gt;&nbsp;&nbsp;p1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*&nbsp;&nbsp;&lt;--&nbsp;&nbsp;p2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM frm_alv_display .<br />
+<br />
+&nbsp;&nbsp;CALL&nbsp;SCREEN&nbsp;9000.<br />
+<br />
+ENDFORM. " FRM_ALV_DISPLAY<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;FRM_CREATE_ALV<br />
+*&---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&gt;P_GRID&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&gt;P_CONTAINER&nbsp;&nbsp;&nbsp;text<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&gt;PV_CONTAINER&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM frm_create_alv   USING p_grid TYPE REF TO cl_gui_alv_grid<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;p_container&nbsp;TYPE&nbsp;REF&nbsp;TO&nbsp;cl_gui_custom_container<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pv_container&nbsp;TYPE&nbsp;scrfname.<br />
+<br />
+&nbsp;&nbsp;CREATE&nbsp;OBJECT&nbsp;p_container<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;container_name&nbsp;=&nbsp;pv_container.<br />
+&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;&lt;&gt;&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;ID&nbsp;sy-msgid&nbsp;TYPE&nbsp;sy-msgty&nbsp;NUMBER&nbsp;sy-msgno<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WITH&nbsp;sy-msgv1&nbsp;sy-msgv2&nbsp;sy-msgv3&nbsp;sy-msgv4.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;CREATE&nbsp;OBJECT&nbsp;p_grid<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_parent&nbsp;=&nbsp;p_container.<br />
+<br />
+ENDFORM. " FRM_CREATE_ALV<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;FRM_REGISTER_EVENT<br />
+*&---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&gt;P_GRID&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM frm_register_event USING p_grid TYPE REF TO cl_gui_alv_grid.<br />
+<br />
+&nbsp;&nbsp;DATA:&nbsp;event_receiver&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;REF&nbsp;TO&nbsp;lcl_event_receiver.<br />
+&nbsp;&nbsp;CREATE&nbsp;OBJECT&nbsp;event_receiver.<br />
+<br />
+&nbsp;&nbsp;SET&nbsp;HANDLER&nbsp;event_receiver-&gt;handle_hotspot_click&nbsp;&nbsp;FOR&nbsp;p_grid.<br />
+<br />
+ENDFORM. " FRM_REGISTER_EVENT<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;FRM_BUILD_FIELDCAT<br />
+*&---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;--LT_FIELDCAT&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM frm_build_fieldcat CHANGING lt_fieldcat TYPE lvc_t_fcat.<br />
+<br />
+&nbsp;&nbsp;PERFORM&nbsp;frm_add_field&nbsp;USING&nbsp;lt_fieldcat&nbsp;'LIGHT'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'指示灯'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;''&nbsp;'X'&nbsp;''.<br />
+&nbsp;&nbsp;PERFORM&nbsp;frm_add_field&nbsp;USING&nbsp;lt_fieldcat&nbsp;'PLNNR'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'任务清单组'&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;''&nbsp;'X'&nbsp;'X'.<br />
+&nbsp;&nbsp;PERFORM&nbsp;frm_add_field&nbsp;USING&nbsp;lt_fieldcat&nbsp;'MATERIAL'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'物料'&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;''&nbsp;'X'&nbsp;''.<br />
+&nbsp;&nbsp;PERFORM&nbsp;frm_add_field&nbsp;USING&nbsp;lt_fieldcat&nbsp;'PLANT'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'工厂'&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;''&nbsp;'X'&nbsp;''.<br />
+&nbsp;&nbsp;PERFORM&nbsp;frm_add_field&nbsp;USING&nbsp;lt_fieldcat&nbsp;'ACTIVITY'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'工序'&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;''&nbsp;'X'&nbsp;''.<br />
+&nbsp;&nbsp;PERFORM&nbsp;frm_add_field&nbsp;USING&nbsp;lt_fieldcat&nbsp;'USAGE'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'用途'&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;''&nbsp;'X'&nbsp;''.<br />
+&nbsp;&nbsp;PERFORM&nbsp;frm_add_field&nbsp;USING&nbsp;lt_fieldcat&nbsp;'STATUS'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'状态'&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;''&nbsp;'X'&nbsp;''.<br />
+&nbsp;&nbsp;PERFORM&nbsp;frm_add_field&nbsp;USING&nbsp;lt_fieldcat&nbsp;'CONTROL_KEY'&nbsp;&nbsp;'控制码'&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;''&nbsp;''&nbsp;''.<br />
+&nbsp;&nbsp;PERFORM&nbsp;frm_add_field&nbsp;USING&nbsp;lt_fieldcat&nbsp;'DESCRIPTION'&nbsp;&nbsp;'工序说明'&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;''&nbsp;''&nbsp;''.<br />
+&nbsp;&nbsp;PERFORM&nbsp;frm_add_field&nbsp;USING&nbsp;lt_fieldcat&nbsp;'INSPCHAR'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'检验特征编号'&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;''&nbsp;''&nbsp;''.<br />
+&nbsp;&nbsp;PERFORM&nbsp;frm_add_field&nbsp;USING&nbsp;lt_fieldcat&nbsp;'MSTR_CHAR'&nbsp;&nbsp;&nbsp;&nbsp;'主检验特性'&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;''&nbsp;''&nbsp;''.<br />
+&nbsp;&nbsp;PERFORM&nbsp;frm_add_field&nbsp;USING&nbsp;lt_fieldcat&nbsp;'PMSTR_CHAR'&nbsp;&nbsp;&nbsp;'工厂'&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;''&nbsp;''&nbsp;''.<br />
+&nbsp;&nbsp;PERFORM&nbsp;frm_add_field&nbsp;USING&nbsp;lt_fieldcat&nbsp;'CHAR_DESCR'&nbsp;&nbsp;&nbsp;'检验特性的短文本'&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;''&nbsp;''&nbsp;''.<br />
+&nbsp;&nbsp;PERFORM&nbsp;frm_add_field&nbsp;USING&nbsp;lt_fieldcat&nbsp;'METHOD'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'检验方法'&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;''&nbsp;''&nbsp;''.<br />
+&nbsp;&nbsp;PERFORM&nbsp;frm_add_field&nbsp;USING&nbsp;lt_fieldcat&nbsp;'PMETHOD'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'检验方法的工厂'&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;''&nbsp;''&nbsp;''.<br />
+&nbsp;&nbsp;PERFORM&nbsp;frm_add_field&nbsp;USING&nbsp;lt_fieldcat&nbsp;'DEC_PLACES'&nbsp;&nbsp;&nbsp;'小数位'&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;''&nbsp;''&nbsp;''.<br />
+&nbsp;&nbsp;PERFORM&nbsp;frm_add_field&nbsp;USING&nbsp;lt_fieldcat&nbsp;'MEAS_UNIT'&nbsp;&nbsp;&nbsp;&nbsp;'计量单位'&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;''&nbsp;''&nbsp;''.<br />
+&nbsp;&nbsp;PERFORM&nbsp;frm_add_field&nbsp;USING&nbsp;lt_fieldcat&nbsp;'LW_TOL_LMT'&nbsp;&nbsp;&nbsp;'下限值'&nbsp;&nbsp;&nbsp;&nbsp;'QPMK'&nbsp;'TOLERANZUN'&nbsp;''&nbsp;''.<br />
+&nbsp;&nbsp;PERFORM&nbsp;frm_add_field&nbsp;USING&nbsp;lt_fieldcat&nbsp;'TARGET_VAL'&nbsp;&nbsp;&nbsp;'目标值'&nbsp;&nbsp;&nbsp;&nbsp;'QPMK'&nbsp;'SOLLWERT'&nbsp;''&nbsp;''.<br />
+&nbsp;&nbsp;PERFORM&nbsp;frm_add_field&nbsp;USING&nbsp;lt_fieldcat&nbsp;'UP_TOL_LMT'&nbsp;&nbsp;&nbsp;'上限值'&nbsp;&nbsp;&nbsp;&nbsp;'QPMK'&nbsp;'TOLERANZOB'&nbsp;''&nbsp;''.<br />
+&nbsp;&nbsp;PERFORM&nbsp;frm_add_field&nbsp;USING&nbsp;lt_fieldcat&nbsp;'SMPL_PROCEDURE'&nbsp;&nbsp;'采样过程'&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;''&nbsp;''&nbsp;''.<br />
+&nbsp;&nbsp;PERFORM&nbsp;frm_add_field&nbsp;USING&nbsp;lt_fieldcat&nbsp;'SMPL_UNIT'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'采样计量单位'&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;''&nbsp;''&nbsp;''.<br />
+&nbsp;&nbsp;PERFORM&nbsp;frm_add_field&nbsp;USING&nbsp;lt_fieldcat&nbsp;'SMPL_QUANT'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'基本采样数'&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;''&nbsp;''&nbsp;''.<br />
+<br />
+&nbsp;&nbsp;PERFORM&nbsp;frm_add_field&nbsp;USING&nbsp;lt_fieldcat&nbsp;'MESSAGE'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'消息'&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;''&nbsp;''&nbsp;''.<br />
+<br />
+ENDFORM. "BUILD_FIELDCAT<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;FRM_ADD_FIELD<br />
+*&---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&gt;PT_FIELDCAT&nbsp;&nbsp;&nbsp;text<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&gt;PV_FIELDNAME&nbsp;&nbsp;text<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&gt;PV_TEXTL&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&gt;PV_TABLE&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&gt;PV_FIELD&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&gt;PV_KEY&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&gt;PV_HOTSPT&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM frm_add_field USING pt_fieldcat TYPE lvc_t_fcat<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pv_fieldname&nbsp;TYPE&nbsp;lvc_fname<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pv_textl&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;scrtext_l<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pv_table&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;lvc_rtname<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pv_field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;lvc_rfname<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"PV_ZERO&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;NO_ZERO<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pv_key&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;lvc_key<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;PV_SUM&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;LVC_DOSUM<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pv_hotspt&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;lvc_hotspt.<br />
+<br />
+&nbsp;&nbsp;DATA:&nbsp;lw_fcat&nbsp;TYPE&nbsp;lvc_s_fcat.<br />
+<br />
+&nbsp;&nbsp;lw_fcat-fieldname&nbsp;&nbsp;=&nbsp;pv_fieldname.<br />
+&nbsp;&nbsp;lw_fcat-scrtext_l&nbsp;&nbsp;=&nbsp;pv_textl.<br />
+&nbsp;&nbsp;lw_fcat-ref_table&nbsp;&nbsp;=&nbsp;pv_table.<br />
+&nbsp;&nbsp;lw_fcat-ref_field&nbsp;&nbsp;=&nbsp;pv_field.<br />
+&nbsp;&nbsp;"LW_FCAT-NO_ZERO&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;PV_ZERO.<br />
+&nbsp;&nbsp;lw_fcat-key&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;pv_key.<br />
+&nbsp;&nbsp;lw_fcat-hotspot&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;pv_hotspt.<br />
+&nbsp;&nbsp;lw_fcat-colddictxt&nbsp;=&nbsp;'L'.<br />
+&nbsp;&nbsp;IF&nbsp;pv_fieldname&nbsp;=&nbsp;'LIGHT'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;lw_fcat-icon&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;APPEND&nbsp;lw_fcat&nbsp;TO&nbsp;pt_fieldcat.<br />
+<br />
+ENDFORM. "FRM_ADD_FIELD<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;FRM_PREPARE_LAYOUT_0100<br />
+*&---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;--P_LS_LAYOUT&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM frm_prepare_layout_alv CHANGING cs_layout TYPE lvc_s_layo.<br />
+&nbsp;&nbsp;cs_layout-cwidth_opt&nbsp;=&nbsp;'X'&nbsp;.<br />
+&nbsp;&nbsp;cs_layout-zebra&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'X'&nbsp;.<br />
+&nbsp;&nbsp;cs_layout-sel_mode&nbsp;&nbsp;&nbsp;=&nbsp;'D'&nbsp;.<br />
+ENDFORM. " FRM_PREPARE_LAYOUT_0100<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;FRM_EXCLUDE_FUNCTIONS_0100<br />
+*&---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;--P_LT_EXCLUDE&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM frm_exclude_functions_0100 CHANGING ct_exclude TYPE ui_functions.<br />
+<br />
+&nbsp;&nbsp;DATA:&nbsp;lw_exclude&nbsp;TYPE&nbsp;ui_func.<br />
+<br />
+&nbsp;&nbsp;lw_exclude&nbsp;=&nbsp;cl_gui_alv_grid=&gt;mc_fc_loc_delete_row.&nbsp;&nbsp;&nbsp;&nbsp;"删除行<br />
+&nbsp;&nbsp;APPEND&nbsp;lw_exclude&nbsp;TO&nbsp;ct_exclude.<br />
+&nbsp;&nbsp;lw_exclude&nbsp;=&nbsp;cl_gui_alv_grid=&gt;mc_fc_loc_append_row.&nbsp;&nbsp;&nbsp;&nbsp;"增加行<br />
+&nbsp;&nbsp;APPEND&nbsp;lw_exclude&nbsp;TO&nbsp;ct_exclude.<br />
+&nbsp;&nbsp;lw_exclude&nbsp;=&nbsp;cl_gui_alv_grid=&gt;mc_fc_loc_insert_row.&nbsp;&nbsp;&nbsp;&nbsp;"插入行<br />
+&nbsp;&nbsp;APPEND&nbsp;lw_exclude&nbsp;TO&nbsp;ct_exclude.<br />
+&nbsp;&nbsp;lw_exclude&nbsp;=&nbsp;cl_gui_alv_grid=&gt;mc_fc_loc_copy_row.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"复制行<br />
+&nbsp;&nbsp;APPEND&nbsp;lw_exclude&nbsp;TO&nbsp;ct_exclude.<br />
+&nbsp;&nbsp;lw_exclude&nbsp;=&nbsp;cl_gui_alv_grid=&gt;mc_fc_loc_copy.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"复制<br />
+&nbsp;&nbsp;APPEND&nbsp;lw_exclude&nbsp;TO&nbsp;ct_exclude.<br />
+&nbsp;&nbsp;lw_exclude&nbsp;=&nbsp;cl_gui_alv_grid=&gt;mc_fc_loc_cut.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"剪切<br />
+&nbsp;&nbsp;APPEND&nbsp;lw_exclude&nbsp;TO&nbsp;ct_exclude.<br />
+&nbsp;&nbsp;lw_exclude&nbsp;=&nbsp;cl_gui_alv_grid=&gt;mc_fc_loc_paste.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"粘贴<br />
+&nbsp;&nbsp;APPEND&nbsp;lw_exclude&nbsp;TO&nbsp;ct_exclude.<br />
+&nbsp;&nbsp;lw_exclude&nbsp;=&nbsp;cl_gui_alv_grid=&gt;mc_fc_loc_paste_new_row.&nbsp;"粘贴新行<br />
+&nbsp;&nbsp;APPEND&nbsp;lw_exclude&nbsp;TO&nbsp;ct_exclude.<br />
+&nbsp;&nbsp;lw_exclude&nbsp;=&nbsp;cl_gui_alv_grid=&gt;mc_fc_loc_undo.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"恢复<br />
+&nbsp;&nbsp;APPEND&nbsp;lw_exclude&nbsp;TO&nbsp;ct_exclude.<br />
+<br />
+ENDFORM. " FRM_EXCLUDE_FUNCTIONS_0100<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;FRM_REFRESH_ALV<br />
+*&---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&gt;P_G_GRID&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM frm_refresh_alv USING pr_alv TYPE REF TO cl_gui_alv_grid.<br />
+<br />
+&nbsp;&nbsp;DATA:&nbsp;ls_stable&nbsp;TYPE&nbsp;&nbsp;&nbsp;lvc_s_stbl.<br />
+   </div>
+   <div class="codeComment">
+*刷新alv<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;CHECK&nbsp;pr_alv&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+&nbsp;&nbsp;ls_stable-row&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;ls_stable-col&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;CALL&nbsp;METHOD&nbsp;pr_alv-&gt;refresh_table_display<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;is_stable&nbsp;=&nbsp;ls_stable.<br />
+<br />
+ENDFORM. " FRM_REFRESH_ALV<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;FRM_ALV_OUTPUT<br />
+*&---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&gt;P_GT_OUT&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM frm_alv_output TABLES pt_out<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pt_fcat&nbsp;TYPE&nbsp;lvc_t_fcat<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pt_sort&nbsp;TYPE&nbsp;lvc_t_sort<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;&nbsp;p_grid&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;REF&nbsp;TO&nbsp;cl_gui_alv_grid<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ps_layout&nbsp;&nbsp;TYPE&nbsp;lvc_s_layo.<br />
+<br />
+<br />
+<br />
+&nbsp;&nbsp;DATA:ls_variant&nbsp;TYPE&nbsp;disvariant.<br />
+<br />
+&nbsp;&nbsp;ls_variant-report&nbsp;=&nbsp;&nbsp;sy-repid.<br />
+<br />
+&nbsp;&nbsp;CALL&nbsp;METHOD&nbsp;p_grid-&gt;set_table_for_first_display<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;is_layout&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ps_layout<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"IT_TOOLBAR_EXCLUDING&nbsp;=&nbsp;GT_EXCLUDE<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_save&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'A'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;is_variant&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_variant<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CHANGING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it_fieldcatalog&nbsp;=&nbsp;pt_fcat[]<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it_outtab&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;pt_out[]<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it_sort&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;pt_sort[].<br />
+<br />
+ENDFORM. " FRM_ALV_OUTPUT<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Form&nbsp;frm_save_data<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;text<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;--&gt;&nbsp;&nbsp;p1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*&&nbsp;&lt;--&nbsp;&nbsp;p2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM frm_inspectionplan_create .<br />
+<br />
+&nbsp;&nbsp;DATA:&nbsp;lt_task&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;STANDARD&nbsp;TABLE&nbsp;OF&nbsp;bapi1191_tsk_c,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_task&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;bapi1191_tsk_c,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lt_materialtaskallocation&nbsp;TYPE&nbsp;STANDARD&nbsp;TABLE&nbsp;OF&nbsp;bapi1191_mtk_c,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_materialtaskallocation&nbsp;TYPE&nbsp;bapi1191_mtk_c,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lt_operation&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;STANDARD&nbsp;TABLE&nbsp;OF&nbsp;bapi1191_opr_c,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_operation&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;bapi1191_opr_c,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lt_inspcharacteristic&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;STANDARD&nbsp;TABLE&nbsp;OF&nbsp;bapi1191_cha_c,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_inspcharacteristic&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;bapi1191_cha_c.<br />
+&nbsp;&nbsp;DATA:&nbsp;lv_group&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;plnnr,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_groupcounter&nbsp;TYPE&nbsp;plnal.<br />
+&nbsp;&nbsp;DATA:&nbsp;lt_return&nbsp;TYPE&nbsp;STANDARD&nbsp;TABLE&nbsp;OF&nbsp;bapiret2,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_return&nbsp;TYPE&nbsp;bapiret2.<br />
+&nbsp;&nbsp;DATA:&nbsp;lt_plmk&nbsp;TYPE&nbsp;tt_plko,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lt_alv&nbsp;&nbsp;TYPE&nbsp;tt_alv.<br />
+&nbsp;&nbsp;DATA:&nbsp;lv_msg(500).<br />
+<br />
+<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*******QP01<br />
+****物料描述<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;lt_plmk&nbsp;=&nbsp;gt_plko.<br />
+&nbsp;&nbsp;SORT&nbsp;lt_plmk&nbsp;BY&nbsp;material.<br />
+&nbsp;&nbsp;DELETE&nbsp;ADJACENT&nbsp;DUPLICATES&nbsp;FROM&nbsp;lt_plmk&nbsp;COMPARING&nbsp;material.<br />
+&nbsp;&nbsp;IF&nbsp;NOT&nbsp;lt_plmk&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;*&nbsp;INTO&nbsp;TABLE&nbsp;@DATA(lt_makt)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;makt&nbsp;FOR&nbsp;ALL&nbsp;ENTRIES&nbsp;IN&nbsp;@lt_plmk<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;matnr&nbsp;=&nbsp;@lt_plmk-material<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;spras&nbsp;=&nbsp;@sy-langu.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+<br />
+&nbsp;&nbsp;lt_alv&nbsp;=&nbsp;gt_alv.<br />
+&nbsp;&nbsp;SORT&nbsp;lt_alv&nbsp;BY&nbsp;&nbsp;material<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;plant<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;usage.<br />
+&nbsp;&nbsp;DELETE&nbsp;ADJACENT&nbsp;DUPLICATES&nbsp;FROM&nbsp;lt_alv&nbsp;COMPARING&nbsp;material<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;plant<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;usage.<br />
+&nbsp;&nbsp;CLEAR:&nbsp;lt_plmk.<br />
+&nbsp;&nbsp;lt_plmk&nbsp;=&nbsp;gt_plko.<br />
+&nbsp;&nbsp;SORT&nbsp;lt_plmk&nbsp;BY&nbsp;material&nbsp;plant&nbsp;usage.<br />
+<br />
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;lt_alv&nbsp;INTO&nbsp;DATA(ls_plko)&nbsp;WHERE&nbsp;sel&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;CREATE-BAPI&nbsp;中的任务清单抬头数据用于检验计划*<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_task-valid_from&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;sy-datum.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;有效起始日期*<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_task-valid_to_date&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'99991231'.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;有效截止日期<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_task-task_list_usage&nbsp;&nbsp;=&nbsp;ls_plko-usage.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;用途<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_task-task_list_status&nbsp;=&nbsp;ls_plko-status.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;状态<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_task-lot_size_from&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'0'.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;从批量<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_task-lot_size_to&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'9999999999'.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;到批量<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_task-plant&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_plko-plant.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;工厂<br />
+   </div>
+   <div class="codeComment">
+*********20210531&nbsp;by&nbsp;XX-ABAP01&nbsp;*******根据工序来创建***START*****************<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;ls_task-ident_key&nbsp;=&nbsp;ls_plko-slwbez.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"检验点<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_task-task_measure_unit&nbsp;=&nbsp;ls_plko-smpl_unit.&nbsp;&nbsp;&nbsp;"&nbsp;单位<br />
+&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;lt_makt&nbsp;INTO&nbsp;DATA(ls_makt)&nbsp;WITH&nbsp;KEY&nbsp;matnr&nbsp;=&nbsp;ls_plko-material.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_task-description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;ls_makt-maktx.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;ls_task&nbsp;TO&nbsp;lt_task.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;ls_task.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;CREATE_BAPI&nbsp;中的物料任务清单用于检验计划*<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_materialtaskallocation-material_long&nbsp;&nbsp;&nbsp;=&nbsp;ls_plko-material.&nbsp;&nbsp;"&nbsp;物料编码<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_materialtaskallocation-plant&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_plko-plant.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;工厂<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_materialtaskallocation-valid_from&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;sy-datum.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;有效起始日期<br />
+&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;ls_materialtaskallocation&nbsp;TO&nbsp;lt_materialtaskallocation.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;ls_materialtaskallocation.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;lt_plmk&nbsp;INTO&nbsp;DATA(ls_plmk)&nbsp;WHERE&nbsp;material&nbsp;=&nbsp;ls_plko-material<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;plant&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_plko-plant<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;usage&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_plko-usage.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;CREATE-BAPI&nbsp;中的工序用于检验批*<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_operation-insp_point_complt_flow_variant&nbsp;=&nbsp;'2'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_operation-valid_from&nbsp;&nbsp;=&nbsp;sy-datum.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;有效起始日期<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_operation-activity&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_plmk-activity.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;操作/活动编号<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_operation-plant&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_plmk-plant.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;工厂<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_operation-control_key&nbsp;=&nbsp;ls_plmk-control_key.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"控制码<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"LS_OPERATION-WORK_CNTR&nbsp;=&nbsp;&nbsp;''.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;工作中心<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"LS_OPERATION-STANDARD_TEXT_KEY&nbsp;=&nbsp;''.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;标准文本码<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_operation-description&nbsp;=&nbsp;ls_plmk-description.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;工序短文本<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_operation-operation_measure_unit&nbsp;=&nbsp;ls_plmk-smpl_unit&nbsp;.&nbsp;"&nbsp;作业/工序的计量单位<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_operation-denominator&nbsp;&nbsp;&nbsp;=&nbsp;'1'.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;用于转换工艺路线和工序单位的分母<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_operation-nominator&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'1'.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;用于转换任务清单和工序计量单位的计数器<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_operation-base_quantity&nbsp;=&nbsp;'1.000'.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;基本数量<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;ls_operation&nbsp;TO&nbsp;lt_operation.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CLEAR:ls_operation.<br />
+   </div>
+   <div class="codeComment">
+*********20210531&nbsp;by&nbsp;XX-ABAP01&nbsp;*******根据工序来创建***END*****************<br />
+<br />
+<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;检验计划&nbsp;CREATE-BAPI&nbsp;中的检验特性*<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_inspcharacteristic-activity&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_plmk-activity.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;操作/活动编号<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_inspcharacteristic-inspchar&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_plmk-inspchar.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;检验特性编号<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_inspcharacteristic-valid_from&nbsp;&nbsp;=&nbsp;sy-datum.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;有效起始日期<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_inspcharacteristic-mstr_char&nbsp;&nbsp;&nbsp;=&nbsp;ls_plmk-mstr_char.&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;主文件检验特性<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_inspcharacteristic-pmstr_char&nbsp;&nbsp;=&nbsp;ls_plmk-pmstr_char.&nbsp;&nbsp;&nbsp;"&nbsp;工厂<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_inspcharacteristic-char_descr&nbsp;&nbsp;=&nbsp;ls_plmk-char_descr.&nbsp;&nbsp;&nbsp;"检验特性的短文本<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_inspcharacteristic-method&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_plmk-method.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"检验方法<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_inspcharacteristic-pmethod&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_plmk-pmethod.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"检验方法的工厂<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_inspcharacteristic-smpl_procedure&nbsp;=&nbsp;ls_plmk-smpl_procedure.&nbsp;&nbsp;&nbsp;"&nbsp;检验特性中的采样程序<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_inspcharacteristic-smpl_unit&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;ls_plko-smpl_unit.&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;采样计量单位<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_inspcharacteristic-smpl_quant&nbsp;&nbsp;=&nbsp;'1.00'.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;采样的采样数量因子（多重采样计量单位）<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_inspcharacteristic-cha_master_import_modus&nbsp;=&nbsp;'C'.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;参考主文件检验特性的方式<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;NOT&nbsp;ls_plmk-dec_places&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_inspcharacteristic-dec_places&nbsp;=&nbsp;ls_plmk-dec_places.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"小数位<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;NOT&nbsp;ls_plmk-meas_unit&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_inspcharacteristic-meas_unit&nbsp;=&nbsp;ls_plmk-meas_unit.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"计量单位<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;NOT&nbsp;ls_plmk-target_val&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_inspcharacteristic-target_val&nbsp;=&nbsp;ls_plmk-target_val.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"目标值<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;NOT&nbsp;ls_plmk-up_tol_lmt&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_inspcharacteristic-up_tol_lmt&nbsp;=&nbsp;ls_plmk-up_tol_lmt.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"上限<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;NOT&nbsp;ls_plmk-lw_tol_lmt&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_inspcharacteristic-lw_tol_lmt&nbsp;=&nbsp;ls_plmk-lw_tol_lmt.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"下限<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;ls_inspcharacteristic&nbsp;TO&nbsp;lt_inspcharacteristic.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;ls_inspcharacteristic.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CLEAR:ls_plmk.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR:&nbsp;lv_group,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_groupcounter,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lt_return.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'BAPI_INSPECTIONPLAN_CREATE'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;group&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lv_group<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;groupcounter&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lv_groupcounter<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TABLES<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;task&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lt_task<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;materialtaskallocation&nbsp;=&nbsp;lt_materialtaskallocation<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;operation&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lt_operation<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;REFERENCEOPERATION&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PRODUCTIONRESOURCE&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;inspcharacteristic&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lt_inspcharacteristic<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TEXTALLOCATION&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TEXT&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lt_return<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INSP_CHAR_VALUES&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;lt_return&nbsp;INTO&nbsp;ls_return&nbsp;WHERE&nbsp;type&nbsp;=&nbsp;'E'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OR&nbsp;type&nbsp;=&nbsp;'A'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CONCATENATE&nbsp;ls_plko-message<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_return-message<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;ls_plko-message.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CLEAR:ls_return.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDLOOP.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;&lt;&gt;&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'BAPI_TRANSACTION_COMMIT'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wait&nbsp;=&nbsp;'X'.&nbsp;"<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_plko-plnnr&nbsp;&nbsp;&nbsp;=&nbsp;lv_group.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_plko-message&nbsp;=&nbsp;'创建成功'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_plko-light&nbsp;=&nbsp;icon_green_light.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MODIFY&nbsp;lt_alv&nbsp;FROM&nbsp;ls_plko&nbsp;TRANSPORTING&nbsp;plnnr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;light<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;message.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ELSE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DATA(lv_err)&nbsp;=&nbsp;abap_true.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'BAPI_TRANSACTION_ROLLBACK'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_plko-light&nbsp;=&nbsp;icon_red_light.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MODIFY&nbsp;lt_alv&nbsp;FROM&nbsp;ls_plko&nbsp;TRANSPORTING&nbsp;plnnr&nbsp;&nbsp;message.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXIT.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR:&nbsp;ls_plko.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR:&nbsp;lt_task[],<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lt_operation[],<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lt_materialtaskallocation[],<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lt_inspcharacteristic[].<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+<br />
+<br />
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;gt_alv&nbsp;INTO&nbsp;DATA(ls_alv).<br />
+&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;lt_alv&nbsp;INTO&nbsp;DATA(lw_alv)&nbsp;WITH&nbsp;&nbsp;KEY&nbsp;material&nbsp;=&nbsp;ls_alv-material<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;plant&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_alv-plant<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;usage&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_alv-usage.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_alv-light&nbsp;&nbsp;&nbsp;=&nbsp;lw_alv-light.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_alv-message&nbsp;=&nbsp;lw_alv-message.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_alv-plnnr&nbsp;&nbsp;&nbsp;=&nbsp;lw_alv-plnnr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MODIFY&nbsp;gt_alv&nbsp;FROM&nbsp;ls_alv&nbsp;TRANSPORTING&nbsp;plnnr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;light<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;message.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+   </div>
+   <div class="codeComment">
+****<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;IF&nbsp;lv_err&nbsp;=&nbsp;''.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;s003.<br />
+&nbsp;&nbsp;ELSE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;&nbsp;MESSAGE&nbsp;S000&nbsp;WITH&nbsp;LV_MSG&nbsp;DISPLAY&nbsp;LIKE&nbsp;'E'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;e000&nbsp;WITH&nbsp;'物料：'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_plko-material<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'所在行，'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_plko-message.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+ENDFORM.<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Form&nbsp;frm_check_data<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;text<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;--&gt;&nbsp;&nbsp;p1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*&&nbsp;&lt;--&nbsp;&nbsp;p2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM frm_check_data .<br />
+<br />
+&nbsp;&nbsp;DATA(lt_plko)&nbsp;=&nbsp;gt_plko[].<br />
+&nbsp;&nbsp;SORT&nbsp;lt_plko&nbsp;BY&nbsp;material<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;plant<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;usage.<br />
+&nbsp;&nbsp;DELETE&nbsp;ADJACENT&nbsp;DUPLICATES&nbsp;FROM&nbsp;lt_plko&nbsp;COMPARING&nbsp;material<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;plant<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;usage.<br />
+&nbsp;&nbsp;IF&nbsp;lt_plko[]&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;a~plnty,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;a~plnnr,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;a~plnal,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;a~zaehl,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;a~werks,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;a~verwe,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;b~matnr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;TABLE&nbsp;@DATA(lt_mapl)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;plko&nbsp;AS&nbsp;a&nbsp;INNER&nbsp;JOIN&nbsp;mapl&nbsp;AS&nbsp;b&nbsp;ON&nbsp;&nbsp;a~plnty&nbsp;=&nbsp;b~plnty<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;a~plnnr&nbsp;=&nbsp;b~plnnr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;a~plnal&nbsp;=&nbsp;b~plnal<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;a~werks&nbsp;=&nbsp;b~werks<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FOR&nbsp;ALL&nbsp;ENTRIES&nbsp;IN&nbsp;@lt_plko<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;b~werks&nbsp;=&nbsp;@lt_plko-plant<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;b~matnr&nbsp;=&nbsp;@lt_plko-material<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;b~loekz&nbsp;=&nbsp;@space<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;a~verwe&nbsp;=&nbsp;@lt_plko-usage.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SORT&nbsp;lt_mapl&nbsp;BY&nbsp;matnr&nbsp;werks&nbsp;verwe.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+<br />
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;gt_plko&nbsp;INTO&nbsp;DATA(ls_plko).<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;ls_plko-material&nbsp;&nbsp;&nbsp;&nbsp;IS&nbsp;INITIAL&nbsp;OR&nbsp;ls_plko-plant&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IS&nbsp;INITIAL&nbsp;OR<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_plko-usage&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IS&nbsp;INITIAL&nbsp;OR&nbsp;ls_plko-status&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IS&nbsp;INITIAL&nbsp;OR<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_plko-control_key&nbsp;IS&nbsp;INITIAL&nbsp;OR&nbsp;ls_plko-inspchar&nbsp;&nbsp;&nbsp;IS&nbsp;INITIAL&nbsp;OR<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_plko-mstr_char&nbsp;&nbsp;&nbsp;IS&nbsp;INITIAL&nbsp;OR&nbsp;ls_plko-pmstr_char&nbsp;IS&nbsp;INITIAL&nbsp;OR<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_plko-smpl_procedure&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;s001&nbsp;DISPLAY&nbsp;LIKE&nbsp;'E'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LEAVE&nbsp;LIST-PROCESSING.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;lt_mapl&nbsp;INTO&nbsp;DATA(ls_mapl)&nbsp;WITH&nbsp;KEY&nbsp;matnr&nbsp;=&nbsp;ls_plko-material<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;werks&nbsp;=&nbsp;ls_plko-plant<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;verwe&nbsp;=&nbsp;ls_plko-usage<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;BINARY&nbsp;SEARCH.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;s012&nbsp;WITH&nbsp;ls_plko-material&nbsp;DISPLAY&nbsp;LIKE&nbsp;'E'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LEAVE&nbsp;LIST-PROCESSING.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR:ls_plko.<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+&nbsp;&nbsp;lt_plko&nbsp;=&nbsp;gt_plko[].<br />
+&nbsp;&nbsp;SORT&nbsp;lt_plko&nbsp;BY&nbsp;material.<br />
+&nbsp;&nbsp;DELETE&nbsp;ADJACENT&nbsp;DUPLICATES&nbsp;FROM&nbsp;lt_plko&nbsp;COMPARING&nbsp;material.<br />
+&nbsp;&nbsp;IF&nbsp;NOT&nbsp;lt_plko&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;matnr,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;meins<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;TABLE&nbsp;@DATA(lt_mara)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;mara&nbsp;FOR&nbsp;ALL&nbsp;ENTRIES&nbsp;IN&nbsp;@lt_plko<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;matnr&nbsp;=&nbsp;@lt_plko-material.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SORT&nbsp;lt_mara&nbsp;BY&nbsp;matnr.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+<br />
+<br />
+&nbsp;&nbsp;SORT&nbsp;gt_plko&nbsp;BY&nbsp;material<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;plant<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;usage.<br />
+<br />
+&nbsp;&nbsp;DATA:&nbsp;ls_alv&nbsp;TYPE&nbsp;ts_alv.<br />
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;gt_plko&nbsp;INTO&nbsp;ls_plko.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'CONVERSION_EXIT_MATN1_INPUT'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;input&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_plko-material<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;output&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_plko-material<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;length_error&nbsp;=&nbsp;1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTHERS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;2.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MOVE-CORRESPONDING&nbsp;ls_plko&nbsp;TO&nbsp;&nbsp;ls_alv.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;lt_mara&nbsp;INTO&nbsp;DATA(ls_mara)&nbsp;WITH&nbsp;KEY&nbsp;matnr&nbsp;=&nbsp;ls_alv-material<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;BINARY&nbsp;SEARCH.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_alv-smpl_unit&nbsp;=&nbsp;ls_mara-meins.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;AUTHORITY-CHECK&nbsp;OBJECT&nbsp;'Q_ROUT'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ID&nbsp;'WERKS'&nbsp;FIELD&nbsp;ls_alv-plant.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;&lt;&gt;&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;s020&nbsp;&nbsp;DISPLAY&nbsp;LIKE&nbsp;'E'&nbsp;WITH&nbsp;&nbsp;'工厂'&nbsp;ls_alv-plant.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LEAVE&nbsp;LIST-PROCESSING.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;ls_alv&nbsp;TO&nbsp;gt_alv.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MODIFY&nbsp;gt_plko&nbsp;FROM&nbsp;ls_plko&nbsp;TRANSPORTING&nbsp;material.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR:ls_alv,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_plko.<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+ENDFORM.<br />
+<br />
+<br />
+<br />
+FORM frm_selected_rows.<br />
+<br />
+&nbsp;&nbsp;DATA:&nbsp;lt_index_rows	TYPE&nbsp;lvc_t_row,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lt_row_no	&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;lvc_t_roid.<br />
+<br />
+&nbsp;&nbsp;CALL&nbsp;METHOD&nbsp;g_grid-&gt;get_selected_rows<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;et_index_rows&nbsp;=&nbsp;lt_index_rows<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;et_row_no&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lt_row_no.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;lt_row_no[]&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;e005.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+<br />
+&nbsp;&nbsp;FIELD-SYMBOLS:&nbsp;&lt;ls_out&gt;&nbsp;TYPE&nbsp;ts_alv.<br />
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;gt_alv&nbsp;ASSIGNING&nbsp;&nbsp;&lt;ls_out&gt;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;lt_row_no&nbsp;INTO&nbsp;DATA(ls_rows)&nbsp;WITH&nbsp;KEY&nbsp;row_id&nbsp;=&nbsp;sy-tabix.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;ls_out&gt;-sel&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ELSE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CLEAR:&lt;ls_out&gt;-sel.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+ENDFORM.<br />
+            </div>
+          </td>
+        </tr>
+      </table>
+      </td>
+      </tr>
+   <tr>
+<td class="footer">Extracted by Mass Download version 1.5.2 - E.G.Mellodew. 1998-2022. Sap Release 755</td>
+   </tr>
+</table>
+</body>
+</html>

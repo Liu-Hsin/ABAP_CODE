@@ -1,0 +1,511 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=GB2312" />
+<title>ZQMR0004</title>
+<style type="text/css">
+.code{ font-family:"Courier New", Courier, monospace; color:#000; font-size:14px; background-color:#F2F4F7 }
+  .codeComment {font-family:"Courier New", Courier, monospace; color:#0000F0; font-size:14px; background-color:#F2F4F7 }
+  .normalBold{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; font-weight:800 }
+  .normalBoldLarge{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+</style>
+<style type="text/css">
+  .normal{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px }
+  .footer{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; text-align: center }
+  h2{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+  h3{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:14px; font-weight:800 }
+  .outerTable{
+   background-color:#E0E7ED;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-right-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+  .innerTable{
+   background-color:#F2F4F7;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-bottom-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+</style>
+</head>
+<body>
+<table class="outerTable">
+  <tr class="normalBoldLarge">
+     <td><h2>Code listing for: ZQMR0004</h2>
+<h3> Description: 进货检验合格率报表</h3></td>
+   </tr>
+  <tr>
+     <td>
+     <table class="innerTable">
+       <tr>
+          <td>
+   <div class="codeComment">
+**********************************************************************<br />
+<br />
+   </div>
+   <div class="code">
+REPORT zqmr0004.<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*----------------------Declare&nbsp;Table-----------------------------------*<br />
+   </div>
+   <div class="code">
+TABLES: qals.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*----------------------Declare&nbsp;Variable--------------------------------*<br />
+<br />
+   </div>
+   <div class="code">
+DATA: BEGIN OF w_main.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INCLUDE&nbsp;STRUCTURE&nbsp;qals.<br />
+DATA name1 TYPE kna1-name1.<br />
+DATA maktx TYPE makt-maktx.<br />
+DATA vcode TYPE qave-vcode.<br />
+DATA unmenge TYPE qals-lmenge01.<br />
+DATA rate  TYPE p  DECIMALS 2.<br />
+DATA urate TYPE p  DECIMALS 2.<br />
+DATA qkennzahl TYPE qave-qkennzahl.<br />
+DATA fenshu  TYPE menge_d.<br />
+DATA kurztext  TYPE qpct-kurztext.<br />
+DATA pr_menge  TYPE i.<br />
+DATA: END OF w_main.<br />
+<br />
+<br />
+DATA w_lfa1 TYPE lfa1.<br />
+DATA w_makt TYPE makt.<br />
+DATA w_qave TYPE qave.<br />
+DATA w_qpct TYPE qpct.<br />
+DATA s_main LIKE w_main.<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*----------------------Declare&nbsp;Internal&nbsp;Table--------------------------*<br />
+   </div>
+   <div class="code">
+DATA t_main LIKE TABLE OF w_main.<br />
+DATA p_main LIKE TABLE OF w_main.<br />
+<br />
+DATA t_makt TYPE TABLE OF makt.<br />
+DATA t_lfa1 TYPE TABLE OF lfa1.<br />
+DATA t_qave TYPE TABLE OF qave.<br />
+DATA t_qpct TYPE TABLE OF qpct.<br />
+<br />
+DATA: ls_style   TYPE lvc_s_styl.<br />
+DATA: w_fieldcat TYPE lvc_s_fcat,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;t_fieldcat&nbsp;TYPE&nbsp;lvc_t_fcat.<br />
+DATA: lr_grid    TYPE REF TO cl_gui_alv_grid.<br />
+DATA: w_layout   TYPE lvc_s_layo.<br />
+<br />
+DATA: w_fcat TYPE slis_fieldcat_alv,            "ALV显示字段结构<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;w_layo&nbsp;TYPE&nbsp;slis_layout_alv,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"ALV显示风格结构<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_fcat&nbsp;TYPE&nbsp;slis_t_fieldcat_alv.<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*----------------------Declare&nbsp;Variable--------------------------------*<br />
+   </div>
+   <div class="code">
+DATA w_repid TYPE sy-repid.<br />
+DATA l_tabix TYPE sy-tabix.<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*======================================================================*<br />
+*&nbsp;&nbsp;Selection&nbsp;Screen&nbsp;Events<br />
+*======================================================================*<br />
+   </div>
+   <div class="code">
+SELECTION-SCREEN BEGIN OF BLOCK ab WITH FRAME TITLE TEXT-001.<br />
+<br />
+&nbsp;&nbsp;SELECT-OPTIONS&nbsp;s_erdat&nbsp;FOR&nbsp;qals-ersteldat.<br />
+&nbsp;&nbsp;SELECT-OPTIONS&nbsp;s_lifnr&nbsp;FOR&nbsp;qals-lifnr&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;."DEFAULT&nbsp;'4100000083'.<br />
+&nbsp;&nbsp;SELECT-OPTIONS&nbsp;s_matnr&nbsp;FOR&nbsp;qals-matnr&nbsp;&nbsp;&nbsp;&nbsp;.<br />
+&nbsp;&nbsp;SELECT-OPTIONS&nbsp;s_prlos&nbsp;FOR&nbsp;qals-prueflos&nbsp;&nbsp;.<br />
+&nbsp;&nbsp;SELECT-OPTIONS&nbsp;s_werk&nbsp;&nbsp;FOR&nbsp;qals-werk&nbsp;OBLIGATORY.<br />
+&nbsp;&nbsp;PARAMETERS:&nbsp;p_detail&nbsp;RADIOBUTTON&nbsp;GROUP&nbsp;dis&nbsp;DEFAULT&nbsp;'X',<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;p_sum&nbsp;&nbsp;&nbsp;&nbsp;RADIOBUTTON&nbsp;GROUP&nbsp;dis.<br />
+SELECTION-SCREEN END OF BLOCK ab.<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*======================================================================*<br />
+*&nbsp;&nbsp;Report&nbsp;Events<br />
+*======================================================================*<br />
+   </div>
+   <div class="code">
+START-OF-SELECTION.<br />
+<br />
+&nbsp;&nbsp;PERFORM&nbsp;frm_get_data.<br />
+&nbsp;&nbsp;PERFORM&nbsp;frm_add_data.<br />
+<br />
+END-OF-SELECTION.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;t_main&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;build_fieldcat.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;build_layout.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;display_alv.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;FRM_GET_DATA<br />
+*&---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;--&gt;&nbsp;&nbsp;p1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*&nbsp;&nbsp;&lt;--&nbsp;&nbsp;p2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM frm_get_data .<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;&nbsp;s_erdat[]&nbsp;IS&nbsp;INITIAL&nbsp;AND&nbsp;s_lifnr[]&nbsp;IS&nbsp;INITIAL<br />
+&nbsp;&nbsp;AND&nbsp;s_matnr[]&nbsp;IS&nbsp;INITIAL&nbsp;AND&nbsp;s_prlos[]&nbsp;IS&nbsp;INITIAL&nbsp;AND&nbsp;s_werk[]&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;TEXT-m01&nbsp;TYPE&nbsp;'S'&nbsp;DISPLAY&nbsp;LIKE&nbsp;'E'.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"请至少选择一个查询条件<br />
+&nbsp;&nbsp;&nbsp;&nbsp;STOP&nbsp;&nbsp;.<br />
+<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+<br />
+&nbsp;&nbsp;SELECT&nbsp;*<br />
+&nbsp;&nbsp;FROM&nbsp;qals<br />
+&nbsp;&nbsp;INTO&nbsp;CORRESPONDING&nbsp;FIELDS&nbsp;OF&nbsp;TABLE&nbsp;t_main<br />
+&nbsp;&nbsp;WHERE&nbsp;ersteldat&nbsp;IN&nbsp;s_erdat<br />
+&nbsp;&nbsp;AND&nbsp;&nbsp;&nbsp;lifnr&nbsp;&nbsp;&nbsp;&nbsp;IN&nbsp;s_lifnr<br />
+&nbsp;&nbsp;AND&nbsp;&nbsp;matnr&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IN&nbsp;s_matnr<br />
+&nbsp;&nbsp;AND&nbsp;&nbsp;werk&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IN&nbsp;s_werk<br />
+&nbsp;&nbsp;AND&nbsp;&nbsp;prueflos&nbsp;IN&nbsp;&nbsp;s_prlos.<br />
+<br />
+&nbsp;&nbsp;DELETE&nbsp;t_main&nbsp;WHERE&nbsp;lifnr&nbsp;IS&nbsp;INITIAL.<br />
+<br />
+<br />
+ENDFORM.                    " FRM_GET_DATA<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;FRM_ADD_DATA<br />
+*&---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;--&gt;&nbsp;&nbsp;p1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*&nbsp;&nbsp;&lt;--&nbsp;&nbsp;p2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM frm_add_data .<br />
+<br />
+&nbsp;&nbsp;CHECK&nbsp;t_main&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+<br />
+<br />
+&nbsp;&nbsp;"--供应商描述<br />
+&nbsp;&nbsp;SELECT&nbsp;lifnr<br />
+&nbsp;&nbsp;name1<br />
+&nbsp;&nbsp;FROM&nbsp;lfa1<br />
+&nbsp;&nbsp;INTO&nbsp;CORRESPONDING&nbsp;FIELDS&nbsp;OF&nbsp;TABLE&nbsp;t_lfa1<br />
+&nbsp;&nbsp;FOR&nbsp;ALL&nbsp;ENTRIES&nbsp;IN&nbsp;t_main<br />
+&nbsp;&nbsp;WHERE&nbsp;lifnr&nbsp;=&nbsp;t_main-lifnr<br />
+&nbsp;&nbsp;AND&nbsp;spras&nbsp;=&nbsp;sy-langu.<br />
+&nbsp;&nbsp;SORT&nbsp;t_lfa1&nbsp;BY&nbsp;lifnr.<br />
+<br />
+<br />
+<br />
+&nbsp;&nbsp;"--物料描述<br />
+&nbsp;&nbsp;SELECT&nbsp;matnr<br />
+&nbsp;&nbsp;maktx<br />
+&nbsp;&nbsp;FROM&nbsp;makt<br />
+&nbsp;&nbsp;INTO&nbsp;CORRESPONDING&nbsp;FIELDS&nbsp;OF&nbsp;TABLE&nbsp;t_makt<br />
+&nbsp;&nbsp;FOR&nbsp;ALL&nbsp;ENTRIES&nbsp;IN&nbsp;t_main<br />
+&nbsp;&nbsp;WHERE&nbsp;matnr&nbsp;=&nbsp;t_main-matnr<br />
+&nbsp;&nbsp;AND&nbsp;spras&nbsp;=&nbsp;sy-langu.<br />
+&nbsp;&nbsp;SORT&nbsp;t_makt&nbsp;BY&nbsp;matnr.<br />
+<br />
+<br />
+&nbsp;&nbsp;"---使用决策代码及描述<br />
+&nbsp;&nbsp;SELECT&nbsp;*&nbsp;FROM&nbsp;qave<br />
+&nbsp;&nbsp;INTO&nbsp;CORRESPONDING&nbsp;FIELDS&nbsp;OF&nbsp;TABLE&nbsp;t_qave<br />
+&nbsp;&nbsp;FOR&nbsp;ALL&nbsp;ENTRIES&nbsp;IN&nbsp;t_main<br />
+&nbsp;&nbsp;WHERE&nbsp;prueflos&nbsp;=&nbsp;t_main-prueflos.<br />
+&nbsp;&nbsp;SORT&nbsp;t_qave&nbsp;BY&nbsp;prueflos.<br />
+<br />
+&nbsp;&nbsp;"--使用决策代码描述<br />
+&nbsp;&nbsp;SELECT&nbsp;*&nbsp;FROM&nbsp;qpct<br />
+&nbsp;&nbsp;INTO&nbsp;CORRESPONDING&nbsp;FIELDS&nbsp;OF&nbsp;TABLE&nbsp;t_qpct<br />
+&nbsp;&nbsp;FOR&nbsp;ALL&nbsp;ENTRIES&nbsp;IN&nbsp;t_qave<br />
+&nbsp;&nbsp;WHERE&nbsp;code&nbsp;=&nbsp;t_qave-vcode<br />
+&nbsp;&nbsp;AND&nbsp;codegruppe&nbsp;=&nbsp;t_qave-vcodegrp<br />
+&nbsp;&nbsp;AND&nbsp;sprache&nbsp;=&nbsp;sy-langu.<br />
+<br />
+<br />
+<br />
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;&nbsp;t_main&nbsp;INTO&nbsp;w_main.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;l_tabix&nbsp;=&nbsp;sy-tabix.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;t_lfa1&nbsp;INTO&nbsp;w_lfa1&nbsp;WITH&nbsp;&nbsp;KEY&nbsp;lifnr&nbsp;=&nbsp;w_main-lifnr&nbsp;BINARY&nbsp;SEARCH&nbsp;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;w_main-name1&nbsp;=&nbsp;w_lfa1-name1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;t_makt&nbsp;INTO&nbsp;w_makt&nbsp;WITH&nbsp;KEY&nbsp;matnr&nbsp;=&nbsp;w_main-matnr&nbsp;BINARY&nbsp;SEARCH&nbsp;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;w_main-maktx&nbsp;=&nbsp;w_makt-maktx.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;t_qave&nbsp;INTO&nbsp;w_qave&nbsp;WITH&nbsp;&nbsp;KEY&nbsp;prueflos&nbsp;=&nbsp;w_main-prueflos&nbsp;BINARY&nbsp;SEARCH.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;=&nbsp;0.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;t_qpct&nbsp;INTO&nbsp;w_qpct&nbsp;WITH&nbsp;KEY&nbsp;code&nbsp;=&nbsp;w_qave-vcode&nbsp;codegruppe&nbsp;=&nbsp;w_qave-vcodegrp&nbsp;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;w_main-kurztext&nbsp;=&nbsp;w_qpct-kurztext.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;w_main-vcode&nbsp;=&nbsp;w_qave-vcode.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;w_main-qkennzahl&nbsp;=&nbsp;w_qave-qkennzahl.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;w_main-vcode&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DELETE&nbsp;t_main&nbsp;INDEX&nbsp;l_tabix.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CONTINUE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;"合格入库数量&nbsp;&nbsp;&nbsp;如果QALS-STAT01=X(非手工检验批)，取QALS-LMENGE01&nbsp;&nbsp;如果QALS-STAT01=空(手工检验批)，合格数量为0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;w_main-stat01&nbsp;=&nbsp;''.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;w_main-lmenge01.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;"不合格数量<br />
+&nbsp;&nbsp;&nbsp;&nbsp;w_main-unmenge&nbsp;=&nbsp;w_main-lmenge04.&nbsp;&nbsp;"w_main-losmenge&nbsp;-&nbsp;w_main-lmenge01.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;"--批合格率<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;w_main-losmenge&nbsp;NE&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;w_main-rate&nbsp;=&nbsp;w_main-lmenge01&nbsp;/&nbsp;w_main-losmenge&nbsp;*&nbsp;100.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MODIFY&nbsp;t_main&nbsp;FROM&nbsp;w_main.<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;p_sum&nbsp;=&nbsp;abap_true.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;DELETE&nbsp;t_main&nbsp;WHERE&nbsp;vcode&nbsp;IS&nbsp;INITIAL.<br />
+<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;p_main&nbsp;=&nbsp;t_main.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SORT&nbsp;t_main&nbsp;BY&nbsp;lifnr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;DELETE&nbsp;ADJACENT&nbsp;DUPLICATES&nbsp;FROM&nbsp;t_main&nbsp;COMPARING&nbsp;lifnr.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;t_main&nbsp;INTO&nbsp;w_main.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CLEAR:w_main-pr_menge,w_main-losmenge,&nbsp;w_main-lmenge01,w_main-unmenge&nbsp;,w_main-fenshu&nbsp;,w_main-urate&nbsp;,w_main-rate.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;p_main&nbsp;INTO&nbsp;s_main&nbsp;WHERE&nbsp;lifnr&nbsp;=&nbsp;w_main-lifnr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;w_main-pr_menge&nbsp;&nbsp;=&nbsp;w_main-pr_menge&nbsp;&nbsp;+&nbsp;1.&nbsp;&nbsp;"送检批数<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;w_main-losmenge&nbsp;=&nbsp;w_main-losmenge&nbsp;+&nbsp;s_main-losmenge.&nbsp;&nbsp;"送检数量<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;w_main-lmenge01&nbsp;=&nbsp;w_main-lmenge01&nbsp;+&nbsp;s_main-lmenge01.&nbsp;&nbsp;"合格数量<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;w_main-unmenge&nbsp;=&nbsp;w_main-unmenge&nbsp;+&nbsp;s_main-unmenge.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"不合格数量<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;w_main-fenshu&nbsp;=&nbsp;w_main-fenshu&nbsp;+&nbsp;s_main-qkennzahl.&nbsp;"分数汇总<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;w_main-losmenge&nbsp;IS&nbsp;NOT&nbsp;&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;w_main-rate.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;w_main-rate&nbsp;=&nbsp;w_main-lmenge01&nbsp;/&nbsp;w_main-losmenge&nbsp;*&nbsp;100.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"每批平均分数<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;w_main-pr_menge&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;w_main-urate&nbsp;=&nbsp;w_main-fenshu&nbsp;/&nbsp;w_main-pr_menge.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MODIFY&nbsp;t_main&nbsp;FROM&nbsp;w_main.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+<br />
+<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+<br />
+ENDFORM.                    " FRM_ADD_DATA<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;BUILD_FIELDCAT<br />
+*&---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;--&gt;&nbsp;&nbsp;p1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*&nbsp;&nbsp;&lt;--&nbsp;&nbsp;p2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM build_fieldcat .<br />
+<br />
+&nbsp;&nbsp;DEFINE&nbsp;field_add.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;w_fieldcat-fieldname&nbsp;=&nbsp;&1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;w_fieldcat-ref_table&nbsp;=&nbsp;&2.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;w_fieldcat-ref_field&nbsp;=&nbsp;&3.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;w_fieldcat-coltext&nbsp;=&nbsp;&4.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;w_fieldcat-scrtext_l&nbsp;=&nbsp;&4.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;w_fieldcat-scrtext_m&nbsp;=&nbsp;&4.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;w_fieldcat-scrtext_s&nbsp;=&nbsp;&4.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;w_fieldcat&nbsp;TO&nbsp;&nbsp;t_fieldcat.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;w_fieldcat.<br />
+&nbsp;&nbsp;END-OF-DEFINITION.<br />
+&nbsp;&nbsp;.<br />
+&nbsp;&nbsp;CLEAR:&nbsp;w_fieldcat,t_fieldcat.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;主表输出字段<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;field_add:&nbsp;'LIFNR'&nbsp;&nbsp;&nbsp;'QALS'&nbsp;'LIFNR'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TEXT-h01.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"供应商<br />
+&nbsp;&nbsp;field_add:&nbsp;'NAME1'&nbsp;&nbsp;&nbsp;'LFA1'&nbsp;'NAME1'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TEXT-h02.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"供应商名称<br />
+&nbsp;&nbsp;field_add:&nbsp;'MATNR'&nbsp;&nbsp;&nbsp;'QALS'&nbsp;'MATNR'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TEXT-h03.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"物料编码<br />
+&nbsp;&nbsp;field_add:&nbsp;'MAKTX'&nbsp;&nbsp;&nbsp;'MAKT'&nbsp;'MAKTX'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TEXT-h04.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"物料描述<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;p_sum&nbsp;=&nbsp;abap_false.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;field_add:&nbsp;'ERSTELDAT'&nbsp;'QALS'&nbsp;'ERSTELDAT'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TEXT-h05.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"检验批日期<br />
+&nbsp;&nbsp;&nbsp;&nbsp;field_add:&nbsp;'PRUEFLOS'&nbsp;&nbsp;'QALS'&nbsp;'PRUEFLOS'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TEXT-h06.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"检验批号<br />
+&nbsp;&nbsp;&nbsp;&nbsp;field_add:&nbsp;'WERK'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'QALS'&nbsp;'WERK'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TEXT-h07.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"工厂<br />
+&nbsp;&nbsp;&nbsp;&nbsp;field_add:&nbsp;'LOSMENGE'&nbsp;&nbsp;&nbsp;'QALS'&nbsp;'LOSMENGE'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TEXT-h08.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"检验批数量<br />
+&nbsp;&nbsp;&nbsp;&nbsp;field_add:&nbsp;'MENGENEINH'&nbsp;'QALS'&nbsp;'MENGENEINH'&nbsp;&nbsp;&nbsp;TEXT-h09.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"单位<br />
+&nbsp;&nbsp;&nbsp;&nbsp;field_add:&nbsp;'VCODE'&nbsp;&nbsp;&nbsp;'QAVE'&nbsp;'VCODE'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TEXT-h10.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"使用决策代码<br />
+&nbsp;&nbsp;&nbsp;&nbsp;field_add:&nbsp;'KURZTEXT'&nbsp;&nbsp;&nbsp;'QPCT'&nbsp;'KURZTEXT'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TEXT-h11.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"使用决策描述<br />
+&nbsp;&nbsp;&nbsp;&nbsp;field_add:&nbsp;'LMENGE01'&nbsp;&nbsp;&nbsp;'QALS'&nbsp;'LMENGE01'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TEXT-h12.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"合格入库数量<br />
+&nbsp;&nbsp;&nbsp;&nbsp;field_add:&nbsp;'UNMENGE'&nbsp;&nbsp;&nbsp;'QALS'&nbsp;'LMENGE01'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TEXT-h13.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"不合格数量<br />
+&nbsp;&nbsp;&nbsp;&nbsp;field_add:&nbsp;'RATE'&nbsp;&nbsp;&nbsp;'&nbsp;'&nbsp;'&nbsp;'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TEXT-h14.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"批合格率<br />
+&nbsp;&nbsp;&nbsp;&nbsp;field_add:&nbsp;'QKENNZAHL'&nbsp;&nbsp;&nbsp;'RQEVA'&nbsp;'QKENNZAHL'&nbsp;&nbsp;TEXT-h15.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"质量分数<br />
+<br />
+&nbsp;&nbsp;ELSE.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;field_add:&nbsp;'PR_MENGE'&nbsp;&nbsp;'QALS'&nbsp;'LMENGE01'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TEXT-h16.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"送检批数<br />
+&nbsp;&nbsp;&nbsp;&nbsp;field_add:&nbsp;'LOSMENGE'&nbsp;&nbsp;&nbsp;'QALS'&nbsp;'LOSMENGE'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TEXT-h17.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"检验批数量<br />
+&nbsp;&nbsp;&nbsp;&nbsp;field_add:&nbsp;'MENGENEINH'&nbsp;&nbsp;&nbsp;'QALS'&nbsp;'MENGENEINH'&nbsp;TEXT-h18.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"单位<br />
+&nbsp;&nbsp;&nbsp;&nbsp;field_add:&nbsp;'LMENGE01'&nbsp;&nbsp;&nbsp;'QALS'&nbsp;'LMENGE01'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TEXT-h19.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"合格数量<br />
+&nbsp;&nbsp;&nbsp;&nbsp;field_add:&nbsp;'UNMENGE'&nbsp;&nbsp;&nbsp;'QALS'&nbsp;'LMENGE01'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TEXT-h20.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"不合格数量<br />
+&nbsp;&nbsp;&nbsp;&nbsp;field_add:&nbsp;'RATE'&nbsp;&nbsp;&nbsp;'&nbsp;'&nbsp;'&nbsp;'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TEXT-h21.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"汇总批合格率(%)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;field_add:&nbsp;'URATE'&nbsp;&nbsp;&nbsp;'&nbsp;'&nbsp;'&nbsp;'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TEXT-h22.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"每批平均质量分数<br />
+<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+ENDFORM.                    " BUILD_FIELDCAT<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;BUILD_LAYOUT<br />
+*&---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;--&gt;&nbsp;&nbsp;p1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*&nbsp;&nbsp;&lt;--&nbsp;&nbsp;p2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM build_layout .<br />
+&nbsp;&nbsp;w_layout-zebra&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;w_layout-cwidth_opt&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;w_layout-sel_mode&nbsp;=&nbsp;'A'.<br />
+ENDFORM.                    " BUILD_LAYOUT<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;DISPLAY_ALV<br />
+*&---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;--&gt;&nbsp;&nbsp;p1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*&nbsp;&nbsp;&lt;--&nbsp;&nbsp;p2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM display_alv .<br />
+&nbsp;&nbsp;w_repid&nbsp;=&nbsp;sy-repid.<br />
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'REUSE_ALV_GRID_DISPLAY_LVC'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_callback_program&nbsp;=&nbsp;w_repid<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;is_layout_lvc&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;w_layout<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it_fieldcat_lvc&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;t_fieldcat[]<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_default&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'X'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_save&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'U'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;TABLES<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;t_outtab&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;t_main.<br />
+&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;&lt;&gt;&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;ID&nbsp;sy-msgid&nbsp;TYPE&nbsp;sy-msgty&nbsp;NUMBER&nbsp;sy-msgno<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WITH&nbsp;sy-msgv1&nbsp;sy-msgv2&nbsp;sy-msgv3&nbsp;sy-msgv4.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+ENDFORM.                    " DISPLAY_ALV<br />
+<br />
+   </div>
+   <div class="codeComment">
+*Text&nbsp;elements<br />
+*----------------------------------------------------------<br />
+*&nbsp;H01&nbsp;供应商<br />
+*&nbsp;H02&nbsp;供应商名称<br />
+*&nbsp;H03&nbsp;物料编码<br />
+*&nbsp;H04&nbsp;物料描述<br />
+*&nbsp;H05&nbsp;检验批日期<br />
+*&nbsp;H06&nbsp;检验批号<br />
+*&nbsp;H07&nbsp;工厂<br />
+*&nbsp;H08&nbsp;检验批数量<br />
+*&nbsp;H09&nbsp;单位<br />
+*&nbsp;H10&nbsp;使用决策代码<br />
+*&nbsp;H11&nbsp;使用决策描述<br />
+*&nbsp;H12&nbsp;合格入库数量<br />
+*&nbsp;H13&nbsp;不合格数量<br />
+*&nbsp;H14&nbsp;批合格率<br />
+*&nbsp;H15&nbsp;质量分数<br />
+*&nbsp;H16&nbsp;送检批数<br />
+*&nbsp;H17&nbsp;检验批数量<br />
+*&nbsp;H18&nbsp;单位<br />
+*&nbsp;H19&nbsp;合格数量<br />
+*&nbsp;H20&nbsp;不合格数量<br />
+*&nbsp;H21&nbsp;汇总批合格率(%)<br />
+*&nbsp;H22&nbsp;每批平均质量分数<br />
+*&nbsp;M01&nbsp;请至少选择一个查询条件<br />
+<br />
+<br />
+*Selection&nbsp;texts<br />
+*----------------------------------------------------------<br />
+*&nbsp;P_DETAIL&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;明细显示<br />
+*&nbsp;P_SUM&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;汇总显示<br />
+*&nbsp;S_ERDAT&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;创建日期<br />
+*&nbsp;S_LIFNR&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;供应商<br />
+*&nbsp;S_MATNR&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;物料<br />
+*&nbsp;S_PRLOS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;检验批<br />
+*&nbsp;S_WERK&nbsp;D&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.<br />
+            </div>
+          </td>
+        </tr>
+      </table>
+      </td>
+      </tr>
+   <tr>
+<td class="footer">Extracted by Mass Download version 1.5.2 - E.G.Mellodew. 1998-2022. Sap Release 755</td>
+   </tr>
+</table>
+</body>
+</html>
