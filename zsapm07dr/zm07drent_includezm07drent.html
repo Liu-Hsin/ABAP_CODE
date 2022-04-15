@@ -1,0 +1,748 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=GB2312" />
+<title>ZM07DRENT</title>
+<style type="text/css">
+.code{ font-family:"Courier New", Courier, monospace; color:#000; font-size:14px; background-color:#F2F4F7 }
+  .codeComment {font-family:"Courier New", Courier, monospace; color:#0000F0; font-size:14px; background-color:#F2F4F7 }
+  .normalBold{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; font-weight:800 }
+  .normalBoldLarge{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+</style>
+<style type="text/css">
+  .normal{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px }
+  .footer{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; text-align: center }
+  h2{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+  h3{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:14px; font-weight:800 }
+  .outerTable{
+   background-color:#E0E7ED;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-right-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+  .innerTable{
+   background-color:#F2F4F7;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-bottom-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+</style>
+</head>
+<body>
+<table class="outerTable">
+  <tr class="normalBoldLarge">
+     <td><h2>Code listing for: ZM07DRENT</h2>
+<h3> Description: Include ZM07DRENT</h3></td>
+   </tr>
+  <tr>
+     <td>
+     <table class="innerTable">
+       <tr>
+          <td>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;包含&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ZM07DRENT<br />
+*&---------------------------------------------------------------------*<br />
+***INCLUDE&nbsp;M07DRENT&nbsp;.<br />
+**--------------------------------------------------------------------**<br />
+**----------&nbsp;Entries&nbsp;für&nbsp;RSNAST00&nbsp;------------------------------------**<br />
+**--------------------------------------------------------------------**<br />
+*----------------------------------------------------------------------*<br />
+*----------------------------------------------------------------------*<br />
+*---------------&nbsp;Wareneingangsscheine&nbsp;---------------------------------*<br />
+*----------------------------------------------------------------------*<br />
+*-----------&nbsp;Wareneingangsschein&nbsp;Version&nbsp;1&nbsp;----------------------------*<br />
+   </div>
+   <div class="code">
+FORM entry_we01 USING ent_retco ent_screen.<br />
+<br />
+&nbsp;&nbsp;DATA:&nbsp;lv_mblnr&nbsp;TYPE&nbsp;mblnr.<br />
+&nbsp;&nbsp;DATA:&nbsp;lv_zeile&nbsp;TYPE&nbsp;mblpo.<br />
+<br />
+<br />
+&nbsp;&nbsp;xscreen&nbsp;=&nbsp;ent_screen.<br />
+&nbsp;&nbsp;CLEAR&nbsp;ent_retco.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;PERFORM&nbsp;lesen&nbsp;USING&nbsp;nast-objky.<br />
+*&nbsp;&nbsp;ent_retco&nbsp;=&nbsp;retco.<br />
+*&nbsp;&nbsp;PERFORM&nbsp;ausgabe_we01.<br />
+<br />
+**********************************************************************<br />
+*&nbsp;&nbsp;自定义打印<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;nast_key&nbsp;=&nbsp;nast-objky.<br />
+&nbsp;&nbsp;BREAK&nbsp;xx-liux.<br />
+&nbsp;&nbsp;"&nbsp;5000000326<br />
+&nbsp;&nbsp;lv_mblnr&nbsp;=&nbsp;nast_key-mblnr.<br />
+&nbsp;&nbsp;lv_zeile&nbsp;=&nbsp;nast_key-zeile.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;lv_zeile&nbsp;=&nbsp;1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;项目号为1&nbsp;的才打印，使得不会重复打印数据。<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;bwart&nbsp;mblnr&nbsp;mjahr&nbsp;zeile&nbsp;matnr&nbsp;bukrs<br />
+&nbsp;&nbsp;&nbsp;&nbsp;werks&nbsp;lgort&nbsp;charg&nbsp;meins&nbsp;menge&nbsp;bstmg<br />
+&nbsp;&nbsp;&nbsp;&nbsp;bstme&nbsp;lifnr&nbsp;ebeln&nbsp;ebelp&nbsp;budat&nbsp;cpudt&nbsp;cputm&nbsp;usnam<br />
+&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;CORRESPONDING&nbsp;FIELDS&nbsp;OF&nbsp;TABLE&nbsp;gt_out<br />
+&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;matdoc<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;mblnr&nbsp;=&nbsp;lv_mblnr.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM:&nbsp;frm_get_data.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM:&nbsp;frm_print_data.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+ENDFORM.<br />
+   </div>
+   <div class="codeComment">
+*-----------&nbsp;Wareneingangsschein&nbsp;Version&nbsp;2&nbsp;----------------------------*<br />
+   </div>
+   <div class="code">
+FORM entry_we02 USING ent_retco ent_screen.<br />
+&nbsp;&nbsp;xscreen&nbsp;=&nbsp;ent_screen.<br />
+&nbsp;&nbsp;CLEAR&nbsp;ent_retco.<br />
+&nbsp;&nbsp;PERFORM&nbsp;lesen&nbsp;USING&nbsp;nast-objky.<br />
+&nbsp;&nbsp;ent_retco&nbsp;=&nbsp;retco.<br />
+&nbsp;&nbsp;PERFORM&nbsp;bestellkopf_lesen.<br />
+&nbsp;&nbsp;PERFORM&nbsp;ausgabe_we02.<br />
+ENDFORM.<br />
+   </div>
+   <div class="codeComment">
+*-----------&nbsp;Wareneingangsschein&nbsp;Version&nbsp;3&nbsp;----------------------------*<br />
+   </div>
+   <div class="code">
+FORM entry_we03 USING ent_retco ent_screen.<br />
+&nbsp;&nbsp;xscreen&nbsp;=&nbsp;ent_screen.<br />
+&nbsp;&nbsp;CLEAR&nbsp;ent_retco.<br />
+&nbsp;&nbsp;CLEAR&nbsp;lgortsplit.<br />
+&nbsp;&nbsp;PERFORM&nbsp;lesen_wes&nbsp;USING&nbsp;nast-objky&nbsp;lgortsplit.<br />
+&nbsp;&nbsp;ent_retco&nbsp;=&nbsp;retco.<br />
+<br />
+ENDFORM.<br />
+   </div>
+   <div class="codeComment">
+*-----------&nbsp;Wareneingangsschein&nbsp;Version&nbsp;3&nbsp;mit&nbsp;Lagerortsplitt&nbsp;---------*<br />
+   </div>
+   <div class="code">
+FORM entry_we03l USING ent_retco ent_screen.<br />
+&nbsp;&nbsp;xscreen&nbsp;=&nbsp;ent_screen.<br />
+&nbsp;&nbsp;CLEAR&nbsp;ent_retco.<br />
+&nbsp;&nbsp;lgortsplit&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;PERFORM&nbsp;lesen_wes&nbsp;USING&nbsp;nast-objky&nbsp;lgortsplit.<br />
+&nbsp;&nbsp;ent_retco&nbsp;=&nbsp;retco.<br />
+ENDFORM.<br />
+   </div>
+   <div class="codeComment">
+*-----------&nbsp;Kanbankarte&nbsp;bei&nbsp;WE&nbsp;---------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM entry_wek1 USING ent_retco ent_screen.<br />
+&nbsp;&nbsp;xscreen&nbsp;=&nbsp;ent_screen.<br />
+&nbsp;&nbsp;CLEAR&nbsp;ent_retco.<br />
+&nbsp;&nbsp;PERFORM&nbsp;lesen&nbsp;USING&nbsp;nast-objky.<br />
+&nbsp;&nbsp;PERFORM&nbsp;ausgabe_wek1.<br />
+ENDFORM.<br />
+   </div>
+   <div class="codeComment">
+*----------------------------------------------------------------------*<br />
+*---------------&nbsp;Warenausgangsscheine&nbsp;---------------------------------*<br />
+*----------------------------------------------------------------------*<br />
+*----------------&nbsp;Warenausgangsschein&nbsp;Version&nbsp;1&nbsp;-----------------------*<br />
+   </div>
+   <div class="code">
+FORM entry_wa01 USING ent_retco ent_screen.<br />
+&nbsp;&nbsp;xscreen&nbsp;=&nbsp;ent_screen.<br />
+&nbsp;&nbsp;CLEAR&nbsp;ent_retco.<br />
+&nbsp;&nbsp;PERFORM&nbsp;lesen_wa&nbsp;USING&nbsp;nast-objky.<br />
+&nbsp;&nbsp;ent_retco&nbsp;=&nbsp;retco.<br />
+&nbsp;&nbsp;PERFORM&nbsp;ausgabe_wa01.<br />
+ENDFORM.<br />
+   </div>
+   <div class="codeComment">
+*----------------&nbsp;Warenausgangsschein&nbsp;Version&nbsp;2&nbsp;-----------------------*<br />
+   </div>
+   <div class="code">
+FORM entry_wa02 USING ent_retco ent_screen.<br />
+&nbsp;&nbsp;xscreen&nbsp;=&nbsp;ent_screen.<br />
+&nbsp;&nbsp;CLEAR&nbsp;ent_retco.<br />
+&nbsp;&nbsp;PERFORM&nbsp;lesen_wa&nbsp;USING&nbsp;nast-objky.<br />
+&nbsp;&nbsp;ent_retco&nbsp;=&nbsp;retco.<br />
+&nbsp;&nbsp;PERFORM&nbsp;ausgabe_wa02.<br />
+ENDFORM.<br />
+   </div>
+   <div class="codeComment">
+*----------------&nbsp;Warenausgangsschein&nbsp;Version&nbsp;3&nbsp;-----------------------*<br />
+   </div>
+   <div class="code">
+FORM entry_wa03 USING ent_retco ent_screen.<br />
+&nbsp;&nbsp;xscreen&nbsp;=&nbsp;ent_screen.<br />
+&nbsp;&nbsp;CLEAR&nbsp;ent_retco.<br />
+&nbsp;&nbsp;CLEAR&nbsp;lgortsplit.<br />
+&nbsp;&nbsp;PERFORM&nbsp;lesen_was&nbsp;USING&nbsp;nast-objky&nbsp;lgortsplit.<br />
+&nbsp;&nbsp;ent_retco&nbsp;=&nbsp;retco.<br />
+ENDFORM.<br />
+   </div>
+   <div class="codeComment">
+*----------------&nbsp;Warenausgangsschein&nbsp;Version&nbsp;3&nbsp;mit&nbsp;Lagerortsplit------*<br />
+   </div>
+   <div class="code">
+FORM entry_wa03l USING ent_retco ent_screen.<br />
+&nbsp;&nbsp;xscreen&nbsp;=&nbsp;ent_screen.<br />
+&nbsp;&nbsp;CLEAR&nbsp;ent_retco.<br />
+&nbsp;&nbsp;lgortsplit&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;PERFORM&nbsp;lesen_was&nbsp;USING&nbsp;nast-objky&nbsp;lgortsplit.<br />
+&nbsp;&nbsp;ent_retco&nbsp;=&nbsp;retco.<br />
+ENDFORM.<br />
+   </div>
+   <div class="codeComment">
+*----------------------------------------------------------------------*<br />
+*---------------&nbsp;Etikettendruck&nbsp;beim&nbsp;Warenausgang&nbsp;---------------------*<br />
+*----------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM entry_etia USING ent_retco ent_screen.<br />
+&nbsp;&nbsp;xscreen&nbsp;=&nbsp;ent_screen.<br />
+&nbsp;&nbsp;CLEAR&nbsp;ent_retco.<br />
+&nbsp;&nbsp;PERFORM&nbsp;lesen_wa&nbsp;USING&nbsp;nast-objky.<br />
+&nbsp;&nbsp;ent_retco&nbsp;=&nbsp;retco.<br />
+&nbsp;&nbsp;PERFORM&nbsp;ausgabe_eti.<br />
+ENDFORM.<br />
+   </div>
+   <div class="codeComment">
+*----------------------------------------------------------------------*<br />
+*----------&nbsp;Etikettendruck&nbsp;beim&nbsp;Wareneingang&nbsp;--------------------------*<br />
+*----------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM entry_etie USING ent_retco ent_screen.<br />
+&nbsp;&nbsp;xscreen&nbsp;=&nbsp;ent_screen.<br />
+&nbsp;&nbsp;CLEAR&nbsp;ent_retco.<br />
+&nbsp;&nbsp;PERFORM&nbsp;lesen&nbsp;USING&nbsp;nast-objky.<br />
+&nbsp;&nbsp;ent_retco&nbsp;=&nbsp;retco.<br />
+&nbsp;&nbsp;PERFORM&nbsp;bestellkopf_lesen.<br />
+&nbsp;&nbsp;PERFORM&nbsp;ausgabe_eti.<br />
+ENDFORM.<br />
+   </div>
+   <div class="codeComment">
+*----------------------------------------------------------------------*<br />
+*------&nbsp;Etikettendruck&nbsp;beim&nbsp;Wareneingang&nbsp;Version&nbsp;3&nbsp;--------------------*<br />
+*----------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM entry_eties USING ent_retco ent_screen.<br />
+&nbsp;&nbsp;xscreen&nbsp;=&nbsp;ent_screen.<br />
+&nbsp;&nbsp;CLEAR&nbsp;ent_retco.<br />
+&nbsp;&nbsp;PERFORM&nbsp;lesen_wese&nbsp;USING&nbsp;nast-objky.<br />
+&nbsp;&nbsp;ent_retco&nbsp;=&nbsp;retco.<br />
+ENDFORM.<br />
+   </div>
+   <div class="codeComment">
+*----------------------------------------------------------------------*<br />
+*-----&nbsp;Etikettendruck&nbsp;beim&nbsp;Warenausgang&nbsp;Version&nbsp;3&nbsp;---------------------*<br />
+*----------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM entry_etias USING ent_retco ent_screen.<br />
+&nbsp;&nbsp;xscreen&nbsp;=&nbsp;ent_screen.<br />
+&nbsp;&nbsp;CLEAR&nbsp;ent_retco.<br />
+&nbsp;&nbsp;PERFORM&nbsp;lesen_wase&nbsp;USING&nbsp;nast-objky.<br />
+&nbsp;&nbsp;ent_retco&nbsp;=&nbsp;retco.<br />
+ENDFORM.<br />
+   </div>
+   <div class="codeComment">
+*----------------------------------------------------------------------*<br />
+*---------------&nbsp;Warenausgangsscheine&nbsp;---------------------------------*<br />
+*----------------------------------------------------------------------*<br />
+*------&nbsp;Warenausgangsschein&nbsp;Lohnbearbeiter&nbsp;Vers1.&nbsp;---------------------*<br />
+   </div>
+   <div class="code">
+FORM entry_wlb1 USING ent_retco ent_screen.<br />
+&nbsp;&nbsp;xscreen&nbsp;=&nbsp;ent_screen.<br />
+&nbsp;&nbsp;CLEAR&nbsp;ent_retco.<br />
+&nbsp;&nbsp;PERFORM&nbsp;lesen_wlb&nbsp;USING&nbsp;nast-objky.<br />
+&nbsp;&nbsp;ent_retco&nbsp;=&nbsp;retco.<br />
+&nbsp;&nbsp;PERFORM&nbsp;ausgabe_wlb1.<br />
+ENDFORM.<br />
+   </div>
+   <div class="codeComment">
+*----------------------------------------------------------------------*<br />
+*---------------&nbsp;Warenausgangsscheine&nbsp;---------------------------------*<br />
+*----------------------------------------------------------------------*<br />
+*------&nbsp;Warenausgangsschein&nbsp;Lohnbearbeiter&nbsp;Vers2.&nbsp;---------------------*<br />
+   </div>
+   <div class="code">
+FORM entry_wlb2 USING ent_retco ent_screen.<br />
+&nbsp;&nbsp;xscreen&nbsp;=&nbsp;ent_screen.<br />
+&nbsp;&nbsp;CLEAR&nbsp;ent_retco.<br />
+&nbsp;&nbsp;PERFORM&nbsp;lesen_wlb&nbsp;USING&nbsp;nast-objky.<br />
+&nbsp;&nbsp;ent_retco&nbsp;=&nbsp;retco.<br />
+&nbsp;&nbsp;PERFORM&nbsp;ausgabe_wlb2.<br />
+ENDFORM.<br />
+   </div>
+   <div class="codeComment">
+*eject<br />
+*-------------&nbsp;Warenausgangsschein&nbsp;LB&nbsp;Version&nbsp;3&nbsp;-----------------------*<br />
+   </div>
+   <div class="code">
+FORM entry_wlb3 USING ent_retco ent_screen.<br />
+&nbsp;&nbsp;xscreen&nbsp;=&nbsp;ent_screen.<br />
+&nbsp;&nbsp;CLEAR&nbsp;ent_retco.<br />
+&nbsp;&nbsp;PERFORM&nbsp;lesen_wlbs&nbsp;USING&nbsp;nast-objky.<br />
+&nbsp;&nbsp;ent_retco&nbsp;=&nbsp;retco.<br />
+ENDFORM.<br />
+   </div>
+   <div class="codeComment">
+*-------&nbsp;Wareneingangsscheine&nbsp;für&nbsp;Fertigungsauftr#ge&nbsp;------------------*<br />
+*----------------------------------------------------------------------*<br />
+*-----------&nbsp;Wareneingangsschein&nbsp;Version&nbsp;1&nbsp;----------------------------*<br />
+   </div>
+   <div class="code">
+FORM entry_wf01 USING ent_retco ent_screen.<br />
+&nbsp;&nbsp;xscreen&nbsp;=&nbsp;ent_screen.<br />
+&nbsp;&nbsp;CLEAR&nbsp;ent_retco.<br />
+&nbsp;&nbsp;PERFORM&nbsp;lesen_wf&nbsp;USING&nbsp;nast-objky.<br />
+&nbsp;&nbsp;ent_retco&nbsp;=&nbsp;retco.<br />
+&nbsp;&nbsp;PERFORM&nbsp;ausgabe_wf01.<br />
+ENDFORM.<br />
+   </div>
+   <div class="codeComment">
+*-----------&nbsp;Wareneingangsschein&nbsp;Version&nbsp;2&nbsp;----------------------------*<br />
+   </div>
+   <div class="code">
+FORM entry_wf02 USING ent_retco ent_screen.<br />
+&nbsp;&nbsp;xscreen&nbsp;=&nbsp;ent_screen.<br />
+&nbsp;&nbsp;CLEAR&nbsp;ent_retco.<br />
+&nbsp;&nbsp;PERFORM&nbsp;lesen_wf&nbsp;USING&nbsp;nast-objky.<br />
+&nbsp;&nbsp;ent_retco&nbsp;=&nbsp;retco.<br />
+&nbsp;&nbsp;PERFORM&nbsp;bestellkopf_lesen.<br />
+&nbsp;&nbsp;PERFORM&nbsp;ausgabe_wf02.<br />
+ENDFORM.<br />
+   </div>
+   <div class="codeComment">
+*eject<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Form&nbsp;frm_get_data<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM frm_get_data .<br />
+&nbsp;&nbsp;IF&nbsp;gt_out[]&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;matnr,&nbsp;mtart,&nbsp;bismt<br />
+&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;TABLE&nbsp;@DATA(lt_mara)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;mara<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FOR&nbsp;ALL&nbsp;ENTRIES&nbsp;IN&nbsp;@gt_out<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;matnr&nbsp;=&nbsp;@gt_out-matnr.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;matnr,&nbsp;maktx<br />
+&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;TABLE&nbsp;@DATA(lt_makt)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;makt<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FOR&nbsp;ALL&nbsp;ENTRIES&nbsp;IN&nbsp;@gt_out<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;matnr&nbsp;=&nbsp;@gt_out-matnr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;spras&nbsp;=&nbsp;1.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;bukrs,&nbsp;butxt<br />
+&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;TABLE&nbsp;@DATA(lt_t001)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;t001<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FOR&nbsp;ALL&nbsp;ENTRIES&nbsp;IN&nbsp;@gt_out<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;bukrs&nbsp;=&nbsp;@gt_out-bukrs.<br />
+<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;werks,&nbsp;name1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;TABLE&nbsp;@DATA(lt_t001w)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;t001w<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FOR&nbsp;ALL&nbsp;ENTRIES&nbsp;IN&nbsp;@gt_out<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;werks&nbsp;=&nbsp;@gt_out-werks.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;werks,&nbsp;lgort,&nbsp;lgobe<br />
+&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;TABLE&nbsp;@DATA(lt_t001l)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;t001l<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FOR&nbsp;ALL&nbsp;ENTRIES&nbsp;IN&nbsp;@gt_out<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;werks&nbsp;=&nbsp;@gt_out-werks<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;lgort&nbsp;=&nbsp;@gt_out-lgort.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;msehi,&nbsp;mseh6&nbsp;AS&nbsp;msehl<br />
+&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;TABLE&nbsp;@DATA(lt_006a)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;t006a<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FOR&nbsp;ALL&nbsp;ENTRIES&nbsp;IN&nbsp;@gt_out<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;msehi&nbsp;=&nbsp;@gt_out-meins<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;spras&nbsp;=&nbsp;1.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;msehi,&nbsp;mseh6&nbsp;AS&nbsp;msehl<br />
+&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;TABLE&nbsp;@DATA(lt_006a1)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;t006a<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FOR&nbsp;ALL&nbsp;ENTRIES&nbsp;IN&nbsp;@gt_out<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;msehi&nbsp;=&nbsp;@gt_out-bstme<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;spras&nbsp;=&nbsp;1.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;partner,&nbsp;name_org1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;TABLE&nbsp;@DATA(lt_but0)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;but000<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FOR&nbsp;ALL&nbsp;ENTRIES&nbsp;IN&nbsp;@gt_out<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;partner&nbsp;=&nbsp;@gt_out-lifnr.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;ebeln,&nbsp;ekgrp<br />
+&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;TABLE&nbsp;@DATA(lt_ekko)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;ekko<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FOR&nbsp;ALL&nbsp;ENTRIES&nbsp;IN&nbsp;@gt_out<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;ebeln&nbsp;=&nbsp;@gt_out-ebeln.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;lt_ekko[]&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;ekgrp,&nbsp;eknam<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;TABLE&nbsp;@DATA(lt_t024)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;t024<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FOR&nbsp;ALL&nbsp;ENTRIES&nbsp;IN&nbsp;@lt_ekko<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;ekgrp&nbsp;=&nbsp;@lt_ekko-ekgrp.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;bname,&nbsp;name_text<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;CORRESPONDING&nbsp;FIELDS&nbsp;OF&nbsp;TABLE&nbsp;lt_name<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;user_addr_idad3<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;FOR&nbsp;ALL&nbsp;ENTRIES&nbsp;IN&nbsp;@gt_out<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;bname&nbsp;=&nbsp;@gt_out-usnam.<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;gt_out&nbsp;INTO&nbsp;gs_out.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;lt_mara&nbsp;INTO&nbsp;DATA(ls_mara)&nbsp;WITH&nbsp;KEY&nbsp;matnr&nbsp;=&nbsp;gs_out-matnr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_out-bismt&nbsp;=&nbsp;ls_mara-bismt.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_out-mtart&nbsp;=&nbsp;ls_mara-mtart.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;lt_makt&nbsp;INTO&nbsp;DATA(ls_makt)&nbsp;WITH&nbsp;KEY&nbsp;matnr&nbsp;=&nbsp;gs_out-matnr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_out-zmaktx&nbsp;=&nbsp;ls_makt-maktx.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;gs_out-charg&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;gs_out-mtart&nbsp;=&nbsp;'Z006'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'VB_BATCH_2_CLASS_OBJECT'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_matnr&nbsp;=&nbsp;gs_out-matnr&nbsp;"物料<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_charg&nbsp;=&nbsp;gs_out-charg&nbsp;"批次<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_werks&nbsp;=&nbsp;gs_out-werks&nbsp;"工厂<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;e_objek&nbsp;=&nbsp;l_objek&nbsp;"对象<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;e_obtab&nbsp;=&nbsp;l_obtab&nbsp;"表<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;e_klart&nbsp;=&nbsp;l_klart&nbsp;"类型<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;e_class&nbsp;=&nbsp;l_class.&nbsp;"类<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;e_objek&nbsp;=&nbsp;l_objek.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'BAPI_OBJCL_GETDETAIL'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;objecttable&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;l_obtab<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;classnum&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;l_class<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;classtype&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;l_klart<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;objectkey_long&nbsp;&nbsp;=&nbsp;e_objek<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;keydate&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;sy-datum<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;language&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;sy-langu<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TABLES<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;allocvaluesnum&nbsp;&nbsp;=&nbsp;lt_num<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;allocvalueschar&nbsp;=&nbsp;lt_char<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;allocvaluescurr&nbsp;=&nbsp;lt_curr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lt_return.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;其中table：lt_num&nbsp;lt_char&nbsp;lt_curr即是获取的特性及特性<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;lt_num.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;lt_num-charact&nbsp;=&nbsp;'Z_BATCH_WIDTH'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'QSS0_FLTP_TO_CHAR_CONVERSION'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_number_of_digits&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;3<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_fltp_value&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lt_num-value_from<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_value_not_initial_flag&nbsp;=&nbsp;'X'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_screen_fieldlength&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;16<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;e_char_field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;zmaktx.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CONCATENATE&nbsp;gs_out-zmaktx&nbsp;zmaktx&nbsp;INTO&nbsp;gs_out-zmaktx.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;zmaktx.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;lt_num-charact&nbsp;=&nbsp;'Z_BATCH_LENGTH'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'QSS0_FLTP_TO_CHAR_CONVERSION'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_number_of_digits&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;3<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_fltp_value&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lt_num-value_from<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_value_not_initial_flag&nbsp;=&nbsp;'X'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_screen_fieldlength&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;16<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;e_char_field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;zmaktx.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CONCATENATE&nbsp;gs_out-zmaktx&nbsp;zmaktx&nbsp;INTO&nbsp;gs_out-zmaktx.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;zmaktx.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDLOOP.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;lt_num[].<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;lt_t001&nbsp;INTO&nbsp;DATA(ls_t001)&nbsp;WITH&nbsp;KEY&nbsp;bukrs&nbsp;=&nbsp;gs_out-bukrs.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_out-butxt&nbsp;=&nbsp;ls_t001-butxt.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;lt_t001w&nbsp;INTO&nbsp;DATA(ls_t001w)&nbsp;WITH&nbsp;KEY&nbsp;werks&nbsp;=&nbsp;gs_out-werks.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_out-name1&nbsp;=&nbsp;ls_t001w-name1.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;lt_t001l&nbsp;INTO&nbsp;DATA(ls_t001l)&nbsp;WITH&nbsp;KEY&nbsp;werks&nbsp;=&nbsp;gs_out-werks<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lgort&nbsp;=&nbsp;gs_out-lgort.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_out-lgobe&nbsp;=&nbsp;ls_t001l-lgobe.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;lt_006a&nbsp;INTO&nbsp;DATA(ls_006a)&nbsp;WITH&nbsp;KEY&nbsp;msehi&nbsp;=&nbsp;gs_out-meins.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_out-zmsehl1&nbsp;=&nbsp;ls_006a-msehl.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;lt_006a1&nbsp;INTO&nbsp;DATA(ls_006a1)&nbsp;WITH&nbsp;KEY&nbsp;msehi&nbsp;=&nbsp;gs_out-bstme.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_out-zmsehl2&nbsp;=&nbsp;ls_006a1-msehl.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;lt_but0&nbsp;INTO&nbsp;DATA(ls_but0)&nbsp;WITH&nbsp;KEY&nbsp;partner&nbsp;=&nbsp;gs_out-lifnr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_out-name_org1&nbsp;=&nbsp;ls_but0-name_org1.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;lt_ekko&nbsp;INTO&nbsp;DATA(ls_ekko)&nbsp;WITH&nbsp;KEY&nbsp;ebeln&nbsp;=&nbsp;gs_out-ebeln.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_out-ekgrp&nbsp;=&nbsp;ls_ekko-ekgrp.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;lt_t024&nbsp;INTO&nbsp;DATA(ls_t024)&nbsp;WITH&nbsp;KEY&nbsp;ekgrp&nbsp;=&nbsp;gs_out-ekgrp.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_out-eknam&nbsp;=&nbsp;ls_t024-eknam.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;gs_out-bwart&nbsp;=&nbsp;'101'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;OR&nbsp;gs_out-bwart&nbsp;=&nbsp;'105'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;OR&nbsp;gs_out-bwart&nbsp;=&nbsp;'123'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;OR&nbsp;gs_out-bwart&nbsp;=&nbsp;'162'.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_out-zdjtype&nbsp;=&nbsp;'入库单'.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;gs_out-bwart&nbsp;=&nbsp;'102'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;OR&nbsp;gs_out-bwart&nbsp;=&nbsp;'106'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;OR&nbsp;gs_out-bwart&nbsp;=&nbsp;'122'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;OR&nbsp;gs_out-bwart&nbsp;=&nbsp;'161'.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_out-zdjtype&nbsp;=&nbsp;'退货单'.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CONDENSE&nbsp;gs_out-zmaktx.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MODIFY&nbsp;gt_out&nbsp;FROM&nbsp;gs_out.<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+ENDFORM.<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Form&nbsp;frm_print_data<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM frm_print_data .<br />
+<br />
+&nbsp;&nbsp;DATA:&nbsp;ls_head&nbsp;TYPE&nbsp;zmms001,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lt_item&nbsp;TYPE&nbsp;TABLE&nbsp;OF&nbsp;zmms001,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_item&nbsp;TYPE&nbsp;zmms001.<br />
+<br />
+&nbsp;&nbsp;control_parameters-no_open&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;control_parameters-no_close&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;control_parameters-langu&nbsp;=&nbsp;'1'.&nbsp;&nbsp;&nbsp;"&nbsp;Chinese&nbsp;language<br />
+&nbsp;&nbsp;output_options-tdiexit&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;output_options-tdnewid&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;output_options-tdimmed&nbsp;=&nbsp;'X'.<br />
+<br />
+&nbsp;&nbsp;PERFORM&nbsp;frm_open_form.<br />
+<br />
+&nbsp;&nbsp;DATA:lt_tmp&nbsp;LIKE&nbsp;TABLE&nbsp;OF&nbsp;gs_out,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_tmp&nbsp;LIKE&nbsp;gs_out.<br />
+<br />
+&nbsp;&nbsp;SELECT&nbsp;bname,&nbsp;name_text<br />
+&nbsp;&nbsp;INTO&nbsp;TABLE&nbsp;@DATA(lt_name)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;user_addr_idad3.<br />
+<br />
+&nbsp;&nbsp;lt_tmp[]&nbsp;=&nbsp;gt_out[]."两表数据进行赋值<br />
+<br />
+&nbsp;&nbsp;SORT&nbsp;lt_tmp&nbsp;BY&nbsp;mblnr&nbsp;mjahr&nbsp;."根据物料凭证编号进行排序<br />
+&nbsp;&nbsp;DELETE&nbsp;ADJACENT&nbsp;DUPLICATES&nbsp;FROM&nbsp;lt_tmp&nbsp;COMPARING&nbsp;mblnr&nbsp;mjahr."删除相临行的重复数据<br />
+<br />
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;lt_tmp&nbsp;INTO&nbsp;ls_tmp."遍历表LT_TMP<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR:ls_head,ls_item,lt_item[].<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;gt_out&nbsp;INTO&nbsp;gs_out&nbsp;WHERE&nbsp;&nbsp;mblnr&nbsp;=&nbsp;ls_tmp-mblnr."根据所选项和物料凭证编号进行读取<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MOVE-CORRESPONDING&nbsp;gs_out&nbsp;TO&nbsp;ls_head."对两结构中字段名相同的部分进行赋值<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MOVE-CORRESPONDING&nbsp;gs_out&nbsp;TO&nbsp;ls_item.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;lt_name&nbsp;INTO&nbsp;DATA(ls_name)&nbsp;WITH&nbsp;KEY&nbsp;bname&nbsp;=&nbsp;sy-uname.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_head-usnam&nbsp;=&nbsp;ls_name-name_text.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_item-usnam&nbsp;=&nbsp;ls_name-name_text.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;ls_item&nbsp;TO&nbsp;lt_item.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;ls_item.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;print_sf_data&nbsp;TABLES&nbsp;lt_item&nbsp;USING&nbsp;ls_head&nbsp;.<br />
+<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+&nbsp;&nbsp;PERFORM&nbsp;frm_close_form.<br />
+<br />
+ENDFORM.<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Form&nbsp;frm_open_form<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM frm_open_form .<br />
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'SSF_OPEN'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;control_parameters&nbsp;=&nbsp;control_parameters<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;output_options&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;output_options<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;job_output_options&nbsp;=&nbsp;job_output_options<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;formatting_error&nbsp;&nbsp;&nbsp;=&nbsp;1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;internal_error&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;send_error&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;3<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;user_canceled&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;4<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTHERS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;5.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;&lt;&gt;&nbsp;0.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;error&nbsp;handling<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;ID&nbsp;sy-msgid&nbsp;TYPE&nbsp;sy-msgty&nbsp;NUMBER&nbsp;sy-msgno<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WITH&nbsp;sy-msgv1&nbsp;sy-msgv2&nbsp;sy-msgv3&nbsp;sy-msgv4.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXIT.<br />
+&nbsp;&nbsp;ENDIF.<br />
+ENDFORM.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Form&nbsp;PRINT_SF_DATA<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM print_sf_data  TABLES   pt_item STRUCTURE zmms001<br />
+USING    ps_head TYPE zmms001.<br />
+<br />
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'SSF_FUNCTION_MODULE_NAME'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;formname&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'ZMM_SF02'&nbsp;"p_form<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fm_name&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;fm_name<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;no_form&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;no_function_module&nbsp;=&nbsp;2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTHERS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;3.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;&lt;&gt;&nbsp;0.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;error&nbsp;handling<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;ID&nbsp;sy-msgid&nbsp;TYPE&nbsp;sy-msgty&nbsp;NUMBER&nbsp;sy-msgno<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WITH&nbsp;sy-msgv1&nbsp;sy-msgv2&nbsp;sy-msgv3&nbsp;sy-msgv4.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXIT.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;fm_name<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;control_parameters&nbsp;=&nbsp;control_parameters<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;output_options&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;output_options<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;user_settings&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'X'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_head&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ps_head<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;job_output_info&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;output_info<br />
+&nbsp;&nbsp;&nbsp;&nbsp;TABLES<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lt_item&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;pt_item<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;formatting_error&nbsp;&nbsp;&nbsp;=&nbsp;1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;internal_error&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;send_error&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;3<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;user_canceled&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;4<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTHERS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;5.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;&lt;&gt;&nbsp;0.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;error&nbsp;handling<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;ID&nbsp;sy-msgid&nbsp;TYPE&nbsp;sy-msgty&nbsp;NUMBER&nbsp;sy-msgno<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WITH&nbsp;sy-msgv1&nbsp;sy-msgv2&nbsp;sy-msgv3&nbsp;sy-msgv4.<br />
+<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+ENDFORM.<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Form&nbsp;frm_close_form<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM frm_close_form .<br />
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'SSF_CLOSE'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;job_output_info&nbsp;&nbsp;=&nbsp;output_info<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;formatting_error&nbsp;=&nbsp;1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;internal_error&nbsp;&nbsp;&nbsp;=&nbsp;2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;send_error&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;3<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTHERS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;4.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;&lt;&gt;&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;ID&nbsp;sy-msgid&nbsp;TYPE&nbsp;sy-msgty&nbsp;NUMBER&nbsp;sy-msgno<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WITH&nbsp;sy-msgv1&nbsp;sy-msgv2&nbsp;sy-msgv3&nbsp;sy-msgv4.<br />
+&nbsp;&nbsp;ENDIF.<br />
+ENDFORM.<br />
+            </div>
+          </td>
+        </tr>
+      </table>
+      </td>
+      </tr>
+   <tr>
+<td class="footer">Extracted by Mass Download version 1.5.2 - E.G.Mellodew. 1998-2022. Sap Release 755</td>
+   </tr>
+</table>
+</body>
+</html>

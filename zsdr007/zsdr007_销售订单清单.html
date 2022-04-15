@@ -1,0 +1,753 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=GB2312" />
+<title>ZSDR007</title>
+<style type="text/css">
+.code{ font-family:"Courier New", Courier, monospace; color:#000; font-size:14px; background-color:#F2F4F7 }
+  .codeComment {font-family:"Courier New", Courier, monospace; color:#0000F0; font-size:14px; background-color:#F2F4F7 }
+  .normalBold{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; font-weight:800 }
+  .normalBoldLarge{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+</style>
+<style type="text/css">
+  .normal{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px }
+  .footer{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; text-align: center }
+  h2{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+  h3{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:14px; font-weight:800 }
+  .outerTable{
+   background-color:#E0E7ED;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-right-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+  .innerTable{
+   background-color:#F2F4F7;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-bottom-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+</style>
+</head>
+<body>
+<table class="outerTable">
+  <tr class="normalBoldLarge">
+     <td><h2>Code listing for: ZSDR007</h2>
+<h3> Description: 销售订单清单</h3></td>
+   </tr>
+  <tr>
+     <td>
+     <table class="innerTable">
+       <tr>
+          <td>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Report&nbsp;ZSDR007<br />
+*&---------------------------------------------------------------------*<br />
+*&<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+REPORT zsdr007.<br />
+TABLES:vbap,vbak,vbkd,but0id,vbpa.<br />
+<br />
+TYPES:BEGIN OF ty_out,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vbeln&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;&nbsp;&nbsp;&nbsp;vbeln_va&nbsp;&nbsp;,&nbsp;"&nbsp;销售凭证<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;auart&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;&nbsp;&nbsp;&nbsp;auart&nbsp;,&nbsp;"&nbsp;销售凭证类型<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;audat&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;&nbsp;&nbsp;&nbsp;audat&nbsp;,&nbsp;"&nbsp;凭证日期<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;augru&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;&nbsp;&nbsp;&nbsp;augru&nbsp;,&nbsp;"&nbsp;订单原因<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bstnk&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;&nbsp;&nbsp;&nbsp;bstnk&nbsp;,&nbsp;"&nbsp;客户参考（抬头）<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ernam&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;&nbsp;&nbsp;&nbsp;ernam&nbsp;,&nbsp;"&nbsp;创建者<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;erdat&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;&nbsp;&nbsp;&nbsp;erdat&nbsp;,&nbsp;"&nbsp;创建日期<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;erzet&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;&nbsp;&nbsp;&nbsp;erzet&nbsp;,&nbsp;"&nbsp;时间<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;faksk&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;&nbsp;&nbsp;&nbsp;faksk&nbsp;,&nbsp;"&nbsp;开票冻结<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ktext&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;&nbsp;&nbsp;&nbsp;ktext_v&nbsp;,&nbsp;"&nbsp;销售凭证描述<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;kunnr&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;&nbsp;&nbsp;&nbsp;kunag&nbsp;,&nbsp;"&nbsp;售达方<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;kurst&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;&nbsp;&nbsp;&nbsp;kurst&nbsp;,&nbsp;"&nbsp;汇率类型<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lifsk&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;&nbsp;&nbsp;&nbsp;lifsk&nbsp;,&nbsp;"&nbsp;交货冻结<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;netwr&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;&nbsp;&nbsp;&nbsp;netwr_ak&nbsp;&nbsp;,&nbsp;"&nbsp;净值（抬头）<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;spart&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;&nbsp;&nbsp;&nbsp;spart&nbsp;,&nbsp;"&nbsp;产品组<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vbtyp&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;&nbsp;&nbsp;&nbsp;vbtypl&nbsp;&nbsp;,&nbsp;"&nbsp;SD&nbsp;凭证类别<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vkbur&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;&nbsp;&nbsp;&nbsp;vkbur&nbsp;,&nbsp;"&nbsp;销售办事处<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vkgrp&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;&nbsp;&nbsp;&nbsp;vkgrp&nbsp;,&nbsp;"&nbsp;销售组<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vkorg&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;&nbsp;&nbsp;&nbsp;vkorg&nbsp;,&nbsp;"&nbsp;销售组织<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vtweg&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;&nbsp;&nbsp;&nbsp;vtweg&nbsp;,&nbsp;"&nbsp;分销渠道<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;waerk&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;&nbsp;&nbsp;&nbsp;waerk&nbsp;,&nbsp;"&nbsp;凭证货币<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gbstk&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;&nbsp;&nbsp;&nbsp;gbstk&nbsp;,&nbsp;"&nbsp;总体状态<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lfgsk&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;&nbsp;&nbsp;&nbsp;lkgsk&nbsp;,&nbsp;"&nbsp;交货状态<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;name_kunag&nbsp;&nbsp;TYPE&nbsp;&nbsp;&nbsp;&nbsp;ad_name1&nbsp;&nbsp;,&nbsp;"&nbsp;售达方名称<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xpcpt_kunag&nbsp;TYPE&nbsp;&nbsp;&nbsp;&nbsp;ad_xpcpt&nbsp;&nbsp;,&nbsp;"&nbsp;地址已冻结（售达方）<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;posnr&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;&nbsp;&nbsp;&nbsp;posnr_va&nbsp;&nbsp;,&nbsp;"&nbsp;销售凭证项目<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;abgru&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;&nbsp;&nbsp;&nbsp;abgru_va&nbsp;&nbsp;,&nbsp;"&nbsp;拒绝原因<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;arktx&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;&nbsp;&nbsp;&nbsp;arktx&nbsp;,&nbsp;"&nbsp;物料描述<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;charg&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;&nbsp;&nbsp;&nbsp;charg_d&nbsp;,&nbsp;"&nbsp;批次<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;kbmeng&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;&nbsp;&nbsp;&nbsp;kbmeng&nbsp;&nbsp;,&nbsp;"&nbsp;确认的数量（项目）<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;kmein&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;&nbsp;&nbsp;&nbsp;kmein&nbsp;,&nbsp;"&nbsp;定价单位<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;kpein&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;&nbsp;&nbsp;&nbsp;kpein&nbsp;,&nbsp;"&nbsp;定价单位<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;kwmeng&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;&nbsp;&nbsp;&nbsp;kwmeng&nbsp;&nbsp;,&nbsp;"&nbsp;订单数量（项目）<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lgort&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;&nbsp;&nbsp;&nbsp;lgort_d&nbsp;,&nbsp;"&nbsp;存储地点<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;matnr&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;&nbsp;&nbsp;&nbsp;matnr&nbsp;,&nbsp;"&nbsp;物料<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;meins&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;&nbsp;&nbsp;&nbsp;meins&nbsp;,&nbsp;"&nbsp;基本计量单位<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;netpr&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;&nbsp;&nbsp;&nbsp;netpr&nbsp;,&nbsp;"&nbsp;净价<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vbap_netwr&nbsp;&nbsp;TYPE&nbsp;&nbsp;&nbsp;&nbsp;netwr_ap&nbsp;&nbsp;,&nbsp;"&nbsp;净值（项目）<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;shkzg&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;&nbsp;&nbsp;&nbsp;shkzg_va&nbsp;&nbsp;,&nbsp;"&nbsp;退货<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vrkme&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;&nbsp;&nbsp;&nbsp;vrkme&nbsp;,&nbsp;"&nbsp;销售单位<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vstel&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;&nbsp;&nbsp;&nbsp;vstel&nbsp;,&nbsp;"&nbsp;装运点/接收点<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;werks&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;&nbsp;&nbsp;&nbsp;werks_ext&nbsp;,&nbsp;"&nbsp;工厂<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;zmeng&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;&nbsp;&nbsp;&nbsp;dzmeng&nbsp;&nbsp;,&nbsp;"&nbsp;目标数量<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gbsta&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;&nbsp;&nbsp;&nbsp;gbsta&nbsp;,&nbsp;"&nbsp;总体状态项目<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lfgsa&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;&nbsp;&nbsp;&nbsp;lfgsa&nbsp;,&nbsp;"&nbsp;交货状态项目<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bstkd&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;&nbsp;&nbsp;&nbsp;bstkd&nbsp;,&nbsp;"&nbsp;客户参考<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;kursk&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;&nbsp;&nbsp;&nbsp;kursk&nbsp;,&nbsp;"&nbsp;汇率<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;prsdt&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;&nbsp;&nbsp;&nbsp;prsdt&nbsp;,&nbsp;"&nbsp;定价日期<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;zpavw&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;&nbsp;&nbsp;&nbsp;parvw&nbsp;,&nbsp;"&nbsp;个人合作伙伴职能<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pernr&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;&nbsp;&nbsp;&nbsp;pernr_d&nbsp;,&nbsp;"&nbsp;员工号<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;parvw&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;&nbsp;&nbsp;&nbsp;parvw&nbsp;,&nbsp;"&nbsp;合作伙伴职能<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vbpa_adrnr&nbsp;&nbsp;TYPE&nbsp;&nbsp;&nbsp;&nbsp;adrnr&nbsp;,&nbsp;"&nbsp;地址<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vbpa_kunnr&nbsp;&nbsp;TYPE&nbsp;&nbsp;&nbsp;&nbsp;kunnr&nbsp;,&nbsp;"&nbsp;合作伙伴<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;name_kunnr&nbsp;&nbsp;TYPE&nbsp;&nbsp;&nbsp;&nbsp;ad_name1&nbsp;&nbsp;,&nbsp;"&nbsp;合作伙伴名称<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xpcpt_kunnr&nbsp;TYPE&nbsp;&nbsp;&nbsp;&nbsp;ad_xpcpt&nbsp;&nbsp;,&nbsp;"&nbsp;地址已冻结（合作伙伴）<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;etenr&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;&nbsp;&nbsp;&nbsp;etenr&nbsp;,&nbsp;"&nbsp;计划行号<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;edatu&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;&nbsp;&nbsp;&nbsp;edatu&nbsp;,&nbsp;"&nbsp;交货日期<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wmeng&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;&nbsp;&nbsp;&nbsp;wmeng&nbsp;,&nbsp;"&nbsp;订单数量（计划行）<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bmeng&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;&nbsp;&nbsp;&nbsp;bmeng&nbsp;,&nbsp;"&nbsp;确认的数量（计划行）<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cmeng&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;&nbsp;&nbsp;&nbsp;cmeng&nbsp;,&nbsp;"&nbsp;更正数量（计划行）<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wadat&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;&nbsp;&nbsp;&nbsp;wadat&nbsp;,&nbsp;"&nbsp;发货日期<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mbdat&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;&nbsp;&nbsp;&nbsp;mbdat&nbsp;,&nbsp;"&nbsp;物料可用日期<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ettyp&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;&nbsp;&nbsp;&nbsp;ettyp&nbsp;,&nbsp;"&nbsp;计划行类别<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vlaufz&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;&nbsp;&nbsp;&nbsp;vlauf_veda&nbsp;&nbsp;,&nbsp;"&nbsp;合同有效期<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vlauez&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;&nbsp;&nbsp;&nbsp;vlaue_veda&nbsp;&nbsp;,&nbsp;"&nbsp;有效期单位<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vlaufk&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;&nbsp;&nbsp;&nbsp;vlauk_veda&nbsp;&nbsp;,&nbsp;"&nbsp;有效期类别<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vinsdat&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;&nbsp;&nbsp;&nbsp;vidat_veda&nbsp;&nbsp;,&nbsp;"&nbsp;安装日期<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vabndat&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;&nbsp;&nbsp;&nbsp;vadat_veda&nbsp;&nbsp;,&nbsp;"&nbsp;接受日期<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vuntdat&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;&nbsp;&nbsp;&nbsp;vudat_veda&nbsp;&nbsp;,&nbsp;"&nbsp;合同已签署<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vbegdat&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;&nbsp;&nbsp;&nbsp;vbdat_veda&nbsp;&nbsp;,&nbsp;"&nbsp;合同开始日期<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;venddat&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;&nbsp;&nbsp;&nbsp;vndat_veda&nbsp;&nbsp;,&nbsp;"&nbsp;合同终止日期<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vkuesch&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;&nbsp;&nbsp;&nbsp;vkues_veda&nbsp;&nbsp;,&nbsp;"&nbsp;取消过程<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vaktsch&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;&nbsp;&nbsp;&nbsp;vasch_veda&nbsp;&nbsp;,&nbsp;"&nbsp;操作<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;veindat&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;&nbsp;&nbsp;&nbsp;vedat_veda&nbsp;&nbsp;,&nbsp;"&nbsp;收到取消<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vwundat&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;&nbsp;&nbsp;&nbsp;vwdat_veda&nbsp;&nbsp;,&nbsp;"&nbsp;要求的取消日期<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vkuepar&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;&nbsp;&nbsp;&nbsp;vkpar_veda&nbsp;&nbsp;,&nbsp;"&nbsp;取消方<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vkuegru&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;&nbsp;&nbsp;&nbsp;vkgru_veda&nbsp;&nbsp;,&nbsp;"&nbsp;取消原因<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vbelkue&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;&nbsp;&nbsp;&nbsp;vbelk_veda&nbsp;&nbsp;,&nbsp;"&nbsp;合作伙伴的取消凭证<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vbedkue&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;&nbsp;&nbsp;&nbsp;vbedk_veda&nbsp;&nbsp;,&nbsp;"&nbsp;取消凭证日期<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vdemdat&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;&nbsp;&nbsp;&nbsp;vddat_veda&nbsp;&nbsp;,&nbsp;"&nbsp;拆除日期<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vasda&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;&nbsp;&nbsp;&nbsp;vasda&nbsp;,&nbsp;"&nbsp;操作日期<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lifsk_t&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;&nbsp;&nbsp;&nbsp;text40&nbsp;&nbsp;,&nbsp;"&nbsp;交货冻结描述<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;faksk_t&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;&nbsp;&nbsp;&nbsp;text40&nbsp;&nbsp;,&nbsp;"&nbsp;开票冻结描述<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;augru_t&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;&nbsp;&nbsp;&nbsp;text40&nbsp;&nbsp;,&nbsp;"&nbsp;订购原因描述<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;abgru_t&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;&nbsp;&nbsp;&nbsp;text40&nbsp;&nbsp;,&nbsp;"&nbsp;拒绝原因描述<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;name_pernr&nbsp;&nbsp;TYPE&nbsp;&nbsp;&nbsp;&nbsp;name1&nbsp;,&nbsp;"&nbsp;员工姓名<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;employee_id&nbsp;TYPE&nbsp;&nbsp;&nbsp;&nbsp;/shcm/empl_id&nbsp;,&nbsp;"&nbsp;员工标识<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gbstk_t&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;&nbsp;&nbsp;&nbsp;text40&nbsp;&nbsp;,&nbsp;"&nbsp;总体状态描述<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lfgsk_t&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;&nbsp;&nbsp;&nbsp;text40&nbsp;&nbsp;,&nbsp;"&nbsp;交货状态描述<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gbsta_t&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;&nbsp;&nbsp;&nbsp;text40&nbsp;&nbsp;,&nbsp;"&nbsp;总体状态项目描述<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lfgsa_t&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;&nbsp;&nbsp;&nbsp;text40&nbsp;&nbsp;,&nbsp;"&nbsp;交货状态项目描述<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vaktsch_t&nbsp;&nbsp;&nbsp;TYPE&nbsp;&nbsp;&nbsp;&nbsp;vasch_veda&nbsp;&nbsp;,&nbsp;"&nbsp;活动描述<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vkorg_t&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;&nbsp;&nbsp;&nbsp;text40&nbsp;&nbsp;,&nbsp;"&nbsp;销售组织名称<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vtweg_t&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;&nbsp;&nbsp;&nbsp;text40&nbsp;&nbsp;,&nbsp;"&nbsp;分销渠道名称<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;spart_t&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;&nbsp;&nbsp;&nbsp;text40&nbsp;&nbsp;,&nbsp;"&nbsp;部门名称<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;auart_t&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;&nbsp;&nbsp;&nbsp;text40&nbsp;&nbsp;,&nbsp;"&nbsp;销售凭证类型<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;kdmat&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;knmt-kdmat,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;zshgc&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;vbap-zshgc,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;zshkw&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;vbap-zshkw,<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sel,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;END&nbsp;OF&nbsp;ty_out.<br />
+DATA gt_out TYPE TABLE OF ty_out.<br />
+DATA gs_out TYPE          ty_out.<br />
+<br />
+<br />
+<br />
+FIELD-SYMBOLS &lt;lt_data&gt;   TYPE ANY TABLE.<br />
+DATA lr_data              TYPE REF TO data.<br />
+FIELD-SYMBOLS &lt;fs_data&gt;   TYPE any .<br />
+<br />
+DATA gv_auart    TYPE tdd_auart_nconv.<br />
+<br />
+<br />
+SELECTION-SCREEN BEGIN OF BLOCK kopf WITH FRAME TITLE TEXT-s03.<br />
+&nbsp;&nbsp;SELECT-OPTIONS:&nbsp;&nbsp;svbeln&nbsp;FOR&nbsp;vbak-vbeln,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sauart&nbsp;FOR&nbsp;gv_auart,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;skunnr&nbsp;FOR&nbsp;vbak-kunnr,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;saudat&nbsp;FOR&nbsp;vbak-audat,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;smatnr&nbsp;FOR&nbsp;vbap-matnr.<br />
+&nbsp;&nbsp;PARAMETERS:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pbstkd&nbsp;TYPE&nbsp;vbkd-bstkd.<br />
+&nbsp;&nbsp;SELECT-OPTIONS:&nbsp;&nbsp;serdat&nbsp;FOR&nbsp;vbak-erdat.<br />
+SELECTION-SCREEN END OF BLOCK kopf.<br />
+<br />
+PARAMETERS:      pdefault TYPE flag NO-DISPLAY DEFAULT 'X'.<br />
+<br />
+<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*SELECTION-SCREEN&nbsp;BEGIN&nbsp;OF&nbsp;BLOCK&nbsp;psst&nbsp;WITH&nbsp;FRAME&nbsp;TITLE&nbsp;TEXT-pst.<br />
+*&nbsp;&nbsp;SELECT-OPTIONS:&nbsp;st_psst&nbsp;FOR&nbsp;vbap-rfm_psst_group&nbsp;MODIF&nbsp;ID&nbsp;pst<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MATCHCODE&nbsp;OBJECT&nbsp;rfm_psst_group_id_shlp.<br />
+*&nbsp;&nbsp;PARAMETERS:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;p_cpsst&nbsp;TYPE&nbsp;arun_compsst&nbsp;MODIF&nbsp;ID&nbsp;pst.<br />
+*SELECTION-SCREEN&nbsp;END&nbsp;OF&nbsp;BLOCK&nbsp;psst.<br />
+<br />
+<br />
+<br />
+*SELECTION-SCREEN&nbsp;BEGIN&nbsp;OF&nbsp;BLOCK&nbsp;season&nbsp;WITH&nbsp;FRAME&nbsp;TITLE&nbsp;TEXT-sea.<br />
+*<br />
+*&nbsp;&nbsp;SELECT-OPTIONS:&nbsp;st_seayr&nbsp;FOR&nbsp;vbap-fsh_season_year&nbsp;MODIF&nbsp;ID&nbsp;sea<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MATCHCODE&nbsp;OBJECT&nbsp;fsh_season_year.<br />
+*&nbsp;&nbsp;SELECT-OPTIONS:&nbsp;st_sea&nbsp;&nbsp;&nbsp;FOR&nbsp;vbap-fsh_season&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MODIF&nbsp;ID&nbsp;sea<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MATCHCODE&nbsp;OBJECT&nbsp;fsh_seasons.<br />
+*&nbsp;&nbsp;SELECT-OPTIONS:&nbsp;st_col&nbsp;&nbsp;&nbsp;FOR&nbsp;vbap-fsh_collection&nbsp;&nbsp;MODIF&nbsp;ID&nbsp;sea<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MATCHCODE&nbsp;OBJECT&nbsp;fsh_collection.<br />
+*&nbsp;&nbsp;SELECT-OPTIONS:&nbsp;st_thm&nbsp;&nbsp;&nbsp;FOR&nbsp;vbap-fsh_theme&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MODIF&nbsp;ID&nbsp;sea<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MATCHCODE&nbsp;OBJECT&nbsp;fsh_theme.<br />
+*SELECTION-SCREEN&nbsp;END&nbsp;OF&nbsp;BLOCK&nbsp;season.<br />
+<br />
+<br />
+   </div>
+   <div class="code">
+SELECTION-SCREEN BEGIN OF BLOCK internalpartnerdata WITH FRAME TITLE TEXT-s04.<br />
+&nbsp;&nbsp;PARAMETERS:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pzpavw&nbsp;TYPE&nbsp;vbpa-parvw&nbsp;MATCHCODE&nbsp;OBJECT&nbsp;sh_tpar_pe.<br />
+&nbsp;&nbsp;SELECT-OPTIONS:&nbsp;sempl&nbsp;FOR&nbsp;but0id-idnumber&nbsp;MATCHCODE&nbsp;OBJECT&nbsp;/shcm/perswrkagrmt&nbsp;,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sernam&nbsp;FOR&nbsp;vbak-ernam.<br />
+SELECTION-SCREEN END OF BLOCK internalpartnerdata.<br />
+<br />
+SELECTION-SCREEN BEGIN OF BLOCK partnerdata WITH FRAME TITLE TEXT-s05.<br />
+&nbsp;&nbsp;PARAMETERS:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ppavw&nbsp;TYPE&nbsp;vbpa-parvw&nbsp;MATCHCODE&nbsp;OBJECT&nbsp;sh_tpar_ku.<br />
+&nbsp;&nbsp;SELECT-OPTIONS:&nbsp;spartner&nbsp;FOR&nbsp;vbpa-kunnr.<br />
+SELECTION-SCREEN END OF BLOCK partnerdata.<br />
+<br />
+SELECTION-SCREEN BEGIN OF BLOCK orgdaten WITH FRAME TITLE TEXT-s01.<br />
+&nbsp;&nbsp;SELECT-OPTIONS:&nbsp;svkorg&nbsp;FOR&nbsp;&nbsp;vbak-vkorg,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;svtweg&nbsp;FOR&nbsp;&nbsp;vbak-vtweg,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sspart&nbsp;FOR&nbsp;&nbsp;vbak-spart,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;svkbur&nbsp;FOR&nbsp;&nbsp;vbak-vkbur,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;svkgrp&nbsp;FOR&nbsp;&nbsp;vbak-vkgrp.<br />
+SELECTION-SCREEN END OF BLOCK orgdaten.<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+SELECTION-SCREEN BEGIN OF BLOCK selumfang WITH FRAME TITLE TEXT-s02.<br />
+&nbsp;&nbsp;PARAMETERS:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pvboff&nbsp;RADIOBUTTON&nbsp;GROUP&nbsp;sel.<br />
+&nbsp;&nbsp;PARAMETERS:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pvball&nbsp;RADIOBUTTON&nbsp;GROUP&nbsp;sel&nbsp;DEFAULT&nbsp;'X'.<br />
+SELECTION-SCREEN END OF BLOCK selumfang.<br />
+<br />
+<br />
+START-OF-SELECTION.<br />
+<br />
+&nbsp;&nbsp;PERFORM&nbsp;get_data.<br />
+&nbsp;&nbsp;PERFORM&nbsp;PROCESS_dATA.<br />
+&nbsp;&nbsp;PERFORM&nbsp;display_data.<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Form&nbsp;get_data<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;text<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM get_data.<br />
+<br />
+&nbsp;&nbsp;"初始设置<br />
+&nbsp;&nbsp;CALL&nbsp;METHOD&nbsp;cl_salv_bs_runtime_info=&gt;set<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;display&nbsp;&nbsp;=&nbsp;abap_false<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;metadata&nbsp;=&nbsp;abap_false<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;data&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;abap_true.<br />
+<br />
+<br />
+&nbsp;&nbsp;SUBMIT&nbsp;sd_sales_document_view<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WITH&nbsp;pvball&nbsp;=&nbsp;pvball<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WITH&nbsp;pbstkd&nbsp;=&nbsp;pbstkd<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WITH&nbsp;pdefault&nbsp;=&nbsp;pdefault<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WITH&nbsp;ppavw&nbsp;&nbsp;=&nbsp;ppavw<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WITH&nbsp;pvboff&nbsp;=&nbsp;pvboff<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WITH&nbsp;pzpavw&nbsp;=&nbsp;pzpavw<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WITH&nbsp;p_cpsst&nbsp;...<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WITH&nbsp;sauart&nbsp;IN&nbsp;sauart<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WITH&nbsp;saudat&nbsp;IN&nbsp;saudat<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WITH&nbsp;sempl&nbsp;IN&nbsp;sempl<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WITH&nbsp;serdat&nbsp;IN&nbsp;serdat<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WITH&nbsp;sernam&nbsp;IN&nbsp;sernam<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WITH&nbsp;skunnr&nbsp;IN&nbsp;skunnr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WITH&nbsp;smatnr&nbsp;IN&nbsp;smatnr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WITH&nbsp;spartner&nbsp;IN&nbsp;spartner<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WITH&nbsp;sspart&nbsp;IN&nbsp;sspart<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WITH&nbsp;st_col&nbsp;...<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WITH&nbsp;st_psst&nbsp;...<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WITH&nbsp;st_sea&nbsp;...<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WITH&nbsp;st_seayr&nbsp;...<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WITH&nbsp;st_thm&nbsp;...<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WITH&nbsp;svbeln&nbsp;IN&nbsp;svbeln<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WITH&nbsp;svkbur&nbsp;IN&nbsp;svkbur<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WITH&nbsp;svkgrp&nbsp;IN&nbsp;svkgrp<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WITH&nbsp;svkorg&nbsp;IN&nbsp;svkorg<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WITH&nbsp;svtweg&nbsp;IN&nbsp;svtweg<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;RETURN.<br />
+<br />
+<br />
+&nbsp;&nbsp;TRY.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;METHOD&nbsp;cl_salv_bs_runtime_info=&gt;get_data_ref<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;r_data&nbsp;=&nbsp;lr_data.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ASSIGN&nbsp;lr_data-&gt;*&nbsp;TO&nbsp;&lt;lt_data&gt;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CATCH&nbsp;cx_salv_bs_sc_runtime_info.<br />
+&nbsp;&nbsp;ENDTRY.<br />
+<br />
+<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;lr_data&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;&lt;lt_data&gt;&nbsp;ASSIGNING&nbsp;&lt;fs_data&gt;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CLEAR:gs_out.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MOVE-CORRESPONDING&nbsp;&lt;fs_data&gt;&nbsp;TO&nbsp;gs_out.<br />
+<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;gs_out&nbsp;TO&nbsp;gt_out.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDLOOP.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+ENDFORM.<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Form&nbsp;PROCESS_dATA<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;text<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM PROCESS_dATA.<br />
+<br />
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;gt_out&nbsp;ASSIGNING&nbsp;FIELD-SYMBOL(&lt;fs_out&gt;).<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;SINGLE&nbsp;zshgc&nbsp;zshkw<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;(&lt;fs_out&gt;-zshgc,&lt;fs_out&gt;-zshkw)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;vbap<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;vbeln&nbsp;=&nbsp;&lt;fs_out&gt;-vbeln<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;posnr&nbsp;=&nbsp;&lt;fs_out&gt;-posnr.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;SINGLE&nbsp;kdmat<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;&lt;fs_out&gt;-kdmat<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;knmt<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;vkorg&nbsp;=&nbsp;&lt;fs_out&gt;-vkorg<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;vtweg&nbsp;=&nbsp;&lt;fs_out&gt;-vtweg<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;kunnr&nbsp;=&nbsp;&lt;fs_out&gt;-kunnr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;matnr&nbsp;=&nbsp;&lt;fs_out&gt;-matnr.<br />
+<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+ENDFORM.<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Form&nbsp;display_data<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;text<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM display_data.<br />
+<br />
+&nbsp;&nbsp;DATA&nbsp;lv_text&nbsp;TYPE&nbsp;&nbsp;string.<br />
+&nbsp;&nbsp;DATA&nbsp;lt_fcat&nbsp;TYPE&nbsp;slis_t_fieldcat_alv.<br />
+&nbsp;&nbsp;DATA&nbsp;ls_layo&nbsp;TYPE&nbsp;slis_layout_alv.<br />
+&nbsp;&nbsp;DATA&nbsp;lt_sort&nbsp;TYPE&nbsp;slis_t_sortinfo_alv.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;gt_out[]&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;s004(sv).<br />
+&nbsp;&nbsp;&nbsp;&nbsp;RETURN.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+<br />
+&nbsp;&nbsp;"初始设置<br />
+&nbsp;&nbsp;CALL&nbsp;METHOD&nbsp;cl_salv_bs_runtime_info=&gt;set<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;display&nbsp;&nbsp;=&nbsp;abap_true<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;metadata&nbsp;=&nbsp;abap_false<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;data&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;abap_true.<br />
+<br />
+<br />
+<br />
+&nbsp;&nbsp;lv_text&nbsp;=&nbsp;'正在输出...'.<br />
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'SAPGUI_PROGRESS_INDICATOR'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text&nbsp;=&nbsp;lv_text.<br />
+<br />
+&nbsp;&nbsp;PERFORM&nbsp;grid_layo_set&nbsp;CHANGING&nbsp;&nbsp;ls_layo.<br />
+&nbsp;&nbsp;PERFORM&nbsp;grid_sort_set&nbsp;TABLES&nbsp;&nbsp;&nbsp;&nbsp;lt_sort.<br />
+&nbsp;&nbsp;PERFORM&nbsp;grid_fcat_set&nbsp;CHANGING&nbsp;&nbsp;lt_fcat.<br />
+<br />
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'REUSE_ALV_GRID_DISPLAY'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_callback_program&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;sy-repid<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_callback_pf_status_set&nbsp;=&nbsp;'GRID_PF_STATUS_SET'<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_callback_user_command&nbsp;=&nbsp;'GRID_USER_COMMAND'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_callback_top_of_page&nbsp;&nbsp;=&nbsp;'GRID_TOP_OF_PAGE&nbsp;'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;is_layout&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_layo<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it_fieldcat&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lt_fcat<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it_sort&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lt_sort<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_default&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'X'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_save&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'U'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;TABLES<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;t_outtab&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;gt_out<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;program_error&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTHERS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;2.<br />
+&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;&lt;&gt;&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;ID&nbsp;sy-msgid&nbsp;TYPE&nbsp;sy-msgty&nbsp;NUMBER&nbsp;sy-msgno<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WITH&nbsp;sy-msgv1&nbsp;sy-msgv2&nbsp;sy-msgv3&nbsp;sy-msgv4.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+ENDFORM.<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;grid_layo_set<br />
+*&---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM grid_layo_set  CHANGING  cs_layo TYPE slis_layout_alv.<br />
+&nbsp;&nbsp;cs_layo-colwidth_optimize&nbsp;&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;cs_layo-box_fieldname&nbsp;=&nbsp;'SEL'.<br />
+ENDFORM.                    "grid_layo_set<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;grid_sort_set<br />
+*&---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM grid_sort_set  TABLES  ct_sort TYPE slis_t_sortinfo_alv.<br />
+&nbsp;&nbsp;DATA&nbsp;ls_sort&nbsp;TYPE&nbsp;slis_sortinfo_alv.<br />
+<br />
+ENDFORM.                    "grid_sort_set<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;grid_pf_status_set<br />
+*&---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM grid_pf_status_set USING rt_extab TYPE slis_t_extab.<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;SET&nbsp;PF-STATUS&nbsp;'STANDARD_FULLSCREEN'&nbsp;EXCLUDING&nbsp;rt_extab.<br />
+   </div>
+   <div class="code">
+ENDFORM.                    "grid_pf_status_set<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;grid_user_command<br />
+*&---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM grid_top_of_page.<br />
+&nbsp;&nbsp;DATA&nbsp;lv_line&nbsp;TYPE&nbsp;char10.<br />
+&nbsp;&nbsp;DATA&nbsp;lv_tabix&nbsp;TYPE&nbsp;p.<br />
+&nbsp;&nbsp;DATA:&nbsp;lt_header&nbsp;TYPE&nbsp;slis_t_listheader,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lw_header&nbsp;LIKE&nbsp;LINE&nbsp;OF&nbsp;lt_header.<br />
+&nbsp;&nbsp;CLEAR&nbsp;lw_header.<br />
+<br />
+&nbsp;&nbsp;DESCRIBE&nbsp;TABLE&nbsp;gt_out&nbsp;LINES&nbsp;lv_tabix.<br />
+&nbsp;&nbsp;lv_line&nbsp;=&nbsp;lv_tabix.<br />
+&nbsp;&nbsp;lw_header-typ&nbsp;&nbsp;=&nbsp;'S'.<br />
+&nbsp;&nbsp;CONCATENATE&nbsp;TEXT-q01&nbsp;lv_line&nbsp;INTO&nbsp;lw_header-info.<br />
+&nbsp;&nbsp;APPEND&nbsp;lw_header&nbsp;TO&nbsp;lt_header.<br />
+&nbsp;&nbsp;CLEAR&nbsp;lw_header.<br />
+<br />
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'REUSE_ALV_COMMENTARY_WRITE'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it_list_commentary&nbsp;=&nbsp;lt_header.<br />
+&nbsp;&nbsp;"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_logo&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'ENJOYSAP_LOGO'.<br />
+ENDFORM.                    "grid_top_of_page<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;GRID_USER_COMMAND<br />
+*&---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM grid_user_command USING UV_uscomm LIKE sy-ucomm<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;US_selfield&nbsp;TYPE&nbsp;slis_selfield&nbsp;.<br />
+<br />
+&nbsp;&nbsp;DATA&nbsp;lv_line&nbsp;TYPE&nbsp;i.<br />
+&nbsp;&nbsp;DATA&nbsp;wa_out&nbsp;&nbsp;TYPE&nbsp;ty_out.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;lv_line&nbsp;=&nbsp;us_selfield-tabindex.<br />
+*&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;gt_out&nbsp;INTO&nbsp;wa_out&nbsp;WITH&nbsp;KEY&nbsp;sel&nbsp;=&nbsp;'X'.<br />
+*&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;&lt;&gt;&nbsp;0.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;'请选择行.....'&nbsp;TYPE&nbsp;'E'.<br />
+*&nbsp;&nbsp;ENDIF.<br />
+*<br />
+*&nbsp;&nbsp;DATA&nbsp;lv_answer&nbsp;TYPE&nbsp;c.<br />
+*&nbsp;&nbsp;CLEAR:lv_answer.<br />
+**<br />
+*&nbsp;&nbsp;CASE&nbsp;UV_uscomm.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'SEND'.&nbsp;&nbsp;&nbsp;"发送<br />
+*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;confirm<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'发送审批'<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'请确认是否执行'<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CHANGING<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_answer.<br />
+*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CHECK&nbsp;&nbsp;lv_answer&nbsp;=&nbsp;1.<br />
+*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;send_oa&nbsp;USING&nbsp;'1'.<br />
+*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'RECALL'.&nbsp;"撤回<br />
+*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;confirm<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'撤回审批'<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'请确认是否执行'<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CHANGING<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_answer.<br />
+*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CHECK&nbsp;&nbsp;lv_answer&nbsp;=&nbsp;1.<br />
+*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;send_oa&nbsp;USING&nbsp;'2'.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'&IC1'.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;OTHERS.<br />
+*&nbsp;&nbsp;ENDCASE.<br />
+<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;us_selfield-col_stable&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;us_selfield-row_stable&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;us_selfield-refresh&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'X'.<br />
+<br />
+ENDFORM.                    "FRM_ALV_COMMAND<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;grid_fcat_set<br />
+*&---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM grid_fcat_set  CHANGING ct_fcat TYPE  slis_t_fieldcat_alv.<br />
+&nbsp;&nbsp;DATA&nbsp;ls_fcat&nbsp;TYPE&nbsp;slis_fieldcat_alv.<br />
+&nbsp;&nbsp;DATA&nbsp;lv_pos&nbsp;&nbsp;TYPE&nbsp;i.<br />
+<br />
+&nbsp;&nbsp;ct_fcat&nbsp;=&nbsp;VALUE&nbsp;#(<br />
+&nbsp;&nbsp;(&nbsp;fieldname&nbsp;=&nbsp;'VBELN'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;seltext_l&nbsp;=&nbsp;'销售凭证'&nbsp;)<br />
+&nbsp;&nbsp;(&nbsp;fieldname&nbsp;=&nbsp;'AUART'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;seltext_l&nbsp;=&nbsp;'销售凭证类型'&nbsp;)<br />
+&nbsp;&nbsp;(&nbsp;fieldname&nbsp;=&nbsp;'AUDAT'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;seltext_l&nbsp;=&nbsp;'凭证日期'&nbsp;)<br />
+&nbsp;&nbsp;(&nbsp;fieldname&nbsp;=&nbsp;'AUGRU'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;seltext_l&nbsp;=&nbsp;'订单原因'&nbsp;)<br />
+&nbsp;&nbsp;(&nbsp;fieldname&nbsp;=&nbsp;'BSTNK'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;seltext_l&nbsp;=&nbsp;'客户参考（抬头）'&nbsp;)<br />
+&nbsp;&nbsp;(&nbsp;fieldname&nbsp;=&nbsp;'ERNAM'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;seltext_l&nbsp;=&nbsp;'创建者'&nbsp;)<br />
+&nbsp;&nbsp;(&nbsp;fieldname&nbsp;=&nbsp;'ERDAT'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;seltext_l&nbsp;=&nbsp;'创建日期'&nbsp;)<br />
+&nbsp;&nbsp;(&nbsp;fieldname&nbsp;=&nbsp;'ERZET'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;seltext_l&nbsp;=&nbsp;'创建时间'&nbsp;)<br />
+&nbsp;&nbsp;(&nbsp;fieldname&nbsp;=&nbsp;'FAKSK'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;seltext_l&nbsp;=&nbsp;'开票冻结'&nbsp;)<br />
+&nbsp;&nbsp;(&nbsp;fieldname&nbsp;=&nbsp;'KTEXT'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;seltext_l&nbsp;=&nbsp;'销售凭证描述'&nbsp;)<br />
+&nbsp;&nbsp;(&nbsp;fieldname&nbsp;=&nbsp;'KUNNR'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;seltext_l&nbsp;=&nbsp;'售达方'&nbsp;)<br />
+&nbsp;&nbsp;(&nbsp;fieldname&nbsp;=&nbsp;'KURST'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;seltext_l&nbsp;=&nbsp;'汇率类型'&nbsp;)<br />
+&nbsp;&nbsp;(&nbsp;fieldname&nbsp;=&nbsp;'LIFSK'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;seltext_l&nbsp;=&nbsp;'交货冻结'&nbsp;)<br />
+&nbsp;&nbsp;(&nbsp;fieldname&nbsp;=&nbsp;'NETWR'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;seltext_l&nbsp;=&nbsp;'净值（抬头）'&nbsp;)<br />
+&nbsp;&nbsp;(&nbsp;fieldname&nbsp;=&nbsp;'SPART'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;seltext_l&nbsp;=&nbsp;'产品组'&nbsp;)<br />
+&nbsp;&nbsp;(&nbsp;fieldname&nbsp;=&nbsp;'VBTYP'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;seltext_l&nbsp;=&nbsp;'SD&nbsp;凭证类别'&nbsp;)<br />
+&nbsp;&nbsp;(&nbsp;fieldname&nbsp;=&nbsp;'VKBUR'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;seltext_l&nbsp;=&nbsp;'销售办事处'&nbsp;)<br />
+&nbsp;&nbsp;(&nbsp;fieldname&nbsp;=&nbsp;'VKGRP'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;seltext_l&nbsp;=&nbsp;'销售组'&nbsp;)<br />
+&nbsp;&nbsp;(&nbsp;fieldname&nbsp;=&nbsp;'VKORG'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;seltext_l&nbsp;=&nbsp;'销售组织'&nbsp;)<br />
+&nbsp;&nbsp;(&nbsp;fieldname&nbsp;=&nbsp;'VTWEG'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;seltext_l&nbsp;=&nbsp;'分销渠道'&nbsp;)<br />
+&nbsp;&nbsp;(&nbsp;fieldname&nbsp;=&nbsp;'WAERK'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;seltext_l&nbsp;=&nbsp;'凭证货币'&nbsp;)<br />
+&nbsp;&nbsp;(&nbsp;fieldname&nbsp;=&nbsp;'GBSTK'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;seltext_l&nbsp;=&nbsp;'总体状态'&nbsp;)<br />
+&nbsp;&nbsp;(&nbsp;fieldname&nbsp;=&nbsp;'LFGSK'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;seltext_l&nbsp;=&nbsp;'交货状态'&nbsp;)<br />
+&nbsp;&nbsp;(&nbsp;fieldname&nbsp;=&nbsp;'NAME_KUNAG'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;seltext_l&nbsp;=&nbsp;'售达方名称'&nbsp;)<br />
+&nbsp;&nbsp;(&nbsp;fieldname&nbsp;=&nbsp;'XPCPT_KUNAG'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;seltext_l&nbsp;=&nbsp;'地址已冻结（售达方）'&nbsp;)<br />
+&nbsp;&nbsp;(&nbsp;fieldname&nbsp;=&nbsp;'POSNR'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;seltext_l&nbsp;=&nbsp;'销售凭证项目'&nbsp;)<br />
+&nbsp;&nbsp;(&nbsp;fieldname&nbsp;=&nbsp;'ABGRU'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;seltext_l&nbsp;=&nbsp;'拒绝原因'&nbsp;)<br />
+&nbsp;&nbsp;(&nbsp;fieldname&nbsp;=&nbsp;'ARKTX'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;seltext_l&nbsp;=&nbsp;'物料描述'&nbsp;)<br />
+&nbsp;&nbsp;(&nbsp;fieldname&nbsp;=&nbsp;'CHARG'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;seltext_l&nbsp;=&nbsp;'批次'&nbsp;)<br />
+&nbsp;&nbsp;(&nbsp;fieldname&nbsp;=&nbsp;'KBMENG'&nbsp;&nbsp;&nbsp;&nbsp;seltext_l&nbsp;=&nbsp;'确认的数量（项目)'&nbsp;)<br />
+&nbsp;&nbsp;(&nbsp;fieldname&nbsp;=&nbsp;'KMEIN'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;seltext_l&nbsp;=&nbsp;'定价单位'&nbsp;)<br />
+&nbsp;&nbsp;(&nbsp;fieldname&nbsp;=&nbsp;'KPEIN'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;seltext_l&nbsp;=&nbsp;'定价单位'&nbsp;)<br />
+&nbsp;&nbsp;(&nbsp;fieldname&nbsp;=&nbsp;'KWMENG'&nbsp;&nbsp;&nbsp;&nbsp;seltext_l&nbsp;=&nbsp;'订单数量（项目）'&nbsp;)<br />
+&nbsp;&nbsp;(&nbsp;fieldname&nbsp;=&nbsp;'LGORT'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;seltext_l&nbsp;=&nbsp;'存储地点'&nbsp;)<br />
+&nbsp;&nbsp;(&nbsp;fieldname&nbsp;=&nbsp;'MATNR'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;seltext_l&nbsp;=&nbsp;'物料编码'&nbsp;ref_fieldname&nbsp;=&nbsp;'MATNR'&nbsp;ref_tabname&nbsp;=&nbsp;'MARA'&nbsp;)<br />
+&nbsp;&nbsp;(&nbsp;fieldname&nbsp;=&nbsp;'MEINS'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;seltext_l&nbsp;=&nbsp;'基本计量单位'&nbsp;)<br />
+&nbsp;&nbsp;(&nbsp;fieldname&nbsp;=&nbsp;'NETPR'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;seltext_l&nbsp;=&nbsp;'净价'&nbsp;)<br />
+&nbsp;&nbsp;(&nbsp;fieldname&nbsp;=&nbsp;'VBAP_NETWR'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;seltext_l&nbsp;=&nbsp;'净值（项目）'&nbsp;)<br />
+&nbsp;&nbsp;(&nbsp;fieldname&nbsp;=&nbsp;'SHKZG'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;seltext_l&nbsp;=&nbsp;'退货'&nbsp;)<br />
+&nbsp;&nbsp;(&nbsp;fieldname&nbsp;=&nbsp;'VRKME'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;seltext_l&nbsp;=&nbsp;'销售单位'&nbsp;)<br />
+&nbsp;&nbsp;(&nbsp;fieldname&nbsp;=&nbsp;'VSTEL'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;seltext_l&nbsp;=&nbsp;'装运点/接收点'&nbsp;)<br />
+&nbsp;&nbsp;(&nbsp;fieldname&nbsp;=&nbsp;'WERKS'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;seltext_l&nbsp;=&nbsp;'工厂'&nbsp;)<br />
+&nbsp;&nbsp;(&nbsp;fieldname&nbsp;=&nbsp;'ZMENG'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;seltext_l&nbsp;=&nbsp;'目标数量'&nbsp;)<br />
+&nbsp;&nbsp;(&nbsp;fieldname&nbsp;=&nbsp;'GBSTA'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;seltext_l&nbsp;=&nbsp;'总体状态项目'&nbsp;)<br />
+&nbsp;&nbsp;(&nbsp;fieldname&nbsp;=&nbsp;'LFGSA'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;seltext_l&nbsp;=&nbsp;'交货状态项目'&nbsp;)<br />
+&nbsp;&nbsp;(&nbsp;fieldname&nbsp;=&nbsp;'BSTKD'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;seltext_l&nbsp;=&nbsp;'客户参考'&nbsp;)<br />
+&nbsp;&nbsp;(&nbsp;fieldname&nbsp;=&nbsp;'KURSK'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;seltext_l&nbsp;=&nbsp;'汇率'&nbsp;)<br />
+&nbsp;&nbsp;(&nbsp;fieldname&nbsp;=&nbsp;'PRSDT'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;seltext_l&nbsp;=&nbsp;'定价日期'&nbsp;)<br />
+&nbsp;&nbsp;(&nbsp;fieldname&nbsp;=&nbsp;'ZPAVW'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;seltext_l&nbsp;=&nbsp;'个人合作伙伴职能'&nbsp;)<br />
+&nbsp;&nbsp;(&nbsp;fieldname&nbsp;=&nbsp;'PERNR'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;seltext_l&nbsp;=&nbsp;'员工号'&nbsp;)<br />
+&nbsp;&nbsp;(&nbsp;fieldname&nbsp;=&nbsp;'PARVW'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;seltext_l&nbsp;=&nbsp;'合作伙伴职能'&nbsp;)<br />
+&nbsp;&nbsp;(&nbsp;fieldname&nbsp;=&nbsp;'VBPA_ADRNR'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;seltext_l&nbsp;=&nbsp;'地址'&nbsp;)<br />
+&nbsp;&nbsp;(&nbsp;fieldname&nbsp;=&nbsp;'VBPA_KUNNR'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;seltext_l&nbsp;=&nbsp;'合作伙伴'&nbsp;)<br />
+&nbsp;&nbsp;(&nbsp;fieldname&nbsp;=&nbsp;'NAME_KUNNR'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;seltext_l&nbsp;=&nbsp;'合作伙伴名称'&nbsp;)<br />
+&nbsp;&nbsp;(&nbsp;fieldname&nbsp;=&nbsp;'XPCPT_KUNNR'&nbsp;&nbsp;&nbsp;&nbsp;seltext_l&nbsp;=&nbsp;'地址已冻结（合作伙伴）'&nbsp;)<br />
+&nbsp;&nbsp;(&nbsp;fieldname&nbsp;=&nbsp;'ETENR'&nbsp;&nbsp;&nbsp;&nbsp;seltext_l&nbsp;=&nbsp;'计划行号'&nbsp;)<br />
+&nbsp;&nbsp;(&nbsp;fieldname&nbsp;=&nbsp;'EDATU'&nbsp;&nbsp;&nbsp;&nbsp;seltext_l&nbsp;=&nbsp;'交货日期'&nbsp;)<br />
+&nbsp;&nbsp;(&nbsp;fieldname&nbsp;=&nbsp;'WMENG'&nbsp;&nbsp;&nbsp;&nbsp;seltext_l&nbsp;=&nbsp;'订单数量（计划行）'&nbsp;)<br />
+&nbsp;&nbsp;(&nbsp;fieldname&nbsp;=&nbsp;'BMENG'&nbsp;&nbsp;&nbsp;&nbsp;seltext_l&nbsp;=&nbsp;'确认的数量（计划行）'&nbsp;)<br />
+&nbsp;&nbsp;(&nbsp;fieldname&nbsp;=&nbsp;'CMENG'&nbsp;&nbsp;&nbsp;&nbsp;seltext_l&nbsp;=&nbsp;'更正数量（计划行）'&nbsp;)<br />
+&nbsp;&nbsp;(&nbsp;fieldname&nbsp;=&nbsp;'WADAT'&nbsp;&nbsp;&nbsp;&nbsp;seltext_l&nbsp;=&nbsp;'发货日期'&nbsp;)<br />
+&nbsp;&nbsp;(&nbsp;fieldname&nbsp;=&nbsp;'MBDAT'&nbsp;&nbsp;&nbsp;&nbsp;seltext_l&nbsp;=&nbsp;'物料可用日期'&nbsp;)<br />
+&nbsp;&nbsp;(&nbsp;fieldname&nbsp;=&nbsp;'ETTYP'&nbsp;&nbsp;&nbsp;&nbsp;seltext_l&nbsp;=&nbsp;'计划行类别'&nbsp;)<br />
+&nbsp;&nbsp;(&nbsp;fieldname&nbsp;=&nbsp;'VLAUFZ'&nbsp;&nbsp;&nbsp;seltext_l&nbsp;=&nbsp;'合同有效期'&nbsp;)<br />
+&nbsp;&nbsp;(&nbsp;fieldname&nbsp;=&nbsp;'VLAUEZ'&nbsp;&nbsp;&nbsp;seltext_l&nbsp;=&nbsp;'有效期单位'&nbsp;)<br />
+&nbsp;&nbsp;(&nbsp;fieldname&nbsp;=&nbsp;'VLAUFK'&nbsp;&nbsp;&nbsp;seltext_l&nbsp;=&nbsp;'有效期类别'&nbsp;)<br />
+&nbsp;&nbsp;(&nbsp;fieldname&nbsp;=&nbsp;'VINSDAT'&nbsp;&nbsp;&nbsp;seltext_l&nbsp;=&nbsp;'安装日期'&nbsp;)<br />
+&nbsp;&nbsp;(&nbsp;fieldname&nbsp;=&nbsp;'VABNDAT'&nbsp;&nbsp;&nbsp;seltext_l&nbsp;=&nbsp;'接受日期'&nbsp;)<br />
+&nbsp;&nbsp;(&nbsp;fieldname&nbsp;=&nbsp;'VUNTDAT'&nbsp;&nbsp;&nbsp;seltext_l&nbsp;=&nbsp;'合同已签署'&nbsp;)<br />
+&nbsp;&nbsp;(&nbsp;fieldname&nbsp;=&nbsp;'VBEGDAT'&nbsp;&nbsp;&nbsp;seltext_l&nbsp;=&nbsp;'合同开始日期'&nbsp;)<br />
+&nbsp;&nbsp;(&nbsp;fieldname&nbsp;=&nbsp;'VENDDAT'&nbsp;&nbsp;&nbsp;seltext_l&nbsp;=&nbsp;'合同终止日期'&nbsp;)<br />
+&nbsp;&nbsp;(&nbsp;fieldname&nbsp;=&nbsp;'VKUESCH'&nbsp;&nbsp;&nbsp;seltext_l&nbsp;=&nbsp;'取消过程'&nbsp;)<br />
+&nbsp;&nbsp;(&nbsp;fieldname&nbsp;=&nbsp;'VAKTSCH'&nbsp;&nbsp;&nbsp;seltext_l&nbsp;=&nbsp;'操作'&nbsp;)<br />
+&nbsp;&nbsp;(&nbsp;fieldname&nbsp;=&nbsp;'VEINDAT'&nbsp;&nbsp;&nbsp;seltext_l&nbsp;=&nbsp;'收到取消'&nbsp;)<br />
+&nbsp;&nbsp;(&nbsp;fieldname&nbsp;=&nbsp;'VWUNDAT'&nbsp;&nbsp;&nbsp;seltext_l&nbsp;=&nbsp;'要求的取消日期'&nbsp;)<br />
+&nbsp;&nbsp;(&nbsp;fieldname&nbsp;=&nbsp;'VKUEPAR'&nbsp;&nbsp;&nbsp;seltext_l&nbsp;=&nbsp;'取消方'&nbsp;)<br />
+&nbsp;&nbsp;(&nbsp;fieldname&nbsp;=&nbsp;'VKUEGRU'&nbsp;&nbsp;&nbsp;seltext_l&nbsp;=&nbsp;'取消原因'&nbsp;)<br />
+&nbsp;&nbsp;(&nbsp;fieldname&nbsp;=&nbsp;'VBELKUE'&nbsp;&nbsp;&nbsp;seltext_l&nbsp;=&nbsp;'合作伙伴的取消凭证'&nbsp;)<br />
+&nbsp;&nbsp;(&nbsp;fieldname&nbsp;=&nbsp;'VBEDKUE'&nbsp;&nbsp;&nbsp;seltext_l&nbsp;=&nbsp;'取消凭证日期'&nbsp;)<br />
+&nbsp;&nbsp;(&nbsp;fieldname&nbsp;=&nbsp;'VDEMDAT'&nbsp;&nbsp;&nbsp;seltext_l&nbsp;=&nbsp;'拆除日期'&nbsp;)<br />
+&nbsp;&nbsp;(&nbsp;fieldname&nbsp;=&nbsp;'VASDA'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;seltext_l&nbsp;=&nbsp;'操作日期'&nbsp;)<br />
+&nbsp;&nbsp;(&nbsp;fieldname&nbsp;=&nbsp;'LIFSK_T'&nbsp;&nbsp;&nbsp;seltext_l&nbsp;=&nbsp;'交货冻结描述'&nbsp;)<br />
+&nbsp;&nbsp;(&nbsp;fieldname&nbsp;=&nbsp;'FAKSK_T'&nbsp;&nbsp;&nbsp;seltext_l&nbsp;=&nbsp;'开票冻结描述'&nbsp;)<br />
+&nbsp;&nbsp;(&nbsp;fieldname&nbsp;=&nbsp;'AUGRU_T'&nbsp;&nbsp;&nbsp;seltext_l&nbsp;=&nbsp;'订购原因描述'&nbsp;)<br />
+&nbsp;&nbsp;(&nbsp;fieldname&nbsp;=&nbsp;'ABGRU_T'&nbsp;&nbsp;&nbsp;seltext_l&nbsp;=&nbsp;'拒绝原因描述'&nbsp;)<br />
+&nbsp;&nbsp;(&nbsp;fieldname&nbsp;=&nbsp;'NAME_PERNR'&nbsp;&nbsp;&nbsp;seltext_l&nbsp;=&nbsp;'员工姓名'&nbsp;)<br />
+&nbsp;&nbsp;(&nbsp;fieldname&nbsp;=&nbsp;'EMPLOYEE_ID'&nbsp;&nbsp;&nbsp;seltext_l&nbsp;=&nbsp;'员工标识'&nbsp;)<br />
+&nbsp;&nbsp;(&nbsp;fieldname&nbsp;=&nbsp;'GBSTK_T'&nbsp;&nbsp;&nbsp;seltext_l&nbsp;=&nbsp;'总体状态描述'&nbsp;)<br />
+&nbsp;&nbsp;(&nbsp;fieldname&nbsp;=&nbsp;'LFGSK_T'&nbsp;&nbsp;&nbsp;seltext_l&nbsp;=&nbsp;'交货状态描述'&nbsp;)<br />
+&nbsp;&nbsp;(&nbsp;fieldname&nbsp;=&nbsp;'GBSTA_T'&nbsp;&nbsp;&nbsp;seltext_l&nbsp;=&nbsp;'总体状态项目描述'&nbsp;)<br />
+&nbsp;&nbsp;(&nbsp;fieldname&nbsp;=&nbsp;'LFGSA_T'&nbsp;&nbsp;&nbsp;seltext_l&nbsp;=&nbsp;'交货状态项目描述'&nbsp;)<br />
+&nbsp;&nbsp;(&nbsp;fieldname&nbsp;=&nbsp;'VAKTSCH_T'&nbsp;&nbsp;&nbsp;seltext_l&nbsp;=&nbsp;'活动描述'&nbsp;)<br />
+&nbsp;&nbsp;(&nbsp;fieldname&nbsp;=&nbsp;'VKORG_T'&nbsp;&nbsp;&nbsp;seltext_l&nbsp;=&nbsp;'销售组织名称'&nbsp;)<br />
+&nbsp;&nbsp;(&nbsp;fieldname&nbsp;=&nbsp;'VTWEG_T'&nbsp;&nbsp;&nbsp;seltext_l&nbsp;=&nbsp;'分销渠道名称'&nbsp;)<br />
+&nbsp;&nbsp;(&nbsp;fieldname&nbsp;=&nbsp;'SPART_T'&nbsp;&nbsp;&nbsp;seltext_l&nbsp;=&nbsp;'部门名称'&nbsp;)<br />
+&nbsp;&nbsp;(&nbsp;fieldname&nbsp;=&nbsp;'AUART_T'&nbsp;&nbsp;&nbsp;seltext_l&nbsp;=&nbsp;'销售凭证类型'&nbsp;)<br />
+<br />
+&nbsp;&nbsp;(&nbsp;fieldname&nbsp;=&nbsp;'KDMAT'&nbsp;&nbsp;&nbsp;&nbsp;seltext_l&nbsp;=&nbsp;'客户物料'&nbsp;)<br />
+&nbsp;&nbsp;(&nbsp;fieldname&nbsp;=&nbsp;'ZSHGC'&nbsp;&nbsp;&nbsp;&nbsp;seltext_l&nbsp;=&nbsp;'送货工厂'&nbsp;)<br />
+&nbsp;&nbsp;(&nbsp;fieldname&nbsp;=&nbsp;'ZSHKW'&nbsp;&nbsp;&nbsp;&nbsp;seltext_l&nbsp;=&nbsp;'送货库位'&nbsp;)<br />
+<br />
+<br />
+<br />
+&nbsp;&nbsp;).<br />
+<br />
+<br />
+ENDFORM.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*Text&nbsp;elements<br />
+*----------------------------------------------------------<br />
+*&nbsp;PST&nbsp;PSST&nbsp;分组数据<br />
+*&nbsp;S01&nbsp;组织数据<br />
+*&nbsp;S02&nbsp;选择条件<br />
+*&nbsp;S03&nbsp;销售凭证数据<br />
+*&nbsp;S04&nbsp;负责人<br />
+*&nbsp;S05&nbsp;伙伴<br />
+*&nbsp;S10&nbsp;销售订单类型<br />
+*&nbsp;SEA&nbsp;季节数据<br />
+<br />
+<br />
+*Selection&nbsp;texts<br />
+*----------------------------------------------------------<br />
+*&nbsp;PBSTKD&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;客户参考<br />
+*&nbsp;PPAVW&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;合作伙伴职能<br />
+*&nbsp;PVBALL&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;所有销售订单<br />
+*&nbsp;PVBOFF&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;未清销售订单<br />
+*&nbsp;PZPAVW&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;合作伙伴职能<br />
+*&nbsp;P_CPSST&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;完整&nbsp;PSST&nbsp;组<br />
+*&nbsp;SAUART&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;订单类型<br />
+*&nbsp;SAUDAT&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;凭证日期<br />
+*&nbsp;SEMPL&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;员工号<br />
+*&nbsp;SERDAT&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;创建日期<br />
+*&nbsp;SERNAM&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;创建者<br />
+*&nbsp;SKUNNR&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;售达方<br />
+*&nbsp;SMATNR&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;物料<br />
+*&nbsp;SPARTNER&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;伙伴<br />
+*&nbsp;SSPART&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;产品组<br />
+*&nbsp;ST_COL&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;集合<br />
+*&nbsp;ST_PSST&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PSST&nbsp;组<br />
+*&nbsp;ST_SEA&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;季节<br />
+*&nbsp;ST_SEAYR&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;季节年度<br />
+*&nbsp;ST_THM&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;主题<br />
+*&nbsp;SVBELN&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;凭证<br />
+*&nbsp;SVKBUR&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;销售办公室<br />
+*&nbsp;SVKGRP&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;销售组<br />
+*&nbsp;SVKORG&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;销售组织<br />
+*&nbsp;SVTWEG&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;分销渠道<br />
+<br />
+<br />
+*Messages<br />
+*----------------------------------------------------------<br />
+*<br />
+*&nbsp;Message&nbsp;class:&nbsp;SV<br />
+*004&nbsp;&nbsp;&nbsp;未找到与选择条件相匹配的条目。<br />
+            </div>
+          </td>
+        </tr>
+      </table>
+      </td>
+      </tr>
+   <tr>
+<td class="footer">Extracted by Mass Download version 1.5.2 - E.G.Mellodew. 1998-2022. Sap Release 755</td>
+   </tr>
+</table>
+</body>
+</html>

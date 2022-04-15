@@ -1,0 +1,332 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=GB2312" />
+<title>ZSRT_UTIL_ADMIN</title>
+<style type="text/css">
+.code{ font-family:"Courier New", Courier, monospace; color:#000; font-size:14px; background-color:#F2F4F7 }
+  .codeComment {font-family:"Courier New", Courier, monospace; color:#0000F0; font-size:14px; background-color:#F2F4F7 }
+  .normalBold{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; font-weight:800 }
+  .normalBoldLarge{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+</style>
+<style type="text/css">
+  .normal{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px }
+  .footer{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; text-align: center }
+  h2{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+  h3{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:14px; font-weight:800 }
+  .outerTable{
+   background-color:#E0E7ED;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-right-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+  .innerTable{
+   background-color:#F2F4F7;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-bottom-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+</style>
+</head>
+<body>
+<table class="outerTable">
+  <tr class="normalBoldLarge">
+     <td><h2>Code listing for: ZSRT_UTIL_ADMIN</h2>
+<h3> Description: Web 服务实用程序：管理</h3></td>
+   </tr>
+  <tr>
+     <td>
+     <table class="innerTable">
+       <tr>
+          <td>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Report&nbsp;&nbsp;SRT_UTIL_ADMIN<br />
+*&<br />
+*&---------------------------------------------------------------------*<br />
+<br />
+   </div>
+   <div class="code">
+REPORT  zsrt_util_admin.<br />
+<br />
+TYPE-POOLS: icon.<br />
+<br />
+TABLES: srt_util_config.<br />
+<br />
+PARAMETERS: utilid TYPE srt_util_id  NO-DISPLAY,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;idtype&nbsp;TYPE&nbsp;char1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;NO-DISPLAY.<br />
+<br />
+CONSTANTS: co_node_root  TYPE tv_nodekey VALUE 'Root'.      "#EC NOTEXT<br />
+CONSTANTS: co_node_root_bl      TYPE tv_nodekey VALUE 'Root BL', "#EC NOTEXT<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;co_node_root_bl_cons&nbsp;TYPE&nbsp;tv_nodekey&nbsp;VALUE&nbsp;'Root&nbsp;BL&nbsp;CONS',&nbsp;"#EC&nbsp;NOTEXT<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;co_node_root_bl_prov&nbsp;TYPE&nbsp;tv_nodekey&nbsp;VALUE&nbsp;'Root&nbsp;BL&nbsp;PROV'.&nbsp;"#EC&nbsp;NOTEXT<br />
+<br />
+CONSTANTS: co_subscreen_config TYPE sy-dynnr VALUE '0101',<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;co_subscreen_perf&nbsp;&nbsp;&nbsp;TYPE&nbsp;sy-dynnr&nbsp;VALUE&nbsp;'0102',<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;co_subscreen_func&nbsp;&nbsp;&nbsp;TYPE&nbsp;sy-dynnr&nbsp;VALUE&nbsp;'0103',<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;co_subscreen_pload&nbsp;&nbsp;TYPE&nbsp;sy-dynnr&nbsp;VALUE&nbsp;'0104'.<br />
+<br />
+CONSTANTS: BEGIN OF co_user_data,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;config&nbsp;TYPE&nbsp;sy-ucomm&nbsp;VALUE&nbsp;'CONFIG',<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;perf&nbsp;&nbsp;&nbsp;TYPE&nbsp;sy-ucomm&nbsp;VALUE&nbsp;'PERF',<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;func&nbsp;&nbsp;&nbsp;TYPE&nbsp;sy-ucomm&nbsp;VALUE&nbsp;'FUNC',<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pload&nbsp;&nbsp;TYPE&nbsp;sy-ucomm&nbsp;VALUE&nbsp;'PLOAD',<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;END&nbsp;OF&nbsp;co_user_data.<br />
+<br />
+CONTROLS: user_data    TYPE TABSTRIP.<br />
+<br />
+TYPES BEGIN OF ty_perf.<br />
+INCLUDE TYPE srt_perf_header.<br />
+TYPES        wstype_c      TYPE c LENGTH 12.<br />
+TYPES        erroricon     TYPE tv_image.<br />
+TYPES END OF ty_perf.<br />
+<br />
+TYPES BEGIN OF ty_func.<br />
+INCLUDE TYPE srt_func_header.<br />
+TYPES        wstype_c      TYPE c LENGTH 12.<br />
+TYPES        erroricon     TYPE tv_image.<br />
+TYPES END OF ty_func.<br />
+<br />
+TYPES BEGIN OF ty_pload.<br />
+INCLUDE TYPE srt_pload_header.<br />
+TYPES        wstype_c      TYPE c LENGTH 12.<br />
+TYPES        erroricon     TYPE tv_image.<br />
+TYPES END OF ty_pload.<br />
+<br />
+CLASS lcl_admin DEFINITION DEFERRED.<br />
+<br />
+CLASS cl_gui_cfw DEFINITION LOAD.<br />
+<br />
+DATA: ok_code        TYPE sy-ucomm,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ms_stable&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;lvc_s_stbl,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mt_hidden_code&nbsp;TYPE&nbsp;ui_functions,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mr_gui_area&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;REF&nbsp;TO&nbsp;cl_gui_custom_container,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mr_gui_appl&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;REF&nbsp;TO&nbsp;lcl_admin,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mr_gui_tree&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;REF&nbsp;TO&nbsp;cl_gui_simple_tree.<br />
+<br />
+DATA: ms_perf_layout  TYPE lvc_s_layo,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ms_variant_perf&nbsp;TYPE&nbsp;disvariant,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mt_perf_fcat&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;lvc_t_fcat,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mr_perf_grid&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;REF&nbsp;TO&nbsp;cl_gui_alv_grid,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mr_perf_area&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;REF&nbsp;TO&nbsp;cl_gui_custom_container.<br />
+<br />
+DATA: ms_func_layout  TYPE lvc_s_layo,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ms_variant_func&nbsp;TYPE&nbsp;disvariant,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mt_func_fcat&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;lvc_t_fcat,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mr_func_grid&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;REF&nbsp;TO&nbsp;cl_gui_alv_grid,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mr_func_area&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;REF&nbsp;TO&nbsp;cl_gui_custom_container.<br />
+<br />
+DATA: ms_pload_layout  TYPE lvc_s_layo,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ms_variant_pload&nbsp;TYPE&nbsp;disvariant,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mt_pload_fcat&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;lvc_t_fcat,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mr_pload_grid&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;REF&nbsp;TO&nbsp;cl_gui_alv_grid,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mr_pload_area&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;REF&nbsp;TO&nbsp;cl_gui_custom_container.<br />
+<br />
+DATA: rb_side_cons   TYPE xsdboolean,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rb_side_prov&nbsp;&nbsp;&nbsp;TYPE&nbsp;xsdboolean,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rb_side_both&nbsp;&nbsp;&nbsp;TYPE&nbsp;xsdboolean&nbsp;VALUE&nbsp;'X',<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rb_cpro_any&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;xsdboolean&nbsp;VALUE&nbsp;'X',<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rb_cpro_spe&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;xsdboolean,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rb_sdef_any&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;xsdboolean&nbsp;VALUE&nbsp;'X',<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rb_sdef_spe&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;xsdboolean,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cb_consider_bl&nbsp;TYPE&nbsp;xsdboolean&nbsp;VALUE&nbsp;'X'.<br />
+<br />
+DATA: inp_user    TYPE sy-uname,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;inp_termid&nbsp;&nbsp;TYPE&nbsp;sysuuid_c,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;inp_uri&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;srt_util_id,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;inp_date&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;sydatum,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;inp_rcid&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;sysuuid_c,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;inp_cid&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;sysuuid_c,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;inp_ccnt&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;i,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;inp_tid&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;sysuuid_c,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;inp_mid&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;sysuuid_c,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;input_error&nbsp;TYPE&nbsp;xsdboolean.<br />
+<br />
+DATA: inp_consumer TYPE prx_r3name,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;inp_provider&nbsp;TYPE&nbsp;prx_r3name.<br />
+<br />
+DATA: rb_user   TYPE xsdboolean,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rb_termid&nbsp;TYPE&nbsp;xsdboolean,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rb_uri&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;xsdboolean,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rb_today&nbsp;&nbsp;TYPE&nbsp;xsdboolean&nbsp;VALUE&nbsp;'X',<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rb_allday&nbsp;TYPE&nbsp;xsdboolean,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rb_mid&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;xsdboolean,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rb_tid&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;xsdboolean,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rb_pid&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;xsdboolean.<br />
+<br />
+DATA: rb_consumer TYPE xsdboolean VALUE 'X',<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rb_provider&nbsp;TYPE&nbsp;xsdboolean.<br />
+<br />
+DATA: m_select_tab    TYPE string,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;m_tree_idtype&nbsp;&nbsp;&nbsp;TYPE&nbsp;char1,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;m_tree_utilid&nbsp;&nbsp;&nbsp;TYPE&nbsp;srt_util_id,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;m_select_idtype&nbsp;TYPE&nbsp;char1,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;m_select_utilid&nbsp;TYPE&nbsp;srt_util_id.<br />
+<br />
+DATA: m_error_message  TYPE string,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;m_last_user&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;syuname,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;m_cfg_validation&nbsp;TYPE&nbsp;c&nbsp;LENGTH&nbsp;19,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;m_cfg_expiry&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;srt_tr_expiry_ts,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;m_local_termid&nbsp;&nbsp;&nbsp;TYPE&nbsp;sysuuid_c,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;m_today_only&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;xsdboolean&nbsp;VALUE&nbsp;'X',<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;m_today_search&nbsp;&nbsp;&nbsp;TYPE&nbsp;xsdboolean,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mt_perf&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;STANDARD&nbsp;TABLE&nbsp;OF&nbsp;ty_perf,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mt_func&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;STANDARD&nbsp;TABLE&nbsp;OF&nbsp;ty_func,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mt_pload&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;STANDARD&nbsp;TABLE&nbsp;OF&nbsp;ty_pload,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mt_exp_node&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;treev_nks,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ms_node&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;srt_util_tree,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mt_node&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;STANDARD&nbsp;TABLE&nbsp;OF&nbsp;srt_util_tree&nbsp;WITH&nbsp;DEFAULT&nbsp;KEY.<br />
+<br />
+DATA: ms_dbinfo      TYPE srt_util_dbinfo,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mt_util_header&nbsp;TYPE&nbsp;srt_util_header_tab.<br />
+<br />
+DATA: BEGIN OF ms_user_data,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;subscreen&nbsp;&nbsp;&nbsp;TYPE&nbsp;sy-dynnr,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;prog&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;sy-repid&nbsp;VALUE&nbsp;'ZSRT_UTIL_ADMIN',<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pressed_tab&nbsp;TYPE&nbsp;sy-ucomm&nbsp;VALUE&nbsp;co_user_data-config,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;END&nbsp;OF&nbsp;ms_user_data.<br />
+<br />
+<br />
+include <a href ="zsrt_util_admin_main.html">zsrt_util_admin_main</a>.<br />
+   </div>
+   <div class="codeComment">
+*INCLUDE&nbsp;srt_util_admin_main.<br />
+<br />
+   </div>
+   <div class="code">
+include <a href ="zsrt_util_admin_routis.html">zsrt_util_admin_routis</a>.<br />
+   </div>
+   <div class="codeComment">
+*INCLUDE&nbsp;srt_util_admin_routis.<br />
+<br />
+   </div>
+   <div class="code">
+include <a href ="zsrt_util_admin_perf.html">zsrt_util_admin_perf</a>.<br />
+   </div>
+   <div class="codeComment">
+*INCLUDE&nbsp;srt_util_admin_perf.<br />
+<br />
+   </div>
+   <div class="code">
+include <a href ="zsrt_util_admin_func.html">zsrt_util_admin_func</a>.<br />
+   </div>
+   <div class="codeComment">
+*INCLUDE&nbsp;srt_util_admin_func.<br />
+<br />
+   </div>
+   <div class="code">
+include <a href ="zsrt_util_admin_pload.html">zsrt_util_admin_pload</a>.<br />
+   </div>
+   <div class="codeComment">
+*INCLUDE&nbsp;srt_util_admin_pload.<br />
+<br />
+<br />
+   </div>
+   <div class="code">
+START-OF-SELECTION.<br />
+<br />
+&nbsp;&nbsp;CALL&nbsp;SCREEN&nbsp;100.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*GUI&nbsp;Texts<br />
+*----------------------------------------------------------<br />
+*&nbsp;EXPIRY_DATE&nbsp;--&gt;&nbsp;Set&nbsp;new&nbsp;expiry&nbsp;date<br />
+*&nbsp;SEARCH_TRACE&nbsp;--&gt;&nbsp;Search&nbsp;Trace<br />
+*&nbsp;SHOW_DBINFO&nbsp;--&gt;&nbsp;Database&nbsp;Information<br />
+*&nbsp;SRTUTIL&nbsp;--&gt;&nbsp;Web&nbsp;Service&nbsp;Utilities<br />
+*&nbsp;EXPIRY_DATE&nbsp;--&gt;&nbsp;设置新失效日期<br />
+*&nbsp;SEARCH_TRACE&nbsp;--&gt;&nbsp;搜索跟踪<br />
+*&nbsp;SHOW_DBINFO&nbsp;--&gt;&nbsp;数据库信息<br />
+*&nbsp;SRTUTIL&nbsp;--&gt;&nbsp;Web&nbsp;服务实用程序<br />
+<br />
+*Text&nbsp;elements<br />
+*----------------------------------------------------------<br />
+*&nbsp;001&nbsp;用户&nbsp;&&nbsp;终端&nbsp;&&nbsp;请求&nbsp;URI<br />
+*&nbsp;002&nbsp;添加用户、终端或请求&nbsp;URI<br />
+*&nbsp;003&nbsp;移除用户、终端或请求&nbsp;URI<br />
+*&nbsp;004&nbsp;添加项目到黑名单<br />
+*&nbsp;005&nbsp;删除项目<br />
+*&nbsp;006&nbsp;负载跟踪的黑名单<br />
+*&nbsp;007&nbsp;使用者<br />
+*&nbsp;008&nbsp;提供者<br />
+*&nbsp;009&nbsp;至少标记一个条目<br />
+*&nbsp;011&nbsp;刷新<br />
+*&nbsp;012&nbsp;删除选定行<br />
+*&nbsp;013&nbsp;更改到期日期<br />
+*&nbsp;014&nbsp;今天&nbsp;&lt;-&gt;&nbsp;所有跟踪<br />
+*&nbsp;015&nbsp;删除行<br />
+*&nbsp;016&nbsp;是否删除所选行？<br />
+*&nbsp;017&nbsp;显示所选行<br />
+*&nbsp;025&nbsp;在树中标记一个条目<br />
+*&nbsp;029&nbsp;请求&nbsp;URI<br />
+*&nbsp;030&nbsp;终端<br />
+*&nbsp;031&nbsp;用户<br />
+*&nbsp;032&nbsp;集团<br />
+*&nbsp;033&nbsp;组件<br />
+*&nbsp;034&nbsp;操作<br />
+*&nbsp;035&nbsp;操作<br />
+*&nbsp;036&nbsp;日期<br />
+*&nbsp;037&nbsp;时间<br />
+*&nbsp;038&nbsp;失效日期<br />
+*&nbsp;039&nbsp;方法<br />
+*&nbsp;041&nbsp;操作命名空间<br />
+*&nbsp;042&nbsp;操作名称<br />
+*&nbsp;052&nbsp;适配器类型<br />
+*&nbsp;059&nbsp;状态<br />
+*&nbsp;060&nbsp;根上下文标识<br />
+*&nbsp;061&nbsp;事务标识<br />
+*&nbsp;062&nbsp;Web&nbsp;服务名称<br />
+*&nbsp;063&nbsp;操作标识<br />
+*&nbsp;064&nbsp;角色<br />
+*&nbsp;071&nbsp;接口名称<br />
+*&nbsp;081&nbsp;无效用户名<br />
+*&nbsp;082&nbsp;无效终端标识<br />
+*&nbsp;083&nbsp;无效消费者代理<br />
+*&nbsp;084&nbsp;无效服务定义<br />
+*&nbsp;085&nbsp;无效根上下文标识<br />
+*&nbsp;086&nbsp;无效消息标识<br />
+*&nbsp;087&nbsp;无效事务标识<br />
+*&nbsp;088&nbsp;无效标识类型<br />
+*&nbsp;089&nbsp;无效请求&nbsp;URI<br />
+*&nbsp;EIP&nbsp;到期时间是过去时间<br />
+*&nbsp;ENF&nbsp;在不久的将来过期<br />
+*&nbsp;IER&nbsp;执行错误<br />
+*&nbsp;IIC&nbsp;不完全执行<br />
+*&nbsp;IOK&nbsp;执行成功<br />
+<br />
+<br />
+*Messages<br />
+*----------------------------------------------------------<br />
+*<br />
+*&nbsp;Message&nbsp;class:&nbsp;00<br />
+*172&nbsp;&nbsp;&nbsp;您无权使用事务&nbsp;&<br />
+*208&nbsp;&nbsp;&nbsp;&<br />
+*<br />
+*&nbsp;Message&nbsp;class:&nbsp;Hard&nbsp;coded<br />
+*&nbsp;&nbsp;&nbsp;Expiry&nbsp;is&nbsp;in&nbsp;the&nbsp;past&nbsp;(EIP)<br />
+            </div>
+          </td>
+        </tr>
+      </table>
+      </td>
+      </tr>
+   <tr>
+<td class="footer">Extracted by Mass Download version 1.5.2 - E.G.Mellodew. 1998-2022. Sap Release 755</td>
+   </tr>
+</table>
+</body>
+</html>

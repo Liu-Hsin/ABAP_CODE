@@ -1,0 +1,216 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=GB2312" />
+<title>ZSAPM07DR</title>
+<style type="text/css">
+.code{ font-family:"Courier New", Courier, monospace; color:#000; font-size:14px; background-color:#F2F4F7 }
+  .codeComment {font-family:"Courier New", Courier, monospace; color:#0000F0; font-size:14px; background-color:#F2F4F7 }
+  .normalBold{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; font-weight:800 }
+  .normalBoldLarge{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+</style>
+<style type="text/css">
+  .normal{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px }
+  .footer{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; text-align: center }
+  h2{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+  h3{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:14px; font-weight:800 }
+  .outerTable{
+   background-color:#E0E7ED;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-right-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+  .innerTable{
+   background-color:#F2F4F7;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-bottom-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+</style>
+</head>
+<body>
+<table class="outerTable">
+  <tr class="normalBoldLarge">
+     <td><h2>Code listing for: ZSAPM07DR</h2>
+<h3> Description: 经NAST的收货/发货通知单打印输出的模块池</h3></td>
+   </tr>
+  <tr>
+     <td>
+     <table class="innerTable">
+       <tr>
+          <td>
+   <div class="code">
+INCLUDE: m07drtop.                   "tabellen und datendeklarationen<br />
+   </div>
+   <div class="codeComment">
+**********************************************************************<br />
+*&nbsp;&nbsp;&nbsp;2022/3/28&nbsp;migo&nbsp;过账打印程序&nbsp;&nbsp;&nbsp;xx-liux<br />
+   </div>
+   <div class="code">
+DATA: BEGIN OF gs_out.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;include&nbsp;structure&nbsp;<a&nbsp;href&nbsp;="zmms001/dictionary-zmms001.html">zmms001</a>.<br />
+DATA:<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bwart&nbsp;TYPE&nbsp;matdoc-bwart,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mjahr&nbsp;TYPE&nbsp;matdoc-mjahr,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mtart&nbsp;TYPE&nbsp;mara-mtart,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bukrs&nbsp;TYPE&nbsp;matdoc-bukrs,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;werks&nbsp;TYPE&nbsp;matdoc-werks,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;name1&nbsp;TYPE&nbsp;t001w-name1,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lgort&nbsp;TYPE&nbsp;matdoc-lgort,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;meins&nbsp;TYPE&nbsp;matdoc-meins,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bstme&nbsp;TYPE&nbsp;matdoc-bstme,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ekgrp&nbsp;TYPE&nbsp;ekko-ekgrp,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cpudt&nbsp;TYPE&nbsp;matdoc-cpudt,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cputm&nbsp;TYPE&nbsp;matdoc-cputm,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;END&nbsp;OF&nbsp;gs_out.<br />
+DATA: gt_out LIKE TABLE OF gs_out.<br />
+<br />
+DATA:<br />
+&nbsp;&nbsp;l_objek&nbsp;&nbsp;&nbsp;TYPE&nbsp;cuobn,&nbsp;"对象<br />
+&nbsp;&nbsp;e_objek&nbsp;&nbsp;&nbsp;TYPE&nbsp;cuobn90,&nbsp;"对象<br />
+&nbsp;&nbsp;l_obtab&nbsp;&nbsp;&nbsp;TYPE&nbsp;tabelle,&nbsp;"表<br />
+&nbsp;&nbsp;l_klart&nbsp;&nbsp;&nbsp;TYPE&nbsp;klassenart,&nbsp;"类型<br />
+&nbsp;&nbsp;l_class&nbsp;&nbsp;&nbsp;TYPE&nbsp;klasse_d,&nbsp;"类<br />
+&nbsp;&nbsp;zmaktx&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;qsollwertc,<br />
+&nbsp;&nbsp;lt_num&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;TABLE&nbsp;OF&nbsp;bapi1003_alloc_values_num&nbsp;WITH&nbsp;HEADER&nbsp;LINE,<br />
+&nbsp;&nbsp;lt_char&nbsp;&nbsp;&nbsp;TYPE&nbsp;TABLE&nbsp;OF&nbsp;bapi1003_alloc_values_char,<br />
+&nbsp;&nbsp;lt_curr&nbsp;&nbsp;&nbsp;TYPE&nbsp;TABLE&nbsp;OF&nbsp;bapi1003_alloc_values_curr,<br />
+&nbsp;&nbsp;lt_return&nbsp;TYPE&nbsp;TABLE&nbsp;OF&nbsp;bapiret2&nbsp;WITH&nbsp;HEADER&nbsp;LINE.<br />
+<br />
+DATA: fm_name TYPE rs38l_fnam.<br />
+DATA   func_module_name    TYPE rs38l_fnam.<br />
+DATA   func_module_name2   TYPE rs38l_fnam.<br />
+DATA   output_options      TYPE ssfcompop.<br />
+DATA   control_parameters  TYPE ssfctrlop.<br />
+DATA   output_info         TYPE ssfcrescl.<br />
+DATA   job_output_options  TYPE ssfcresop.<br />
+<br />
+   </div>
+   <div class="codeComment">
+**********************************************************************<br />
+<br />
+<br />
+<br />
+<br />
+*include:&nbsp;m07drtop_pdf.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&gt;&nbsp;moved&nbsp;to&nbsp;m07drtop&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"1098706<br />
+<br />
+   </div>
+   <div class="code">
+INCLUDE: m07drmta.                   "zugriffsroutinen für atab-tabellen<br />
+<br />
+INCLUDE: m07drmma.                   "zugriffsroutinen material<br />
+<br />
+INCLUDE: m07drmbe.                   "zugriffsroutine bestellung<br />
+<br />
+INCLUDE: m07drmfa.                   "zugriffsroutine fauftrkopf<br />
+<br />
+INCLUDE: m07drkon.                   "zugriffsroutine kontierung<br />
+<br />
+INCLUDE: m07drf01.                   "druck we schein  fertauftr. vers1<br />
+<br />
+INCLUDE: m07drf01_pdf.               "druck we schein  fertauftr. vers1 (pdf)<br />
+<br />
+INCLUDE: m07drf02.                   "druck we schein  fertauftr. vers2<br />
+<br />
+INCLUDE: m07drf02_pdf.               "druck we schein  fertauftr. vers2 (pdf)<br />
+<br />
+INCLUDE: m07dre01.                   "druck wareneingangsschein vers.1<br />
+<br />
+INCLUDE: m07dre01_pdf.               "druck wareneingangsschein vers.1 (pdf)<br />
+<br />
+INCLUDE: m07dre02.                   "druck wareneingangsschein vers.2<br />
+<br />
+INCLUDE: m07dre02_pdf.               "druck wareneingangsschein vers.1 (pdf)<br />
+<br />
+INCLUDE: m07dre03.                   "druck wareneingangsschein vers.3<br />
+<br />
+INCLUDE: m07dra01.                   "druck warenausgangsschein vers.1<br />
+<br />
+INCLUDE: m07dra01_pdf.               "druck warenausgangsschein vers.1 (pdf)<br />
+<br />
+INCLUDE: m07dra02.                   "druck warenausgangsschein vers.2<br />
+<br />
+INCLUDE: m07dra02_pdf.               "druck warenausgangsschein vers.1 (pdf)<br />
+<br />
+INCLUDE: m07dra03.                   "druck warenausgangsschein vers.3<br />
+<br />
+INCLUDE: m07drlb3.                   "druck warenausg.schein lb vers.3<br />
+<br />
+INCLUDE: m07dreti.                   "druck etiketten warenausgang<br />
+<br />
+INCLUDE: m07dreti_pdf.               "druck etiketten warenausgang (pdf)<br />
+<br />
+INCLUDE: m07drkto.                   "druck mehrfachkontierungsblatt<br />
+<br />
+INCLUDE: m07drkto_pdf.               "druck mehrfachkontierungsblatt (pdf)<br />
+"<br />
+include <a href ="zm07drent.html">zm07drent</a>.                   "entries für druck  change 20220328.<br />
+<br />
+INCLUDE: m07drent_pdf.               "entries für druck (pdf)<br />
+<br />
+INCLUDE: m07drlob.                   "leseroutine adresse lb-lieferant<br />
+<br />
+INCLUDE: m07draus.                   "ausgaberoutinen<br />
+<br />
+INCLUDE: m07draus_pdf.               "ausgaberoutinen (pdf)<br />
+<br />
+INCLUDE: m07drson.                   "sonstige routinen<br />
+<br />
+INCLUDE: m07drson_pdf.               "sonstige routinen (pdf)<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;eject<br />
+<br />
+*Text&nbsp;elements<br />
+*----------------------------------------------------------<br />
+*&nbsp;010&nbsp;收货单<br />
+*&nbsp;020&nbsp;退货单<br />
+*&nbsp;030&nbsp;销售订单&nbsp;&nbsp;&nbsp;:<br />
+*&nbsp;040&nbsp;资产&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:<br />
+*&nbsp;050&nbsp;成本中心&nbsp;&nbsp;&nbsp;&nbsp;:<br />
+*&nbsp;060&nbsp;项目&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:<br />
+*&nbsp;061&nbsp;网络&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:<br />
+*&nbsp;062&nbsp;生产订单&nbsp;&nbsp;:<br />
+*&nbsp;070&nbsp;下列选择中无打印输出(表156中没有定义):<br />
+*&nbsp;080&nbsp;年份&nbsp;凭证号&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;项目&nbsp;MvTyp<br />
+*&nbsp;100&nbsp;供应商&nbsp;:<br />
+*&nbsp;101&nbsp;发货厂家:<br />
+*&nbsp;105&nbsp;货架寿命到期日:<br />
+*&nbsp;106&nbsp;DC货架寿命到期日:<br />
+*&nbsp;110&nbsp;帐户设置单<br />
+<br />
+<br />
+*Messages<br />
+*----------------------------------------------------------<br />
+*<br />
+*&nbsp;Message&nbsp;class:&nbsp;M7<br />
+*001&nbsp;&nbsp;&nbsp;请检查表&:&nbsp;条目&&nbsp;&&nbsp;&不存在<br />
+*811&nbsp;&nbsp;&nbsp;维护打印控制表<br />
+*<br />
+*&nbsp;Message&nbsp;class:&nbsp;PK<br />
+*220&nbsp;&nbsp;&nbsp;打印看板卡片时出错<br />
+            </div>
+          </td>
+        </tr>
+      </table>
+      </td>
+      </tr>
+   <tr>
+<td class="footer">Extracted by Mass Download version 1.5.2 - E.G.Mellodew. 1998-2022. Sap Release 755</td>
+   </tr>
+</table>
+</body>
+</html>

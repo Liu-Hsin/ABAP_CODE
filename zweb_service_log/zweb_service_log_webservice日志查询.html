@@ -1,0 +1,1249 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=GB2312" />
+<title>ZWEB_SERVICE_LOG</title>
+<style type="text/css">
+.code{ font-family:"Courier New", Courier, monospace; color:#000; font-size:14px; background-color:#F2F4F7 }
+  .codeComment {font-family:"Courier New", Courier, monospace; color:#0000F0; font-size:14px; background-color:#F2F4F7 }
+  .normalBold{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; font-weight:800 }
+  .normalBoldLarge{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+</style>
+<style type="text/css">
+  .normal{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px }
+  .footer{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; text-align: center }
+  h2{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+  h3{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:14px; font-weight:800 }
+  .outerTable{
+   background-color:#E0E7ED;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-right-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+  .innerTable{
+   background-color:#F2F4F7;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-bottom-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+</style>
+</head>
+<body>
+<table class="outerTable">
+  <tr class="normalBoldLarge">
+     <td><h2>Code listing for: ZWEB_SERVICE_LOG</h2>
+<h3> Description: webservice 日志查询</h3></td>
+   </tr>
+  <tr>
+     <td>
+     <table class="innerTable">
+       <tr>
+          <td>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Report&nbsp;ZWEB_SERVICE_LOG<br />
+*&---------------------------------------------------------------------*<br />
+*&<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+REPORT zweb_service_log.<br />
+<br />
+"Webservice日志查询报表，集成Soamanager、SRT_LOG和SRTLOG_E2E的功能，双击查询错误信息<br />
+"涉及表：<br />
+"日志表：SRT_MONILOG_DATA、SRT_MONLOG_DATA2<br />
+"跟踪表：SRT_MONI_PAYLTRC<br />
+"错误表：SRT_UTIL_ERRLOG<br />
+<br />
+TYPES: BEGIN OF typ_log,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"表字段<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;call_id&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;srt_moni_id,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ts_call&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;timestampl,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;username&nbsp;&nbsp;&nbsp;TYPE&nbsp;syuname,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;call_state&nbsp;TYPE&nbsp;srt_moni_status,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;errortype&nbsp;&nbsp;TYPE&nbsp;srt_moni_errortype,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;calledprog&nbsp;TYPE&nbsp;char255,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;comm_patt&nbsp;&nbsp;TYPE&nbsp;char255,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;req_id&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;guid_32,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;resp_id&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;guid_32,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;op_name&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;char255,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;remaddr&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;srt_moni_rem_ipaddr,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;trc_key&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;srt_moni_trc_key,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"自定义字段<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;datetime&nbsp;&nbsp;&nbsp;TYPE&nbsp;char20,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;date&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;sydatum,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;time&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;syuzeit,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;icon&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;icon_d,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;req_txt&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;char10,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;resp_txt&nbsp;&nbsp;&nbsp;TYPE&nbsp;char10,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;op_text&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;char128,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cellstyles&nbsp;TYPE&nbsp;lvc_t_styl,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;END&nbsp;OF&nbsp;typ_log.<br />
+<br />
+TYPES: BEGIN OF typ_error,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;logno&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;int2,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;error_category&nbsp;TYPE&nbsp;char20,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;short_text&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;char128,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;error_context&nbsp;&nbsp;TYPE&nbsp;xstring,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;END&nbsp;OF&nbsp;typ_error.<br />
+<br />
+TYPES: BEGIN OF typ_func,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mappedname&nbsp;TYPE&nbsp;vepfuncmap,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stext&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;rs38l_ftxt,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;funcname&nbsp;&nbsp;&nbsp;TYPE&nbsp;rs38l_fnam,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;END&nbsp;OF&nbsp;typ_func.<br />
+<br />
+DATA: tab_log   TYPE TABLE OF typ_log,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rec_log&nbsp;&nbsp;&nbsp;TYPE&nbsp;typ_log,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rec_trace&nbsp;TYPE&nbsp;srt_moni_payltrc,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tab_error&nbsp;TYPE&nbsp;TABLE&nbsp;OF&nbsp;typ_error,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rec_error&nbsp;TYPE&nbsp;typ_error,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tab_func&nbsp;&nbsp;TYPE&nbsp;TABLE&nbsp;OF&nbsp;typ_func,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rec_func&nbsp;&nbsp;TYPE&nbsp;typ_func.<br />
+<br />
+DATA: g_tabix      LIKE sy-tabix,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rec_stylerow&nbsp;TYPE&nbsp;lvc_s_styl,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tab_events&nbsp;&nbsp;&nbsp;TYPE&nbsp;slis_t_event.<br />
+<br />
+DATA: g_xml_content TYPE string.<br />
+<br />
+"各个表名<br />
+DATA: log1    TYPE tabname16 VALUE 'SRT_MONILOG_DATA', "ZSRT_LOG_DATA<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;log2&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;tabname16&nbsp;VALUE&nbsp;'SRT_MONLOG_DATA2',&nbsp;"ZSRT_LOG_DATA2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;payload&nbsp;TYPE&nbsp;tabname16&nbsp;VALUE&nbsp;'SRT_MONI_PAYLTRC',&nbsp;"ZSRT_PAYLTRC<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;error&nbsp;&nbsp;&nbsp;TYPE&nbsp;tabname16&nbsp;VALUE&nbsp;'SRT_UTIL_ERRLOG'.&nbsp;"ZSRT_UTIL_ERRLOG<br />
+<br />
+DATA: g_ts_froms TYPE tzonref-tstamps,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;g_ts_tos&nbsp;&nbsp;&nbsp;TYPE&nbsp;tzonref-tstamps.<br />
+<br />
+"添加BUTTON_CLICK事件<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*----------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;class&nbsp;lcl_event_receiver&nbsp;definition<br />
+*----------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;alv按钮点击事件<br />
+*----------------------------------------------------------------------*<br />
+<br />
+<br />
+   </div>
+   <div class="code">
+CLASS lcl_event_receiver DEFINITION.<br />
+&nbsp;&nbsp;PUBLIC&nbsp;SECTION.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;METHODS:<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;handle_button_click<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FOR&nbsp;EVENT&nbsp;button_click&nbsp;OF&nbsp;cl_gui_alv_grid<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING&nbsp;es_col_id&nbsp;es_row_no.<br />
+ENDCLASS. "LCL_EVENT_RECEIVER DEFINITION<br />
+<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*----------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;class&nbsp;lcl_event_receiver&nbsp;implementation<br />
+*----------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;alv按钮点击事件<br />
+*----------------------------------------------------------------------*<br />
+<br />
+<br />
+   </div>
+   <div class="code">
+CLASS lcl_event_receiver IMPLEMENTATION.<br />
+&nbsp;&nbsp;METHOD&nbsp;handle_button_click.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;sub_button_click&nbsp;USING&nbsp;es_col_id&nbsp;es_row_no.<br />
+&nbsp;&nbsp;ENDMETHOD.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"handle_button_click<br />
+ENDCLASS. "LCL_EVENT_RECEIVER IMPLEMENTATION<br />
+<br />
+DATA: gv_event_receiver TYPE REF TO lcl_event_receiver.<br />
+DATA: gv_grid TYPE REF TO cl_gui_alv_grid.<br />
+DATA: g_xml TYPE REF TO cl_xml_document.<br />
+<br />
+INITIALIZATION.<br />
+&nbsp;&nbsp;CREATE&nbsp;OBJECT&nbsp;g_xml.<br />
+<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*----------------------------------------------------------------------*<br />
+*&nbsp;Selection&nbsp;Screen<br />
+*----------------------------------------------------------------------*<br />
+<br />
+<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;SELECTION-SCREEN&nbsp;BEGIN&nbsp;OF&nbsp;BLOCK&nbsp;bl00&nbsp;WITH&nbsp;FRAME&nbsp;TITLE&nbsp;TEXT-000.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PARAMETERS:&nbsp;f_mandt&nbsp;TYPE&nbsp;symandt&nbsp;DEFAULT&nbsp;sy-mandt&nbsp;OBLIGATORY&nbsp;MODIF&nbsp;ID&nbsp;r1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SELECT-OPTIONS:<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;s_callid&nbsp;FOR&nbsp;rec_log-call_id&nbsp;MODIF&nbsp;ID&nbsp;r1,"调用标识<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;s_opname&nbsp;FOR&nbsp;rec_log-op_name&nbsp;NO&nbsp;INTERVALS&nbsp;NO-EXTENSION&nbsp;LOWER&nbsp;CASE&nbsp;MODIF&nbsp;ID&nbsp;r1,"Web服务方法名<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;s_state&nbsp;FOR&nbsp;rec_log-call_state&nbsp;MODIF&nbsp;ID&nbsp;r1."接口状态<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SELECTION-SCREEN:&nbsp;BEGIN&nbsp;OF&nbsp;LINE,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;COMMENT&nbsp;1(31)&nbsp;TEXT-001&nbsp;FOR&nbsp;FIELD&nbsp;p_datefr."时戳<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PARAMETERS:<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;p_datefr&nbsp;TYPE&nbsp;datum&nbsp;DEFAULT&nbsp;sy-datum&nbsp;OBLIGATORY,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;p_timefr&nbsp;TYPE&nbsp;uzeit&nbsp;DEFAULT&nbsp;'000000'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SELECTION-SCREEN&nbsp;COMMENT&nbsp;55(10)&nbsp;TEXT-002&nbsp;FOR&nbsp;FIELD&nbsp;p_dateto.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PARAMETERS:<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;p_dateto&nbsp;TYPE&nbsp;datum&nbsp;DEFAULT&nbsp;sy-datum&nbsp;OBLIGATORY,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;p_timeto&nbsp;TYPE&nbsp;uzeit&nbsp;DEFAULT&nbsp;'235959'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SELECTION-SCREEN&nbsp;END&nbsp;OF&nbsp;LINE.<br />
+&nbsp;&nbsp;SELECTION-SCREEN&nbsp;END&nbsp;OF&nbsp;BLOCK&nbsp;bl00.<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*************************************************************************<br />
+<br />
+<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;SELECTION-SCREEN&nbsp;BEGIN&nbsp;OF&nbsp;BLOCK&nbsp;bl03&nbsp;WITH&nbsp;FRAME&nbsp;TITLE&nbsp;TEXT-004.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PARAMETERS:&nbsp;p_req&nbsp;&nbsp;TYPE&nbsp;string,&nbsp;"请求搜索关键字<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;p_resp&nbsp;TYPE&nbsp;string.&nbsp;"响应搜索关键字<br />
+&nbsp;&nbsp;SELECTION-SCREEN&nbsp;END&nbsp;OF&nbsp;BLOCK&nbsp;bl03.<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*************************************************************************<br />
+<br />
+<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;SELECTION-SCREEN&nbsp;BEGIN&nbsp;OF&nbsp;BLOCK&nbsp;bl01&nbsp;WITH&nbsp;FRAME&nbsp;TITLE&nbsp;TEXT-003.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SELECTION-SCREEN&nbsp;BEGIN&nbsp;OF&nbsp;LINE.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PARAMETERS:&nbsp;r_f01&nbsp;RADIOBUTTON&nbsp;GROUP&nbsp;r1&nbsp;USER-COMMAND&nbsp;r1."F01-查询在线日志<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SELECTION-SCREEN&nbsp;COMMENT&nbsp;3(11)&nbsp;TEXT-011.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SELECTION-SCREEN&nbsp;POSITION&nbsp;15.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PARAMETERS:&nbsp;r_f02&nbsp;RADIOBUTTON&nbsp;GROUP&nbsp;r1."F02-查询历史日志<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SELECTION-SCREEN&nbsp;COMMENT&nbsp;17(12)&nbsp;TEXT-012.<br />
+<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;SELECTION-SCREEN&nbsp;POSITION&nbsp;30.<br />
+*&nbsp;parameters:&nbsp;r_f03&nbsp;radiobutton&nbsp;group&nbsp;r1."F03-删除历史日志<br />
+*&nbsp;SELECTION-SCREEN&nbsp;COMMENT&nbsp;32(12)&nbsp;text-013.<br />
+<br />
+<br />
+<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;SELECTION-SCREEN&nbsp;END&nbsp;OF&nbsp;LINE.<br />
+&nbsp;&nbsp;SELECTION-SCREEN&nbsp;END&nbsp;OF&nbsp;BLOCK&nbsp;bl01.<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*************************************************************************<br />
+<br />
+<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;SELECTION-SCREEN&nbsp;BEGIN&nbsp;OF&nbsp;BLOCK&nbsp;bl02&nbsp;WITH&nbsp;FRAME."&nbsp;TITLE&nbsp;text-000.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PARAMETERS:&nbsp;p_uprow&nbsp;TYPE&nbsp;int4&nbsp;DEFAULT&nbsp;50."最大命中数量<br />
+&nbsp;&nbsp;SELECTION-SCREEN&nbsp;END&nbsp;OF&nbsp;BLOCK&nbsp;bl02.<br />
+<br />
+AT SELECTION-SCREEN ON VALUE-REQUEST FOR s_opname-low.<br />
+&nbsp;&nbsp;PERFORM&nbsp;sub_opname_f4&nbsp;USING&nbsp;'S_OPNAME-LOW'.<br />
+<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*AT&nbsp;SELECTION-SCREEN&nbsp;OUTPUT."当r_f03值改变时会触发此事件<br />
+*&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;SCREEN.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;r_f03&nbsp;=&nbsp;'X'.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;screen-group1&nbsp;=&nbsp;'R1'.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;screen-active&nbsp;=&nbsp;0."设置组内设置屏幕的显示0和隐藏1<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;modify&nbsp;screen."把配置应用到当前屏幕<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;else.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;screen-group1&nbsp;=&nbsp;'R1'.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;screen-active&nbsp;=&nbsp;1."设置组内设置屏幕的显示0和隐藏1<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;modify&nbsp;screen."把配置应用到当前屏幕<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;endif.<br />
+*&nbsp;&nbsp;endloop.<br />
+<br />
+<br />
+<br />
+   </div>
+   <div class="code">
+START-OF-SELECTION.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;sy-batch&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;"后台运行，将标准表中日志信息存贮在自建表中，其中参数为将最近N天的日志同步到自建表中<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;sub_copy_tables&nbsp;USING&nbsp;'1'.<br />
+&nbsp;&nbsp;ELSE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;r_f01&nbsp;=&nbsp;'X'."查询在线日志<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;log1&nbsp;=&nbsp;'SRT_MONILOG_DATA'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;log2&nbsp;=&nbsp;'SRT_MONLOG_DATA2'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;payload&nbsp;=&nbsp;'SRT_MONI_PAYLTRC'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;error&nbsp;=&nbsp;'SRT_UTIL_ERRLOG'.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;sub_get_log.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;sub_event_build.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;sub_display_alv.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ELSEIF&nbsp;r_f02&nbsp;=&nbsp;'X'."查询历史日志<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;log1&nbsp;=&nbsp;'ZSRT_LOG_DATA'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;log2&nbsp;=&nbsp;'ZSRT_LOG_DATA2'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;payload&nbsp;=&nbsp;'ZSRT_PAYLTRC'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;error&nbsp;=&nbsp;'ZSRT_UTIL_ERRLOG'.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;sub_get_log.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;sub_event_build.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;sub_display_alv.<br />
+<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;ELSEIF&nbsp;r_f03&nbsp;=&nbsp;'X'."删除历史日志<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;log1&nbsp;=&nbsp;'ZSRT_LOG_DATA'.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;log2&nbsp;=&nbsp;'ZSRT_LOG_DATA2'.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;payload&nbsp;=&nbsp;'ZSRT_PAYLTRC'.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;error&nbsp;=&nbsp;'ZSRT_UTIL_ERRLOG'.<br />
+*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;perform&nbsp;sub_delete_history_log.<br />
+<br />
+<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FORM&nbsp;&nbsp;sub_opname_f4<br />
+*&---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;方法名f4<br />
+*----------------------------------------------------------------------*<br />
+<br />
+<br />
+   </div>
+   <div class="code">
+FORM sub_opname_f4 USING p_dynfnam TYPE dynfnam.<br />
+&nbsp;&nbsp;DATA:&nbsp;rec_dynpro_values&nbsp;TYPE&nbsp;dynpread,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tab_dynpro_values&nbsp;TYPE&nbsp;TABLE&nbsp;OF&nbsp;dynpread,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tab_values&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;TABLE&nbsp;OF&nbsp;typ_func.<br />
+<br />
+&nbsp;&nbsp;DATA:&nbsp;rec_return&nbsp;TYPE&nbsp;ddshretval,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tab_return&nbsp;TYPE&nbsp;TABLE&nbsp;OF&nbsp;ddshretval.<br />
+<br />
+&nbsp;&nbsp;RANGES:&nbsp;r_opname&nbsp;FOR&nbsp;rec_log-op_name.<br />
+<br />
+&nbsp;&nbsp;"读取屏幕中已经输入的字段值<br />
+&nbsp;&nbsp;rec_dynpro_values-fieldname&nbsp;=&nbsp;p_dynfnam.<br />
+&nbsp;&nbsp;APPEND&nbsp;rec_dynpro_values&nbsp;TO&nbsp;tab_dynpro_values.<br />
+<br />
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'DYNP_VALUES_READ'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dyname&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;sy-repid<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dynumb&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;sy-dynnr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;TABLES<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dynpfields&nbsp;=&nbsp;tab_dynpro_values.<br />
+<br />
+&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;tab_dynpro_values&nbsp;INTO&nbsp;rec_dynpro_values&nbsp;INDEX&nbsp;1.<br />
+&nbsp;&nbsp;IF&nbsp;rec_dynpro_values-fieldvalue&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;r_opname-sign&nbsp;=&nbsp;'I'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;FIND&nbsp;'*'&nbsp;IN&nbsp;rec_dynpro_values-fieldvalue&nbsp;IN&nbsp;CHARACTER&nbsp;MODE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;r_opname-option&nbsp;=&nbsp;'CP'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ELSE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;r_opname-option&nbsp;=&nbsp;'EQ'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;r_opname-low&nbsp;=&nbsp;rec_dynpro_values-fieldvalue.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;r_opname.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;SELECT&nbsp;b~mappedname<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;a~stext<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;a~funcname<br />
+&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;TABLE&nbsp;tab_values<br />
+&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;tftit&nbsp;AS&nbsp;a<br />
+&nbsp;&nbsp;&nbsp;&nbsp;INNER&nbsp;JOIN&nbsp;vepfunction&nbsp;AS&nbsp;b&nbsp;ON&nbsp;a~funcname&nbsp;=&nbsp;b~function<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;a~spras&nbsp;=&nbsp;sy-langu<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;b~mappedname&nbsp;IN&nbsp;r_opname.<br />
+<br />
+&nbsp;&nbsp;SORT&nbsp;tab_values&nbsp;BY&nbsp;mappedname.<br />
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'F4IF_INT_TABLE_VALUE_REQUEST'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;window_title&nbsp;=&nbsp;'选择方法名'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;retfield&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'MAPPEDNAME'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dynpprog&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;sy-repid<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dynpnr&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;sy-dynnr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dynprofield&nbsp;&nbsp;=&nbsp;p_dynfnam<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;value_org&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'S'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;TABLES<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;value_tab&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;tab_values.<br />
+<br />
+ENDFORM. "sub_opname_f4<br />
+<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FORM&nbsp;&nbsp;sub_get_log<br />
+*&---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;取数<br />
+*----------------------------------------------------------------------*<br />
+<br />
+<br />
+   </div>
+   <div class="code">
+FORM sub_get_log.<br />
+&nbsp;&nbsp;DATA:&nbsp;l_ts_froml&nbsp;TYPE&nbsp;tzonref-tstampl,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;l_ts_tol&nbsp;&nbsp;&nbsp;TYPE&nbsp;tzonref-tstampl.<br />
+&nbsp;&nbsp;DATA:&nbsp;l_ts_call&nbsp;TYPE&nbsp;timestamp.<br />
+<br />
+&nbsp;&nbsp;"将日期和时间转换为&nbsp;短时间戳&nbsp;差8小时！<br />
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'IB_CONVERT_INTO_TIMESTAMP'&nbsp;"FROM<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_datlo&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;p_datefr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_timlo&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;p_timefr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;e_timestamp&nbsp;=&nbsp;g_ts_froms.<br />
+<br />
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'IB_CONVERT_INTO_TIMESTAMP'&nbsp;"TO<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_datlo&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;p_dateto<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_timlo&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;p_timeto<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;e_timestamp&nbsp;=&nbsp;g_ts_tos.<br />
+<br />
+&nbsp;&nbsp;"将&nbsp;短时间戳&nbsp;转换为&nbsp;长时间戳<br />
+&nbsp;&nbsp;PERFORM&nbsp;sub_conv_ts_from_short_to_long&nbsp;USING&nbsp;g_ts_froms&nbsp;g_ts_tos<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;l_ts_froml&nbsp;l_ts_tol.<br />
+<br />
+&nbsp;&nbsp;REFRESH:&nbsp;tab_log.<br />
+<br />
+&nbsp;&nbsp;SELECT&nbsp;call_id<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ts_call<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;username<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;call_state<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;errortype<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;calledprog<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;comm_patt<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;req_id<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;resp_id<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;op_name<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;remaddr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;trc_key<br />
+&nbsp;&nbsp;&nbsp;&nbsp;UP&nbsp;TO&nbsp;p_uprow&nbsp;ROWS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;CORRESPONDING&nbsp;FIELDS&nbsp;OF&nbsp;TABLE&nbsp;tab_log<br />
+&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;(log1)"srt_monilog_data<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;call_id&nbsp;IN&nbsp;s_callid<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;ts_call&nbsp;BETWEEN&nbsp;l_ts_froml&nbsp;AND&nbsp;l_ts_tol<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;call_state&nbsp;IN&nbsp;s_state<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;sapclient&nbsp;=&nbsp;f_mandt<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;op_name&nbsp;IN&nbsp;s_opname<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ORDER&nbsp;BY&nbsp;ts_call&nbsp;DESCENDING.<br />
+<br />
+&nbsp;&nbsp;SELECT&nbsp;call_id<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ts_call<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;username<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;call_state<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;errortype<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;calledprog<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;comm_patt<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;req_id<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;resp_id<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;op_name<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;remaddr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;trc_key<br />
+&nbsp;&nbsp;&nbsp;&nbsp;UP&nbsp;TO&nbsp;p_uprow&nbsp;ROWS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;APPENDING&nbsp;CORRESPONDING&nbsp;FIELDS&nbsp;OF&nbsp;TABLE&nbsp;tab_log<br />
+&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;(log2)"srt_monlog_data2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;call_id&nbsp;IN&nbsp;s_callid<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;ts_call&nbsp;BETWEEN&nbsp;l_ts_froml&nbsp;AND&nbsp;l_ts_tol<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;call_state&nbsp;IN&nbsp;s_state<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;sapclient&nbsp;=&nbsp;f_mandt<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;op_name&nbsp;IN&nbsp;s_opname<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ORDER&nbsp;BY&nbsp;ts_call&nbsp;DESCENDING.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;tab_log[]&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;'没有查询到数据'&nbsp;TYPE&nbsp;'S'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXIT.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;"关键字过滤(启用关键字过滤，性能上会有所下降)<br />
+&nbsp;&nbsp;PERFORM&nbsp;sub_filter.<br />
+<br />
+&nbsp;&nbsp;"获得Webservice方法名对应文本<br />
+&nbsp;&nbsp;SELECT&nbsp;b~mappedname<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;a~stext<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;a~funcname<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;TABLE&nbsp;tab_func<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;tftit&nbsp;AS&nbsp;a<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INNER&nbsp;JOIN&nbsp;vepfunction&nbsp;AS&nbsp;b&nbsp;ON&nbsp;a~funcname&nbsp;=&nbsp;b~function<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;a~spras&nbsp;=&nbsp;sy-langu.<br />
+<br />
+&nbsp;&nbsp;SORT&nbsp;tab_func&nbsp;BY&nbsp;mappedname.<br />
+<br />
+&nbsp;&nbsp;SORT&nbsp;&nbsp;tab_log&nbsp;BY&nbsp;ts_call&nbsp;DESCENDING.<br />
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;tab_log&nbsp;INTO&nbsp;rec_log.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;g_tabix&nbsp;=&nbsp;sy-tabix.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;"将长时间戳转换为短时间戳<br />
+&nbsp;&nbsp;&nbsp;&nbsp;l_ts_call&nbsp;=&nbsp;rec_log-ts_call&nbsp;DIV&nbsp;1.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'IB_CONVERT_FROM_TIMESTAMP'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_timestamp&nbsp;=&nbsp;l_ts_call<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;e_datlo&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;rec_log-date<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;e_timlo&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;rec_log-time.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;rec_log-call_state&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rec_log-icon&nbsp;=&nbsp;icon_green_light."绿灯<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ELSEIF&nbsp;rec_log-call_state&nbsp;=&nbsp;1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rec_log-icon&nbsp;=&nbsp;icon_yellow_light."黄灯<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ELSEIF&nbsp;rec_log-call_state&nbsp;=&nbsp;2.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rec_log-icon&nbsp;=&nbsp;icon_red_light."红灯<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;rec_log-req_txt&nbsp;=&nbsp;'显示请求'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;rec_log-resp_txt&nbsp;=&nbsp;'显示响应'.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;"获取Webservice方法名称文本<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR:&nbsp;rec_func.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;tab_func&nbsp;INTO&nbsp;rec_func<br />
+&nbsp;&nbsp;&nbsp;&nbsp;BINARY&nbsp;SEARCH&nbsp;WITH&nbsp;KEY&nbsp;mappedname&nbsp;=&nbsp;rec_log-op_name.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;rec_log-op_text&nbsp;=&nbsp;rec_func-stext.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;"显示成按钮样式<br />
+&nbsp;&nbsp;&nbsp;&nbsp;rec_stylerow-fieldname&nbsp;=&nbsp;'REQ_TXT'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;rec_stylerow-style&nbsp;=&nbsp;cl_gui_alv_grid=&gt;mc_style_button.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;rec_stylerow&nbsp;TO&nbsp;rec_log-cellstyles.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;rec_stylerow-fieldname&nbsp;=&nbsp;'RESP_TXT'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;rec_stylerow-style&nbsp;=&nbsp;cl_gui_alv_grid=&gt;mc_style_button.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;rec_stylerow&nbsp;TO&nbsp;rec_log-cellstyles.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MODIFY&nbsp;tab_log&nbsp;FROM&nbsp;rec_log&nbsp;INDEX&nbsp;g_tabix.<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+ENDFORM. "sub_get_log<br />
+<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FORM&nbsp;&nbsp;sub_filter<br />
+*&---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;关键字过滤<br />
+*----------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM sub_filter.<br />
+&nbsp;&nbsp;"先过滤请求XML<br />
+&nbsp;&nbsp;IF&nbsp;p_req&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;tab_log&nbsp;INTO&nbsp;rec_log.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;g_tabix&nbsp;=&nbsp;sy-tabix.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"查找Payload表获得XML<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CLEAR:&nbsp;rec_trace.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;SINGLE&nbsp;*<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;rec_trace<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;(payload)"srt_moni_payltrc<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;id&nbsp;=&nbsp;rec_log-call_id.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"没有XML日志的删除<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;&lt;&gt;&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DELETE&nbsp;tab_log&nbsp;INDEX&nbsp;g_tabix.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CONTINUE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"没有XML日志的删除<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;rec_trace-soap_env_req&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DELETE&nbsp;tab_log&nbsp;INDEX&nbsp;g_tabix.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CONTINUE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CLEAR:&nbsp;g_xml_content.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;METHOD&nbsp;cl_soap_moni_helper=&gt;convert_xstring_to_string<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xstring_in&nbsp;=&nbsp;rec_trace-soap_env_req<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;charset&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'UTF-8'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RECEIVING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;string_out&nbsp;=&nbsp;g_xml_content.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"不包含关键字的删除<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SEARCH&nbsp;g_xml_content&nbsp;FOR&nbsp;p_req.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;&lt;&gt;&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DELETE&nbsp;tab_log&nbsp;INDEX&nbsp;g_tabix.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CONTINUE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDLOOP.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;"再过滤响应XML<br />
+&nbsp;&nbsp;IF&nbsp;p_resp&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;tab_log&nbsp;INTO&nbsp;rec_log.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;g_tabix&nbsp;=&nbsp;sy-tabix.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"查找Payload表获得XML<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CLEAR:&nbsp;rec_trace.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;SINGLE&nbsp;*<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;rec_trace<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;(payload)"srt_moni_payltrc<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;id&nbsp;=&nbsp;rec_log-call_id.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;&lt;&gt;&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DELETE&nbsp;tab_log&nbsp;INDEX&nbsp;g_tabix.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CONTINUE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;rec_trace-soap_env_req&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DELETE&nbsp;tab_log&nbsp;INDEX&nbsp;g_tabix.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CONTINUE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CLEAR:&nbsp;g_xml_content.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;METHOD&nbsp;cl_soap_moni_helper=&gt;convert_xstring_to_string<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xstring_in&nbsp;=&nbsp;rec_trace-soap_env_resp<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;charset&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'UTF-8'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RECEIVING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;string_out&nbsp;=&nbsp;g_xml_content.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SEARCH&nbsp;g_xml_content&nbsp;FOR&nbsp;p_resp.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;&lt;&gt;&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DELETE&nbsp;tab_log&nbsp;INDEX&nbsp;g_tabix.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CONTINUE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDLOOP.<br />
+&nbsp;&nbsp;ENDIF.<br />
+ENDFORM. "sub_filter<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FORM&nbsp;&nbsp;sub_display_alv<br />
+*&---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;显示alv<br />
+*----------------------------------------------------------------------*<br />
+<br />
+<br />
+   </div>
+   <div class="code">
+FORM sub_display_alv.<br />
+&nbsp;&nbsp;DATA:&nbsp;it_field&nbsp;&nbsp;&nbsp;TYPE&nbsp;lvc_t_fcat,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wa_field&nbsp;&nbsp;&nbsp;TYPE&nbsp;lvc_s_fcat,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;l_layout&nbsp;&nbsp;&nbsp;TYPE&nbsp;lvc_s_layo,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;l_settings&nbsp;TYPE&nbsp;lvc_s_glay.<br />
+<br />
+&nbsp;&nbsp;DEFINE&nbsp;add_field.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;wa_field.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_field-fieldname&nbsp;=&nbsp;&1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_field-scrtext_l&nbsp;=&nbsp;&2.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_field-scrtext_m&nbsp;=&nbsp;&2.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_field-scrtext_s&nbsp;=&nbsp;&2.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_field-no_zero&nbsp;=&nbsp;&3."不显示数字零<br />
+&nbsp;&nbsp;&nbsp;wa_field-icon&nbsp;=&nbsp;&4.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;wa_field&nbsp;TO&nbsp;it_field.<br />
+&nbsp;&nbsp;END-OF-DEFINITION.<br />
+<br />
+&nbsp;&nbsp;l_layout-cwidth_opt&nbsp;=&nbsp;'X'."自动优化列宽<br />
+&nbsp;&nbsp;l_layout-zebra&nbsp;&nbsp;=&nbsp;'X'."颜色交替<br />
+&nbsp;&nbsp;l_layout-stylefname&nbsp;&nbsp;='CELLSTYLES'."样式列列名<br />
+<br />
+&nbsp;&nbsp;add_field&nbsp;'ICON'&nbsp;'接口状态'&nbsp;''&nbsp;'X'.<br />
+&nbsp;&nbsp;add_field&nbsp;'CALL_ID'&nbsp;'消息编号'&nbsp;''&nbsp;''.<br />
+&nbsp;&nbsp;add_field&nbsp;'DATE'&nbsp;'调用日期'&nbsp;''&nbsp;''.<br />
+&nbsp;&nbsp;add_field&nbsp;'TIME'&nbsp;'调用时间'&nbsp;''&nbsp;''.<br />
+&nbsp;&nbsp;add_field&nbsp;'USERNAME'&nbsp;'连接用户名'&nbsp;''&nbsp;''.<br />
+&nbsp;&nbsp;add_field&nbsp;'ERRORTYPE'&nbsp;'错误类型'&nbsp;''&nbsp;''.<br />
+&nbsp;&nbsp;add_field&nbsp;'CALLEDPROG'&nbsp;'接口对象'&nbsp;''&nbsp;''.<br />
+&nbsp;&nbsp;add_field&nbsp;'OP_NAME'&nbsp;'接口方法名'&nbsp;''&nbsp;''.<br />
+&nbsp;&nbsp;add_field&nbsp;'OP_TEXT'&nbsp;'接口方法名文本'&nbsp;''&nbsp;''.<br />
+&nbsp;&nbsp;add_field&nbsp;'REMADDR'&nbsp;'调用者IP地址'&nbsp;''&nbsp;''.<br />
+&nbsp;&nbsp;add_field&nbsp;'REQ_TXT'&nbsp;'请求XML'&nbsp;''&nbsp;''.<br />
+&nbsp;&nbsp;add_field&nbsp;'RESP_TXT'&nbsp;'响应XML'&nbsp;''&nbsp;''.<br />
+<br />
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'REUSE_ALV_GRID_DISPLAY_LVC'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_callback_program&nbsp;=&nbsp;sy-repid<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it_fieldcat_lvc&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;it_field<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;is_layout_lvc&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;l_layout<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_save&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'X'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_grid_settings&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;l_settings<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it_events&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;tab_events<br />
+&nbsp;&nbsp;&nbsp;&nbsp;TABLES<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;t_outtab&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;tab_log<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;program_error&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTHERS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;2.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;&lt;&gt;&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;ID&nbsp;sy-msgid&nbsp;TYPE&nbsp;sy-msgty&nbsp;NUMBER&nbsp;sy-msgno<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WITH&nbsp;sy-msgv1&nbsp;sy-msgv2&nbsp;sy-msgv3&nbsp;sy-msgv4.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+ENDFORM. "sub_display_alv<br />
+<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FORM&nbsp;&nbsp;sub_pf_status_set<br />
+*&---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;设置gui状态(cpoy&nbsp;saplkkbl)<br />
+*----------------------------------------------------------------------*<br />
+<br />
+<br />
+   </div>
+   <div class="code">
+FORM sub_pf_status_set USING extab TYPE slis_t_extab.<br />
+&nbsp;&nbsp;SET&nbsp;PF-STATUS&nbsp;'STANDARD_FULLSCREEN'&nbsp;EXCLUDING&nbsp;extab."CPOY&nbsp;SAPLKKBL<br />
+ENDFORM. "sub_pf_status_set<br />
+<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FORM&nbsp;&nbsp;sub_user_command<br />
+*&---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;处理alv指令<br />
+*----------------------------------------------------------------------*<br />
+<br />
+<br />
+   </div>
+   <div class="code">
+FORM sub_user_command USING p_ucomm LIKE sy-ucomm<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;p_selfield&nbsp;TYPE&nbsp;slis_selfield.<br />
+&nbsp;&nbsp;CLEAR:&nbsp;rec_log.<br />
+&nbsp;&nbsp;CASE&nbsp;p_ucomm.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'&IC1'."双击"p_selfield-fieldname&nbsp;=&nbsp;'EBELN'&nbsp;双击字段名<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;tab_log&nbsp;INTO&nbsp;rec_log&nbsp;INDEX&nbsp;p_selfield-tabindex."rs_selfield-value<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;rec_log-call_state&nbsp;=&nbsp;'2'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;r_f01&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SUBMIT&nbsp;srt_util_log_e2e&nbsp;WITH&nbsp;ts_from&nbsp;=&nbsp;g_ts_froms"此处不传值，默认当天<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WITH&nbsp;ts_to&nbsp;=&nbsp;g_ts_tos""此处不传值，默认当天<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WITH&nbsp;tid&nbsp;=&nbsp;rec_log-trc_key"调用标准功能&nbsp;TCode：SRTLOG_E2E&nbsp;传入“事务标识”<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;RETURN.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ELSEIF&nbsp;r_f02&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;sub_show_detail&nbsp;USING&nbsp;rec_log-trc_key."弹出框展示<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'REFRESH'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;sub_get_log.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;p_selfield-refresh&nbsp;=&nbsp;'X'."编辑ALV数据更新到内表<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"gv_grid-&gt;refresh_table_display(&nbsp;)."更新ALV<br />
+&nbsp;&nbsp;ENDCASE.<br />
+<br />
+ENDFORM. "sub_user_command<br />
+<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FORM&nbsp;&nbsp;sub_button_click<br />
+*&---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;响应按钮事件<br />
+*----------------------------------------------------------------------*<br />
+<br />
+<br />
+   </div>
+   <div class="code">
+FORM sub_button_click USING p_col_id TYPE lvc_s_col<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;p_row_no&nbsp;TYPE&nbsp;lvc_s_roid.<br />
+&nbsp;&nbsp;CLEAR:&nbsp;rec_log.<br />
+&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;tab_log&nbsp;INTO&nbsp;rec_log&nbsp;INDEX&nbsp;p_row_no-row_id.<br />
+<br />
+&nbsp;&nbsp;"查找Payload表获得XML<br />
+&nbsp;&nbsp;CLEAR:&nbsp;rec_trace.<br />
+&nbsp;&nbsp;SELECT&nbsp;SINGLE&nbsp;*<br />
+&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;rec_trace<br />
+&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;(payload)"srt_moni_payltrc<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;id&nbsp;=&nbsp;rec_log-call_id.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;&lt;&gt;&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;'无XML数据'&nbsp;TYPE&nbsp;'E'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXIT.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;p_col_id-fieldname&nbsp;=&nbsp;'REQ_TXT'."请求<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;rec_trace-soap_env_req&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;'无请求XML数据'&nbsp;TYPE&nbsp;'E'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXIT.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR:&nbsp;g_xml_content.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;METHOD&nbsp;cl_soap_moni_helper=&gt;convert_xstring_to_string<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xstring_in&nbsp;=&nbsp;rec_trace-soap_env_req<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;charset&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'UTF-8'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RECEIVING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;string_out&nbsp;=&nbsp;g_xml_content.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;METHOD&nbsp;g_xml-&gt;parse_string<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stream&nbsp;=&nbsp;g_xml_content.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;METHOD&nbsp;g_xml-&gt;display.<br />
+&nbsp;&nbsp;ELSEIF&nbsp;p_col_id-fieldname&nbsp;=&nbsp;'RESP_TXT'."响应<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;rec_trace-soap_env_resp&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;'无响应XML数据'&nbsp;TYPE&nbsp;'E'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXIT.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR:&nbsp;g_xml_content.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;METHOD&nbsp;cl_soap_moni_helper=&gt;convert_xstring_to_string<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xstring_in&nbsp;=&nbsp;rec_trace-soap_env_resp<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;charset&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'UTF-8'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RECEIVING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;string_out&nbsp;=&nbsp;g_xml_content.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;METHOD&nbsp;g_xml-&gt;parse_string<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stream&nbsp;=&nbsp;g_xml_content.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;METHOD&nbsp;g_xml-&gt;display.<br />
+&nbsp;&nbsp;ENDIF.<br />
+ENDFORM. "sub_button_click<br />
+<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FORM&nbsp;&nbsp;sub_event_build<br />
+*&---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;设置alv的event事件(caller_exit)<br />
+*----------------------------------------------------------------------*<br />
+<br />
+<br />
+   </div>
+   <div class="code">
+FORM sub_event_build.<br />
+&nbsp;&nbsp;DATA:&nbsp;rec_event&nbsp;LIKE&nbsp;LINE&nbsp;OF&nbsp;tab_events.<br />
+<br />
+&nbsp;&nbsp;CLEAR:&nbsp;rec_event.<br />
+&nbsp;&nbsp;rec_event-name&nbsp;=&nbsp;'CALLER_EXIT'."按钮点击事件<br />
+&nbsp;&nbsp;rec_event-form&nbsp;=&nbsp;'SUB_REGISTER_BUTTON'.<br />
+&nbsp;&nbsp;APPEND&nbsp;rec_event&nbsp;TO&nbsp;tab_events.<br />
+<br />
+&nbsp;&nbsp;CLEAR:&nbsp;rec_event.<br />
+&nbsp;&nbsp;rec_event-name&nbsp;=&nbsp;'USER_COMMAND'."用户命令事件<br />
+&nbsp;&nbsp;rec_event-form&nbsp;=&nbsp;'SUB_USER_COMMAND'.<br />
+&nbsp;&nbsp;APPEND&nbsp;rec_event&nbsp;TO&nbsp;tab_events.<br />
+<br />
+&nbsp;&nbsp;CLEAR:&nbsp;rec_event.<br />
+&nbsp;&nbsp;rec_event-name&nbsp;=&nbsp;'PF_STATUS_SET'."设置GUI状态<br />
+&nbsp;&nbsp;rec_event-form&nbsp;=&nbsp;'SUB_PF_STATUS_SET'.<br />
+&nbsp;&nbsp;APPEND&nbsp;rec_event&nbsp;TO&nbsp;tab_events.<br />
+<br />
+ENDFORM. "sub_event_build<br />
+<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FORM&nbsp;&nbsp;sub_register_button<br />
+*&---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;注册按钮事件<br />
+*----------------------------------------------------------------------*<br />
+<br />
+<br />
+   </div>
+   <div class="code">
+FORM sub_register_button USING e_grid TYPE slis_data_caller_exit.<br />
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'GET_GLOBALS_FROM_SLVC_FULLSCR'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;e_grid&nbsp;=&nbsp;gv_grid.<br />
+<br />
+&nbsp;&nbsp;CREATE&nbsp;OBJECT&nbsp;gv_event_receiver.<br />
+&nbsp;&nbsp;SET&nbsp;HANDLER&nbsp;gv_event_receiver-&gt;handle_button_click&nbsp;FOR&nbsp;gv_grid.<br />
+ENDFORM. "sub_register_button<br />
+<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FORM&nbsp;&nbsp;sub_show_detail<br />
+*&---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;弹出详细信息<br />
+*----------------------------------------------------------------------*<br />
+<br />
+<br />
+   </div>
+   <div class="code">
+FORM sub_show_detail USING p_trc_key TYPE srt_moni_trc_key.<br />
+&nbsp;&nbsp;CHECK&nbsp;p_trc_key&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+<br />
+&nbsp;&nbsp;DATA:&nbsp;tab_fieldcat&nbsp;TYPE&nbsp;slis_t_fieldcat_alv,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rec_fieldcat&nbsp;TYPE&nbsp;slis_fieldcat_alv.<br />
+<br />
+&nbsp;&nbsp;REFRESH:&nbsp;tab_error.<br />
+&nbsp;&nbsp;SELECT&nbsp;logno&nbsp;error_category&nbsp;short_text&nbsp;error_context<br />
+&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;TABLE&nbsp;tab_error<br />
+&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;(error)"srt_util_errlog<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;timestamp&nbsp;BETWEEN&nbsp;g_ts_froms&nbsp;AND&nbsp;g_ts_tos<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;applid&nbsp;=&nbsp;p_trc_key.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;tab_error[]&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;'无错误信息'&nbsp;TYPE&nbsp;'E'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXIT.<br />
+&nbsp;&nbsp;ELSE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SORT&nbsp;&nbsp;tab_error&nbsp;BY&nbsp;logno.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;DEFINE&nbsp;add_sub_fieldcat.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;rec_fieldcat.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;rec_fieldcat-col_pos&nbsp;=&nbsp;&1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;rec_fieldcat-fieldname&nbsp;=&nbsp;&2.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;rec_fieldcat-seltext_l&nbsp;=&nbsp;&3.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;rec_fieldcat-key&nbsp;=&nbsp;&4.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;rec_fieldcat-fix_column&nbsp;=&nbsp;&4.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;rec_fieldcat-edit&nbsp;=&nbsp;&5.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;rec_fieldcat-outputlen&nbsp;=&nbsp;&6.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;rec_fieldcat-no_zero&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;rec_fieldcat&nbsp;TO&nbsp;tab_fieldcat.<br />
+&nbsp;&nbsp;END-OF-DEFINITION.<br />
+<br />
+&nbsp;&nbsp;add_sub_fieldcat&nbsp;1&nbsp;'LOGNO'&nbsp;'行号'&nbsp;'X'&nbsp;''&nbsp;'5'&nbsp;.<br />
+&nbsp;&nbsp;add_sub_fieldcat&nbsp;2&nbsp;'ERROR_CATEGORY'&nbsp;'错误类型'&nbsp;''&nbsp;''&nbsp;'15'&nbsp;.<br />
+&nbsp;&nbsp;add_sub_fieldcat&nbsp;3&nbsp;'SHORT_TEXT'&nbsp;'错误描述'&nbsp;''&nbsp;''&nbsp;'70'&nbsp;.<br />
+<br />
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'REUSE_ALV_POPUP_TO_SELECT'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_title&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'错误信息'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_callback_program&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;sy-repid<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_zebra&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'X'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_allow_no_selection&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'X'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_screen_start_column&nbsp;&nbsp;&nbsp;=&nbsp;5<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_screen_start_line&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_screen_end_column&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;100<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_screen_end_line&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;10<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_tabname&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'TAB_ERROR'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_callback_user_command&nbsp;=&nbsp;'SUB_USER_COMMAND_POPUP'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it_fieldcat&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;tab_fieldcat[]<br />
+&nbsp;&nbsp;&nbsp;&nbsp;TABLES<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;t_outtab&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;tab_error<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;program_error&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTHERS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;2.<br />
+<br />
+ENDFORM. "sub_show_detail<br />
+<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FORM&nbsp;&nbsp;sub_user_command_popup<br />
+*&---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;处理弹出alv<br />
+*----------------------------------------------------------------------*<br />
+<br />
+<br />
+   </div>
+   <div class="code">
+FORM sub_user_command_popup USING p_ucomm LIKE sy-ucomm<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;p_selfield&nbsp;TYPE&nbsp;slis_selfield.<br />
+&nbsp;&nbsp;CASE&nbsp;p_ucomm.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'&ETA'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;tab_error&nbsp;INTO&nbsp;rec_error&nbsp;INDEX&nbsp;p_selfield-tabindex.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"显示详细错误信息<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CLEAR:&nbsp;g_xml_content.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;METHOD&nbsp;cl_soap_moni_helper=&gt;convert_xstring_to_string<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xstring_in&nbsp;=&nbsp;rec_error-error_context<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;charset&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'UTF-8'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RECEIVING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;string_out&nbsp;=&nbsp;g_xml_content.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;METHOD&nbsp;g_xml-&gt;parse_string<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stream&nbsp;=&nbsp;g_xml_content.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;METHOD&nbsp;g_xml-&gt;display.<br />
+&nbsp;&nbsp;ENDCASE.<br />
+<br />
+&nbsp;&nbsp;CLEAR:&nbsp;p_ucomm.<br />
+ENDFORM. "sub_user_command_popup<br />
+<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FORM&nbsp;&nbsp;sub_convert_ts_from_short_to_long<br />
+*&---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;转换时间格式&nbsp;从短时间戳到长时间戳<br />
+*----------------------------------------------------------------------*<br />
+<br />
+<br />
+   </div>
+   <div class="code">
+FORM sub_conv_ts_from_short_to_long USING ip_ts_from TYPE timestamp<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ip_ts_to&nbsp;&nbsp;TYPE&nbsp;timestamp<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ep_ts_from&nbsp;&nbsp;TYPE&nbsp;timestampl<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ep_ts_to&nbsp;&nbsp;TYPE&nbsp;timestampl.<br />
+&nbsp;&nbsp;DATA:&nbsp;l_dec(15)&nbsp;&nbsp;TYPE&nbsp;c,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;l_dec2(22)&nbsp;TYPE&nbsp;c.<br />
+<br />
+&nbsp;&nbsp;CONSTANTS&nbsp;&nbsp;co_padding&nbsp;&nbsp;TYPE&nbsp;string&nbsp;VALUE&nbsp;'.9999999'.<br />
+<br />
+&nbsp;&nbsp;ep_ts_from&nbsp;=&nbsp;ip_ts_from.&nbsp;"&nbsp;(JJJJMMTThhmmss)<br />
+&nbsp;&nbsp;l_dec&nbsp;=&nbsp;ip_ts_to.<br />
+&nbsp;&nbsp;CONCATENATE&nbsp;l_dec(14)&nbsp;co_padding&nbsp;INTO&nbsp;l_dec2.<br />
+&nbsp;&nbsp;ep_ts_to&nbsp;=&nbsp;l_dec2.<br />
+<br />
+ENDFORM. "sub_convert_ts_from_short_to_long<br />
+<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FORM&nbsp;&nbsp;sub_copy_tables<br />
+*&---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;将系统的日志表转储在自定义表中<br />
+*----------------------------------------------------------------------*<br />
+<br />
+<br />
+   </div>
+   <div class="code">
+FORM sub_copy_tables USING f_days TYPE dlydy.<br />
+&nbsp;&nbsp;DATA:&nbsp;tab_zsrt_log_data&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;TABLE&nbsp;OF&nbsp;zsrt_log_data,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tab_zsrt_log_data2&nbsp;&nbsp;&nbsp;TYPE&nbsp;TABLE&nbsp;OF&nbsp;zsrt_log_data2,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tab_zsrt_payltrc&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;TABLE&nbsp;OF&nbsp;zsrt_payltrc,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tab_zsrt_util_errlog&nbsp;TYPE&nbsp;TABLE&nbsp;OF&nbsp;zsrt_util_errlog.<br />
+<br />
+&nbsp;&nbsp;DATA:&nbsp;l_ts_froml&nbsp;TYPE&nbsp;tzonref-tstampl,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;l_ts_tol&nbsp;&nbsp;&nbsp;TYPE&nbsp;tzonref-tstampl.<br />
+<br />
+&nbsp;&nbsp;DATA:&nbsp;l_date&nbsp;LIKE&nbsp;sy-datum.<br />
+<br />
+&nbsp;&nbsp;"获得前&nbsp;f_days&nbsp;天的日期<br />
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'RP_CALC_DATE_IN_INTERVAL'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;date&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;sy-datum<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;days&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;f_days<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;months&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;signum&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'-'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;years&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;calc_date&nbsp;=&nbsp;l_date.<br />
+<br />
+<br />
+&nbsp;&nbsp;"将日期和时间转换为&nbsp;短时间戳&nbsp;差8小时！<br />
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'IB_CONVERT_INTO_TIMESTAMP'&nbsp;"FROM<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_datlo&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;l_date<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_timlo&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;sy-uzeit<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;e_timestamp&nbsp;=&nbsp;g_ts_froms.<br />
+<br />
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'IB_CONVERT_INTO_TIMESTAMP'&nbsp;"TO<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_datlo&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;sy-datum<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_timlo&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;sy-uzeit<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;e_timestamp&nbsp;=&nbsp;g_ts_tos.<br />
+<br />
+&nbsp;&nbsp;"将&nbsp;短时间戳&nbsp;转换为&nbsp;长时间戳<br />
+&nbsp;&nbsp;PERFORM&nbsp;sub_conv_ts_from_short_to_long&nbsp;USING&nbsp;g_ts_froms&nbsp;g_ts_tos<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;l_ts_froml&nbsp;l_ts_tol.<br />
+<br />
+&nbsp;&nbsp;SELECT&nbsp;*<br />
+&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;CORRESPONDING&nbsp;FIELDS&nbsp;OF&nbsp;TABLE&nbsp;tab_zsrt_log_data<br />
+&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;srt_monilog_data<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;ts_call&nbsp;BETWEEN&nbsp;l_ts_froml&nbsp;AND&nbsp;l_ts_tol.<br />
+<br />
+&nbsp;&nbsp;SELECT&nbsp;*<br />
+&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;CORRESPONDING&nbsp;FIELDS&nbsp;OF&nbsp;TABLE&nbsp;tab_zsrt_log_data2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;srt_monlog_data2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;ts_call&nbsp;BETWEEN&nbsp;l_ts_froml&nbsp;AND&nbsp;l_ts_tol.<br />
+<br />
+&nbsp;&nbsp;SELECT&nbsp;*<br />
+&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;CORRESPONDING&nbsp;FIELDS&nbsp;OF&nbsp;TABLE&nbsp;tab_zsrt_payltrc<br />
+&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;srt_moni_payltrc<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;expire_ts&nbsp;BETWEEN&nbsp;l_ts_froml&nbsp;AND&nbsp;l_ts_tol.<br />
+<br />
+&nbsp;&nbsp;SELECT&nbsp;*<br />
+&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;CORRESPONDING&nbsp;FIELDS&nbsp;OF&nbsp;TABLE&nbsp;tab_zsrt_util_errlog<br />
+&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;srt_util_errlog<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;timestamp&nbsp;BETWEEN&nbsp;g_ts_froms&nbsp;AND&nbsp;g_ts_tos."短时间戳<br />
+<br />
+&nbsp;&nbsp;MODIFY&nbsp;zsrt_log_data&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;TABLE&nbsp;tab_zsrt_log_data.<br />
+&nbsp;&nbsp;MESSAGE&nbsp;i001(00)&nbsp;WITH&nbsp;'SRT_MONILOG_DATA&nbsp;IMPORT_'&nbsp;sy-dbcnt&nbsp;'_'.<br />
+<br />
+&nbsp;&nbsp;MODIFY&nbsp;zsrt_log_data2&nbsp;&nbsp;&nbsp;FROM&nbsp;TABLE&nbsp;tab_zsrt_log_data2.<br />
+&nbsp;&nbsp;MESSAGE&nbsp;i001(00)&nbsp;WITH&nbsp;'SRT_MONLOG_DATA2&nbsp;IMPORT_'&nbsp;sy-dbcnt&nbsp;'_'.<br />
+<br />
+&nbsp;&nbsp;MODIFY&nbsp;zsrt_payltrc&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;TABLE&nbsp;tab_zsrt_payltrc.<br />
+&nbsp;&nbsp;MESSAGE&nbsp;i001(00)&nbsp;WITH&nbsp;'SRT_MONI_PAYLTRC&nbsp;IMPORT_'&nbsp;sy-dbcnt&nbsp;'_'.<br />
+<br />
+&nbsp;&nbsp;MODIFY&nbsp;zsrt_util_errlog&nbsp;FROM&nbsp;TABLE&nbsp;tab_zsrt_util_errlog.<br />
+&nbsp;&nbsp;MESSAGE&nbsp;i001(00)&nbsp;WITH&nbsp;'SRT_UTIL_ERRLOG&nbsp;IMPORT_'&nbsp;sy-dbcnt&nbsp;'_'.<br />
+<br />
+&nbsp;&nbsp;COMMIT&nbsp;WORK&nbsp;AND&nbsp;WAIT.<br />
+ENDFORM. " SUB_COPY_TABLES<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FORM&nbsp;&nbsp;sub_delete_history_log<br />
+*&---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;删除历史日志<br />
+*----------------------------------------------------------------------*<br />
+<br />
+<br />
+   </div>
+   <div class="code">
+FORM sub_delete_history_log.<br />
+&nbsp;&nbsp;DATA:&nbsp;l_ts_froml&nbsp;TYPE&nbsp;tzonref-tstampl,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;l_ts_tol&nbsp;&nbsp;&nbsp;TYPE&nbsp;tzonref-tstampl.<br />
+<br />
+&nbsp;&nbsp;"将日期和时间转换为&nbsp;短时间戳&nbsp;差8小时！<br />
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'IB_CONVERT_INTO_TIMESTAMP'&nbsp;"FROM<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_datlo&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;p_datefr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_timlo&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;p_timefr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;e_timestamp&nbsp;=&nbsp;g_ts_froms.<br />
+<br />
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'IB_CONVERT_INTO_TIMESTAMP'&nbsp;"TO<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_datlo&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;p_dateto<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_timlo&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;p_timeto<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;e_timestamp&nbsp;=&nbsp;g_ts_tos.<br />
+<br />
+&nbsp;&nbsp;"将&nbsp;短时间戳&nbsp;转换为&nbsp;长时间戳<br />
+&nbsp;&nbsp;PERFORM&nbsp;sub_conv_ts_from_short_to_long&nbsp;USING&nbsp;g_ts_froms&nbsp;g_ts_tos<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;l_ts_froml&nbsp;l_ts_tol.<br />
+<br />
+&nbsp;&nbsp;DELETE&nbsp;FROM&nbsp;(log1)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;ts_call&nbsp;BETWEEN&nbsp;l_ts_froml&nbsp;AND&nbsp;l_ts_tol.<br />
+&nbsp;&nbsp;WRITE:&nbsp;/&nbsp;'删除表',&nbsp;log1,&nbsp;sy-dbcnt,&nbsp;'条'.<br />
+<br />
+&nbsp;&nbsp;DELETE&nbsp;FROM&nbsp;(log2)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;ts_call&nbsp;BETWEEN&nbsp;l_ts_froml&nbsp;AND&nbsp;l_ts_tol.<br />
+&nbsp;&nbsp;WRITE:&nbsp;/&nbsp;'删除表',&nbsp;log2,&nbsp;sy-dbcnt,&nbsp;'条'.<br />
+<br />
+&nbsp;&nbsp;DELETE&nbsp;FROM&nbsp;(payload)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;expire_ts&nbsp;BETWEEN&nbsp;l_ts_froml&nbsp;AND&nbsp;l_ts_tol.<br />
+&nbsp;&nbsp;WRITE:&nbsp;/&nbsp;'删除表',&nbsp;payload,&nbsp;sy-dbcnt,&nbsp;'条'.<br />
+<br />
+&nbsp;&nbsp;DELETE&nbsp;FROM&nbsp;(error)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;timestamp&nbsp;BETWEEN&nbsp;g_ts_froms&nbsp;AND&nbsp;g_ts_tos."短时间戳<br />
+&nbsp;&nbsp;WRITE:&nbsp;/&nbsp;'删除表',&nbsp;error,&nbsp;sy-dbcnt,&nbsp;'条'.<br />
+<br />
+&nbsp;&nbsp;COMMIT&nbsp;WORK&nbsp;AND&nbsp;WAIT.<br />
+ENDFORM. " SUB_DELETE_HISTORY_LOG<br />
+<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*Text&nbsp;elements<br />
+*----------------------------------------------------------<br />
+*&nbsp;000&nbsp;查询条件<br />
+*&nbsp;001&nbsp;时戳<br />
+*&nbsp;002&nbsp;到<br />
+*&nbsp;003&nbsp;选项<br />
+*&nbsp;004&nbsp;关键字搜索<br />
+*&nbsp;011&nbsp;查询在线日志<br />
+*&nbsp;012&nbsp;查询历史日志<br />
+*&nbsp;013&nbsp;删除历史日志<br />
+<br />
+<br />
+*Selection&nbsp;texts<br />
+*----------------------------------------------------------<br />
+*&nbsp;F_MANDT&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;客户端<br />
+*&nbsp;P_REQ&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;请求搜索关键字<br />
+*&nbsp;P_RESP&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;响应搜索关键字<br />
+*&nbsp;P_UPROW&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;最大命中数量<br />
+*&nbsp;S_CALLID&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;调用标识<br />
+*&nbsp;S_OPNAME&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;服务方法名<br />
+*&nbsp;S_STATE&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;接口状态<br />
+<br />
+<br />
+*Messages<br />
+*----------------------------------------------------------<br />
+*<br />
+*&nbsp;Message&nbsp;class:&nbsp;00<br />
+*001&nbsp;&nbsp;&nbsp;&1&2&3&4&5&6&7&8<br />
+*<br />
+*&nbsp;Message&nbsp;class:&nbsp;Hard&nbsp;coded<br />
+*&nbsp;&nbsp;&nbsp;没有查询到数据<br />
+<br />
+*Text&nbsp;elements<br />
+*----------------------------------------------------------<br />
+*&nbsp;000&nbsp;查询条件<br />
+*&nbsp;001&nbsp;时戳<br />
+*&nbsp;002&nbsp;到<br />
+*&nbsp;003&nbsp;选项<br />
+*&nbsp;004&nbsp;关键字搜索<br />
+*&nbsp;011&nbsp;查询在线日志<br />
+*&nbsp;012&nbsp;查询历史日志<br />
+*&nbsp;013&nbsp;删除历史日志<br />
+<br />
+<br />
+*Selection&nbsp;texts<br />
+*----------------------------------------------------------<br />
+*&nbsp;F_MANDT&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;客户端<br />
+*&nbsp;P_REQ&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;请求搜索关键字<br />
+*&nbsp;P_RESP&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;响应搜索关键字<br />
+*&nbsp;P_UPROW&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;最大命中数量<br />
+*&nbsp;S_CALLID&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;调用标识<br />
+*&nbsp;S_OPNAME&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;服务方法名<br />
+*&nbsp;S_STATE&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;接口状态<br />
+<br />
+<br />
+*Messages<br />
+*----------------------------------------------------------<br />
+*<br />
+*&nbsp;Message&nbsp;class:&nbsp;00<br />
+*001&nbsp;&nbsp;&nbsp;&1&2&3&4&5&6&7&8<br />
+*<br />
+*&nbsp;Message&nbsp;class:&nbsp;Hard&nbsp;coded<br />
+*&nbsp;&nbsp;&nbsp;没有查询到数据<br />
+            </div>
+          </td>
+        </tr>
+      </table>
+      </td>
+      </tr>
+   <tr>
+<td class="footer">Extracted by Mass Download version 1.5.2 - E.G.Mellodew. 1998-2022. Sap Release 755</td>
+   </tr>
+</table>
+</body>
+</html>

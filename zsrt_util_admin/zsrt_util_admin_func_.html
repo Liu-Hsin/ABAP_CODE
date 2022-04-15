@@ -1,0 +1,408 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=GB2312" />
+<title>ZSRT_UTIL_ADMIN_FUNC</title>
+<style type="text/css">
+.code{ font-family:"Courier New", Courier, monospace; color:#000; font-size:14px; background-color:#F2F4F7 }
+  .codeComment {font-family:"Courier New", Courier, monospace; color:#0000F0; font-size:14px; background-color:#F2F4F7 }
+  .normalBold{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; font-weight:800 }
+  .normalBoldLarge{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+</style>
+<style type="text/css">
+  .normal{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px }
+  .footer{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; text-align: center }
+  h2{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+  h3{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:14px; font-weight:800 }
+  .outerTable{
+   background-color:#E0E7ED;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-right-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+  .innerTable{
+   background-color:#F2F4F7;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-bottom-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+</style>
+</head>
+<body>
+<table class="outerTable">
+  <tr class="normalBoldLarge">
+     <td><h2>Code listing for: ZSRT_UTIL_ADMIN_FUNC</h2>
+<h3> Description: </h3></td>
+   </tr>
+  <tr>
+     <td>
+     <table class="innerTable">
+       <tr>
+          <td>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;Include&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SRT_UTIL_ADMIN_FUNC<br />
+*&---------------------------------------------------------------------*<br />
+<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;display_func_overview<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM display_func_overview.<br />
+<br />
+&nbsp;&nbsp;PERFORM&nbsp;get_func_data.<br />
+<br />
+&nbsp;&nbsp;CALL&nbsp;METHOD&nbsp;mr_func_grid-&gt;refresh_table_display(&nbsp;is_stable&nbsp;=&nbsp;ms_stable&nbsp;).<br />
+<br />
+ENDFORM.                    " display_func_overview<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;get_func_data<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM get_func_data.<br />
+<br />
+&nbsp;&nbsp;DATA:&nbsp;l_sapuser&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;syuname,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;l_terminal_id&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;sysuuid_c,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;l_request_uri&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;srt_util_id,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_func&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;ty_func,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_func_header&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;srt_func_header,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lt_func_header&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;srt_func_header_tab.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Get&nbsp;Functional&nbsp;Trace&nbsp;Headers<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;IF&nbsp;m_select_idtype&nbsp;=&nbsp;if_soap_util_constants=&gt;co_idtype_user.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;l_sapuser&nbsp;=&nbsp;m_select_utilid.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CONCATENATE&nbsp;'Client'(032)&nbsp;sy-mandt<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'User'(031)&nbsp;&nbsp;&nbsp;m_select_utilid<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;ms_func_layout-grid_title&nbsp;SEPARATED&nbsp;BY&nbsp;space.<br />
+<br />
+&nbsp;&nbsp;ELSEIF&nbsp;m_select_idtype&nbsp;=&nbsp;if_soap_util_constants=&gt;co_idtype_term.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;l_terminal_id&nbsp;=&nbsp;m_select_utilid.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CONCATENATE&nbsp;'Client'(032)&nbsp;&nbsp;&nbsp;sy-mandt<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'Terminal'(030)&nbsp;m_select_utilid<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;ms_func_layout-grid_title&nbsp;SEPARATED&nbsp;BY&nbsp;space.<br />
+<br />
+&nbsp;&nbsp;ELSE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;l_request_uri&nbsp;=&nbsp;m_select_utilid.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CONCATENATE&nbsp;'Client'(032)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sy-mandt<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'Request&nbsp;URI'(029)&nbsp;m_select_utilid<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;ms_func_layout-grid_title&nbsp;SEPARATED&nbsp;BY&nbsp;space.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;cl_soap_util_db=&gt;func_get_headers(<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sapuser&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;l_sapuser<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;terminal_id&nbsp;=&nbsp;l_terminal_id<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;request_uri&nbsp;=&nbsp;l_request_uri<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;today_only&nbsp;&nbsp;=&nbsp;m_today_only<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;header_list&nbsp;=&nbsp;lt_func_header<br />
+&nbsp;&nbsp;).<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Set&nbsp;Header&nbsp;and&nbsp;Error&nbsp;State<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;REFRESH&nbsp;mt_func.<br />
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;lt_func_header&nbsp;INTO&nbsp;ls_func_header.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MOVE-CORRESPONDING&nbsp;ls_func_header&nbsp;TO&nbsp;ls_func.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;WS&nbsp;Type<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;CASE&nbsp;ls_func-wstype.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;if_soap_util_constants=&gt;ws_type_consumer&nbsp;OR&nbsp;if_soap_util_constants=&gt;ws_type_generic_consumer.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_func-wstype_c&nbsp;=&nbsp;if_soap_util_constants=&gt;ws_type_consumer_text.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;if_soap_util_constants=&gt;ws_type_provider.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_func-wstype_c&nbsp;=&nbsp;if_soap_util_constants=&gt;ws_type_provider_text.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;if_soap_util_constants=&gt;ws_type_rfc_provider.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_func-wstype_c&nbsp;=&nbsp;if_soap_util_constants=&gt;ws_type_provider_text.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;if_soap_util_constants=&gt;ws_type_sender.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_func-wstype_c&nbsp;=&nbsp;if_soap_util_constants=&gt;ws_type_sender_text.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;if_soap_util_constants=&gt;ws_type_receiver.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_func-wstype_c&nbsp;=&nbsp;if_soap_util_constants=&gt;ws_type_receiver_text.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDCASE.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Error&nbsp;State<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;ls_func-opstate&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_func-erroricon&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;icon_led_green.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_func-erroricon+3&nbsp;&nbsp;=&nbsp;'\Q'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_func-erroricon+5&nbsp;&nbsp;=&nbsp;'Successful&nbsp;Execution'(iok).<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_func-erroricon+45&nbsp;=&nbsp;'@'.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ELSEIF&nbsp;ls_func-opstate&nbsp;=&nbsp;'I'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_func-erroricon&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;icon_led_yellow.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_func-erroricon+3&nbsp;&nbsp;=&nbsp;'\Q'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_func-erroricon+5&nbsp;&nbsp;=&nbsp;'Incomplete&nbsp;Execution'(iic).<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_func-erroricon+45&nbsp;=&nbsp;'@'.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ELSEIF&nbsp;ls_func-opstate&nbsp;=&nbsp;'E'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_func-erroricon&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;icon_led_red.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_func-erroricon+3&nbsp;&nbsp;=&nbsp;'\Q'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_func-erroricon+5&nbsp;&nbsp;=&nbsp;'Erroneous&nbsp;Execution'(ier).<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_func-erroricon+45&nbsp;=&nbsp;'@'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;ls_func&nbsp;TO&nbsp;mt_func.<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+ENDFORM.                    " get_func_data<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;create_mr_func_grid<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM create_mr_func_grid.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;mr_func_area&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CREATE&nbsp;OBJECT&nbsp;mr_func_area<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;container_name&nbsp;=&nbsp;'FUNCTIONAL_AREA'.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;create_ms_func_layout.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;mr_func_grid&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CREATE&nbsp;OBJECT&nbsp;mr_func_grid<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_parent&nbsp;=&nbsp;mr_func_area.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;SET&nbsp;HANDLER&nbsp;mr_gui_appl-&gt;handle_grid_double_click&nbsp;&nbsp;FOR&nbsp;mr_func_grid.<br />
+&nbsp;&nbsp;SET&nbsp;HANDLER&nbsp;mr_gui_appl-&gt;handle_hide_menu&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FOR&nbsp;mr_func_grid.<br />
+&nbsp;&nbsp;SET&nbsp;HANDLER&nbsp;mr_gui_appl-&gt;handle_toolbar&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FOR&nbsp;mr_func_grid.<br />
+&nbsp;&nbsp;SET&nbsp;HANDLER&nbsp;mr_gui_appl-&gt;handle_display_rows&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FOR&nbsp;mr_func_grid.<br />
+&nbsp;&nbsp;SET&nbsp;HANDLER&nbsp;mr_gui_appl-&gt;handle_delete_rows&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FOR&nbsp;mr_func_grid.<br />
+&nbsp;&nbsp;SET&nbsp;HANDLER&nbsp;mr_gui_appl-&gt;handle_get_context_menu&nbsp;&nbsp;&nbsp;FOR&nbsp;mr_func_grid.<br />
+&nbsp;&nbsp;SET&nbsp;HANDLER&nbsp;mr_gui_appl-&gt;handle_refresh_button&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FOR&nbsp;mr_func_grid.<br />
+&nbsp;&nbsp;SET&nbsp;HANDLER&nbsp;mr_gui_appl-&gt;handle_change_expiry_date&nbsp;FOR&nbsp;mr_func_grid.<br />
+&nbsp;&nbsp;SET&nbsp;HANDLER&nbsp;mr_gui_appl-&gt;handle_change_view&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FOR&nbsp;mr_func_grid.<br />
+<br />
+&nbsp;&nbsp;PERFORM&nbsp;create_func_fieldcat.<br />
+<br />
+ENDFORM.                    " create_mr_func_grid<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;create_func_fieldcat<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM create_func_fieldcat.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;m_select_utilid&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;get_func_data.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;MOVE&nbsp;sy-repid&nbsp;TO&nbsp;ms_variant_func-report.<br />
+<br />
+&nbsp;&nbsp;CALL&nbsp;METHOD&nbsp;mr_func_grid-&gt;set_table_for_first_display<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;is_layout&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ms_func_layout<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it_toolbar_excluding&nbsp;=&nbsp;mt_hidden_code<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_save&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'A'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;is_variant&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ms_variant_func<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CHANGING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it_outtab&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;mt_func<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it_fieldcatalog&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;mt_func_fcat[].<br />
+<br />
+&nbsp;&nbsp;CALL&nbsp;METHOD&nbsp;mr_func_grid-&gt;set_toolbar_interactive.<br />
+<br />
+&nbsp;&nbsp;CALL&nbsp;METHOD&nbsp;cl_gui_control=&gt;set_focus<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;control&nbsp;=&nbsp;mr_func_grid.<br />
+<br />
+ENDFORM.                    " create_func_fieldcat<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;create_ms_func_layout.<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM create_ms_func_layout.<br />
+<br />
+&nbsp;&nbsp;DATA:&nbsp;index&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;i,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_gui_fcat&nbsp;&nbsp;TYPE&nbsp;lvc_s_fcat.<br />
+<br />
+&nbsp;&nbsp;CLEAR:&nbsp;mt_func_fcat.<br />
+&nbsp;&nbsp;ms_func_layout-sel_mode&nbsp;&nbsp;&nbsp;=&nbsp;'A'.<br />
+<br />
+&nbsp;&nbsp;index&nbsp;=&nbsp;index&nbsp;+&nbsp;1.<br />
+&nbsp;&nbsp;CLEAR&nbsp;ls_gui_fcat.<br />
+&nbsp;&nbsp;ls_gui_fcat-col_pos&nbsp;&nbsp;&nbsp;=&nbsp;index.<br />
+&nbsp;&nbsp;ls_gui_fcat-fieldname&nbsp;=&nbsp;'ERRORICON'.<br />
+&nbsp;&nbsp;ls_gui_fcat-coltext&nbsp;&nbsp;&nbsp;=&nbsp;'State'(059).<br />
+&nbsp;&nbsp;ls_gui_fcat-outputlen&nbsp;=&nbsp;5.<br />
+&nbsp;&nbsp;ls_gui_fcat-icon&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;APPEND&nbsp;ls_gui_fcat&nbsp;TO&nbsp;mt_func_fcat.<br />
+<br />
+&nbsp;&nbsp;index&nbsp;=&nbsp;index&nbsp;+&nbsp;1.<br />
+&nbsp;&nbsp;CLEAR&nbsp;ls_gui_fcat.<br />
+&nbsp;&nbsp;ls_gui_fcat-col_pos&nbsp;&nbsp;&nbsp;=&nbsp;index.<br />
+&nbsp;&nbsp;ls_gui_fcat-fieldname&nbsp;=&nbsp;'WSNAME'.<br />
+&nbsp;&nbsp;ls_gui_fcat-coltext&nbsp;&nbsp;&nbsp;=&nbsp;'Web&nbsp;Service&nbsp;Name'(062).<br />
+&nbsp;&nbsp;ls_gui_fcat-outputlen&nbsp;=&nbsp;30.<br />
+&nbsp;&nbsp;ls_gui_fcat-no_out&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;APPEND&nbsp;ls_gui_fcat&nbsp;TO&nbsp;mt_func_fcat.<br />
+<br />
+&nbsp;&nbsp;index&nbsp;=&nbsp;index&nbsp;+&nbsp;1.<br />
+&nbsp;&nbsp;CLEAR&nbsp;ls_gui_fcat.<br />
+&nbsp;&nbsp;ls_gui_fcat-col_pos&nbsp;&nbsp;&nbsp;=&nbsp;index.<br />
+&nbsp;&nbsp;ls_gui_fcat-fieldname&nbsp;=&nbsp;'IFNAME'.<br />
+&nbsp;&nbsp;ls_gui_fcat-coltext&nbsp;&nbsp;&nbsp;=&nbsp;'Interface&nbsp;Name'(071).<br />
+&nbsp;&nbsp;ls_gui_fcat-outputlen&nbsp;=&nbsp;33.<br />
+&nbsp;&nbsp;APPEND&nbsp;ls_gui_fcat&nbsp;TO&nbsp;mt_func_fcat.<br />
+<br />
+&nbsp;&nbsp;index&nbsp;=&nbsp;index&nbsp;+&nbsp;1.<br />
+&nbsp;&nbsp;CLEAR&nbsp;ls_gui_fcat.<br />
+&nbsp;&nbsp;ls_gui_fcat-col_pos&nbsp;&nbsp;&nbsp;=&nbsp;index.<br />
+&nbsp;&nbsp;ls_gui_fcat-fieldname&nbsp;=&nbsp;'WSTYPE_C'.<br />
+&nbsp;&nbsp;ls_gui_fcat-coltext&nbsp;&nbsp;&nbsp;=&nbsp;'Role'(064).<br />
+&nbsp;&nbsp;ls_gui_fcat-outputlen&nbsp;=&nbsp;9.<br />
+&nbsp;&nbsp;ls_gui_fcat-lowercase&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;APPEND&nbsp;ls_gui_fcat&nbsp;TO&nbsp;mt_func_fcat.<br />
+<br />
+&nbsp;&nbsp;index&nbsp;=&nbsp;index&nbsp;+&nbsp;1.<br />
+&nbsp;&nbsp;CLEAR&nbsp;ls_gui_fcat.<br />
+&nbsp;&nbsp;ls_gui_fcat-col_pos&nbsp;&nbsp;&nbsp;=&nbsp;index.<br />
+&nbsp;&nbsp;ls_gui_fcat-fieldname&nbsp;=&nbsp;'COMPONENT'.<br />
+&nbsp;&nbsp;ls_gui_fcat-coltext&nbsp;&nbsp;&nbsp;=&nbsp;'Component'(033).<br />
+&nbsp;&nbsp;ls_gui_fcat-outputlen&nbsp;=&nbsp;35.<br />
+&nbsp;&nbsp;ls_gui_fcat-no_out&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;APPEND&nbsp;ls_gui_fcat&nbsp;TO&nbsp;mt_func_fcat.<br />
+<br />
+&nbsp;&nbsp;index&nbsp;=&nbsp;index&nbsp;+&nbsp;1.<br />
+&nbsp;&nbsp;CLEAR&nbsp;ls_gui_fcat.<br />
+&nbsp;&nbsp;ls_gui_fcat-col_pos&nbsp;&nbsp;&nbsp;=&nbsp;index.<br />
+&nbsp;&nbsp;ls_gui_fcat-fieldname&nbsp;=&nbsp;'OPERATION_SHORT'.<br />
+&nbsp;&nbsp;ls_gui_fcat-coltext&nbsp;&nbsp;&nbsp;=&nbsp;'Operation'(034).<br />
+&nbsp;&nbsp;ls_gui_fcat-lowercase&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;ls_gui_fcat-outputlen&nbsp;=&nbsp;35.<br />
+&nbsp;&nbsp;ls_gui_fcat-dd_outlen&nbsp;=&nbsp;61.<br />
+&nbsp;&nbsp;ls_gui_fcat-no_out&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;APPEND&nbsp;ls_gui_fcat&nbsp;TO&nbsp;mt_func_fcat.<br />
+<br />
+&nbsp;&nbsp;index&nbsp;=&nbsp;index&nbsp;+&nbsp;1.<br />
+&nbsp;&nbsp;CLEAR&nbsp;ls_gui_fcat.<br />
+&nbsp;&nbsp;ls_gui_fcat-col_pos&nbsp;&nbsp;&nbsp;=&nbsp;index.<br />
+&nbsp;&nbsp;ls_gui_fcat-fieldname&nbsp;=&nbsp;'OPERATION'.<br />
+&nbsp;&nbsp;ls_gui_fcat-coltext&nbsp;&nbsp;&nbsp;=&nbsp;'Method'(039).<br />
+&nbsp;&nbsp;ls_gui_fcat-dd_outlen&nbsp;=&nbsp;61.<br />
+&nbsp;&nbsp;ls_gui_fcat-no_out&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;ls_gui_fcat-no_out&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;APPEND&nbsp;ls_gui_fcat&nbsp;TO&nbsp;mt_func_fcat.<br />
+<br />
+&nbsp;&nbsp;index&nbsp;=&nbsp;index&nbsp;+&nbsp;1.<br />
+&nbsp;&nbsp;CLEAR&nbsp;ls_gui_fcat.<br />
+&nbsp;&nbsp;ls_gui_fcat-col_pos&nbsp;&nbsp;&nbsp;=&nbsp;index.<br />
+&nbsp;&nbsp;ls_gui_fcat-fieldname&nbsp;=&nbsp;'COMMTYPE'.<br />
+&nbsp;&nbsp;ls_gui_fcat-coltext&nbsp;&nbsp;&nbsp;=&nbsp;'Adapter&nbsp;Type'(052).<br />
+&nbsp;&nbsp;ls_gui_fcat-outputlen&nbsp;=&nbsp;10.<br />
+&nbsp;&nbsp;ls_gui_fcat-lowercase&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;APPEND&nbsp;ls_gui_fcat&nbsp;TO&nbsp;mt_func_fcat.<br />
+<br />
+&nbsp;&nbsp;index&nbsp;=&nbsp;index&nbsp;+&nbsp;1.<br />
+&nbsp;&nbsp;CLEAR&nbsp;ls_gui_fcat.<br />
+&nbsp;&nbsp;ls_gui_fcat-col_pos&nbsp;&nbsp;&nbsp;=&nbsp;index.<br />
+&nbsp;&nbsp;ls_gui_fcat-fieldname&nbsp;=&nbsp;'OPDATE'.<br />
+&nbsp;&nbsp;ls_gui_fcat-coltext&nbsp;&nbsp;&nbsp;=&nbsp;'Date'(036).<br />
+&nbsp;&nbsp;ls_gui_fcat-outputlen&nbsp;=&nbsp;10.<br />
+&nbsp;&nbsp;APPEND&nbsp;ls_gui_fcat&nbsp;TO&nbsp;mt_func_fcat.<br />
+<br />
+&nbsp;&nbsp;index&nbsp;=&nbsp;index&nbsp;+&nbsp;1.<br />
+&nbsp;&nbsp;CLEAR&nbsp;ls_gui_fcat.<br />
+&nbsp;&nbsp;ls_gui_fcat-col_pos&nbsp;&nbsp;&nbsp;=&nbsp;index.<br />
+&nbsp;&nbsp;ls_gui_fcat-fieldname&nbsp;=&nbsp;'OPTIME'.<br />
+&nbsp;&nbsp;ls_gui_fcat-coltext&nbsp;&nbsp;&nbsp;=&nbsp;'Time'(037).<br />
+&nbsp;&nbsp;ls_gui_fcat-outputlen&nbsp;=&nbsp;8.<br />
+&nbsp;&nbsp;APPEND&nbsp;ls_gui_fcat&nbsp;TO&nbsp;mt_func_fcat.<br />
+<br />
+&nbsp;&nbsp;index&nbsp;=&nbsp;index&nbsp;+&nbsp;1.<br />
+&nbsp;&nbsp;CLEAR&nbsp;ls_gui_fcat.<br />
+&nbsp;&nbsp;ls_gui_fcat-col_pos&nbsp;&nbsp;&nbsp;=&nbsp;index.<br />
+&nbsp;&nbsp;ls_gui_fcat-fieldname&nbsp;=&nbsp;'EXPIRE'.<br />
+&nbsp;&nbsp;ls_gui_fcat-coltext&nbsp;&nbsp;&nbsp;=&nbsp;'Expiry&nbsp;Date'(038).<br />
+&nbsp;&nbsp;ls_gui_fcat-outputlen&nbsp;=&nbsp;10.<br />
+&nbsp;&nbsp;APPEND&nbsp;ls_gui_fcat&nbsp;TO&nbsp;mt_func_fcat.<br />
+<br />
+&nbsp;&nbsp;index&nbsp;=&nbsp;index&nbsp;+&nbsp;1.<br />
+&nbsp;&nbsp;CLEAR&nbsp;ls_gui_fcat.<br />
+&nbsp;&nbsp;ls_gui_fcat-col_pos&nbsp;&nbsp;&nbsp;=&nbsp;index.<br />
+&nbsp;&nbsp;ls_gui_fcat-fieldname&nbsp;=&nbsp;'OPID'.<br />
+&nbsp;&nbsp;ls_gui_fcat-coltext&nbsp;&nbsp;&nbsp;=&nbsp;'Operation&nbsp;ID'(063).<br />
+&nbsp;&nbsp;ls_gui_fcat-outputlen&nbsp;=&nbsp;35.<br />
+&nbsp;&nbsp;ls_gui_fcat-lowercase&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;ls_gui_fcat-no_out&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;APPEND&nbsp;ls_gui_fcat&nbsp;TO&nbsp;mt_func_fcat.<br />
+<br />
+&nbsp;&nbsp;index&nbsp;=&nbsp;index&nbsp;+&nbsp;1.<br />
+&nbsp;&nbsp;CLEAR&nbsp;ls_gui_fcat.<br />
+&nbsp;&nbsp;ls_gui_fcat-col_pos&nbsp;&nbsp;&nbsp;=&nbsp;index.<br />
+&nbsp;&nbsp;ls_gui_fcat-fieldname&nbsp;=&nbsp;'ROOT_CTX_ID'.<br />
+&nbsp;&nbsp;ls_gui_fcat-coltext&nbsp;&nbsp;&nbsp;=&nbsp;'Root&nbsp;Context&nbsp;ID'(060).<br />
+&nbsp;&nbsp;ls_gui_fcat-outputlen&nbsp;=&nbsp;35.<br />
+&nbsp;&nbsp;ls_gui_fcat-lowercase&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;ls_gui_fcat-no_out&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;APPEND&nbsp;ls_gui_fcat&nbsp;TO&nbsp;mt_func_fcat.<br />
+<br />
+&nbsp;&nbsp;index&nbsp;=&nbsp;index&nbsp;+&nbsp;1.<br />
+&nbsp;&nbsp;CLEAR&nbsp;ls_gui_fcat.<br />
+&nbsp;&nbsp;ls_gui_fcat-col_pos&nbsp;&nbsp;&nbsp;=&nbsp;index.<br />
+&nbsp;&nbsp;ls_gui_fcat-fieldname&nbsp;=&nbsp;'TRANSACTION_ID'.<br />
+&nbsp;&nbsp;ls_gui_fcat-coltext&nbsp;&nbsp;&nbsp;=&nbsp;'Transaction&nbsp;ID'(061).<br />
+&nbsp;&nbsp;ls_gui_fcat-outputlen&nbsp;=&nbsp;35.<br />
+&nbsp;&nbsp;ls_gui_fcat-lowercase&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;ls_gui_fcat-no_out&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;APPEND&nbsp;ls_gui_fcat&nbsp;TO&nbsp;mt_func_fcat.<br />
+<br />
+ENDFORM.                    " create_ms_func_layout<br />
+            </div>
+          </td>
+        </tr>
+      </table>
+      </td>
+      </tr>
+   <tr>
+<td class="footer">Extracted by Mass Download version 1.5.2 - E.G.Mellodew. 1998-2022. Sap Release 755</td>
+   </tr>
+</table>
+</body>
+</html>

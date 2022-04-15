@@ -1,0 +1,1226 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=GB2312" />
+<title>ZSRT_UTIL_ADMIN_ROUTIS</title>
+<style type="text/css">
+.code{ font-family:"Courier New", Courier, monospace; color:#000; font-size:14px; background-color:#F2F4F7 }
+  .codeComment {font-family:"Courier New", Courier, monospace; color:#0000F0; font-size:14px; background-color:#F2F4F7 }
+  .normalBold{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; font-weight:800 }
+  .normalBoldLarge{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+</style>
+<style type="text/css">
+  .normal{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px }
+  .footer{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; text-align: center }
+  h2{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+  h3{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:14px; font-weight:800 }
+  .outerTable{
+   background-color:#E0E7ED;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-right-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+  .innerTable{
+   background-color:#F2F4F7;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-bottom-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+</style>
+</head>
+<body>
+<table class="outerTable">
+  <tr class="normalBoldLarge">
+     <td><h2>Code listing for: ZSRT_UTIL_ADMIN_ROUTIS</h2>
+<h3> Description: </h3></td>
+   </tr>
+  <tr>
+     <td>
+     <table class="innerTable">
+       <tr>
+          <td>
+   <div class="codeComment">
+*----------------------------------------------------------------------*<br />
+*&&nbsp;Include&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SRT_UTIL_ADMIN_ROUTIS<br />
+*----------------------------------------------------------------------*<br />
+<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;update_util_admin<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM update_util_admin.<br />
+<br />
+&nbsp;&nbsp;DATA:&nbsp;l_pload_side&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;x&nbsp;LENGTH&nbsp;1,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_util_detail&nbsp;&nbsp;TYPE&nbsp;srt_util_detail.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;m_select_utilid&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;m_error_message&nbsp;=&nbsp;cl_soap_util_db=&gt;admin_create(<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;utilid&nbsp;=&nbsp;m_select_utilid<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;idtype&nbsp;=&nbsp;m_select_idtype<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;).<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;m_error_message&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;i208(00)&nbsp;WITH&nbsp;m_error_message.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"#EC&nbsp;CI_USE_WANTED<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXIT.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Get&nbsp;Current&nbsp;Trace&nbsp;Configuration<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;ls_util_detail&nbsp;=&nbsp;cl_soap_util_db=&gt;admin_get_entry(<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;utilid&nbsp;=&nbsp;m_select_utilid<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;idtype&nbsp;=&nbsp;m_select_idtype<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;).<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Update&nbsp;Performance&nbsp;Trace&nbsp;Level&nbsp;if&nbsp;required<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;IF&nbsp;srt_util_config-perf_level&nbsp;IS&nbsp;NOT&nbsp;INITIAL&nbsp;&nbsp;&nbsp;OR<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;srt_util_config-perf_level&nbsp;&lt;&gt;&nbsp;ls_util_detail-perf_level.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;m_error_message&nbsp;=&nbsp;cl_soap_util_db=&gt;perf_set_level(<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;utilid&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;m_select_utilid<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;idtype&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;m_select_idtype<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;perf_level&nbsp;=&nbsp;srt_util_config-perf_level<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;expiry_ts&nbsp;&nbsp;=&nbsp;conv&nbsp;#(&nbsp;m_cfg_expiry&nbsp;)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;).<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;m_error_message&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;i208(00)&nbsp;WITH&nbsp;m_error_message.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"#EC&nbsp;CI_USE_WANTED<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXIT.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Update&nbsp;Functional&nbsp;Trace&nbsp;Level&nbsp;if&nbsp;required<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;IF&nbsp;srt_util_config-func_level&nbsp;IS&nbsp;NOT&nbsp;INITIAL&nbsp;&nbsp;&nbsp;OR<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;srt_util_config-func_level&nbsp;&lt;&gt;&nbsp;ls_util_detail-func_level.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;m_error_message&nbsp;=&nbsp;cl_soap_util_db=&gt;func_set_level(<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;utilid&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;m_select_utilid<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;idtype&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;m_select_idtype<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;func_level&nbsp;=&nbsp;srt_util_config-func_level<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;expiry_ts&nbsp;&nbsp;=&nbsp;conv&nbsp;#(&nbsp;m_cfg_expiry&nbsp;)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;).<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;m_error_message&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;i208(00)&nbsp;WITH&nbsp;m_error_message.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"#EC&nbsp;CI_USE_WANTED<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXIT.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Update&nbsp;Payload&nbsp;Trace&nbsp;Level&nbsp;&&nbsp;additonal&nbsp;Parameters&nbsp;if&nbsp;required<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;IF&nbsp;rb_side_both&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;l_pload_side&nbsp;=&nbsp;l_pload_side&nbsp;+&nbsp;if_soap_util_constants=&gt;pload_side_cons<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+&nbsp;if_soap_util_constants=&gt;pload_side_prov.<br />
+&nbsp;&nbsp;ELSEIF&nbsp;rb_side_cons&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;l_pload_side&nbsp;=&nbsp;l_pload_side&nbsp;+&nbsp;if_soap_util_constants=&gt;pload_side_cons.<br />
+&nbsp;&nbsp;ELSE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;l_pload_side&nbsp;=&nbsp;l_pload_side&nbsp;+&nbsp;if_soap_util_constants=&gt;pload_side_prov.<br />
+&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;IF&nbsp;rb_cpro_spe&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;l_pload_side&nbsp;=&nbsp;l_pload_side&nbsp;+&nbsp;if_soap_util_constants=&gt;pload_side_cpro_spe.<br />
+&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;IF&nbsp;rb_sdef_spe&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;l_pload_side&nbsp;=&nbsp;l_pload_side&nbsp;+&nbsp;if_soap_util_constants=&gt;pload_side_sdef_spe.<br />
+&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;IF&nbsp;cb_consider_bl&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;l_pload_side&nbsp;=&nbsp;l_pload_side&nbsp;+&nbsp;if_soap_util_constants=&gt;pload_side_consider_bl.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;srt_util_config-pload_level&nbsp;IS&nbsp;NOT&nbsp;INITIAL&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OR<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;srt_util_config-pload_level&nbsp;&lt;&gt;&nbsp;ls_util_detail-pload_level&nbsp;OR<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;srt_util_config-pload_side&nbsp;&nbsp;&lt;&gt;&nbsp;ls_util_detail-pload_side&nbsp;&nbsp;OR<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;srt_util_config-cpro_1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;&gt;&nbsp;ls_util_detail-cpro_1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OR<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;srt_util_config-cpro_2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;&gt;&nbsp;ls_util_detail-cpro_2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OR<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;srt_util_config-cpro_3&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;&gt;&nbsp;ls_util_detail-cpro_3&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OR<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;srt_util_config-sdef_1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;&gt;&nbsp;ls_util_detail-sdef_1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OR<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;srt_util_config-sdef_2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;&gt;&nbsp;ls_util_detail-sdef_2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OR<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;srt_util_config-sdef_3&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;&gt;&nbsp;ls_util_detail-sdef_3.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;m_error_message&nbsp;=&nbsp;cl_soap_util_db=&gt;payload_set_level(<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;utilid&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;m_select_utilid<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;idtype&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;m_select_idtype<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pload_level&nbsp;=&nbsp;srt_util_config-pload_level<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pload_side&nbsp;&nbsp;=&nbsp;l_pload_side<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cpro_1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;srt_util_config-cpro_1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cpro_2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;srt_util_config-cpro_2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cpro_3&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;srt_util_config-cpro_3<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sdef_1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;srt_util_config-sdef_1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sdef_2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;srt_util_config-sdef_2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sdef_3&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;srt_util_config-sdef_3<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;expiry_ts&nbsp;&nbsp;&nbsp;=&nbsp;conv&nbsp;#(&nbsp;m_cfg_expiry&nbsp;)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;).<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;m_error_message&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;i208(00)&nbsp;WITH&nbsp;m_error_message.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"#EC&nbsp;CI_USE_WANTED<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXIT.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+ENDFORM.                    " update_util_admin<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;set_config_values<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM set_config_values.<br />
+<br />
+&nbsp;&nbsp;DATA:&nbsp;l_date_long&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;c&nbsp;LENGTH&nbsp;10,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;l_time_long&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;c&nbsp;LENGTH&nbsp;8,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_util_detail&nbsp;&nbsp;TYPE&nbsp;srt_util_detail.<br />
+<br />
+&nbsp;&nbsp;ls_util_detail&nbsp;=&nbsp;cl_soap_util_db=&gt;admin_get_entry(<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;utilid&nbsp;=&nbsp;m_select_utilid<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;idtype&nbsp;=&nbsp;m_select_idtype<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;).<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;ls_util_detail-perf_level&nbsp;IS&nbsp;NOT&nbsp;INITIAL&nbsp;OR<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_util_detail-func_level&nbsp;IS&nbsp;NOT&nbsp;INITIAL&nbsp;OR<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_util_detail-pload_level&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WRITE:&nbsp;ls_util_detail-expiry_date&nbsp;TO&nbsp;l_date_long,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_util_detail-expiry_time&nbsp;TO&nbsp;l_time_long.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CONCATENATE&nbsp;l_date_long&nbsp;l_time_long<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;m_cfg_validation&nbsp;SEPARATED&nbsp;BY&nbsp;space.<br />
+&nbsp;&nbsp;ELSE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;m_cfg_validation.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;data&nbsp;lv_expiry_ts&nbsp;type&nbsp;timestamp.<br />
+&nbsp;&nbsp;get&nbsp;time&nbsp;stamp&nbsp;field&nbsp;lv_expiry_ts.<br />
+&nbsp;&nbsp;lv_expiry_ts&nbsp;=&nbsp;cl_abap_tstmp=&gt;add(&nbsp;tstmp&nbsp;=&nbsp;lv_expiry_ts&nbsp;secs&nbsp;&nbsp;=&nbsp;cl_soap_util_db=&gt;co_trace_validation&nbsp;).<br />
+&nbsp;&nbsp;if&nbsp;lv_expiry_ts&nbsp;&lt;&nbsp;ls_util_detail-expiry_ts.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;m_cfg_expiry&nbsp;=&nbsp;ls_util_detail-expiry_ts.<br />
+&nbsp;&nbsp;else.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;m_cfg_expiry&nbsp;=&nbsp;lv_expiry_ts.<br />
+&nbsp;&nbsp;endif.<br />
+<br />
+&nbsp;&nbsp;m_last_user&nbsp;=&nbsp;ls_util_detail-last_user.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;ls_util_detail-pload_side&nbsp;O&nbsp;if_soap_util_constants=&gt;pload_side_consider_bl.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;cb_consider_bl&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;else.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;cb_consider_bl&nbsp;=&nbsp;space.<br />
+&nbsp;&nbsp;endif.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;ls_util_detail&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;srt_util_config-perf_level&nbsp;&nbsp;=&nbsp;ls_util_detail-perf_level.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;srt_util_config-func_level&nbsp;&nbsp;=&nbsp;ls_util_detail-func_level.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;srt_util_config-pload_level&nbsp;=&nbsp;ls_util_detail-pload_level.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;srt_util_config-cpro_1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_util_detail-cpro_1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;srt_util_config-cpro_2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_util_detail-cpro_2.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;srt_util_config-cpro_3&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_util_detail-cpro_3.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;srt_util_config-sdef_1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_util_detail-sdef_1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;srt_util_config-sdef_2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_util_detail-sdef_2.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;srt_util_config-sdef_3&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_util_detail-sdef_3.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;ls_util_detail-pload_side&nbsp;O&nbsp;if_soap_util_constants=&gt;pload_side_cons&nbsp;AND<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_util_detail-pload_side&nbsp;O&nbsp;if_soap_util_constants=&gt;pload_side_prov.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rb_side_both&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CLEAR:&nbsp;rb_side_cons,&nbsp;rb_side_prov.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ELSE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;ls_util_detail-pload_side&nbsp;O&nbsp;if_soap_util_constants=&gt;pload_side_cons.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rb_side_cons&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CLEAR:&nbsp;rb_side_prov,&nbsp;rb_side_both.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;ls_util_detail-pload_side&nbsp;O&nbsp;if_soap_util_constants=&gt;pload_side_prov.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rb_side_prov&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CLEAR:&nbsp;rb_side_cons,&nbsp;rb_side_both.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;ls_util_detail-pload_side&nbsp;O&nbsp;if_soap_util_constants=&gt;pload_side_cpro_spe.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rb_cpro_spe&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;rb_cpro_any.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ELSE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rb_cpro_any&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;rb_cpro_spe.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;ls_util_detail-pload_side&nbsp;O&nbsp;if_soap_util_constants=&gt;pload_side_sdef_spe.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rb_sdef_spe&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;rb_sdef_any.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ELSE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rb_sdef_any&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;rb_sdef_spe.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;ELSE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_util_detail-utilid&nbsp;=&nbsp;m_select_utilid.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_util_detail-idtype&nbsp;=&nbsp;m_select_idtype.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;m_select_utilid&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;m_error_message&nbsp;=&nbsp;cl_soap_util_db=&gt;admin_create(<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;utilid&nbsp;=&nbsp;m_select_utilid<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;idtype&nbsp;=&nbsp;m_select_idtype<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;).<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;m_error_message&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;i208(00)&nbsp;WITH&nbsp;m_error_message.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXIT.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR:&nbsp;srt_util_config-perf_level,&nbsp;srt_util_config-func_level,&nbsp;srt_util_config-pload_level,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;srt_util_config-cpro_1,&nbsp;srt_util_config-cpro_2,&nbsp;srt_util_config-cpro_3,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;srt_util_config-sdef_1,&nbsp;srt_util_config-sdef_2,&nbsp;srt_util_config-sdef_3.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+ENDFORM.                    " set_config_values<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;show_perf_traces<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM show_perf_traces.<br />
+<br />
+&nbsp;&nbsp;CALL&nbsp;SCREEN&nbsp;300&nbsp;STARTING&nbsp;AT&nbsp;10&nbsp;10.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;ok_code&nbsp;=&nbsp;'GOON'.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Show&nbsp;Traces&nbsp;by&nbsp;User&nbsp;Name<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;rb_user&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SUBMIT&nbsp;srt_util_perf&nbsp;WITH&nbsp;sapuser&nbsp;=&nbsp;inp_user&nbsp;&nbsp;&nbsp;"#EC&nbsp;CI_USE_WANTED<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WITH&nbsp;today&nbsp;&nbsp;&nbsp;=&nbsp;m_today_search<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;RETURN.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"#EC&nbsp;CI_SUBMIT<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;m_select_utilid&nbsp;&lt;&gt;&nbsp;'*'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;inp_user&nbsp;=&nbsp;m_select_utilid.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ELSE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;inp_user&nbsp;=&nbsp;m_select_utilid&nbsp;=&nbsp;m_tree_utilid.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;m_select_idtype&nbsp;=&nbsp;m_tree_idtype.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXIT.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Show&nbsp;Traces&nbsp;by&nbsp;Terminal&nbsp;ID<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;rb_termid&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SUBMIT&nbsp;srt_util_perf&nbsp;WITH&nbsp;termid&nbsp;=&nbsp;inp_termid&nbsp;&nbsp;"#EC&nbsp;CI_USE_WANTED<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WITH&nbsp;today&nbsp;&nbsp;=&nbsp;m_today_search<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;RETURN.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"#EC&nbsp;CI_SUBMIT<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;inp_termid&nbsp;=&nbsp;m_select_utilid.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXIT.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Show&nbsp;Traces&nbsp;by&nbsp;Request&nbsp;URI<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;rb_uri&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SUBMIT&nbsp;srt_util_perf&nbsp;WITH&nbsp;req_uri&nbsp;=&nbsp;inp_uri&nbsp;&nbsp;&nbsp;&nbsp;"#EC&nbsp;CI_USE_WANTED<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WITH&nbsp;today&nbsp;&nbsp;&nbsp;=&nbsp;m_today_search<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;RETURN.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"#EC&nbsp;CI_SUBMIT<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;inp_uri&nbsp;=&nbsp;m_select_utilid.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXIT.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Show&nbsp;Traces&nbsp;by&nbsp;Root&nbsp;Context&nbsp;ID<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;rb_pid&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SUBMIT&nbsp;srt_util_perf_detail&nbsp;WITH&nbsp;root_cid&nbsp;=&nbsp;inp_rcid&nbsp;"#EC&nbsp;CI_USE_WANTED<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WITH&nbsp;conn_id&nbsp;&nbsp;=&nbsp;inp_cid<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WITH&nbsp;conn_cnt&nbsp;=&nbsp;inp_ccnt<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;RETURN.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"#EC&nbsp;CI_SUBMIT<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXIT.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Show&nbsp;Traces&nbsp;by&nbsp;Transaction&nbsp;ID<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;rb_tid&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SUBMIT&nbsp;srt_util_perf_detail&nbsp;WITH&nbsp;tid&nbsp;=&nbsp;inp_tid&nbsp;"#EC&nbsp;CI_USE_WANTED<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;RETURN.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"#EC&nbsp;CI_SUBMIT<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXIT.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Show&nbsp;Traces&nbsp;by&nbsp;Message&nbsp;ID<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;rb_mid&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SUBMIT&nbsp;srt_util_perf_detail&nbsp;WITH&nbsp;mid&nbsp;=&nbsp;inp_mid&nbsp;"#EC&nbsp;CI_USE_WANTED<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;RETURN.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"#EC&nbsp;CI_SUBMIT<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXIT.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+ENDFORM.                    " show_perf_traces<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;show_func_traces<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM show_func_traces.<br />
+<br />
+&nbsp;&nbsp;CALL&nbsp;SCREEN&nbsp;300&nbsp;STARTING&nbsp;AT&nbsp;10&nbsp;10.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;ok_code&nbsp;=&nbsp;'GOON'.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Show&nbsp;Traces&nbsp;by&nbsp;User&nbsp;Name<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;rb_user&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SUBMIT&nbsp;srt_util_func&nbsp;WITH&nbsp;sapuser&nbsp;=&nbsp;inp_user&nbsp;&nbsp;&nbsp;"#EC&nbsp;CI_USE_WANTED<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WITH&nbsp;today&nbsp;&nbsp;&nbsp;=&nbsp;m_today_search<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;RETURN.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"#EC&nbsp;CI_SUBMIT<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;m_select_utilid&nbsp;&lt;&gt;&nbsp;'*'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;inp_user&nbsp;=&nbsp;m_select_utilid.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ELSE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;inp_user&nbsp;=&nbsp;m_select_utilid&nbsp;=&nbsp;m_tree_utilid.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;m_select_idtype&nbsp;=&nbsp;m_tree_idtype.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXIT.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Show&nbsp;Traces&nbsp;by&nbsp;Terminal&nbsp;ID<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;rb_termid&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SUBMIT&nbsp;srt_util_func&nbsp;WITH&nbsp;termid&nbsp;=&nbsp;inp_termid&nbsp;&nbsp;"#EC&nbsp;CI_USE_WANTED<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WITH&nbsp;today&nbsp;&nbsp;=&nbsp;m_today_search<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;RETURN.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"#EC&nbsp;CI_SUBMIT<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;inp_termid&nbsp;=&nbsp;m_select_utilid.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXIT.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Show&nbsp;Traces&nbsp;by&nbsp;Request&nbsp;URI<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;rb_uri&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SUBMIT&nbsp;srt_util_func&nbsp;WITH&nbsp;req_uri&nbsp;=&nbsp;inp_uri&nbsp;&nbsp;&nbsp;&nbsp;"#EC&nbsp;CI_USE_WANTED<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WITH&nbsp;today&nbsp;&nbsp;&nbsp;=&nbsp;m_today_search<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;RETURN.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"#EC&nbsp;CI_SUBMIT<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;inp_uri&nbsp;=&nbsp;m_select_utilid.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXIT.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Show&nbsp;Traces&nbsp;by&nbsp;Root&nbsp;Context&nbsp;ID<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;rb_pid&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SUBMIT&nbsp;srt_util_func_detail&nbsp;WITH&nbsp;root_cid&nbsp;=&nbsp;inp_rcid&nbsp;"#EC&nbsp;CI_USE_WANTED<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WITH&nbsp;conn_id&nbsp;&nbsp;=&nbsp;inp_cid<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WITH&nbsp;conn_cnt&nbsp;=&nbsp;inp_ccnt<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;RETURN.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"#EC&nbsp;CI_SUBMIT<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXIT.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Show&nbsp;Traces&nbsp;by&nbsp;Transaction&nbsp;ID<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;rb_tid&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SUBMIT&nbsp;srt_util_func_detail&nbsp;WITH&nbsp;tid&nbsp;=&nbsp;inp_tid&nbsp;"#EC&nbsp;CI_USE_WANTED<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;RETURN.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"#EC&nbsp;CI_SUBMIT<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXIT.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Show&nbsp;Traces&nbsp;by&nbsp;Message&nbsp;ID<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;rb_mid&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SUBMIT&nbsp;srt_util_func_detail&nbsp;WITH&nbsp;mid&nbsp;=&nbsp;inp_mid&nbsp;"#EC&nbsp;CI_USE_WANTED<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;RETURN.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"#EC&nbsp;CI_SUBMIT<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXIT.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+ENDFORM.                    " show_func_traces<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;show_pload_traces<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM show_pload_traces.<br />
+<br />
+&nbsp;&nbsp;CALL&nbsp;SCREEN&nbsp;300&nbsp;STARTING&nbsp;AT&nbsp;10&nbsp;10.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;ok_code&nbsp;=&nbsp;'GOON'.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Show&nbsp;Traces&nbsp;by&nbsp;User&nbsp;Name<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;rb_user&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SUBMIT&nbsp;srt_util_pload&nbsp;WITH&nbsp;sapuser&nbsp;=&nbsp;inp_user&nbsp;&nbsp;"#EC&nbsp;CI_USE_WANTED<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WITH&nbsp;today&nbsp;&nbsp;&nbsp;=&nbsp;m_today_search<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;RETURN.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"#EC&nbsp;CI_SUBMIT<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;m_select_utilid&nbsp;&lt;&gt;&nbsp;'*'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;inp_user&nbsp;=&nbsp;m_select_utilid.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ELSE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;inp_user&nbsp;=&nbsp;m_select_utilid&nbsp;=&nbsp;m_tree_utilid.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;m_select_idtype&nbsp;=&nbsp;m_tree_idtype.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXIT.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Show&nbsp;Traces&nbsp;by&nbsp;Terminal&nbsp;ID<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;rb_termid&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SUBMIT&nbsp;srt_util_pload&nbsp;WITH&nbsp;termid&nbsp;=&nbsp;inp_termid&nbsp;"#EC&nbsp;CI_USE_WANTED<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WITH&nbsp;today&nbsp;&nbsp;=&nbsp;m_today_search<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;RETURN.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"#EC&nbsp;CI_SUBMIT<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;inp_termid&nbsp;=&nbsp;m_select_utilid.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXIT.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Show&nbsp;Traces&nbsp;by&nbsp;Request&nbsp;URI<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;rb_uri&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SUBMIT&nbsp;srt_util_pload&nbsp;WITH&nbsp;req_uri&nbsp;=&nbsp;inp_uri&nbsp;&nbsp;&nbsp;"#EC&nbsp;CI_USE_WANTED<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WITH&nbsp;today&nbsp;&nbsp;&nbsp;=&nbsp;m_today_search<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;RETURN.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"#EC&nbsp;CI_SUBMIT<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;inp_uri&nbsp;=&nbsp;m_select_utilid.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXIT.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Show&nbsp;Traces&nbsp;by&nbsp;Root&nbsp;Context&nbsp;ID<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;rb_pid&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SUBMIT&nbsp;srt_util_pload_detail&nbsp;WITH&nbsp;root_cid&nbsp;=&nbsp;inp_rcid&nbsp;"#EC&nbsp;CI_USE_WANTED<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WITH&nbsp;conn_id&nbsp;&nbsp;=&nbsp;inp_cid<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WITH&nbsp;conn_cnt&nbsp;=&nbsp;inp_ccnt<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;RETURN.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"#EC&nbsp;CI_SUBMIT<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXIT.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Show&nbsp;Traces&nbsp;by&nbsp;Transaction&nbsp;ID<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;rb_tid&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SUBMIT&nbsp;srt_util_pload_detail&nbsp;WITH&nbsp;tid&nbsp;=&nbsp;inp_tid&nbsp;"#EC&nbsp;CI_USE_WANTED<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;RETURN.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"#EC&nbsp;CI_SUBMIT<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXIT.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Show&nbsp;Traces&nbsp;by&nbsp;Message&nbsp;ID<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;rb_mid&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SUBMIT&nbsp;srt_util_pload_detail&nbsp;WITH&nbsp;mid&nbsp;=&nbsp;inp_mid&nbsp;"#EC&nbsp;CI_USE_WANTED<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;RETURN.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"#EC&nbsp;CI_SUBMIT<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXIT.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+ENDFORM.                    " show_func_traces<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;add_user<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM add_user .<br />
+<br />
+&nbsp;&nbsp;inp_user&nbsp;=&nbsp;m_tree_utilid&nbsp;=&nbsp;sy-uname.<br />
+&nbsp;&nbsp;m_tree_idtype&nbsp;=&nbsp;if_soap_util_constants=&gt;co_idtype_user.<br />
+<br />
+&nbsp;&nbsp;CALL&nbsp;SCREEN&nbsp;200&nbsp;STARTING&nbsp;AT&nbsp;10&nbsp;10.<br />
+&nbsp;&nbsp;IF&nbsp;m_select_utilid&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;set_config_values.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;update_tree.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+ENDFORM.                    " add_user<br />
+<br />
+FORM add_item_bl .<br />
+&nbsp;&nbsp;clear:&nbsp;inp_consumer,&nbsp;inp_provider.<br />
+&nbsp;&nbsp;call&nbsp;SCREEN&nbsp;203&nbsp;starting&nbsp;at&nbsp;10&nbsp;10.<br />
+<br />
+ENDFORM.                    " add_user<br />
+<br />
+<br />
+FORM del_item_bl using iv_type type prx_r3obj iv_name type prx_r3name.<br />
+<br />
+&nbsp;&nbsp;try.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;data(lo_util)&nbsp;=&nbsp;cl_soap_util_factory=&gt;get_util_config(&nbsp;).<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;case&nbsp;iv_type.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;when&nbsp;'WEBI'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lo_util-&gt;pload_trace_bl_remove_provider(&nbsp;iv_name&nbsp;=&nbsp;iv_name&nbsp;).<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;when&nbsp;'CLAS'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lo_util-&gt;pload_trace_bl_remove_consumer(&nbsp;iv_name&nbsp;=&nbsp;iv_name&nbsp;).<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;endcase.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;catch&nbsp;cx_soap_static_check&nbsp;into&nbsp;data(lx_fault).<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;message&nbsp;lx_fault&nbsp;type&nbsp;'E'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;endtry.<br />
+&nbsp;&nbsp;PERFORM&nbsp;update_util_admin.<br />
+&nbsp;&nbsp;PERFORM&nbsp;refresh_tree.<br />
+<br />
+ENDFORM.                    " add_user<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;create_and_init_tree<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM create_and_init_tree .<br />
+<br />
+&nbsp;&nbsp;DATA:&nbsp;container_name&nbsp;&nbsp;TYPE&nbsp;c&nbsp;LENGTH&nbsp;30,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_event&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;cntl_simple_event,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lt_event&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;cntl_simple_events.<br />
+<br />
+&nbsp;&nbsp;container_name&nbsp;=&nbsp;'TREE_CONTAINER'.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Create&nbsp;a&nbsp;container&nbsp;for&nbsp;the&nbsp;tree&nbsp;control<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;CREATE&nbsp;OBJECT&nbsp;mr_gui_area<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;container_name&nbsp;=&nbsp;container_name.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Create&nbsp;object&nbsp;of&nbsp;type&nbsp;TREE.<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;CREATE&nbsp;OBJECT&nbsp;mr_gui_tree<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;parent&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;mr_gui_area<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;node_selection_mode&nbsp;=&nbsp;cl_gui_simple_tree=&gt;node_sel_mode_single.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;node&nbsp;double&nbsp;click<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;ls_event-eventid&nbsp;=&nbsp;cl_gui_simple_tree=&gt;eventid_node_double_click.<br />
+&nbsp;&nbsp;ls_event-appl_event&nbsp;=&nbsp;'X'.&nbsp;"&nbsp;process&nbsp;PAI&nbsp;if&nbsp;event&nbsp;occurs<br />
+&nbsp;&nbsp;APPEND&nbsp;ls_event&nbsp;TO&nbsp;lt_event.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;right&nbsp;click&nbsp;to&nbsp;generate&nbsp;a&nbsp;context&nbsp;menu<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;ls_event-eventid&nbsp;=&nbsp;cl_gui_simple_tree=&gt;eventid_node_context_menu_req.<br />
+&nbsp;&nbsp;ls_event-appl_event&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;APPEND&nbsp;ls_event&nbsp;TO&nbsp;lt_event.<br />
+   </div>
+   <div class="codeComment">
+*<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;CALL&nbsp;METHOD&nbsp;mr_gui_tree-&gt;set_ctx_menu_select_event_appl<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;appl_event&nbsp;=&nbsp;'X'.<br />
+<br />
+&nbsp;&nbsp;CALL&nbsp;METHOD&nbsp;mr_gui_tree-&gt;set_registered_events<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;events&nbsp;=&nbsp;lt_event.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;assign&nbsp;event&nbsp;handlers&nbsp;in&nbsp;the&nbsp;application&nbsp;class&nbsp;to&nbsp;each&nbsp;desired&nbsp;event<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;SET&nbsp;HANDLER&nbsp;mr_gui_appl-&gt;handle_node_double_click&nbsp;FOR&nbsp;mr_gui_tree.<br />
+&nbsp;&nbsp;SET&nbsp;HANDLER&nbsp;mr_gui_appl-&gt;handle_tree_menu&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FOR&nbsp;mr_gui_tree.<br />
+&nbsp;&nbsp;SET&nbsp;HANDLER&nbsp;mr_gui_appl-&gt;handle_context_menu_sel&nbsp;&nbsp;FOR&nbsp;mr_gui_tree.<br />
+<br />
+&nbsp;&nbsp;PERFORM&nbsp;build_tree.<br />
+<br />
+&nbsp;&nbsp;CALL&nbsp;METHOD&nbsp;mr_gui_tree-&gt;add_nodes<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;table_structure_name&nbsp;=&nbsp;'SRT_UTIL_TREE'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;node_table&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;mt_node.<br />
+<br />
+&nbsp;&nbsp;CALL&nbsp;METHOD&nbsp;mr_gui_tree-&gt;expand_root_nodes<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;level_count&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;expand_subtree&nbsp;=&nbsp;space.<br />
+<br />
+ENDFORM.                    " create_and_init_tree<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;map_node_to_name<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM map_node_to_name USING p_nodekey TYPE tv_nodekey.<br />
+<br />
+&nbsp;&nbsp;DATA:&nbsp;ls_temp&nbsp;&nbsp;LIKE&nbsp;LINE&nbsp;OF&nbsp;mt_node.<br />
+<br />
+&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;mt_node&nbsp;WITH&nbsp;KEY&nbsp;node_key&nbsp;=&nbsp;p_nodekey&nbsp;INTO&nbsp;ls_temp.&nbsp;"#EC&nbsp;CI_STDSEQ<br />
+&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;&lt;&gt;&nbsp;0&nbsp;OR&nbsp;p_nodekey&nbsp;=&nbsp;co_node_root&nbsp;or&nbsp;p_nodekey&nbsp;=&nbsp;co_node_root_bl&nbsp;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;i208(00)&nbsp;WITH&nbsp;'Mark&nbsp;an&nbsp;entry&nbsp;in&nbsp;the&nbsp;tree'(025).&nbsp;"#EC&nbsp;CI_USE_WANTED<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXIT.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;m_select_utilid&nbsp;=&nbsp;ls_temp-text.<br />
+&nbsp;&nbsp;m_select_idtype&nbsp;=&nbsp;ls_temp-idtype.<br />
+<br />
+ENDFORM.                    " map_node_to_name<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;build_tree<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM build_tree.<br />
+<br />
+&nbsp;&nbsp;DATA:&nbsp;l_hostno&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;i,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;l_hostno_bl&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;i,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_util_header&nbsp;&nbsp;TYPE&nbsp;srt_util_header.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Node&nbsp;with&nbsp;key&nbsp;'Root'<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;CLEAR:&nbsp;mt_node,&nbsp;mt_exp_node.<br />
+&nbsp;&nbsp;ms_node-node_key&nbsp;=&nbsp;co_node_root.<br />
+&nbsp;&nbsp;APPEND&nbsp;ms_node-node_key&nbsp;TO&nbsp;mt_exp_node.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Key&nbsp;of&nbsp;the&nbsp;node<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;ms_node-hidden&nbsp;&nbsp;&nbsp;=&nbsp;space.&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;The&nbsp;node&nbsp;is&nbsp;visible<br />
+&nbsp;&nbsp;ms_node-disabled&nbsp;=&nbsp;space.&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;selectable<br />
+&nbsp;&nbsp;ms_node-isfolder&nbsp;=&nbsp;'X'.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;a&nbsp;folder<br />
+&nbsp;&nbsp;CLEAR&nbsp;ms_node-relatkey.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;Special&nbsp;case:&nbsp;A&nbsp;root&nbsp;node&nbsp;has&nbsp;no&nbsp;parent<br />
+&nbsp;&nbsp;CLEAR&nbsp;ms_node-relatship.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;node<br />
+&nbsp;&nbsp;CLEAR&nbsp;ms_node-n_image.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;Folder-/&nbsp;Leaf-Symbol&nbsp;in&nbsp;state&nbsp;"closed":<br />
+&nbsp;&nbsp;CLEAR&nbsp;ms_node-exp_image.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;Folder-/&nbsp;Leaf-Symbol&nbsp;in&nbsp;state&nbsp;"open":<br />
+&nbsp;&nbsp;CLEAR&nbsp;ms_node-expander.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;see&nbsp;below.<br />
+&nbsp;&nbsp;ms_node-text&nbsp;=&nbsp;'Users&nbsp;&&nbsp;Terminals&nbsp;&&nbsp;Request&nbsp;URI'(001).<br />
+&nbsp;&nbsp;APPEND&nbsp;ms_node&nbsp;TO&nbsp;mt_node.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Root&nbsp;Node&nbsp;for&nbsp;blacklist'<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;ms_node-node_key&nbsp;=&nbsp;co_node_root_bl.<br />
+&nbsp;&nbsp;APPEND&nbsp;ms_node-node_key&nbsp;TO&nbsp;mt_exp_node.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Key&nbsp;of&nbsp;the&nbsp;node<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;ms_node-hidden&nbsp;&nbsp;&nbsp;=&nbsp;space.&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;The&nbsp;node&nbsp;is&nbsp;visible<br />
+&nbsp;&nbsp;ms_node-disabled&nbsp;=&nbsp;space.&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;selectable<br />
+&nbsp;&nbsp;ms_node-isfolder&nbsp;=&nbsp;'X'.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;a&nbsp;folder<br />
+&nbsp;&nbsp;CLEAR&nbsp;ms_node-relatkey.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;Special&nbsp;case:&nbsp;A&nbsp;root&nbsp;node&nbsp;has&nbsp;no&nbsp;parent<br />
+&nbsp;&nbsp;CLEAR&nbsp;ms_node-relatship.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;node<br />
+&nbsp;&nbsp;CLEAR&nbsp;ms_node-n_image.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;Folder-/&nbsp;Leaf-Symbol&nbsp;in&nbsp;state&nbsp;"closed":<br />
+&nbsp;&nbsp;CLEAR&nbsp;ms_node-exp_image.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;Folder-/&nbsp;Leaf-Symbol&nbsp;in&nbsp;state&nbsp;"open":<br />
+&nbsp;&nbsp;CLEAR&nbsp;ms_node-expander.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;see&nbsp;below.<br />
+&nbsp;&nbsp;ms_node-text&nbsp;=&nbsp;'Blacklist&nbsp;for&nbsp;Payload'(006).<br />
+&nbsp;&nbsp;APPEND&nbsp;ms_node&nbsp;TO&nbsp;mt_node.<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Node&nbsp;for&nbsp;blacklist&nbsp;consumer'<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;ms_node-node_key&nbsp;=&nbsp;co_node_root_bl_cons.<br />
+&nbsp;&nbsp;APPEND&nbsp;ms_node-node_key&nbsp;TO&nbsp;mt_exp_node.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Key&nbsp;of&nbsp;the&nbsp;node<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;ms_node-hidden&nbsp;&nbsp;&nbsp;=&nbsp;space.&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;The&nbsp;node&nbsp;is&nbsp;visible<br />
+&nbsp;&nbsp;ms_node-disabled&nbsp;=&nbsp;space.&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;selectable<br />
+&nbsp;&nbsp;ms_node-isfolder&nbsp;=&nbsp;'X'.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;a&nbsp;folder<br />
+&nbsp;&nbsp;ms_node-relatkey&nbsp;=&nbsp;co_node_root_bl.<br />
+&nbsp;&nbsp;ms_node-relatship&nbsp;=&nbsp;cl_gui_simple_tree=&gt;relat_last_child.<br />
+&nbsp;&nbsp;CLEAR&nbsp;ms_node-n_image.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;Folder-/&nbsp;Leaf-Symbol&nbsp;in&nbsp;state&nbsp;"closed":<br />
+&nbsp;&nbsp;CLEAR&nbsp;ms_node-exp_image.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;Folder-/&nbsp;Leaf-Symbol&nbsp;in&nbsp;state&nbsp;"open":<br />
+&nbsp;&nbsp;CLEAR&nbsp;ms_node-expander.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;see&nbsp;below.<br />
+&nbsp;&nbsp;ms_node-text&nbsp;=&nbsp;'Consumer'(007).<br />
+&nbsp;&nbsp;APPEND&nbsp;ms_node&nbsp;TO&nbsp;mt_node.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Node&nbsp;for&nbsp;blacklist&nbsp;provider'<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;ms_node-node_key&nbsp;=&nbsp;co_node_root_bl_prov.<br />
+&nbsp;&nbsp;APPEND&nbsp;ms_node-node_key&nbsp;TO&nbsp;mt_exp_node.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Key&nbsp;of&nbsp;the&nbsp;node<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;ms_node-hidden&nbsp;&nbsp;&nbsp;=&nbsp;space.&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;The&nbsp;node&nbsp;is&nbsp;visible<br />
+&nbsp;&nbsp;ms_node-disabled&nbsp;=&nbsp;space.&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;selectable<br />
+&nbsp;&nbsp;ms_node-isfolder&nbsp;=&nbsp;'X'.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;a&nbsp;folder<br />
+&nbsp;&nbsp;ms_node-relatkey&nbsp;=&nbsp;co_node_root_bl.<br />
+&nbsp;&nbsp;ms_node-relatship&nbsp;=&nbsp;cl_gui_simple_tree=&gt;relat_last_child.<br />
+&nbsp;&nbsp;CLEAR&nbsp;ms_node-n_image.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;Folder-/&nbsp;Leaf-Symbol&nbsp;in&nbsp;state&nbsp;"closed":<br />
+&nbsp;&nbsp;CLEAR&nbsp;ms_node-exp_image.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;Folder-/&nbsp;Leaf-Symbol&nbsp;in&nbsp;state&nbsp;"open":<br />
+&nbsp;&nbsp;CLEAR&nbsp;ms_node-expander.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;see&nbsp;below.<br />
+&nbsp;&nbsp;ms_node-text&nbsp;=&nbsp;'Provider'(008).<br />
+&nbsp;&nbsp;APPEND&nbsp;ms_node&nbsp;TO&nbsp;mt_node.<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Get&nbsp;all&nbsp;Users&nbsp;and&nbsp;Terminals<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;cl_soap_util_db=&gt;admin_get_headers(<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;header_list&nbsp;=&nbsp;mt_util_header<br />
+&nbsp;&nbsp;).<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Nodes&nbsp;with&nbsp;keys&nbsp;numbered&nbsp;according&nbsp;to&nbsp;the&nbsp;number&nbsp;of&nbsp;users.<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;mt_util_header&nbsp;INTO&nbsp;ls_util_header.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;ls_util_header-idtype&nbsp;=&nbsp;if_soap_util_constants=&gt;co_idtype_bl.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;case&nbsp;ls_util_header-utilid(4).<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;when&nbsp;'CLAS'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ms_node-relatkey&nbsp;&nbsp;=&nbsp;co_node_root_bl_cons.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ms_node-node_key&nbsp;=&nbsp;|BL&nbsp;CLAS&nbsp;{&nbsp;l_hostno_bl&nbsp;}|.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;when&nbsp;'WEBI'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ms_node-relatkey&nbsp;&nbsp;=&nbsp;co_node_root_bl_prov.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ms_node-node_key&nbsp;=&nbsp;|BL&nbsp;WEBI&nbsp;{&nbsp;l_hostno_bl&nbsp;}|.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;when&nbsp;others.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;assert&nbsp;1&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;endcase.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ms_node-text&nbsp;&nbsp;&nbsp;=&nbsp;ls_util_header-utilid+4.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;l_hostno_bl&nbsp;=&nbsp;l_hostno_bl&nbsp;+&nbsp;1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;else.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;l_hostno&nbsp;=&nbsp;l_hostno&nbsp;+&nbsp;1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ms_node-node_key&nbsp;=&nbsp;l_hostno.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ms_node-relatkey&nbsp;&nbsp;=&nbsp;co_node_root.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ms_node-text&nbsp;&nbsp;&nbsp;=&nbsp;ls_util_header-utilid.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;endif.<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Node&nbsp;is&nbsp;inserted&nbsp;as&nbsp;child&nbsp;of&nbsp;the&nbsp;node&nbsp;with&nbsp;key&nbsp;'Root'.<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;ms_node-relatship&nbsp;=&nbsp;cl_gui_simple_tree=&gt;relat_last_child.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ms_node-hidden&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;space.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ms_node-disabled&nbsp;&nbsp;=&nbsp;space.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ms_node-isfolder&nbsp;&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;ms_node-n_image.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;ms_node-exp_image.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ms_node-expander&nbsp;=&nbsp;space.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ms_node-idtype&nbsp;=&nbsp;ls_util_header-idtype.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;ms_node&nbsp;TO&nbsp;mt_node.<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+<br />
+ENDFORM.                    " build_tree<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;refresh_tree<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM refresh_tree.<br />
+<br />
+&nbsp;&nbsp;PERFORM&nbsp;update_tree.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;m_select_idtype&nbsp;=&nbsp;if_soap_util_constants=&gt;co_idtype_user.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;inp_user&nbsp;=&nbsp;m_tree_utilid&nbsp;=&nbsp;m_select_utilid.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;m_tree_idtype&nbsp;=&nbsp;m_select_idtype.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR:&nbsp;inp_termid,&nbsp;inp_uri.<br />
+<br />
+&nbsp;&nbsp;ELSEIF&nbsp;m_select_idtype&nbsp;=&nbsp;if_soap_util_constants=&gt;co_idtype_term.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;inp_termid&nbsp;=&nbsp;m_tree_utilid&nbsp;=&nbsp;m_select_utilid.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;m_tree_idtype&nbsp;=&nbsp;m_select_idtype.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR:&nbsp;inp_user,&nbsp;inp_uri.<br />
+<br />
+&nbsp;&nbsp;ELSE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;inp_uri&nbsp;=&nbsp;m_tree_utilid&nbsp;=&nbsp;m_select_utilid.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;m_tree_idtype&nbsp;=&nbsp;m_select_idtype.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR:&nbsp;inp_user,&nbsp;inp_termid.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;mt_util_header&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"#EC&nbsp;CI_STDSEQ<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WITH&nbsp;KEY&nbsp;utilid&nbsp;=&nbsp;m_select_utilid<br />
+&nbsp;&nbsp;&nbsp;&nbsp;TRANSPORTING&nbsp;NO&nbsp;FIELDS.<br />
+&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;&lt;&gt;&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR:&nbsp;m_select_utilid,&nbsp;m_select_idtype.<br />
+&nbsp;&nbsp;ELSE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;set_config_values.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+ENDFORM.                    " refresh_tree<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;update_tree<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM update_tree.<br />
+<br />
+&nbsp;&nbsp;CALL&nbsp;METHOD&nbsp;mr_gui_tree-&gt;delete_all_nodes<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTHERS&nbsp;=&nbsp;0.<br />
+<br />
+&nbsp;&nbsp;PERFORM&nbsp;build_tree.<br />
+<br />
+&nbsp;&nbsp;CALL&nbsp;METHOD&nbsp;mr_gui_tree-&gt;add_nodes<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;table_structure_name&nbsp;=&nbsp;'SRT_UTIL_TREE'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;node_table&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;mt_node.<br />
+<br />
+&nbsp;&nbsp;CALL&nbsp;METHOD&nbsp;mr_gui_tree-&gt;expand_nodes<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;node_key_table&nbsp;=&nbsp;mt_exp_node.<br />
+<br />
+ENDFORM.                    " update_tree<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;handle_node_doubleclick<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM handle_node_doubleclick.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;ms_user_data-pressed_tab&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ms_user_data-pressed_tab&nbsp;=&nbsp;'CONFIG'.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;CLEAR:&nbsp;mr_perf_grid,&nbsp;mr_func_grid,&nbsp;mr_pload_grid.<br />
+&nbsp;&nbsp;FREE:&nbsp;&nbsp;mr_perf_grid,&nbsp;mr_func_grid,&nbsp;mr_pload_grid.<br />
+<br />
+&nbsp;&nbsp;PERFORM&nbsp;build_tree.<br />
+&nbsp;&nbsp;PERFORM&nbsp;refresh_tree.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;m_select_idtype&nbsp;=&nbsp;if_soap_util_constants=&gt;co_idtype_user.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;inp_user&nbsp;=&nbsp;m_tree_utilid&nbsp;=&nbsp;m_select_utilid.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;m_tree_idtype&nbsp;=&nbsp;m_select_idtype.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR:&nbsp;inp_termid,&nbsp;inp_uri.<br />
+<br />
+&nbsp;&nbsp;ELSEIF&nbsp;m_select_idtype&nbsp;=&nbsp;if_soap_util_constants=&gt;co_idtype_term.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;inp_termid&nbsp;=&nbsp;m_tree_utilid&nbsp;=&nbsp;m_select_utilid.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;m_tree_idtype&nbsp;=&nbsp;m_select_idtype.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR:&nbsp;inp_user,&nbsp;inp_uri.<br />
+<br />
+&nbsp;&nbsp;ELSE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;inp_uri&nbsp;=&nbsp;m_tree_utilid&nbsp;=&nbsp;m_select_utilid.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;m_tree_idtype&nbsp;=&nbsp;m_select_idtype.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR:&nbsp;inp_user,&nbsp;inp_termid.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;PERFORM&nbsp;set_config_values.<br />
+<br />
+ENDFORM.                    " handle_node_doubleclick<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;check_wsnames<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM check_wsnames.<br />
+<br />
+&nbsp;&nbsp;CLEAR&nbsp;input_error.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;srt_util_config-cpro_1&nbsp;CS&nbsp;'*'&nbsp;OR&nbsp;srt_util_config-cpro_2&nbsp;CS&nbsp;'*'&nbsp;OR&nbsp;srt_util_config-cpro_3&nbsp;CS&nbsp;'*'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;input_error&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;'Invalid&nbsp;Consumer&nbsp;Proxy'(083)&nbsp;TYPE&nbsp;'I'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXIT.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;srt_util_config-sdef_1&nbsp;CS&nbsp;'*'&nbsp;OR&nbsp;srt_util_config-sdef_2&nbsp;CS&nbsp;'*'&nbsp;OR&nbsp;srt_util_config-sdef_3&nbsp;CS&nbsp;'*'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;input_error&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;'Invalid&nbsp;Service&nbsp;Definition'(084)&nbsp;TYPE&nbsp;'I'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXIT.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+ENDFORM.                    " check_wsnames<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;check_user<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM check_user USING p_new_user TYPE xsdboolean.<br />
+<br />
+&nbsp;&nbsp;DATA:&nbsp;ls_usr01&nbsp;TYPE&nbsp;usr01.<br />
+<br />
+&nbsp;&nbsp;CLEAR&nbsp;input_error.<br />
+&nbsp;&nbsp;IF&nbsp;inp_user&nbsp;IS&nbsp;INITIAL&nbsp;OR<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(&nbsp;p_new_user&nbsp;IS&nbsp;NOT&nbsp;INITIAL&nbsp;AND&nbsp;inp_user&nbsp;=&nbsp;'*'&nbsp;).<br />
+&nbsp;&nbsp;&nbsp;&nbsp;input_error&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;inp_user&nbsp;=&nbsp;sy-uname.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;'Invalid&nbsp;User&nbsp;Name'(081)&nbsp;TYPE&nbsp;'I'.<br />
+&nbsp;&nbsp;ELSEIF&nbsp;inp_user&nbsp;&lt;&gt;&nbsp;'*'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;SINGLE&nbsp;*&nbsp;FROM&nbsp;usr01<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;ls_usr01<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;bname&nbsp;=&nbsp;inp_user.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;&lt;&gt;&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;input_error&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;inp_user&nbsp;=&nbsp;sy-uname.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;'Invalid&nbsp;User&nbsp;Name'(081)&nbsp;TYPE&nbsp;'I'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+ENDFORM.                    " check_user<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;check_terminal_id<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM check_terminal_id.<br />
+<br />
+&nbsp;&nbsp;DATA:&nbsp;nfill&nbsp;&nbsp;TYPE&nbsp;i.<br />
+<br />
+&nbsp;&nbsp;CLEAR&nbsp;input_error.<br />
+&nbsp;&nbsp;nfill&nbsp;=&nbsp;strlen(&nbsp;inp_termid&nbsp;).<br />
+&nbsp;&nbsp;IF&nbsp;nfill&nbsp;&lt;&gt;&nbsp;32&nbsp;OR&nbsp;NOT&nbsp;(&nbsp;inp_termid&nbsp;CO&nbsp;'0123456789ABCDEFabcdef'&nbsp;).<br />
+&nbsp;&nbsp;&nbsp;&nbsp;input_error&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;'Invalid&nbsp;Terminal&nbsp;ID'(082)&nbsp;TYPE&nbsp;'I'.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+ENDFORM.                    " check_terminal_id<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;check_request_uri<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM check_request_uri.<br />
+<br />
+&nbsp;&nbsp;CLEAR&nbsp;input_error.<br />
+&nbsp;&nbsp;IF&nbsp;inp_uri&nbsp;IS&nbsp;INITIAL&nbsp;OR&nbsp;inp_uri(1)&nbsp;&lt;&gt;&nbsp;'/'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;input_error&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;'Invalid&nbsp;Request&nbsp;URI'(089)&nbsp;TYPE&nbsp;'I'.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+ENDFORM.                    " check_request_uri<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;grid_get_selected_rows<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM grid_get_selected_rows USING pr_grid  TYPE REF TO cl_gui_alv_grid<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pt_row&nbsp;&nbsp;&nbsp;TYPE&nbsp;lvc_t_roid.<br />
+<br />
+&nbsp;&nbsp;DATA:&nbsp;ls_row&nbsp;&nbsp;&nbsp;TYPE&nbsp;lvc_s_roid,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lt_row&nbsp;&nbsp;&nbsp;TYPE&nbsp;lvc_t_roid,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_cell&nbsp;&nbsp;TYPE&nbsp;lvc_s_ceno,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lt_cell&nbsp;&nbsp;TYPE&nbsp;lvc_t_ceno.<br />
+<br />
+&nbsp;&nbsp;CALL&nbsp;METHOD&nbsp;pr_grid-&gt;get_selected_rows<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;et_row_no&nbsp;=&nbsp;lt_row.<br />
+&nbsp;&nbsp;pt_row[]&nbsp;=&nbsp;lt_row[].<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;pt_row[]&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;METHOD&nbsp;pr_grid-&gt;get_selected_cells_id<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;et_cells&nbsp;=&nbsp;lt_cell.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;lt_cell&nbsp;INTO&nbsp;ls_cell&nbsp;INDEX&nbsp;1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;&lt;&gt;&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;i208(00)&nbsp;WITH&nbsp;'Mark&nbsp;at&nbsp;least&nbsp;one&nbsp;entry'(009).&nbsp;"#EC&nbsp;CI_USE_WANTED<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXIT.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_row-row_id&nbsp;=&nbsp;ls_cell-row_id.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;ls_row&nbsp;TO&nbsp;pt_row.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+ENDFORM.                    " mr_perf_grid_get_selected_rows<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;get_new_expiry_date<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM get_new_expiry_date.<br />
+<br />
+&nbsp;&nbsp;CALL&nbsp;SCREEN&nbsp;400&nbsp;STARTING&nbsp;AT&nbsp;10&nbsp;10.<br />
+<br />
+ENDFORM.                    " get_new_expiry_date<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;hide_toolbar<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM hide_toolbar .<br />
+<br />
+&nbsp;&nbsp;CLEAR&nbsp;mt_hidden_code.<br />
+<br />
+&nbsp;&nbsp;APPEND&nbsp;cl_gui_alv_grid=&gt;mc_fc_col_optimize&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TO&nbsp;mt_hidden_code.<br />
+&nbsp;&nbsp;APPEND&nbsp;cl_gui_alv_grid=&gt;mc_fc_help&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TO&nbsp;mt_hidden_code.<br />
+&nbsp;&nbsp;APPEND&nbsp;cl_gui_alv_grid=&gt;mc_fc_col_invisible&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TO&nbsp;mt_hidden_code.<br />
+&nbsp;&nbsp;APPEND&nbsp;cl_gui_alv_grid=&gt;mc_fc_find&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TO&nbsp;mt_hidden_code.<br />
+&nbsp;&nbsp;APPEND&nbsp;cl_gui_alv_grid=&gt;mc_fc_loc_copy&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TO&nbsp;mt_hidden_code.<br />
+&nbsp;&nbsp;APPEND&nbsp;cl_gui_alv_grid=&gt;mc_fc_delete_filter&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TO&nbsp;mt_hidden_code.<br />
+&nbsp;&nbsp;APPEND&nbsp;cl_gui_alv_grid=&gt;mc_fc_unfix_columns&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TO&nbsp;mt_hidden_code.<br />
+&nbsp;&nbsp;APPEND&nbsp;cl_gui_alv_grid=&gt;mc_fc_subtot&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TO&nbsp;mt_hidden_code.<br />
+&nbsp;&nbsp;APPEND&nbsp;cl_gui_alv_grid=&gt;mc_fc_sum&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TO&nbsp;mt_hidden_code.<br />
+&nbsp;&nbsp;APPEND&nbsp;cl_gui_alv_grid=&gt;mc_fc_info&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TO&nbsp;mt_hidden_code.<br />
+&nbsp;&nbsp;APPEND&nbsp;cl_gui_alv_grid=&gt;mc_fc_print&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TO&nbsp;mt_hidden_code.<br />
+&nbsp;&nbsp;APPEND&nbsp;cl_gui_alv_grid=&gt;mc_fc_views&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TO&nbsp;mt_hidden_code.<br />
+&nbsp;&nbsp;APPEND&nbsp;cl_gui_alv_grid=&gt;mc_fc_graph&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TO&nbsp;mt_hidden_code.<br />
+&nbsp;&nbsp;APPEND&nbsp;cl_gui_alv_grid=&gt;mc_fc_loc_copy_row&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TO&nbsp;mt_hidden_code.<br />
+&nbsp;&nbsp;APPEND&nbsp;cl_gui_alv_grid=&gt;mc_fc_loc_delete_row&nbsp;&nbsp;&nbsp;&nbsp;TO&nbsp;mt_hidden_code.<br />
+&nbsp;&nbsp;APPEND&nbsp;cl_gui_alv_grid=&gt;mc_fc_loc_append_row&nbsp;&nbsp;&nbsp;&nbsp;TO&nbsp;mt_hidden_code.<br />
+&nbsp;&nbsp;APPEND&nbsp;cl_gui_alv_grid=&gt;mc_fc_loc_insert_row&nbsp;&nbsp;&nbsp;&nbsp;TO&nbsp;mt_hidden_code.<br />
+&nbsp;&nbsp;APPEND&nbsp;cl_gui_alv_grid=&gt;mc_fc_loc_move_row&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TO&nbsp;mt_hidden_code.<br />
+&nbsp;&nbsp;APPEND&nbsp;cl_gui_alv_grid=&gt;mc_fc_loc_copy&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TO&nbsp;mt_hidden_code.<br />
+&nbsp;&nbsp;APPEND&nbsp;cl_gui_alv_grid=&gt;mc_fc_loc_cut&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TO&nbsp;mt_hidden_code.<br />
+&nbsp;&nbsp;APPEND&nbsp;cl_gui_alv_grid=&gt;mc_fc_loc_paste&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TO&nbsp;mt_hidden_code.<br />
+&nbsp;&nbsp;APPEND&nbsp;cl_gui_alv_grid=&gt;mc_fc_loc_paste_new_row&nbsp;TO&nbsp;mt_hidden_code.<br />
+&nbsp;&nbsp;APPEND&nbsp;cl_gui_alv_grid=&gt;mc_fc_loc_undo&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TO&nbsp;mt_hidden_code.<br />
+&nbsp;&nbsp;APPEND&nbsp;cl_gui_alv_grid=&gt;mc_fc_refresh&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TO&nbsp;mt_hidden_code.<br />
+&nbsp;&nbsp;APPEND&nbsp;cl_gui_alv_grid=&gt;mc_fc_check&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TO&nbsp;mt_hidden_code.<br />
+&nbsp;&nbsp;APPEND&nbsp;cl_gui_alv_grid=&gt;mc_fc_auf&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TO&nbsp;mt_hidden_code.<br />
+<br />
+&nbsp;&nbsp;APPEND&nbsp;cl_gui_alv_grid=&gt;mc_mb_sum&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TO&nbsp;mt_hidden_code.<br />
+<br />
+ENDFORM.                    "hide_toolbar<br />
+<br />
+<br />
+FORM check_bl_item.<br />
+<br />
+&nbsp;&nbsp;CLEAR&nbsp;input_error.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;INP_CONSUMER&nbsp;CS&nbsp;'*'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;input_error&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;'Invalid&nbsp;Consumer&nbsp;Proxy'(083)&nbsp;TYPE&nbsp;'I'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXIT.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;inp_provider&nbsp;CS&nbsp;'*'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;input_error&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;'Invalid&nbsp;Service&nbsp;Definition'(084)&nbsp;TYPE&nbsp;'I'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXIT.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+ENDFORM.<br />
+            </div>
+          </td>
+        </tr>
+      </table>
+      </td>
+      </tr>
+   <tr>
+<td class="footer">Extracted by Mass Download version 1.5.2 - E.G.Mellodew. 1998-2022. Sap Release 755</td>
+   </tr>
+</table>
+</body>
+</html>

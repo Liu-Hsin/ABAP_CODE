@@ -1,0 +1,644 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=GB2312" />
+<title>ZSAPLOG</title>
+<style type="text/css">
+.code{ font-family:"Courier New", Courier, monospace; color:#000; font-size:14px; background-color:#F2F4F7 }
+  .codeComment {font-family:"Courier New", Courier, monospace; color:#0000F0; font-size:14px; background-color:#F2F4F7 }
+  .normalBold{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; font-weight:800 }
+  .normalBoldLarge{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+</style>
+<style type="text/css">
+  .normal{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px }
+  .footer{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; text-align: center }
+  h2{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+  h3{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:14px; font-weight:800 }
+  .outerTable{
+   background-color:#E0E7ED;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-right-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+  .innerTable{
+   background-color:#F2F4F7;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-bottom-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+</style>
+</head>
+<body>
+<table class="outerTable">
+  <tr class="normalBoldLarge">
+     <td><h2>Code listing for: ZSAPLOG</h2>
+<h3> Description: SOAP LOG</h3></td>
+   </tr>
+  <tr>
+     <td>
+     <table class="innerTable">
+       <tr>
+          <td>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Report&nbsp;ZSAPLOG<br />
+*&---------------------------------------------------------------------*<br />
+*&<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+REPORT zsaplog.<br />
+DATA srt_util_trcploa TYPE srt_util_trcploa.<br />
+DATA gt_zsrt_trcploa TYPE TABLE OF zsrt_trcploa.<br />
+DATA gs_zsrt_trcploa TYPE          zsrt_trcploa.<br />
+FIELD-SYMBOLS &lt;FS_zsrt_trcploa&gt; TYPE zsrt_trcploa.<br />
+<br />
+TYPES BEGIN OF ty_OUT.<br />
+INCLUDE TYPE srt_pload_header.<br />
+TYPES        wstype_c      TYPE c LENGTH 12.<br />
+TYPES        erroricon     TYPE tv_image.<br />
+TYPES        sel TYPE c LENGTH 1.<br />
+TYPES END OF ty_OUT.<br />
+<br />
+DATA gt_out  TYPE TABLE OF ty_OUT.<br />
+DATA gS_out  TYPE          ty_OUT.<br />
+<br />
+CLEAR:gt_zsrt_trcploa,gs_zsrt_trcploa.<br />
+<br />
+SELECTION-SCREEN BEGIN OF BLOCK b1 WITH FRAME TITLE TEXT-001.<br />
+&nbsp;&nbsp;SELECT-OPTIONS:s_TIMES&nbsp;FOR&nbsp;srt_util_trcploa-timestampl&nbsp;NO-DISPLAY.<br />
+<br />
+<br />
+&nbsp;&nbsp;SELECTION-SCREEN&nbsp;BEGIN&nbsp;OF&nbsp;LINE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SELECTION-SCREEN&nbsp;COMMENT&nbsp;(31)&nbsp;TEXT-cm7&nbsp;FOR&nbsp;FIELD&nbsp;exedate.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PARAMETERS:&nbsp;exedate&nbsp;TYPE&nbsp;sy-datum.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SELECTION-SCREEN&nbsp;COMMENT&nbsp;44(2)&nbsp;TEXT-cm9&nbsp;FOR&nbsp;FIELD&nbsp;exetime.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PARAMETERS:&nbsp;exetime&nbsp;&nbsp;TYPE&nbsp;sy-uzeit.<br />
+&nbsp;&nbsp;SELECTION-SCREEN&nbsp;END&nbsp;OF&nbsp;LINE.<br />
+<br />
+&nbsp;&nbsp;SELECTION-SCREEN&nbsp;BEGIN&nbsp;OF&nbsp;LINE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SELECTION-SCREEN&nbsp;COMMENT&nbsp;(31)&nbsp;TEXT-cm8&nbsp;FOR&nbsp;FIELD&nbsp;exe2date.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PARAMETERS:&nbsp;exe2date&nbsp;&nbsp;TYPE&nbsp;sy-datum.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SELECTION-SCREEN&nbsp;COMMENT&nbsp;44(2)&nbsp;TEXT-cm9&nbsp;FOR&nbsp;FIELD&nbsp;exe2time.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PARAMETERS:&nbsp;exe2time&nbsp;&nbsp;TYPE&nbsp;sy-uzeit.<br />
+&nbsp;&nbsp;SELECTION-SCREEN&nbsp;END&nbsp;OF&nbsp;LINE.<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;SELECT-OPTIONS:s_UNAME&nbsp;FOR&nbsp;srt_util_trcploa-sapuser.<br />
+&nbsp;&nbsp;SELECT-OPTIONS:s_WNAME&nbsp;FOR&nbsp;srt_util_trcploa-wsname.&nbsp;&nbsp;"服务名<br />
+&nbsp;&nbsp;SELECT-OPTIONS:s_INAME&nbsp;FOR&nbsp;srt_util_trcploa-ifname.&nbsp;&nbsp;"接口名<br />
+<br />
+<br />
+SELECTION-SCREEN END OF BLOCK b1.<br />
+<br />
+<br />
+INITIALIZATION.<br />
+&nbsp;&nbsp;PERFORM&nbsp;default_DATA.<br />
+<br />
+<br />
+START-OF-SELECTION.<br />
+   </div>
+   <div class="codeComment">
+*后台执行&nbsp;每天更新&nbsp;日志<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;IF&nbsp;sy-batch&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;job_copy.<br />
+&nbsp;&nbsp;ELSE.<br />
+   </div>
+   <div class="codeComment">
+*前台查询<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;initial_data.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;SELECT_dATA.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;PROCESS_dATA.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;display_data.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Form&nbsp;initial_data<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;text<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM initial_data .<br />
+<br />
+   </div>
+   <div class="codeComment">
+*exedate&nbsp;&nbsp;开始日期<br />
+*exetime&nbsp;&nbsp;开始时间<br />
+<br />
+*exe2date&nbsp;&nbsp;结束日期<br />
+*exe2time&nbsp;&nbsp;结束时间<br />
+<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;DATA:lV_timestampl_from&nbsp;TYPE&nbsp;timestamp.<br />
+&nbsp;&nbsp;DATA:lV_timestampl_TO&nbsp;&nbsp;&nbsp;TYPE&nbsp;timestamp.<br />
+&nbsp;&nbsp;CLEAR:lV_timestampl_from.<br />
+&nbsp;&nbsp;CLEAR:lV_timestampl_TO.<br />
+<br />
+&nbsp;&nbsp;cl_soap_util_db=&gt;local_time_to_utc(<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;local_date&nbsp;=&nbsp;exedate<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;local_time&nbsp;=&nbsp;exetime<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;timestamp&nbsp;&nbsp;=&nbsp;lV_timestampl_from&nbsp;).<br />
+<br />
+&nbsp;&nbsp;cl_soap_util_db=&gt;local_time_to_utc(<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;local_date&nbsp;=&nbsp;exe2date<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;local_time&nbsp;=&nbsp;exe2time<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;timestamp&nbsp;&nbsp;=&nbsp;lV_timestampl_TO&nbsp;).<br />
+<br />
+&nbsp;&nbsp;CLEAR:s_TIMES[].<br />
+&nbsp;&nbsp;s_TIMES-low&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lV_timestampl_from.<br />
+&nbsp;&nbsp;s_TIMES-high&nbsp;&nbsp;&nbsp;=&nbsp;lV_timestampl_TO.<br />
+&nbsp;&nbsp;s_TIMES-siGn&nbsp;&nbsp;&nbsp;=&nbsp;'I'.<br />
+&nbsp;&nbsp;s_TIMES-option&nbsp;=&nbsp;'BT'.<br />
+&nbsp;&nbsp;APPEND&nbsp;s_TIMES.<br />
+<br />
+ENDFORM.<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Form&nbsp;default_DATA<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;text<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM default_DATA.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*exedate&nbsp;&nbsp;开始日期<br />
+*exetime&nbsp;&nbsp;开始时间<br />
+<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;exedate&nbsp;=&nbsp;sy-datum&nbsp;-&nbsp;1.<br />
+&nbsp;&nbsp;exetime&nbsp;=&nbsp;sy-uzeit.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*exe2date&nbsp;&nbsp;结束日期<br />
+*exe2time&nbsp;&nbsp;结束时间<br />
+<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;exe2date&nbsp;=&nbsp;sy-datum.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;exe2time&nbsp;=&nbsp;.<br />
+<br />
+   </div>
+   <div class="code">
+ENDFORM.<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Form&nbsp;SELECT_dATA<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;text<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM SELECT_dATA.<br />
+<br />
+&nbsp;&nbsp;SELECT&nbsp;*<br />
+&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;zsrt_trcploa<br />
+&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;TABLE&nbsp;gt_zsrt_trcploa<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;timestampl&nbsp;IN&nbsp;S_times<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;sapuser&nbsp;IN&nbsp;s_uname<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;wsname&nbsp;&nbsp;IN&nbsp;s_wname<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;ifname&nbsp;&nbsp;IN&nbsp;s_iname<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ORDER&nbsp;BY&nbsp;oputc&nbsp;opusec&nbsp;utctime&nbsp;usectime.<br />
+<br />
+ENDFORM.<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Form&nbsp;PROCESS_dATA<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;text<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM PROCESS_dATA.<br />
+<br />
+&nbsp;&nbsp;DATA&nbsp;lV_char22&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;c&nbsp;LENGTH&nbsp;22.<br />
+&nbsp;&nbsp;DATA&nbsp;lv_tstamps&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;tzonref-tstamps.<br />
+<br />
+<br />
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;GT_zsrt_trcploa&nbsp;INTO&nbsp;GS_zsrt_trcploa.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR:gs_out.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MOVE-CORRESPONDING&nbsp;GS_zsrt_trcploa&nbsp;TO&nbsp;gs_out.<br />
+<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR:lV_char22,lv_tstamps.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;lV_char22&nbsp;&nbsp;=&nbsp;gs_out-timestampl.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;lv_tstamps&nbsp;=&nbsp;lV_char22(15).<br />
+<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'CIF_GEN4_CONVERT_TIMESTAMP'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;iv_timestamp&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lv_tstamps<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;iv_timezone&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;sy-zonlo<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ev_date&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;gs_out-opdate<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ev_time&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;gs_out-optime<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;time_conversion_failed&nbsp;=&nbsp;1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTHERS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;2.<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Error&nbsp;State<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;gs_out-opstate&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_out-erroricon&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;icon_led_green.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_out-erroricon+3&nbsp;&nbsp;=&nbsp;'\Q'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_out-erroricon+5&nbsp;&nbsp;=&nbsp;'Successful&nbsp;Execution'(iok).<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_out-erroricon+45&nbsp;=&nbsp;'@'.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ELSEIF&nbsp;gs_out-opstate&nbsp;=&nbsp;'I'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_out-erroricon&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;icon_led_yellow.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_out-erroricon+3&nbsp;&nbsp;=&nbsp;'\Q'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_out-erroricon+5&nbsp;&nbsp;=&nbsp;'Incomplete&nbsp;Execution'(iic).<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_out-erroricon+45&nbsp;=&nbsp;'@'.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ELSEIF&nbsp;gs_out-opstate&nbsp;=&nbsp;'E'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_out-erroricon&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;icon_led_red.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_out-erroricon+3&nbsp;&nbsp;=&nbsp;'\Q'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_out-erroricon+5&nbsp;&nbsp;=&nbsp;'Erroneous&nbsp;Execution'(ier).<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_out-erroricon+45&nbsp;=&nbsp;'@'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;gs_out&nbsp;TO&nbsp;gt_out.<br />
+<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+<br />
+<br />
+ENDFORM.<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Form&nbsp;display_data<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;text<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM display_data.<br />
+<br />
+&nbsp;&nbsp;DATA&nbsp;lv_text&nbsp;TYPE&nbsp;&nbsp;string.<br />
+&nbsp;&nbsp;DATA&nbsp;lt_fcat&nbsp;TYPE&nbsp;slis_t_fieldcat_alv.<br />
+&nbsp;&nbsp;DATA&nbsp;ls_layo&nbsp;TYPE&nbsp;slis_layout_alv.<br />
+&nbsp;&nbsp;DATA&nbsp;lt_sort&nbsp;TYPE&nbsp;slis_t_sortinfo_alv.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;gt_OUT[]&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;s004(sv).<br />
+&nbsp;&nbsp;&nbsp;&nbsp;RETURN.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;lv_text&nbsp;=&nbsp;'正在输出...'.<br />
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'SAPGUI_PROGRESS_INDICATOR'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text&nbsp;=&nbsp;lv_text.<br />
+<br />
+&nbsp;&nbsp;PERFORM&nbsp;grid_layo_set&nbsp;CHANGING&nbsp;&nbsp;ls_layo.<br />
+&nbsp;&nbsp;PERFORM&nbsp;grid_sort_set&nbsp;TABLES&nbsp;&nbsp;&nbsp;&nbsp;lt_sort.<br />
+&nbsp;&nbsp;PERFORM&nbsp;grid_fcat_set&nbsp;CHANGING&nbsp;&nbsp;lt_fcat.<br />
+<br />
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'REUSE_ALV_GRID_DISPLAY'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_callback_program&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;sy-repid<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_callback_pf_status_set&nbsp;=&nbsp;'GRID_PF_STATUS_SET'<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_callback_user_command&nbsp;=&nbsp;'GRID_USER_COMMAND'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_callback_top_of_page&nbsp;&nbsp;=&nbsp;'GRID_TOP_OF_PAGE&nbsp;'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;is_layout&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_layo<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it_fieldcat&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lt_fcat<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it_sort&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lt_sort<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_default&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'X'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_save&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'U'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;TABLES<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;t_outtab&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;gt_OUT<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;program_error&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTHERS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;2.<br />
+&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;&lt;&gt;&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;ID&nbsp;sy-msgid&nbsp;TYPE&nbsp;sy-msgty&nbsp;NUMBER&nbsp;sy-msgno<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WITH&nbsp;sy-msgv1&nbsp;sy-msgv2&nbsp;sy-msgv3&nbsp;sy-msgv4.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+ENDFORM.<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;grid_layo_set<br />
+*&---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM grid_layo_set  CHANGING  cs_layo TYPE slis_layout_alv.<br />
+&nbsp;&nbsp;cs_layo-colwidth_optimize&nbsp;&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;cs_layo-box_fieldname&nbsp;=&nbsp;'SEL'.<br />
+ENDFORM.                    "grid_layo_set<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;grid_sort_set<br />
+*&---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM grid_sort_set  TABLES  ct_sort TYPE slis_t_sortinfo_alv.<br />
+&nbsp;&nbsp;DATA&nbsp;ls_sort&nbsp;TYPE&nbsp;slis_sortinfo_alv.<br />
+<br />
+ENDFORM.                    "grid_sort_set<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;grid_pf_status_set<br />
+*&---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM grid_pf_status_set USING rt_extab TYPE slis_t_extab.<br />
+<br />
+&nbsp;&nbsp;SET&nbsp;PF-STATUS&nbsp;'STANDARD_FULLSCREEN'&nbsp;EXCLUDING&nbsp;rt_extab.<br />
+ENDFORM.                    "grid_pf_status_set<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;grid_user_command<br />
+*&---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM grid_top_of_page.<br />
+&nbsp;&nbsp;DATA&nbsp;lv_line&nbsp;TYPE&nbsp;char10.<br />
+&nbsp;&nbsp;DATA&nbsp;lv_tabix&nbsp;TYPE&nbsp;p.<br />
+&nbsp;&nbsp;DATA:&nbsp;lt_header&nbsp;TYPE&nbsp;slis_t_listheader,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lw_header&nbsp;LIKE&nbsp;LINE&nbsp;OF&nbsp;lt_header.<br />
+&nbsp;&nbsp;CLEAR&nbsp;lw_header.<br />
+<br />
+&nbsp;&nbsp;DESCRIBE&nbsp;TABLE&nbsp;gt_out&nbsp;LINES&nbsp;lv_tabix.<br />
+&nbsp;&nbsp;lv_line&nbsp;=&nbsp;lv_tabix.<br />
+&nbsp;&nbsp;lw_header-typ&nbsp;&nbsp;=&nbsp;'S'.<br />
+&nbsp;&nbsp;CONCATENATE&nbsp;TEXT-q01&nbsp;lv_line&nbsp;INTO&nbsp;lw_header-info.<br />
+&nbsp;&nbsp;APPEND&nbsp;lw_header&nbsp;TO&nbsp;lt_header.<br />
+&nbsp;&nbsp;CLEAR&nbsp;lw_header.<br />
+<br />
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'REUSE_ALV_COMMENTARY_WRITE'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it_list_commentary&nbsp;=&nbsp;lt_header.<br />
+&nbsp;&nbsp;"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_logo&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'ENJOYSAP_LOGO'.<br />
+ENDFORM.                    "grid_top_of_page<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;GRID_USER_COMMAND<br />
+*&---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM grid_user_command USING UV_uscomm LIKE sy-ucomm<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;US_selfield&nbsp;TYPE&nbsp;slis_selfield&nbsp;.<br />
+<br />
+&nbsp;&nbsp;DATA&nbsp;lv_line&nbsp;TYPE&nbsp;i.<br />
+&nbsp;&nbsp;DATA&nbsp;wa_out&nbsp;&nbsp;TYPE&nbsp;ty_out.<br />
+&nbsp;&nbsp;lv_line&nbsp;=&nbsp;us_selfield-tabindex.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;gt_out&nbsp;INTO&nbsp;wa_out&nbsp;WITH&nbsp;KEY&nbsp;sel&nbsp;=&nbsp;'X'.<br />
+*&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;&lt;&gt;&nbsp;0.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;'请选择行.....'&nbsp;TYPE&nbsp;'E'.<br />
+*&nbsp;&nbsp;ENDIF.<br />
+<br />
+*<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;CASE&nbsp;UV_uscomm.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'PRINT'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'ZSAVE'.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'&IC1'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;gt_out&nbsp;INTO&nbsp;wa_out&nbsp;INDEX&nbsp;lv_line.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;wa_out-transaction_id&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SUBMIT&nbsp;srt_util_pload_detail&nbsp;WITH&nbsp;tid&nbsp;=&nbsp;wa_out-transaction_id&nbsp;"#EC&nbsp;CI_USE_WANTED<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;RETURN.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"#EC&nbsp;CI_SUBMIT<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;display_pload_overview.<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;OTHERS.<br />
+&nbsp;&nbsp;ENDCASE.<br />
+<br />
+&nbsp;&nbsp;us_selfield-col_stable&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;us_selfield-row_stable&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;us_selfield-refresh&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'X'.<br />
+<br />
+ENDFORM.                    "FRM_ALV_COMMAND<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;grid_fcat_set<br />
+*&---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM grid_fcat_set  CHANGING ct_fcat TYPE  slis_t_fieldcat_alv.<br />
+&nbsp;&nbsp;DATA&nbsp;ls_fcat&nbsp;TYPE&nbsp;slis_fieldcat_alv.<br />
+&nbsp;&nbsp;DATA&nbsp;lv_pos&nbsp;&nbsp;TYPE&nbsp;i.<br />
+<br />
+&nbsp;&nbsp;ct_fcat&nbsp;=&nbsp;VALUE&nbsp;#(<br />
+&nbsp;&nbsp;(&nbsp;fieldname&nbsp;=&nbsp;'ERRORICON'&nbsp;&nbsp;seltext_l&nbsp;=&nbsp;'状态'&nbsp;icon&nbsp;=&nbsp;'X'&nbsp;)<br />
+&nbsp;&nbsp;(&nbsp;fieldname&nbsp;=&nbsp;'WSNAME'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;seltext_l&nbsp;=&nbsp;'Web&nbsp;服务名称'&nbsp;&nbsp;)<br />
+&nbsp;&nbsp;(&nbsp;fieldname&nbsp;=&nbsp;'IFNAME'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;seltext_l&nbsp;=&nbsp;'接口名称'&nbsp;&nbsp;)<br />
+&nbsp;&nbsp;(&nbsp;fieldname&nbsp;=&nbsp;'WSTYPE_C'&nbsp;&nbsp;&nbsp;seltext_l&nbsp;=&nbsp;'角色'&nbsp;&nbsp;)<br />
+&nbsp;&nbsp;(&nbsp;fieldname&nbsp;=&nbsp;'OPERATION_SPACE'&nbsp;&nbsp;seltext_l&nbsp;=&nbsp;'操作命名空间'&nbsp;&nbsp;)<br />
+&nbsp;&nbsp;(&nbsp;fieldname&nbsp;=&nbsp;'OPERATION_NAME'&nbsp;&nbsp;&nbsp;seltext_l&nbsp;=&nbsp;'操作名称'&nbsp;&nbsp;)<br />
+&nbsp;&nbsp;(&nbsp;fieldname&nbsp;=&nbsp;'COMMTYPE'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;seltext_l&nbsp;=&nbsp;'适配器类型'&nbsp;&nbsp;)<br />
+&nbsp;&nbsp;(&nbsp;fieldname&nbsp;=&nbsp;'OPDATE'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;seltext_l&nbsp;=&nbsp;'日期'&nbsp;&nbsp;)<br />
+&nbsp;&nbsp;(&nbsp;fieldname&nbsp;=&nbsp;'OPTIME'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;seltext_l&nbsp;=&nbsp;'时间'&nbsp;&nbsp;)<br />
+&nbsp;&nbsp;(&nbsp;fieldname&nbsp;=&nbsp;'EXPIRE'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;seltext_l&nbsp;=&nbsp;'失效日期'&nbsp;&nbsp;)<br />
+&nbsp;&nbsp;(&nbsp;fieldname&nbsp;=&nbsp;'OPID'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;seltext_l&nbsp;=&nbsp;'操作标识'&nbsp;&nbsp;)<br />
+&nbsp;&nbsp;(&nbsp;fieldname&nbsp;=&nbsp;'ROOT_CTX_ID'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;seltext_l&nbsp;=&nbsp;'根上下文标识'&nbsp;&nbsp;)<br />
+&nbsp;&nbsp;(&nbsp;fieldname&nbsp;=&nbsp;'TRANSACTION_ID'&nbsp;&nbsp;&nbsp;seltext_l&nbsp;=&nbsp;'事务标识'&nbsp;&nbsp;)<br />
+<br />
+&nbsp;&nbsp;).<br />
+<br />
+ENDFORM.<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Form&nbsp;job_copy<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;text<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM job_copy.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*exedate&nbsp;&nbsp;开始日期<br />
+*exetime&nbsp;&nbsp;开始时间<br />
+<br />
+*exe2date&nbsp;&nbsp;结束日期<br />
+*exe2time&nbsp;&nbsp;结束时间<br />
+<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;DATA:lV_timestampl_from&nbsp;TYPE&nbsp;timestamp.<br />
+&nbsp;&nbsp;DATA:lV_timestampl_TO&nbsp;&nbsp;&nbsp;TYPE&nbsp;timestamp.<br />
+&nbsp;&nbsp;CLEAR:lV_timestampl_from.<br />
+&nbsp;&nbsp;CLEAR:lV_timestampl_TO.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*开始日期&nbsp;+&nbsp;时间<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;exedate&nbsp;=&nbsp;sy-datum&nbsp;-&nbsp;1.<br />
+&nbsp;&nbsp;exetime&nbsp;=&nbsp;'000000'.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*结束日期&nbsp;+&nbsp;实际<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;exe2date&nbsp;=&nbsp;sy-datum&nbsp;-&nbsp;1.<br />
+&nbsp;&nbsp;exe2time&nbsp;=&nbsp;'240000'.<br />
+<br />
+<br />
+&nbsp;&nbsp;cl_soap_util_db=&gt;local_time_to_utc(<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;local_date&nbsp;=&nbsp;exedate<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;local_time&nbsp;=&nbsp;exetime<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;timestamp&nbsp;&nbsp;=&nbsp;lV_timestampl_from&nbsp;).<br />
+<br />
+&nbsp;&nbsp;cl_soap_util_db=&gt;local_time_to_utc(<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;local_date&nbsp;=&nbsp;exe2date<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;local_time&nbsp;=&nbsp;exe2time<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;timestamp&nbsp;&nbsp;=&nbsp;lV_timestampl_TO&nbsp;).<br />
+<br />
+&nbsp;&nbsp;CLEAR:s_TIMES[].<br />
+&nbsp;&nbsp;s_TIMES-low&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lV_timestampl_from.<br />
+&nbsp;&nbsp;s_TIMES-high&nbsp;&nbsp;&nbsp;=&nbsp;lV_timestampl_TO.<br />
+&nbsp;&nbsp;s_TIMES-siGn&nbsp;&nbsp;&nbsp;=&nbsp;'I'.<br />
+&nbsp;&nbsp;s_TIMES-option&nbsp;=&nbsp;'BT'.<br />
+&nbsp;&nbsp;APPEND&nbsp;s_TIMES.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;DATA&nbsp;LT_zsrt_trcploa&nbsp;TYPE&nbsp;TABLE&nbsp;OF&nbsp;Zsrt_trcploa.<br />
+&nbsp;&nbsp;DATA&nbsp;LS_zsrt_trcploa&nbsp;TYPE&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Zsrt_trcploa.<br />
+&nbsp;&nbsp;CLEAR:LT_zsrt_trcploa.<br />
+<br />
+&nbsp;&nbsp;SELECT&nbsp;*<br />
+&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;srt_util_trcploa<br />
+&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;TABLE&nbsp;lt_zsrt_trcploa<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;timestampl&nbsp;IN&nbsp;S_times<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ORDER&nbsp;BY&nbsp;oputc&nbsp;opusec&nbsp;utctime&nbsp;usectime.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;lt_zsrt_trcploa[]&nbsp;IS&nbsp;&nbsp;NOT&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;INSERT&nbsp;zsrt_trcploa&nbsp;FROM&nbsp;TABLE&nbsp;lt_zsrt_trcploa&nbsp;ACCEPTING&nbsp;DUPLICATE&nbsp;KEYS.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;COMMIT&nbsp;WORK.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;'数据保存成功！'&nbsp;TYPE&nbsp;'S'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+ENDFORM.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*Text&nbsp;elements<br />
+*----------------------------------------------------------<br />
+*&nbsp;001&nbsp;输入参数<br />
+*&nbsp;CM7&nbsp;起始日期/时间<br />
+*&nbsp;CM8&nbsp;截止日期/时间<br />
+*&nbsp;CM9&nbsp;/<br />
+<br />
+<br />
+*Selection&nbsp;texts<br />
+*----------------------------------------------------------<br />
+*&nbsp;S_INAME&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;接口名称<br />
+*&nbsp;S_UNAME&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;用户名<br />
+*&nbsp;S_WNAME&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Web&nbsp;服务名称<br />
+<br />
+<br />
+*Messages<br />
+*----------------------------------------------------------<br />
+*<br />
+*&nbsp;Message&nbsp;class:&nbsp;Hard&nbsp;coded<br />
+*&nbsp;&nbsp;&nbsp;数据保存成功！<br />
+*<br />
+*&nbsp;Message&nbsp;class:&nbsp;SV<br />
+*004&nbsp;&nbsp;&nbsp;未找到与选择条件相匹配的条目。<br />
+            </div>
+          </td>
+        </tr>
+      </table>
+      </td>
+      </tr>
+   <tr>
+<td class="footer">Extracted by Mass Download version 1.5.2 - E.G.Mellodew. 1998-2022. Sap Release 755</td>
+   </tr>
+</table>
+</body>
+</html>

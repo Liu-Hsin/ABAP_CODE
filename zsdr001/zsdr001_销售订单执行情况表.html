@@ -1,0 +1,1188 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=GB2312" />
+<title>ZSDR001</title>
+<style type="text/css">
+.code{ font-family:"Courier New", Courier, monospace; color:#000; font-size:14px; background-color:#F2F4F7 }
+  .codeComment {font-family:"Courier New", Courier, monospace; color:#0000F0; font-size:14px; background-color:#F2F4F7 }
+  .normalBold{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; font-weight:800 }
+  .normalBoldLarge{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+</style>
+<style type="text/css">
+  .normal{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px }
+  .footer{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; text-align: center }
+  h2{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+  h3{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:14px; font-weight:800 }
+  .outerTable{
+   background-color:#E0E7ED;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-right-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+  .innerTable{
+   background-color:#F2F4F7;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-bottom-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+</style>
+</head>
+<body>
+<table class="outerTable">
+  <tr class="normalBoldLarge">
+     <td><h2>Code listing for: ZSDR001</h2>
+<h3> Description: 销售订单执行情况表</h3></td>
+   </tr>
+  <tr>
+     <td>
+     <table class="innerTable">
+       <tr>
+          <td>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Report&nbsp;ZSDR001<br />
+*&---------------------------------------------------------------------*<br />
+*&<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+REPORT zsdr001 NO STANDARD PAGE HEADING LINE-SIZE 255<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE-ID&nbsp;zsdmsg.<br />
+<br />
+TABLES: vbak, vbap, knmt.<br />
+<br />
+<br />
+DATA: BEGIN OF it_tvak OCCURS 0,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;auart&nbsp;TYPE&nbsp;vbak-auart,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;END&nbsp;OF&nbsp;it_tvak.<br />
+RANGES r_auart FOR vbak-auart.<br />
+<br />
+<br />
+DATA it_vbak TYPE vbak OCCURS 0 WITH HEADER LINE.<br />
+DATA it_vbap TYPE SORTED TABLE OF vbap WITH UNIQUE KEY vbeln posnr WITH HEADER LINE.<br />
+DATA it_vbkd TYPE SORTED TABLE OF vbkd WITH UNIQUE KEY vbeln WITH HEADER LINE.<br />
+DATA it_vbep TYPE SORTED TABLE OF vbep WITH UNIQUE KEY vbeln posnr etenr WITH HEADER LINE.<br />
+DATA it_lips TYPE SORTED TABLE OF lips WITH UNIQUE KEY vbeln posnr WITH HEADER LINE.<br />
+DATA it_likp TYPE SORTED TABLE OF likp WITH UNIQUE KEY vbeln WITH HEADER LINE.<br />
+DATA it_vbrp TYPE vbrp OCCURS 0 WITH HEADER LINE.<br />
+DATA it_vbrk TYPE SORTED TABLE OF vbrk WITH UNIQUE KEY vbeln WITH HEADER LINE.<br />
+DATA it_vbfa TYPE SORTED TABLE OF vbfa WITH NON-UNIQUE KEY vbelv posnv WITH HEADER LINE.<br />
+<br />
+<br />
+DATA v_tabix TYPE sy-tabix.<br />
+DATA v_zexit TYPE char1.<br />
+DATA v_vgbel TYPE vbrp-vgbel.<br />
+DATA v_vgpos TYPE vbrp-vgpos.<br />
+DATA v_end   TYPE char1.<br />
+DATA wa_vbrp TYPE vbrp.<br />
+DATA wa_tvap TYPE tvap.<br />
+TYPES: BEGIN OF tp_ykpsl,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vbeln&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;vbap-vbeln,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;posnr&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;vbap-posnr,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vbeln_dn&nbsp;TYPE&nbsp;lips-vbeln,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;posnr_dn&nbsp;TYPE&nbsp;lips-posnr,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vbeln_bl&nbsp;TYPE&nbsp;vbrp-vbeln,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;posnr_bl&nbsp;TYPE&nbsp;vbrp-posnr,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fkimg&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;vbrp-fkimg,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;END&nbsp;OF&nbsp;tp_ykpsl.<br />
+DATA it_ykpsl TYPE STANDARD TABLE OF tp_ykpsl WITH HEADER LINE.<br />
+DATA it_ykpsl_so TYPE SORTED TABLE OF tp_ykpsl WITH NON-UNIQUE KEY vbeln posnr WITH HEADER LINE.<br />
+DATA it_ykpsl_dn TYPE SORTED TABLE OF tp_ykpsl WITH NON-UNIQUE KEY vbeln_dn posnr_dn WITH HEADER LINE.<br />
+DATA wa_thead   TYPE thead.<br />
+DATA it_tline   TYPE tline OCCURS 0 WITH HEADER LINE.<br />
+DATA v_domvalue TYPE dd07v-domvalue_l.<br />
+DATA v_ddtext   TYPE dd07v-ddtext.<br />
+<br />
+DATA: BEGIN OF it_show OCCURS 0,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vbeln&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;vbak-vbeln,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;posnr&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;vbap-posnr,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vkorg&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;vbak-vkorg,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vtext_vko&nbsp;TYPE&nbsp;tvkot-vtext,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vtweg&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;vbak-vtweg,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vtext_vtw&nbsp;TYPE&nbsp;tvtwt-vtext,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vkbur&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;vbak-vkbur,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bezei_vkb&nbsp;TYPE&nbsp;tvkbt-bezei,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;kunnr_so&nbsp;&nbsp;TYPE&nbsp;vbak-kunnr,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;name1_so&nbsp;&nbsp;TYPE&nbsp;kna1-name1,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bstkd&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;vbkd-bstkd,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;erdat_so&nbsp;&nbsp;TYPE&nbsp;vbak-erdat,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;erzet_so&nbsp;&nbsp;TYPE&nbsp;vbak-erzet,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ernam_so&nbsp;&nbsp;TYPE&nbsp;vbak-ernam,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;auart&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;vbak-auart,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bezei_aua&nbsp;TYPE&nbsp;tvakt-bezei,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ztext_soh&nbsp;TYPE&nbsp;char255,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;销售订单抬头文本<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;augru&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;vbak-augru,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bezei_aug&nbsp;TYPE&nbsp;tvaut-bezei,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;zddyy&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;char40,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;订单原因<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lifsk&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;vbak-lifsk,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vtext_lif&nbsp;TYPE&nbsp;tvlst-vtext,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;zddjhdj&nbsp;&nbsp;&nbsp;TYPE&nbsp;char40,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;订单交货冻结<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;faksk&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;vbak-faksk,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vtext_fak&nbsp;TYPE&nbsp;tvlst-vtext,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;zddkpdj&nbsp;&nbsp;&nbsp;TYPE&nbsp;char40,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;订单开票冻结<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lfgsk&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;vbak-lfgsk,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;zddjhzt&nbsp;&nbsp;&nbsp;TYPE&nbsp;char40,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;订单交货状态<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;prsdt_so&nbsp;&nbsp;TYPE&nbsp;vbkd-prsdt,<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;matnr&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;vbap-matnr,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;arktx&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;vbap-arktx,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;kdmat&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;knmt-kdmat,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mvgr1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;mvke-mvgr1,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bezei&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;tvm1t-bezei,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pstyv&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;vbap-pstyv,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;zddsl&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;vbap-zmeng,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;订单数量<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;meins_so&nbsp;&nbsp;TYPE&nbsp;vbap-meins,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;msehl_so&nbsp;&nbsp;TYPE&nbsp;t006a-msehl,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;edatu&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;vbep-edatu,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;kzwi1_so&nbsp;&nbsp;TYPE&nbsp;vbap-kzwi1,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;kzwi2_so&nbsp;&nbsp;TYPE&nbsp;vbap-kzwi2,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;kzwi3_so&nbsp;&nbsp;TYPE&nbsp;vbap-kzwi3,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;zhsdj&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;vbap-netpr,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;含税单价<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;waerk&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;vbap-waerk,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ztext_soi&nbsp;TYPE&nbsp;char255,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;销售订单行项目文本<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;klmeng&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;vbap-klmeng,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dlvqty_bu&nbsp;TYPE&nbsp;vbep-dlvqty_bu,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;zyjhje&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;vbap-netpr,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;已交货金额<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ordqty_bu&nbsp;TYPE&nbsp;vbep-ordqty_bu,<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vbeln_dn&nbsp;&nbsp;TYPE&nbsp;likp-vbeln,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;posnr_dn&nbsp;&nbsp;TYPE&nbsp;lips-posnr,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;kunnr_dn&nbsp;&nbsp;TYPE&nbsp;likp-kunnr,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;name1_dn&nbsp;&nbsp;TYPE&nbsp;adrc-name1,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;street&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;adrc-street,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ztext_dnh&nbsp;TYPE&nbsp;char255,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;交货单抬头文本<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lfart&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;likp-lfart,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vtext_lfa&nbsp;TYPE&nbsp;tvlkt-vtext,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;kostk&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;likp-kostk,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;zjpzt&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;char40,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;拣配状态<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wbstk&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;likp-wbstk,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;zgzzt&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;char40,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;交货单过账状态<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ernam_dn&nbsp;&nbsp;TYPE&nbsp;likp-ernam,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;erdat_dn&nbsp;&nbsp;TYPE&nbsp;likp-erdat,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;erzet_dn&nbsp;&nbsp;TYPE&nbsp;likp-erzet,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wadat&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;likp-wadat,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wadat_ist&nbsp;TYPE&nbsp;likp-wadat_ist,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;btgew&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;likp-btgew,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gewei&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;likp-gewei,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;anzpk&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;likp-anzpk,<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lfimg&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;lips-lfimg,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;meins_dn&nbsp;&nbsp;TYPE&nbsp;lips-meins,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;msehl_dn&nbsp;&nbsp;TYPE&nbsp;t006a-msehl,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;werks&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;lips-werks,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lgort&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;lips-lgort,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lgobe&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;t001l-lgobe,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;charg&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;lips-charg,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;uecha&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;lips-uecha,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;inco1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;likp-inco1,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;inco2_l&nbsp;&nbsp;&nbsp;TYPE&nbsp;likp-inco2_l,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ztext_dni&nbsp;TYPE&nbsp;char255,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;交货单行项目文本<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vbeln_bl&nbsp;&nbsp;TYPE&nbsp;vbrk-vbeln,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;posnr_bl&nbsp;&nbsp;TYPE&nbsp;vbrp-posnr,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vbeln_blc&nbsp;TYPE&nbsp;vbrk-vbeln,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rfbsk&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;vbrk-rfbsk,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;zfpgzzt&nbsp;&nbsp;&nbsp;TYPE&nbsp;char40,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;发票过账状态<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ztext_blh&nbsp;TYPE&nbsp;char255,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;发票抬头文本<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;erdat_bl&nbsp;&nbsp;TYPE&nbsp;vbrk-erdat,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;erzet_bl&nbsp;&nbsp;TYPE&nbsp;vbrk-erzet,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ernam_bl&nbsp;&nbsp;TYPE&nbsp;vbrk-ernam,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fkdat&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;vbrk-fkdat,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;zterm&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;vbrk-zterm,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xblnr&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;vbrk-xblnr,<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fkimg&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;vbrp-fkimg,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;meins_bl&nbsp;&nbsp;TYPE&nbsp;vbrp-meins,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;kzwi1_bl&nbsp;&nbsp;TYPE&nbsp;vbrp-kzwi1,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;kzwi2_bl&nbsp;&nbsp;TYPE&nbsp;vbrp-kzwi2,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;kzwi3_bl&nbsp;&nbsp;TYPE&nbsp;vbrp-kzwi3,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;zkphsdj&nbsp;&nbsp;&nbsp;TYPE&nbsp;vbrp-netwr,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;开票含税单价<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;kursk&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;vbrp-kursk,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;prsdt_bl&nbsp;&nbsp;TYPE&nbsp;vbrp-prsdt,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mwsk1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;vbrp-mwsk1,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;zwkpsl&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;vbrp-fkimg,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;未开票数量<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;zwkphsje&nbsp;&nbsp;TYPE&nbsp;vbrp-netwr,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;未开票含税金额<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;END&nbsp;OF&nbsp;it_show.<br />
+<br />
+<br />
+TYPE-POOLS: slis.<br />
+DATA: wa_layout_lvc TYPE lvc_s_layo.<br />
+DATA: wa_fieldcat_lvc TYPE lvc_s_fcat.<br />
+DATA: it_fieldcat_lvc TYPE lvc_t_fcat.<br />
+DATA: ob_cl_gui_alv_grid TYPE REF TO cl_gui_alv_grid.<br />
+DEFINE add_field.<br />
+&nbsp;&nbsp;CLEAR:&nbsp;wa_fieldcat_lvc.<br />
+&nbsp;&nbsp;wa_fieldcat_lvc-fieldname&nbsp;=&nbsp;'&1'.<br />
+&nbsp;&nbsp;wa_fieldcat_lvc-coltext&nbsp;&nbsp;&nbsp;=&nbsp;&2.<br />
+&nbsp;&nbsp;wa_fieldcat_lvc-scrtext_l&nbsp;=&nbsp;&2.<br />
+&nbsp;&nbsp;IF&nbsp;wa_fieldcat_lvc-fieldname&nbsp;=&nbsp;'VBELN'&nbsp;&nbsp;&nbsp;&nbsp;OR&nbsp;wa_fieldcat_lvc-fieldname&nbsp;=&nbsp;'VBELN_DN'<br />
+&nbsp;&nbsp;OR&nbsp;wa_fieldcat_lvc-fieldname&nbsp;=&nbsp;'VBELN_BL'&nbsp;OR&nbsp;wa_fieldcat_lvc-fieldname&nbsp;=&nbsp;'VBELN_BLC'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_fieldcat_lvc-edit_mask&nbsp;=&nbsp;'==ALPHA'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_fieldcat_lvc-hotspot&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;IF&nbsp;wa_fieldcat_lvc-fieldname&nbsp;=&nbsp;'KUNNR_SO'&nbsp;OR&nbsp;wa_fieldcat_lvc-fieldname&nbsp;=&nbsp;'KUNNR_DN'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_fieldcat_lvc-edit_mask&nbsp;=&nbsp;'==ALPHA'.<br />
+&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;IF&nbsp;wa_fieldcat_lvc-fieldname&nbsp;=&nbsp;'MATNR'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_fieldcat_lvc-inttype&nbsp;=&nbsp;'C'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_fieldcat_lvc-intlen&nbsp;&nbsp;=&nbsp;'18'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_fieldcat_lvc-no_zero&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;APPEND&nbsp;wa_fieldcat_lvc&nbsp;TO&nbsp;it_fieldcat_lvc.<br />
+END-OF-DEFINITION.<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+SELECTION-SCREEN BEGIN OF BLOCK b1 WITH FRAME TITLE TEXT-001.<br />
+&nbsp;&nbsp;SELECT-OPTIONS:&nbsp;s_vbeln&nbsp;FOR&nbsp;vbak-vbeln,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;s_kunnr&nbsp;FOR&nbsp;vbak-kunnr&nbsp;OBLIGATORY,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;s_erdat&nbsp;FOR&nbsp;vbak-erdat,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;s_ernam&nbsp;FOR&nbsp;vbak-ernam,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;s_matnr&nbsp;FOR&nbsp;vbap-matnr,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;s_kdmat&nbsp;FOR&nbsp;knmt-kdmat,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;s_auart&nbsp;FOR&nbsp;vbak-auart.<br />
+SELECTION-SCREEN END OF BLOCK b1.<br />
+<br />
+SELECTION-SCREEN BEGIN OF BLOCK b2 WITH FRAME TITLE TEXT-002.<br />
+&nbsp;&nbsp;SELECT-OPTIONS:&nbsp;s_vkorg&nbsp;FOR&nbsp;vbak-vkorg&nbsp;OBLIGATORY,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;s_vtweg&nbsp;FOR&nbsp;vbak-vtweg&nbsp;OBLIGATORY,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;s_spart&nbsp;FOR&nbsp;vbak-spart,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;s_vkbur&nbsp;FOR&nbsp;vbak-vkbur.<br />
+SELECTION-SCREEN END OF BLOCK b2.<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+INITIALIZATION.<br />
+&nbsp;&nbsp;s_erdat+0(3)&nbsp;=&nbsp;'IBT'.<br />
+&nbsp;&nbsp;s_erdat-low&nbsp;&nbsp;=&nbsp;sy-datum&nbsp;-&nbsp;7.<br />
+&nbsp;&nbsp;s_erdat-high&nbsp;=&nbsp;sy-datum.<br />
+&nbsp;&nbsp;APPEND&nbsp;s_erdat.<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+AT SELECTION-SCREEN.<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+START-OF-SELECTION.<br />
+   </div>
+   <div class="codeComment">
+*权限检查<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;REFRESH:&nbsp;it_tvak,&nbsp;r_auart.<br />
+&nbsp;&nbsp;SELECT&nbsp;auart&nbsp;INTO&nbsp;TABLE&nbsp;it_tvak&nbsp;FROM&nbsp;tvak<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;auart&nbsp;IN&nbsp;s_auart.<br />
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;it_tvak.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;AUTHORITY-CHECK&nbsp;OBJECT&nbsp;'V_VBAK_AAT'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ID&nbsp;'AUART'&nbsp;FIELD&nbsp;it_tvak-auart<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ID&nbsp;'ACTVT'&nbsp;FIELD&nbsp;'03'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;r_auart+0(3)&nbsp;=&nbsp;'IEQ'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;r_auart-low&nbsp;&nbsp;=&nbsp;it_tvak-auart.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;r_auart.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+&nbsp;&nbsp;IF&nbsp;r_auart[]&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;i000&nbsp;WITH&nbsp;'您没有查询订单类型的权限!'&nbsp;DISPLAY&nbsp;LIKE&nbsp;'E'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXIT.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*查询VBAK<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;REFRESH&nbsp;it_vbak.<br />
+&nbsp;&nbsp;SELECT&nbsp;*&nbsp;INTO&nbsp;TABLE&nbsp;it_vbak&nbsp;FROM&nbsp;vbak<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;vbeln&nbsp;IN&nbsp;s_vbeln<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;kunnr&nbsp;IN&nbsp;s_kunnr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;erdat&nbsp;IN&nbsp;s_erdat<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;ernam&nbsp;IN&nbsp;s_ernam<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;auart&nbsp;IN&nbsp;r_auart<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;vkorg&nbsp;IN&nbsp;s_vkorg<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;vtweg&nbsp;IN&nbsp;s_vtweg<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;spart&nbsp;IN&nbsp;s_spart<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;vkbur&nbsp;IN&nbsp;s_vkbur.<br />
+&nbsp;&nbsp;IF&nbsp;it_vbak[]&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;i000&nbsp;WITH&nbsp;'查找不到任何数据!'&nbsp;DISPLAY&nbsp;LIKE&nbsp;'E'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXIT.<br />
+&nbsp;&nbsp;ELSE.<br />
+   </div>
+   <div class="codeComment">
+*权限检查<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;it_vbak.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AUTHORITY-CHECK&nbsp;OBJECT&nbsp;'V_VBAK_VKO'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ID&nbsp;'VKORG'&nbsp;FIELD&nbsp;it_vbak-vkorg<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ID&nbsp;'VTWEG'&nbsp;FIELD&nbsp;it_vbak-vtweg<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ID&nbsp;'SPART'&nbsp;FIELD&nbsp;it_vbak-spart<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ID&nbsp;'ACTVT'&nbsp;FIELD&nbsp;'03'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;&lt;&gt;&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DELETE&nbsp;it_vbak.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDLOOP.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;it_vbak[]&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;i000&nbsp;WITH&nbsp;'您没有查询销售组织/分销渠道/产品组的权限!'&nbsp;DISPLAY&nbsp;LIKE&nbsp;'E'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXIT.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*查询VBAP<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;REFRESH&nbsp;it_vbap.<br />
+&nbsp;&nbsp;SELECT&nbsp;*&nbsp;INTO&nbsp;TABLE&nbsp;it_vbap&nbsp;FROM&nbsp;vbap<br />
+&nbsp;&nbsp;&nbsp;&nbsp;FOR&nbsp;ALL&nbsp;ENTRIES&nbsp;IN&nbsp;it_vbak<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;vbeln&nbsp;=&nbsp;&nbsp;it_vbak-vbeln<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;matnr&nbsp;IN&nbsp;s_matnr.<br />
+&nbsp;&nbsp;IF&nbsp;it_vbap[]&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;i000&nbsp;WITH&nbsp;'查找不到任何数据!'&nbsp;DISPLAY&nbsp;LIKE&nbsp;'E'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXIT.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*查询VBKD<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;REFRESH&nbsp;it_vbkd.<br />
+&nbsp;&nbsp;SELECT&nbsp;*&nbsp;INTO&nbsp;TABLE&nbsp;it_vbkd&nbsp;FROM&nbsp;vbkd<br />
+&nbsp;&nbsp;&nbsp;&nbsp;FOR&nbsp;ALL&nbsp;ENTRIES&nbsp;IN&nbsp;it_vbak<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;vbeln&nbsp;=&nbsp;it_vbak-vbeln<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;posnr&nbsp;=&nbsp;''.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*查询VBEP<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;REFRESH&nbsp;it_vbep.<br />
+&nbsp;&nbsp;SELECT&nbsp;*&nbsp;INTO&nbsp;TABLE&nbsp;it_vbep&nbsp;FROM&nbsp;vbep<br />
+&nbsp;&nbsp;&nbsp;&nbsp;FOR&nbsp;ALL&nbsp;ENTRIES&nbsp;IN&nbsp;it_vbap<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;vbeln&nbsp;=&nbsp;it_vbap-vbeln<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;posnr&nbsp;=&nbsp;it_vbap-posnr.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*查询LIKP，LIPS<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;REFRESH:&nbsp;it_likp,&nbsp;it_lips.<br />
+&nbsp;&nbsp;SELECT&nbsp;*&nbsp;INTO&nbsp;TABLE&nbsp;it_lips&nbsp;FROM&nbsp;lips<br />
+&nbsp;&nbsp;&nbsp;&nbsp;FOR&nbsp;ALL&nbsp;ENTRIES&nbsp;IN&nbsp;it_vbap<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;vgbel&nbsp;=&nbsp;it_vbap-vbeln<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;vgpos&nbsp;=&nbsp;it_vbap-posnr.<br />
+&nbsp;&nbsp;IF&nbsp;NOT&nbsp;it_lips[]&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;*&nbsp;INTO&nbsp;TABLE&nbsp;it_likp&nbsp;FROM&nbsp;likp<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FOR&nbsp;ALL&nbsp;ENTRIES&nbsp;IN&nbsp;it_lips<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;vbeln&nbsp;=&nbsp;it_lips-vbeln.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*查询VBRK，VBRP<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;REFRESH:&nbsp;it_vbrk,&nbsp;it_vbrp.<br />
+&nbsp;&nbsp;SELECT&nbsp;*&nbsp;INTO&nbsp;TABLE&nbsp;it_vbrp&nbsp;FROM&nbsp;vbrp<br />
+&nbsp;&nbsp;&nbsp;&nbsp;FOR&nbsp;ALL&nbsp;ENTRIES&nbsp;IN&nbsp;it_vbap<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;vgbel&nbsp;=&nbsp;it_vbap-vbeln<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;vgpos&nbsp;=&nbsp;it_vbap-posnr.<br />
+&nbsp;&nbsp;IF&nbsp;NOT&nbsp;it_lips[]&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;*&nbsp;APPENDING&nbsp;TABLE&nbsp;it_vbrp&nbsp;FROM&nbsp;vbrp<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FOR&nbsp;ALL&nbsp;ENTRIES&nbsp;IN&nbsp;it_lips<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;vgbel&nbsp;=&nbsp;it_lips-vbeln<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;vgpos&nbsp;=&nbsp;it_lips-posnr.<br />
+&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;IF&nbsp;NOT&nbsp;it_vbrp[]&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;*&nbsp;INTO&nbsp;TABLE&nbsp;it_vbrk&nbsp;FROM&nbsp;vbrk<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FOR&nbsp;ALL&nbsp;ENTRIES&nbsp;IN&nbsp;it_vbrp<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;vbeln&nbsp;=&nbsp;&nbsp;it_vbrp-vbeln<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;vbtyp&nbsp;IN&nbsp;('M','O','P').<br />
+&nbsp;&nbsp;&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;it_vbrp.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;it_vbrk&nbsp;WITH&nbsp;KEY&nbsp;vbeln&nbsp;=&nbsp;it_vbrp-vbeln.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;&lt;&gt;&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DELETE&nbsp;it_vbrp.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDLOOP.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*查询VBFA：取发票冲销<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;REFRESH&nbsp;it_vbfa.<br />
+&nbsp;&nbsp;IF&nbsp;NOT&nbsp;it_vbrp[]&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;*&nbsp;INTO&nbsp;TABLE&nbsp;it_vbfa&nbsp;FROM&nbsp;vbfa<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FOR&nbsp;ALL&nbsp;ENTRIES&nbsp;IN&nbsp;it_vbrp<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;vbelv&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;it_vbrp-vbeln<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;posnv&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;it_vbrp-posnr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;vbtyp_v&nbsp;IN&nbsp;('M','O','P')<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;vbtyp_n&nbsp;IN&nbsp;('N','S').<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*整理数据<br />
+*发票<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;SORT&nbsp;it_vbrp&nbsp;BY&nbsp;vgbel&nbsp;vgpos&nbsp;vbeln&nbsp;posnr.<br />
+&nbsp;&nbsp;REFRESH&nbsp;it_ykpsl.<br />
+&nbsp;&nbsp;CLEAR:&nbsp;v_vgbel,&nbsp;v_vgpos.<br />
+&nbsp;&nbsp;REFRESH&nbsp;it_show.<br />
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;it_vbrp.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;判断当前是否是最大的凭证<br />
+&nbsp;&nbsp;&nbsp;&nbsp;v_tabix&nbsp;=&nbsp;sy-tabix.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;v_vgbel&nbsp;=&nbsp;it_vbrp-vgbel.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;v_vgpos&nbsp;=&nbsp;it_vbrp-vgpos.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;v_end&nbsp;&nbsp;&nbsp;=&nbsp;''.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;v_tabix&nbsp;=&nbsp;v_tabix&nbsp;+&nbsp;1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;it_vbrp&nbsp;INTO&nbsp;wa_vbrp&nbsp;INDEX&nbsp;v_tabix.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;wa_vbrp-vgbel&nbsp;&lt;&gt;&nbsp;v_vgbel&nbsp;OR&nbsp;wa_vbrp-vgpos&nbsp;&lt;&gt;&nbsp;v_vgpos.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;v_end&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ELSE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;v_end&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;it_vbfa.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;it_vbfa&nbsp;WITH&nbsp;KEY&nbsp;vbelv&nbsp;=&nbsp;it_vbrp-vbeln<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;posnv&nbsp;=&nbsp;it_vbrp-posnr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;=&nbsp;0&nbsp;AND&nbsp;v_end&nbsp;=&nbsp;''.&nbsp;"&nbsp;不是最大的一笔发票凭证且被冲销了不显示<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CONTINUE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;匹配其他表<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;it_vbrk.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;it_vbrk&nbsp;WITH&nbsp;KEY&nbsp;vbeln&nbsp;=&nbsp;it_vbrp-vbeln.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR:&nbsp;it_lips,&nbsp;it_likp,&nbsp;it_vbap,&nbsp;it_vbak,&nbsp;it_vbkd.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;it_lips&nbsp;WITH&nbsp;KEY&nbsp;vbeln&nbsp;=&nbsp;it_vbrp-vgbel<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;posnr&nbsp;=&nbsp;it_vbrp-posnr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;it_likp&nbsp;WITH&nbsp;KEY&nbsp;vbeln&nbsp;=&nbsp;it_lips-vbeln.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;it_vbap&nbsp;WITH&nbsp;KEY&nbsp;vbeln&nbsp;=&nbsp;it_lips-vgbel<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;posnr&nbsp;=&nbsp;it_lips-posnr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ELSE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;it_vbap&nbsp;WITH&nbsp;KEY&nbsp;vbeln&nbsp;=&nbsp;it_vbrp-vgbel<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;posnr&nbsp;=&nbsp;it_vbrp-posnr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;it_vbak&nbsp;WITH&nbsp;KEY&nbsp;vbeln&nbsp;=&nbsp;it_vbap-vbeln.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;it_vbkd&nbsp;WITH&nbsp;KEY&nbsp;vbeln&nbsp;=&nbsp;it_vbak-vbeln.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;赋值到显示内表中<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;it_show.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;销售订单<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;sub_set_so.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;v_zexit&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CONTINUE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;交货单<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;sub_set_dn.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;发票<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;sub_set_bl.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;it_show.<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+&nbsp;&nbsp;"&nbsp;计算未开票数量，未开票含税金额<br />
+&nbsp;&nbsp;REFRESH:&nbsp;it_ykpsl_so,&nbsp;it_ykpsl_dn.<br />
+&nbsp;&nbsp;it_ykpsl_so[]&nbsp;=&nbsp;it_ykpsl[].<br />
+&nbsp;&nbsp;it_ykpsl_dn[]&nbsp;=&nbsp;it_ykpsl[].<br />
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;it_show.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;wa_tvap.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;SINGLE&nbsp;*&nbsp;INTO&nbsp;wa_tvap&nbsp;FROM&nbsp;tvap<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;pstyv&nbsp;=&nbsp;it_show-pstyv.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CASE&nbsp;wa_tvap-fkrel.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;''&nbsp;OR&nbsp;'J'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it_show-zwkpsl&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'A'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it_show-zwkpsl&nbsp;=&nbsp;it_show-lfimg.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;it_ykpsl_dn&nbsp;WHERE&nbsp;vbeln_dn&nbsp;=&nbsp;it_show-vbeln_dn<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;posnr_dn&nbsp;=&nbsp;it_show-posnr_dn.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it_show-zwkpsl&nbsp;=&nbsp;it_show-zwkpsl&nbsp;-&nbsp;it_ykpsl_dn-fkimg.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDLOOP.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it_show-zwkphsje&nbsp;=&nbsp;it_show-zhsdj&nbsp;*&nbsp;it_show-zwkpsl.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'B'&nbsp;OR&nbsp;'C'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it_show-zwkpsl&nbsp;=&nbsp;it_show-zddsl.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;it_ykpsl_so&nbsp;WHERE&nbsp;vbeln&nbsp;=&nbsp;it_show-vbeln<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;posnr&nbsp;=&nbsp;it_show-posnr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it_show-zwkpsl&nbsp;=&nbsp;it_show-zwkpsl&nbsp;-&nbsp;it_ykpsl_so-fkimg.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDLOOP.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it_show-zwkphsje&nbsp;=&nbsp;it_show-zhsdj&nbsp;*&nbsp;it_show-zwkpsl.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDCASE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MODIFY&nbsp;it_show.<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*交货单<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;it_lips.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;it_show&nbsp;WITH&nbsp;KEY&nbsp;vbeln_dn&nbsp;=&nbsp;it_lips-vbeln<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;posnr_dn&nbsp;=&nbsp;it_lips-posnr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;&lt;&gt;&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;it_likp&nbsp;WITH&nbsp;KEY&nbsp;vbeln&nbsp;=&nbsp;it_lips-vbeln.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;it_vbap&nbsp;WITH&nbsp;KEY&nbsp;vbeln&nbsp;=&nbsp;it_lips-vgbel<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;posnr&nbsp;=&nbsp;it_lips-posnr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;it_vbak&nbsp;WITH&nbsp;KEY&nbsp;vbeln&nbsp;=&nbsp;it_vbap-vbeln.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;it_vbkd&nbsp;WITH&nbsp;KEY&nbsp;vbeln&nbsp;=&nbsp;it_vbak-vbeln.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;赋值到显示内表中<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;it_show.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;销售订单<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;sub_set_so.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;v_zexit&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CONTINUE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;交货单<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;sub_set_dn.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;it_show.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*销售订单<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;it_vbap.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;it_show&nbsp;WITH&nbsp;KEY&nbsp;vbeln&nbsp;=&nbsp;it_vbap-vbeln<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;posnr&nbsp;=&nbsp;it_vbap-posnr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;&lt;&gt;&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;it_vbak&nbsp;WITH&nbsp;KEY&nbsp;vbeln&nbsp;=&nbsp;it_vbap-vbeln.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;it_vbkd&nbsp;WITH&nbsp;KEY&nbsp;vbeln&nbsp;=&nbsp;it_vbak-vbeln.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;赋值到显示内表中<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;it_show.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;销售订单<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;sub_set_so.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;v_zexit&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CONTINUE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;it_show.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+&nbsp;&nbsp;SORT&nbsp;it_show&nbsp;BY&nbsp;vbeln&nbsp;posnr&nbsp;vbeln_dn&nbsp;posnr_dn&nbsp;vbeln_bl&nbsp;posnr_bl.<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*ALV显示<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;REFRESH&nbsp;it_fieldcat_lvc.<br />
+&nbsp;&nbsp;add_field&nbsp;&nbsp;vbeln&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'销售订单号'.<br />
+&nbsp;&nbsp;add_field&nbsp;&nbsp;posnr&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'订单行项目号'.<br />
+&nbsp;&nbsp;add_field&nbsp;&nbsp;vkorg&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'销售组织'.<br />
+&nbsp;&nbsp;add_field&nbsp;&nbsp;vtext_vko&nbsp;&nbsp;&nbsp;'销售组织描述'.<br />
+&nbsp;&nbsp;add_field&nbsp;&nbsp;vtweg&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'分销渠道'.<br />
+&nbsp;&nbsp;add_field&nbsp;&nbsp;vtext_vtw&nbsp;&nbsp;&nbsp;'分销渠道描述'.<br />
+&nbsp;&nbsp;add_field&nbsp;&nbsp;vkbur&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'销售办公室'.<br />
+&nbsp;&nbsp;add_field&nbsp;&nbsp;bezei_vkb&nbsp;&nbsp;&nbsp;'销售办公室描述'.<br />
+&nbsp;&nbsp;add_field&nbsp;&nbsp;kunnr_so&nbsp;&nbsp;&nbsp;&nbsp;'售达方编码'.<br />
+&nbsp;&nbsp;add_field&nbsp;&nbsp;name1_so&nbsp;&nbsp;&nbsp;&nbsp;'售达方名称'.<br />
+&nbsp;&nbsp;add_field&nbsp;&nbsp;bstkd&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'客户参考'.<br />
+&nbsp;&nbsp;add_field&nbsp;&nbsp;erdat_so&nbsp;&nbsp;&nbsp;&nbsp;'订单创建日期'.<br />
+&nbsp;&nbsp;add_field&nbsp;&nbsp;erzet_so&nbsp;&nbsp;&nbsp;&nbsp;'订单创建时间'.<br />
+&nbsp;&nbsp;add_field&nbsp;&nbsp;ernam_so&nbsp;&nbsp;&nbsp;&nbsp;'订单创建人'.<br />
+&nbsp;&nbsp;add_field&nbsp;&nbsp;auart&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'订单类型'.<br />
+&nbsp;&nbsp;add_field&nbsp;&nbsp;bezei_aua&nbsp;&nbsp;&nbsp;'订单类型描述'.<br />
+&nbsp;&nbsp;add_field&nbsp;&nbsp;ztext_soh&nbsp;&nbsp;&nbsp;'订单备注'.<br />
+&nbsp;&nbsp;add_field&nbsp;&nbsp;zddyy&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'订单原因'.<br />
+&nbsp;&nbsp;add_field&nbsp;&nbsp;zddjhdj&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'订单交货冻结'.<br />
+&nbsp;&nbsp;add_field&nbsp;&nbsp;zddkpdj&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'订单开票冻结'.<br />
+&nbsp;&nbsp;add_field&nbsp;&nbsp;zddjhzt&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'订单交货状态'.<br />
+&nbsp;&nbsp;add_field&nbsp;&nbsp;prsdt_so&nbsp;&nbsp;&nbsp;&nbsp;'定价日期'.<br />
+&nbsp;&nbsp;add_field&nbsp;&nbsp;matnr&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'物料编码'.<br />
+&nbsp;&nbsp;add_field&nbsp;&nbsp;arktx&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'物料描述'.<br />
+&nbsp;&nbsp;add_field&nbsp;&nbsp;kdmat&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'客户物料号'.<br />
+&nbsp;&nbsp;add_field&nbsp;&nbsp;mvgr1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'产品系列'.<br />
+&nbsp;&nbsp;add_field&nbsp;&nbsp;bezei&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'产品系列描述'.<br />
+&nbsp;&nbsp;add_field&nbsp;&nbsp;pstyv&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'项目类别'.<br />
+&nbsp;&nbsp;add_field&nbsp;&nbsp;zddsl&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'订单数量'.<br />
+&nbsp;&nbsp;add_field&nbsp;&nbsp;meins_so&nbsp;&nbsp;&nbsp;&nbsp;'单位'.<br />
+&nbsp;&nbsp;add_field&nbsp;&nbsp;msehl_so&nbsp;&nbsp;&nbsp;&nbsp;'单位描述'.<br />
+&nbsp;&nbsp;add_field&nbsp;&nbsp;edatu&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'交货日期'.<br />
+&nbsp;&nbsp;add_field&nbsp;&nbsp;kzwi1_so&nbsp;&nbsp;&nbsp;&nbsp;'订单含税金额'.<br />
+&nbsp;&nbsp;add_field&nbsp;&nbsp;kzwi2_so&nbsp;&nbsp;&nbsp;&nbsp;'订单税额'.<br />
+&nbsp;&nbsp;add_field&nbsp;&nbsp;kzwi3_so&nbsp;&nbsp;&nbsp;&nbsp;'订单不含税金额'.<br />
+&nbsp;&nbsp;add_field&nbsp;&nbsp;zhsdj&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'销售含税单价'.<br />
+&nbsp;&nbsp;add_field&nbsp;&nbsp;waerk&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'订单币制'.<br />
+&nbsp;&nbsp;add_field&nbsp;&nbsp;ztext_soi&nbsp;&nbsp;&nbsp;'订单行项目备注'.<br />
+&nbsp;&nbsp;add_field&nbsp;&nbsp;klmeng&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'累计确认数量'.<br />
+&nbsp;&nbsp;add_field&nbsp;&nbsp;dlvqty_bu&nbsp;&nbsp;&nbsp;'已交货数量'.<br />
+&nbsp;&nbsp;add_field&nbsp;&nbsp;zyjhje&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'已交货金额'.<br />
+&nbsp;&nbsp;add_field&nbsp;&nbsp;ordqty_bu&nbsp;&nbsp;&nbsp;'待交货数量'.<br />
+&nbsp;&nbsp;add_field&nbsp;&nbsp;vbeln_dn&nbsp;&nbsp;&nbsp;&nbsp;'交货单号'.<br />
+&nbsp;&nbsp;add_field&nbsp;&nbsp;posnr_dn&nbsp;&nbsp;&nbsp;&nbsp;'交货单行号'.<br />
+&nbsp;&nbsp;add_field&nbsp;&nbsp;kunnr_dn&nbsp;&nbsp;&nbsp;&nbsp;'收货方编码'.<br />
+&nbsp;&nbsp;add_field&nbsp;&nbsp;name1_dn&nbsp;&nbsp;&nbsp;&nbsp;'收货方名称'.<br />
+&nbsp;&nbsp;add_field&nbsp;&nbsp;street&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'收货地点'.<br />
+&nbsp;&nbsp;add_field&nbsp;&nbsp;ztext_dnh&nbsp;&nbsp;&nbsp;'交货抬头备注'.<br />
+&nbsp;&nbsp;add_field&nbsp;&nbsp;lfart&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'交货单类型'.<br />
+&nbsp;&nbsp;add_field&nbsp;&nbsp;vtext_lfa&nbsp;&nbsp;&nbsp;'交货单类型描述'.<br />
+&nbsp;&nbsp;add_field&nbsp;&nbsp;zjpzt&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'拣配状态'.<br />
+&nbsp;&nbsp;add_field&nbsp;&nbsp;zgzzt&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'交货单过账状态'.<br />
+&nbsp;&nbsp;add_field&nbsp;&nbsp;ernam_dn&nbsp;&nbsp;&nbsp;&nbsp;'交货单创建者'.<br />
+&nbsp;&nbsp;add_field&nbsp;&nbsp;erdat_dn&nbsp;&nbsp;&nbsp;&nbsp;'交货单创建日期'.<br />
+&nbsp;&nbsp;add_field&nbsp;&nbsp;erzet_dn&nbsp;&nbsp;&nbsp;&nbsp;'交货单创建时间'.<br />
+&nbsp;&nbsp;add_field&nbsp;&nbsp;wadat&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'计划交货日期'.<br />
+&nbsp;&nbsp;add_field&nbsp;&nbsp;wadat_ist&nbsp;&nbsp;&nbsp;'实际交货日期'.<br />
+&nbsp;&nbsp;add_field&nbsp;&nbsp;btgew&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'总重量'.<br />
+&nbsp;&nbsp;add_field&nbsp;&nbsp;gewei&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'重量单位'.<br />
+&nbsp;&nbsp;add_field&nbsp;&nbsp;anzpk&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'包数'.<br />
+&nbsp;&nbsp;add_field&nbsp;&nbsp;lfimg&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'交货数量'.<br />
+&nbsp;&nbsp;add_field&nbsp;&nbsp;meins_dn&nbsp;&nbsp;&nbsp;&nbsp;'交货单位'.<br />
+&nbsp;&nbsp;add_field&nbsp;&nbsp;msehl_dn&nbsp;&nbsp;&nbsp;&nbsp;'交货单位描述'.<br />
+&nbsp;&nbsp;add_field&nbsp;&nbsp;werks&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'交货工厂'.<br />
+&nbsp;&nbsp;add_field&nbsp;&nbsp;lgort&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'交货库位'.<br />
+&nbsp;&nbsp;add_field&nbsp;&nbsp;lgobe&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'库位描述'.<br />
+&nbsp;&nbsp;add_field&nbsp;&nbsp;charg&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'批次'.<br />
+&nbsp;&nbsp;add_field&nbsp;&nbsp;uecha&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'上层项目号'.<br />
+&nbsp;&nbsp;add_field&nbsp;&nbsp;inco1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'贸易条款'.<br />
+&nbsp;&nbsp;add_field&nbsp;&nbsp;inco2_l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'贸易条款2'.<br />
+&nbsp;&nbsp;add_field&nbsp;&nbsp;ztext_dni&nbsp;&nbsp;&nbsp;'交货行备注'.<br />
+&nbsp;&nbsp;add_field&nbsp;&nbsp;vbeln_bl&nbsp;&nbsp;&nbsp;&nbsp;'销售发票号'.<br />
+&nbsp;&nbsp;add_field&nbsp;&nbsp;posnr_bl&nbsp;&nbsp;&nbsp;&nbsp;'发票行号'.<br />
+&nbsp;&nbsp;add_field&nbsp;&nbsp;vbeln_blc&nbsp;&nbsp;&nbsp;'取消发票号'.<br />
+&nbsp;&nbsp;add_field&nbsp;&nbsp;zfpgzzt&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'发票过账状态'.<br />
+&nbsp;&nbsp;add_field&nbsp;&nbsp;ztext_blh&nbsp;&nbsp;&nbsp;'发票备注'.<br />
+&nbsp;&nbsp;add_field&nbsp;&nbsp;erdat_bl&nbsp;&nbsp;&nbsp;&nbsp;'发票创建日期'.<br />
+&nbsp;&nbsp;add_field&nbsp;&nbsp;erzet_bl&nbsp;&nbsp;&nbsp;&nbsp;'发票创建时间'.<br />
+&nbsp;&nbsp;add_field&nbsp;&nbsp;ernam_bl&nbsp;&nbsp;&nbsp;&nbsp;'发票创建人'.<br />
+&nbsp;&nbsp;add_field&nbsp;&nbsp;fkdat&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'开票日期'.<br />
+&nbsp;&nbsp;add_field&nbsp;&nbsp;zterm&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'付款条件'.<br />
+&nbsp;&nbsp;add_field&nbsp;&nbsp;xblnr&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'VAT发票号'.<br />
+&nbsp;&nbsp;add_field&nbsp;&nbsp;fkimg&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'开票数量'.<br />
+&nbsp;&nbsp;add_field&nbsp;&nbsp;meins_bl&nbsp;&nbsp;&nbsp;&nbsp;'开票单位'.<br />
+&nbsp;&nbsp;add_field&nbsp;&nbsp;kzwi1_bl&nbsp;&nbsp;&nbsp;&nbsp;'开票含税金额'.<br />
+&nbsp;&nbsp;add_field&nbsp;&nbsp;kzwi2_bl&nbsp;&nbsp;&nbsp;&nbsp;'开票税额'.<br />
+&nbsp;&nbsp;add_field&nbsp;&nbsp;kzwi3_bl&nbsp;&nbsp;&nbsp;&nbsp;'开票不含税金额'.<br />
+&nbsp;&nbsp;add_field&nbsp;&nbsp;zkphsdj&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'开票含税单价'.<br />
+&nbsp;&nbsp;add_field&nbsp;&nbsp;kursk&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'开票汇率'.<br />
+&nbsp;&nbsp;add_field&nbsp;&nbsp;prsdt_bl&nbsp;&nbsp;&nbsp;&nbsp;'发票定价日期'.<br />
+&nbsp;&nbsp;add_field&nbsp;&nbsp;mwsk1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'税码'.<br />
+&nbsp;&nbsp;add_field&nbsp;&nbsp;zwkpsl&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'未开票数量'.<br />
+&nbsp;&nbsp;add_field&nbsp;&nbsp;zwkphsje&nbsp;&nbsp;&nbsp;&nbsp;'未开票含税金额'.<br />
+<br />
+&nbsp;&nbsp;wa_layout_lvc-zebra&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;wa_layout_lvc-cwidth_opt&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;wa_layout_lvc-no_rowmark&nbsp;=&nbsp;'X'.<br />
+<br />
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'REUSE_ALV_GRID_DISPLAY_LVC'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_callback_program&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;sy-repid<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"i_callback_pf_status_set&nbsp;=&nbsp;'SUB_PF_STATUS_SET'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_callback_user_command&nbsp;&nbsp;=&nbsp;'SUB_USER_COMMAND'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;is_layout_lvc&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;wa_layout_lvc<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it_fieldcat_lvc&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;it_fieldcat_lvc[]<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_default&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'X'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_save&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'A'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;TABLES<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;t_outtab&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;it_show<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;program_error&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTHERS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;2.<br />
+&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;&lt;&gt;&nbsp;0.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+END-OF-SELECTION.<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+FORM sub_set_so .<br />
+&nbsp;&nbsp;it_show-vbeln&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;it_vbak-vbeln.<br />
+&nbsp;&nbsp;it_show-posnr&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;it_vbap-posnr.<br />
+&nbsp;&nbsp;it_show-vkorg&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;it_vbak-vkorg.<br />
+&nbsp;&nbsp;SELECT&nbsp;SINGLE&nbsp;vtext&nbsp;INTO&nbsp;it_show-vtext_vko&nbsp;FROM&nbsp;tvkot<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;vkorg&nbsp;=&nbsp;it_show-vkorg<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;spras&nbsp;=&nbsp;'1'.<br />
+&nbsp;&nbsp;it_show-vtweg&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;it_vbak-vtweg.<br />
+&nbsp;&nbsp;SELECT&nbsp;SINGLE&nbsp;vtext&nbsp;INTO&nbsp;it_show-vtext_vtw&nbsp;FROM&nbsp;tvtwt<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;vtweg&nbsp;=&nbsp;it_show-vtweg<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;spras&nbsp;=&nbsp;'1'.<br />
+&nbsp;&nbsp;it_show-vkbur&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;it_vbak-vkbur.<br />
+&nbsp;&nbsp;SELECT&nbsp;SINGLE&nbsp;bezei&nbsp;INTO&nbsp;it_show-bezei_vkb&nbsp;FROM&nbsp;tvkbt<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;vkbur&nbsp;=&nbsp;it_show-vkbur<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;spras&nbsp;=&nbsp;'1'.<br />
+&nbsp;&nbsp;it_show-kunnr_so&nbsp;&nbsp;&nbsp;=&nbsp;it_vbak-kunnr.<br />
+&nbsp;&nbsp;SELECT&nbsp;SINGLE&nbsp;name1&nbsp;INTO&nbsp;it_show-name1_so&nbsp;FROM&nbsp;kna1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;kunnr&nbsp;=&nbsp;it_show-kunnr_so.<br />
+&nbsp;&nbsp;it_show-bstkd&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;it_vbkd-bstkd.<br />
+&nbsp;&nbsp;it_show-erdat_so&nbsp;&nbsp;&nbsp;=&nbsp;it_vbak-erdat.<br />
+&nbsp;&nbsp;it_show-erzet_so&nbsp;&nbsp;&nbsp;=&nbsp;it_vbak-erzet.<br />
+&nbsp;&nbsp;it_show-ernam_so&nbsp;&nbsp;&nbsp;=&nbsp;it_vbak-ernam.<br />
+&nbsp;&nbsp;it_show-auart&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;it_vbak-auart.<br />
+&nbsp;&nbsp;SELECT&nbsp;SINGLE&nbsp;bezei&nbsp;INTO&nbsp;it_show-bezei_aua&nbsp;FROM&nbsp;tvakt<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;auart&nbsp;=&nbsp;it_show-auart<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;spras&nbsp;=&nbsp;'1'.<br />
+&nbsp;&nbsp;CLEAR&nbsp;wa_thead.&nbsp;REFRESH&nbsp;it_tline.<br />
+&nbsp;&nbsp;wa_thead-tdid&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'Z001'.<br />
+&nbsp;&nbsp;wa_thead-tdspras&nbsp;&nbsp;&nbsp;=&nbsp;'1'.<br />
+&nbsp;&nbsp;wa_thead-tdname&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;it_show-vbeln.<br />
+&nbsp;&nbsp;wa_thead-tdobject&nbsp;&nbsp;=&nbsp;'VBBK'.<br />
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'READ_TEXT'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;client&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;sy-mandt<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;id&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;wa_thead-tdid<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;language&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;wa_thead-tdspras<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;name&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;wa_thead-tdname<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;object&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;wa_thead-tdobject<br />
+&nbsp;&nbsp;&nbsp;&nbsp;TABLES<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lines&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;it_tline<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;id&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;language&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;name&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;3<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;not_found&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;4<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;object&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;5<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;reference_check&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;6<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wrong_access_to_archive&nbsp;=&nbsp;7<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTHERS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;8.<br />
+&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;it_tline.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CONCATENATE&nbsp;it_show-ztext_soh&nbsp;it_tline-tdline&nbsp;INTO&nbsp;it_show-ztext_soh.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDLOOP.<br />
+&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;it_show-augru&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;it_vbak-augru.<br />
+&nbsp;&nbsp;SELECT&nbsp;SINGLE&nbsp;bezei&nbsp;INTO&nbsp;it_show-bezei_aug&nbsp;FROM&nbsp;tvaut<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;augru&nbsp;=&nbsp;it_show-augru<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;spras&nbsp;=&nbsp;'1'.<br />
+&nbsp;&nbsp;CONCATENATE&nbsp;it_show-augru&nbsp;it_show-bezei_aug&nbsp;INTO&nbsp;it_show-zddyy.<br />
+&nbsp;&nbsp;it_show-lifsk&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;it_vbak-lifsk.<br />
+&nbsp;&nbsp;SELECT&nbsp;SINGLE&nbsp;vtext&nbsp;INTO&nbsp;it_show-vtext_lif&nbsp;FROM&nbsp;tvlst<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;lifsp&nbsp;=&nbsp;it_show-lifsk<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;spras&nbsp;=&nbsp;'1'.<br />
+&nbsp;&nbsp;CONCATENATE&nbsp;it_show-lifsk&nbsp;it_show-vtext_lif&nbsp;INTO&nbsp;it_show-zddjhdj.<br />
+&nbsp;&nbsp;it_show-faksk&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;it_vbak-faksk.<br />
+&nbsp;&nbsp;SELECT&nbsp;SINGLE&nbsp;vtext&nbsp;INTO&nbsp;it_show-vtext_fak&nbsp;FROM&nbsp;tvfst<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;faksp&nbsp;=&nbsp;it_show-faksk<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;spras&nbsp;=&nbsp;'1'.<br />
+&nbsp;&nbsp;CONCATENATE&nbsp;it_show-faksk&nbsp;it_show-vtext_fak&nbsp;INTO&nbsp;it_show-zddkpdj.<br />
+&nbsp;&nbsp;it_show-lfgsk&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;it_vbak-lfgsk.<br />
+&nbsp;&nbsp;CASE&nbsp;it_show-lfgsk.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;''.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it_show-zddjhzt&nbsp;=&nbsp;'与交货无关'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'A'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it_show-zddjhzt&nbsp;=&nbsp;'未交货'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'B'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it_show-zddjhzt&nbsp;=&nbsp;'部分交货'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'C'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it_show-zddjhzt&nbsp;=&nbsp;'完全交货'.<br />
+&nbsp;&nbsp;ENDCASE.<br />
+&nbsp;&nbsp;CONCATENATE&nbsp;it_show-lfgsk&nbsp;it_show-zddjhzt&nbsp;INTO&nbsp;it_show-zddjhzt.<br />
+&nbsp;&nbsp;it_show-prsdt_so&nbsp;&nbsp;&nbsp;=&nbsp;it_vbkd-prsdt.<br />
+&nbsp;&nbsp;it_show-matnr&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;it_vbap-matnr.<br />
+&nbsp;&nbsp;it_show-arktx&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;it_vbap-arktx.<br />
+&nbsp;&nbsp;CLEAR&nbsp;v_zexit.<br />
+&nbsp;&nbsp;SELECT&nbsp;SINGLE&nbsp;kdmat&nbsp;INTO&nbsp;it_show-kdmat&nbsp;FROM&nbsp;knmt<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;vkorg&nbsp;=&nbsp;it_vbak-vkorg<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;vtweg&nbsp;=&nbsp;it_vbak-vtweg<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;kunnr&nbsp;=&nbsp;it_vbak-kunnr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;matnr&nbsp;=&nbsp;it_vbap-matnr.<br />
+&nbsp;&nbsp;IF&nbsp;NOT&nbsp;it_show-kdmat&nbsp;IN&nbsp;s_kdmat.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;v_zexit&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXIT.<br />
+&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;SELECT&nbsp;SINGLE&nbsp;mvgr1&nbsp;INTO&nbsp;it_show-mvgr1&nbsp;FROM&nbsp;mvke<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;matnr&nbsp;=&nbsp;it_vbap-matnr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;vkorg&nbsp;=&nbsp;it_vbak-vkorg<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;vtweg&nbsp;=&nbsp;it_vbak-vtweg.<br />
+&nbsp;&nbsp;SELECT&nbsp;SINGLE&nbsp;bezei&nbsp;INTO&nbsp;it_show-bezei&nbsp;FROM&nbsp;tvm1t<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;mvgr1&nbsp;=&nbsp;it_show-mvgr1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;spras&nbsp;=&nbsp;'1'.<br />
+&nbsp;&nbsp;it_show-pstyv&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;it_vbap-pstyv.<br />
+&nbsp;&nbsp;IF&nbsp;it_show-auart&nbsp;=&nbsp;'ZCR'&nbsp;OR&nbsp;it_show-auart&nbsp;=&nbsp;'ZDR'&nbsp;OR&nbsp;it_show-auart&nbsp;=&nbsp;'ZCQ'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;it_show-zddsl&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;it_vbap-zmeng.<br />
+&nbsp;&nbsp;ELSE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;it_show-zddsl&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;it_vbap-kwmeng.<br />
+&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;it_show-meins_so&nbsp;&nbsp;&nbsp;=&nbsp;it_vbap-meins.<br />
+&nbsp;&nbsp;SELECT&nbsp;SINGLE&nbsp;msehl&nbsp;INTO&nbsp;it_show-msehl_so&nbsp;FROM&nbsp;t006a<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;msehi&nbsp;=&nbsp;it_show-meins_so<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;spras&nbsp;=&nbsp;'1'.<br />
+&nbsp;&nbsp;it_show-kzwi1_so&nbsp;&nbsp;&nbsp;=&nbsp;it_vbap-kzwi1.<br />
+&nbsp;&nbsp;it_show-kzwi2_so&nbsp;&nbsp;&nbsp;=&nbsp;it_vbap-kzwi2.<br />
+&nbsp;&nbsp;it_show-kzwi3_so&nbsp;&nbsp;&nbsp;=&nbsp;it_vbap-kzwi3.<br />
+&nbsp;&nbsp;IF&nbsp;it_show-zddsl&nbsp;&lt;&gt;&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;it_show-zhsdj&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;it_show-kzwi1_so&nbsp;/&nbsp;it_show-zddsl.<br />
+&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;it_show-waerk&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;it_vbap-waerk.<br />
+&nbsp;&nbsp;CLEAR&nbsp;wa_thead.&nbsp;REFRESH&nbsp;it_tline.<br />
+&nbsp;&nbsp;wa_thead-tdid&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'ZI01'.<br />
+&nbsp;&nbsp;wa_thead-tdspras&nbsp;&nbsp;&nbsp;=&nbsp;'1'.<br />
+&nbsp;&nbsp;CONCATENATE&nbsp;it_show-vbeln&nbsp;it_show-posnr&nbsp;INTO&nbsp;wa_thead-tdname.<br />
+&nbsp;&nbsp;wa_thead-tdobject&nbsp;&nbsp;=&nbsp;'VBBP'.<br />
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'READ_TEXT'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;client&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;sy-mandt<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;id&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;wa_thead-tdid<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;language&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;wa_thead-tdspras<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;name&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;wa_thead-tdname<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;object&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;wa_thead-tdobject<br />
+&nbsp;&nbsp;&nbsp;&nbsp;TABLES<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lines&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;it_tline<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;id&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;language&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;name&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;3<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;not_found&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;4<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;object&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;5<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;reference_check&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;6<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wrong_access_to_archive&nbsp;=&nbsp;7<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTHERS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;8.<br />
+&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;it_tline.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CONCATENATE&nbsp;it_show-ztext_soi&nbsp;it_tline-tdline&nbsp;INTO&nbsp;it_show-ztext_soi.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDLOOP.<br />
+&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;it_show-klmeng&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;it_vbap-klmeng.<br />
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;it_vbep&nbsp;WHERE&nbsp;vbeln&nbsp;=&nbsp;it_show-vbeln<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;posnr&nbsp;=&nbsp;it_show-posnr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;it_vbep-etenr&nbsp;=&nbsp;'0001'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it_show-edatu&nbsp;&nbsp;=&nbsp;it_vbep-edatu.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;it_show-dlvqty_bu&nbsp;=&nbsp;it_show-dlvqty_bu&nbsp;+&nbsp;it_vbep-dlvqty_bu.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;it_show-ordqty_bu&nbsp;=&nbsp;it_show-ordqty_bu&nbsp;+&nbsp;it_vbep-ordqty_bu.<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+&nbsp;&nbsp;it_show-zyjhje&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;it_show-zhsdj&nbsp;*&nbsp;it_show-dlvqty_bu.<br />
+ENDFORM.<br />
+<br />
+<br />
+FORM sub_set_dn .<br />
+&nbsp;&nbsp;it_show-vbeln_dn&nbsp;&nbsp;=&nbsp;it_likp-vbeln.<br />
+&nbsp;&nbsp;it_show-posnr_dn&nbsp;&nbsp;=&nbsp;it_lips-posnr.<br />
+&nbsp;&nbsp;it_show-kunnr_dn&nbsp;&nbsp;=&nbsp;it_likp-kunnr.<br />
+&nbsp;&nbsp;SELECT&nbsp;SINGLE&nbsp;adrc~name1&nbsp;adrc~street&nbsp;INTO&nbsp;(it_show-name1_dn,it_show-street)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;adrc&nbsp;INNER&nbsp;JOIN&nbsp;vbpa&nbsp;ON&nbsp;vbpa~adrnr&nbsp;=&nbsp;adrc~addrnumber<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;vbpa~vbeln&nbsp;=&nbsp;it_show-vbeln_dn.<br />
+&nbsp;&nbsp;CLEAR&nbsp;wa_thead.&nbsp;REFRESH&nbsp;it_tline.<br />
+&nbsp;&nbsp;wa_thead-tdid&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'Z001'.<br />
+&nbsp;&nbsp;wa_thead-tdspras&nbsp;&nbsp;&nbsp;=&nbsp;'1'.<br />
+&nbsp;&nbsp;wa_thead-tdname&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;it_show-vbeln_dn.<br />
+&nbsp;&nbsp;wa_thead-tdobject&nbsp;&nbsp;=&nbsp;'VBBK'.<br />
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'READ_TEXT'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;client&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;sy-mandt<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;id&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;wa_thead-tdid<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;language&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;wa_thead-tdspras<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;name&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;wa_thead-tdname<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;object&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;wa_thead-tdobject<br />
+&nbsp;&nbsp;&nbsp;&nbsp;TABLES<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lines&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;it_tline<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;id&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;language&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;name&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;3<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;not_found&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;4<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;object&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;5<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;reference_check&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;6<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wrong_access_to_archive&nbsp;=&nbsp;7<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTHERS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;8.<br />
+&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;it_tline.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CONCATENATE&nbsp;it_show-ztext_dnh&nbsp;it_tline-tdline&nbsp;INTO&nbsp;it_show-ztext_dnh.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDLOOP.<br />
+&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;it_show-lfart&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;it_likp-lfart.<br />
+&nbsp;&nbsp;SELECT&nbsp;SINGLE&nbsp;vtext&nbsp;INTO&nbsp;it_show-vtext_lfa&nbsp;FROM&nbsp;tvlkt<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;lfart&nbsp;=&nbsp;it_show-lfart<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;spras&nbsp;=&nbsp;'1'.<br />
+&nbsp;&nbsp;it_show-kostk&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;it_likp-kostk.<br />
+&nbsp;&nbsp;CASE&nbsp;it_show-kostk.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;''.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it_show-zjpzt&nbsp;=&nbsp;'与拣配无关'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'A'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it_show-zjpzt&nbsp;=&nbsp;'未拣配'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'B'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it_show-zjpzt&nbsp;=&nbsp;'部分拣配'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'C'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it_show-zjpzt&nbsp;=&nbsp;'完全拣配'.<br />
+&nbsp;&nbsp;ENDCASE.<br />
+&nbsp;&nbsp;CONCATENATE&nbsp;it_show-kostk&nbsp;it_show-zjpzt&nbsp;INTO&nbsp;it_show-zjpzt.<br />
+&nbsp;&nbsp;it_show-wbstk&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;it_likp-wbstk.<br />
+&nbsp;&nbsp;CASE&nbsp;it_show-wbstk.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;''.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it_show-zgzzt&nbsp;=&nbsp;'与过账无关'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'A'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it_show-zgzzt&nbsp;=&nbsp;'未过账'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'B'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it_show-zgzzt&nbsp;=&nbsp;'部分过账'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'C'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it_show-zgzzt&nbsp;=&nbsp;'完全过账'.<br />
+&nbsp;&nbsp;ENDCASE.<br />
+&nbsp;&nbsp;CONCATENATE&nbsp;it_show-wbstk&nbsp;it_show-zgzzt&nbsp;INTO&nbsp;it_show-zgzzt.<br />
+&nbsp;&nbsp;it_show-ernam_dn&nbsp;&nbsp;&nbsp;=&nbsp;it_likp-ernam.<br />
+&nbsp;&nbsp;it_show-erdat_dn&nbsp;&nbsp;&nbsp;=&nbsp;it_likp-erdat.<br />
+&nbsp;&nbsp;it_show-erzet_dn&nbsp;&nbsp;&nbsp;=&nbsp;it_likp-erzet.<br />
+&nbsp;&nbsp;it_show-wadat&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;it_likp-wadat.<br />
+&nbsp;&nbsp;it_show-wadat_ist&nbsp;&nbsp;=&nbsp;it_likp-wadat_ist.<br />
+&nbsp;&nbsp;it_show-btgew&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;it_likp-btgew.<br />
+&nbsp;&nbsp;it_show-gewei&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;it_likp-gewei.<br />
+&nbsp;&nbsp;it_show-anzpk&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;it_likp-anzpk.<br />
+&nbsp;&nbsp;it_show-lfimg&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;it_lips-lfimg.<br />
+&nbsp;&nbsp;it_show-meins_dn&nbsp;&nbsp;&nbsp;=&nbsp;it_lips-meins.<br />
+&nbsp;&nbsp;SELECT&nbsp;SINGLE&nbsp;msehl&nbsp;INTO&nbsp;it_show-msehl_dn&nbsp;FROM&nbsp;t006a<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;msehi&nbsp;=&nbsp;it_show-meins_dn<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;spras&nbsp;=&nbsp;'1'.<br />
+&nbsp;&nbsp;it_show-werks&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;it_lips-werks.<br />
+&nbsp;&nbsp;it_show-lgort&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;it_lips-lgort.<br />
+&nbsp;&nbsp;SELECT&nbsp;SINGLE&nbsp;lgobe&nbsp;INTO&nbsp;it_show-lgobe&nbsp;FROM&nbsp;t001l<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;werks&nbsp;=&nbsp;it_show-werks<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;lgort&nbsp;=&nbsp;it_show-lgort.<br />
+&nbsp;&nbsp;it_show-charg&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;it_lips-charg.<br />
+&nbsp;&nbsp;it_show-uecha&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;it_lips-uecha.<br />
+&nbsp;&nbsp;it_show-inco1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;it_likp-inco1.<br />
+&nbsp;&nbsp;it_show-inco2_l&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;it_likp-inco2_l.<br />
+&nbsp;&nbsp;CLEAR&nbsp;wa_thead.&nbsp;REFRESH&nbsp;it_tline.<br />
+&nbsp;&nbsp;wa_thead-tdid&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'ZI01'.<br />
+&nbsp;&nbsp;wa_thead-tdspras&nbsp;&nbsp;&nbsp;=&nbsp;'1'.<br />
+&nbsp;&nbsp;CONCATENATE&nbsp;it_show-vbeln_dn&nbsp;it_show-posnr_dn&nbsp;INTO&nbsp;wa_thead-tdname.<br />
+&nbsp;&nbsp;wa_thead-tdobject&nbsp;&nbsp;=&nbsp;'VBBP'.<br />
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'READ_TEXT'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;client&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;sy-mandt<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;id&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;wa_thead-tdid<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;language&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;wa_thead-tdspras<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;name&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;wa_thead-tdname<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;object&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;wa_thead-tdobject<br />
+&nbsp;&nbsp;&nbsp;&nbsp;TABLES<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lines&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;it_tline<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;id&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;language&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;name&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;3<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;not_found&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;4<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;object&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;5<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;reference_check&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;6<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wrong_access_to_archive&nbsp;=&nbsp;7<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTHERS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;8.<br />
+&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;it_tline.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CONCATENATE&nbsp;it_show-ztext_dni&nbsp;it_tline-tdline&nbsp;INTO&nbsp;it_show-ztext_dni.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDLOOP.<br />
+&nbsp;&nbsp;ENDIF.<br />
+ENDFORM.<br />
+<br />
+<br />
+FORM sub_set_bl .<br />
+&nbsp;&nbsp;it_show-vbeln_bl&nbsp;&nbsp;&nbsp;=&nbsp;it_vbrp-vbeln.<br />
+&nbsp;&nbsp;it_show-posnr_bl&nbsp;&nbsp;&nbsp;=&nbsp;it_vbrp-posnr.<br />
+&nbsp;&nbsp;it_show-vbeln_blc&nbsp;&nbsp;=&nbsp;it_vbfa-vbeln.<br />
+&nbsp;&nbsp;it_show-rfbsk&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;it_vbrk-rfbsk.<br />
+&nbsp;&nbsp;v_domvalue&nbsp;=&nbsp;it_show-rfbsk.<br />
+&nbsp;&nbsp;CLEAR&nbsp;v_ddtext.<br />
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'DOMAIN_VALUE_GET'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_domname&nbsp;&nbsp;=&nbsp;'RFBSK'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_domvalue&nbsp;=&nbsp;v_domvalue<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;e_ddtext&nbsp;&nbsp;&nbsp;=&nbsp;v_ddtext<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;not_exist&nbsp;&nbsp;=&nbsp;1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTHERS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;2.<br />
+&nbsp;&nbsp;CONCATENATE&nbsp;it_show-rfbsk&nbsp;v_ddtext&nbsp;INTO&nbsp;it_show-zfpgzzt.<br />
+&nbsp;&nbsp;CLEAR&nbsp;wa_thead.&nbsp;REFRESH&nbsp;it_tline.<br />
+&nbsp;&nbsp;wa_thead-tdid&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'Z001'.<br />
+&nbsp;&nbsp;wa_thead-tdspras&nbsp;&nbsp;&nbsp;=&nbsp;'1'.<br />
+&nbsp;&nbsp;wa_thead-tdname&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;it_show-vbeln_bl.<br />
+&nbsp;&nbsp;wa_thead-tdobject&nbsp;&nbsp;=&nbsp;'VBBK'.<br />
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'READ_TEXT'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;client&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;sy-mandt<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;id&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;wa_thead-tdid<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;language&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;wa_thead-tdspras<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;name&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;wa_thead-tdname<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;object&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;wa_thead-tdobject<br />
+&nbsp;&nbsp;&nbsp;&nbsp;TABLES<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lines&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;it_tline<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;id&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;language&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;name&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;3<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;not_found&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;4<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;object&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;5<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;reference_check&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;6<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wrong_access_to_archive&nbsp;=&nbsp;7<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTHERS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;8.<br />
+&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;it_tline.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CONCATENATE&nbsp;it_show-ztext_blh&nbsp;it_tline-tdline&nbsp;INTO&nbsp;it_show-ztext_blh.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDLOOP.<br />
+&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;it_show-erdat_bl&nbsp;&nbsp;&nbsp;=&nbsp;it_vbrk-erdat.<br />
+&nbsp;&nbsp;it_show-erzet_bl&nbsp;&nbsp;&nbsp;=&nbsp;it_vbrk-erzet.<br />
+&nbsp;&nbsp;it_show-ernam_bl&nbsp;&nbsp;&nbsp;=&nbsp;it_vbrk-ernam.<br />
+&nbsp;&nbsp;it_show-fkdat&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;it_vbrk-fkdat.<br />
+&nbsp;&nbsp;it_show-zterm&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;it_vbrk-zterm.<br />
+&nbsp;&nbsp;it_show-xblnr&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;it_vbrk-xblnr.<br />
+&nbsp;&nbsp;it_show-fkimg&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;it_vbrp-fkimg.<br />
+&nbsp;&nbsp;it_show-meins_bl&nbsp;&nbsp;&nbsp;=&nbsp;it_vbrp-meins.<br />
+&nbsp;&nbsp;it_show-kzwi1_bl&nbsp;&nbsp;&nbsp;=&nbsp;it_vbrp-kzwi1.<br />
+&nbsp;&nbsp;it_show-kzwi2_bl&nbsp;&nbsp;&nbsp;=&nbsp;it_vbrp-kzwi2.<br />
+&nbsp;&nbsp;it_show-kzwi3_bl&nbsp;&nbsp;&nbsp;=&nbsp;it_vbrp-kzwi3.<br />
+&nbsp;&nbsp;it_show-zkphsdj&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;it_show-kzwi1_bl&nbsp;*&nbsp;it_show-fkimg.<br />
+&nbsp;&nbsp;it_show-kursk&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;it_vbrp-kursk.<br />
+&nbsp;&nbsp;it_show-prsdt_bl&nbsp;&nbsp;&nbsp;=&nbsp;it_vbrp-prsdt.<br />
+&nbsp;&nbsp;it_show-mwsk1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;it_vbrp-mwsk1.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;it_show-vbeln_blc&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;it_ykpsl.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;it_ykpsl-vbeln&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;it_show-vbeln.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;it_ykpsl-posnr&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;it_show-posnr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;it_ykpsl-vbeln_dn&nbsp;=&nbsp;it_show-vbeln_dn.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;it_ykpsl-posnr_dn&nbsp;=&nbsp;it_show-posnr_dn.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;it_ykpsl-vbeln_bl&nbsp;=&nbsp;it_show-vbeln_bl.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;it_ykpsl-posnr_bl&nbsp;=&nbsp;it_show-posnr_bl.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;it_ykpsl-fkimg&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;it_show-fkimg.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;it_ykpsl.<br />
+&nbsp;&nbsp;ENDIF.<br />
+ENDFORM.<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;sub_pf_status_set<br />
+*&---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&gt;FT_EXTAB&nbsp;&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM sub_pf_status_set USING ft_extab TYPE slis_t_extab.<br />
+&nbsp;&nbsp;SET&nbsp;PF-STATUS&nbsp;'1001'.<br />
+ENDFORM. "sub_pf_status_set<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;sub_user_command<br />
+*&---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&gt;F_UCOMM&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&gt;FS_SELFIELD&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM sub_user_command USING f_ucomm TYPE sy-ucomm<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fs_selfield&nbsp;TYPE&nbsp;slis_selfield.<br />
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'GET_GLOBALS_FROM_SLVC_FULLSCR'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;e_grid&nbsp;=&nbsp;ob_cl_gui_alv_grid.<br />
+&nbsp;&nbsp;CALL&nbsp;METHOD&nbsp;ob_cl_gui_alv_grid-&gt;check_changed_data.<br />
+<br />
+&nbsp;&nbsp;CASE&nbsp;f_ucomm.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'&IC1'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;it_show&nbsp;INDEX&nbsp;fs_selfield-tabindex.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;EQ&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;fs_selfield-fieldname&nbsp;=&nbsp;'VBELN'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SET&nbsp;PARAMETER&nbsp;ID&nbsp;'AUN'&nbsp;FIELD&nbsp;it_show-vbeln.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;TRANSACTION&nbsp;'VA03'&nbsp;AND&nbsp;SKIP&nbsp;FIRST&nbsp;SCREEN.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ELSEIF&nbsp;fs_selfield-fieldname&nbsp;=&nbsp;'VBELN_DN'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SET&nbsp;PARAMETER&nbsp;ID&nbsp;'VL'&nbsp;FIELD&nbsp;it_show-vbeln_dn.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;TRANSACTION&nbsp;'VL03N'&nbsp;AND&nbsp;SKIP&nbsp;FIRST&nbsp;SCREEN.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ELSEIF&nbsp;fs_selfield-fieldname&nbsp;=&nbsp;'VBELN_BL'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SET&nbsp;PARAMETER&nbsp;ID&nbsp;'VF'&nbsp;FIELD&nbsp;it_show-vbeln_bl.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;TRANSACTION&nbsp;'VF03'&nbsp;AND&nbsp;SKIP&nbsp;FIRST&nbsp;SCREEN.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ELSEIF&nbsp;fs_selfield-fieldname&nbsp;=&nbsp;'VBELN_BLC'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SET&nbsp;PARAMETER&nbsp;ID&nbsp;'VF'&nbsp;FIELD&nbsp;it_show-vbeln_blc.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;TRANSACTION&nbsp;'VF03'&nbsp;AND&nbsp;SKIP&nbsp;FIRST&nbsp;SCREEN.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;OTHERS.<br />
+&nbsp;&nbsp;ENDCASE.<br />
+<br />
+&nbsp;&nbsp;fs_selfield-refresh&nbsp;=&nbsp;'X'.<br />
+ENDFORM. "sub_user_command<br />
+<br />
+   </div>
+   <div class="codeComment">
+*Text&nbsp;elements<br />
+*----------------------------------------------------------<br />
+*&nbsp;001&nbsp;销售凭证数据<br />
+*&nbsp;002&nbsp;组织数据<br />
+<br />
+<br />
+*Selection&nbsp;texts<br />
+*----------------------------------------------------------<br />
+*&nbsp;S_AUART&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;销售凭证类型<br />
+*&nbsp;S_ERDAT&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;创建日期<br />
+*&nbsp;S_ERNAM&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;创建者<br />
+*&nbsp;S_KDMAT&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;客户物料<br />
+*&nbsp;S_KUNNR&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;售达方<br />
+*&nbsp;S_MATNR&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;物料<br />
+*&nbsp;S_SPART&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;产品组<br />
+*&nbsp;S_VBELN&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;销售凭证<br />
+*&nbsp;S_VKBUR&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;销售办事处<br />
+*&nbsp;S_VKORG&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;销售组织<br />
+*&nbsp;S_VTWEG&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;分销渠道<br />
+<br />
+<br />
+*Messages<br />
+*----------------------------------------------------------<br />
+*<br />
+*&nbsp;Message&nbsp;class:&nbsp;ZSDMSG<br />
+*000&nbsp;&nbsp;&nbsp;&1&2&3&4&5&6&7&8<br />
+            </div>
+          </td>
+        </tr>
+      </table>
+      </td>
+      </tr>
+   <tr>
+<td class="footer">Extracted by Mass Download version 1.5.2 - E.G.Mellodew. 1998-2022. Sap Release 755</td>
+   </tr>
+</table>
+</body>
+</html>

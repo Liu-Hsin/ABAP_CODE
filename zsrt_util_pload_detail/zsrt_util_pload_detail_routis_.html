@@ -1,0 +1,1667 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=GB2312" />
+<title>ZSRT_UTIL_PLOAD_DETAIL_ROUTIS</title>
+<style type="text/css">
+.code{ font-family:"Courier New", Courier, monospace; color:#000; font-size:14px; background-color:#F2F4F7 }
+  .codeComment {font-family:"Courier New", Courier, monospace; color:#0000F0; font-size:14px; background-color:#F2F4F7 }
+  .normalBold{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; font-weight:800 }
+  .normalBoldLarge{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+</style>
+<style type="text/css">
+  .normal{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px }
+  .footer{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; text-align: center }
+  h2{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+  h3{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:14px; font-weight:800 }
+  .outerTable{
+   background-color:#E0E7ED;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-right-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+  .innerTable{
+   background-color:#F2F4F7;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-bottom-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+</style>
+</head>
+<body>
+<table class="outerTable">
+  <tr class="normalBoldLarge">
+     <td><h2>Code listing for: ZSRT_UTIL_PLOAD_DETAIL_ROUTIS</h2>
+<h3> Description: </h3></td>
+   </tr>
+  <tr>
+     <td>
+     <table class="innerTable">
+       <tr>
+          <td>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;Include&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SRT_UTIL_PLOAD_DETAIL_ROUTIS<br />
+*&---------------------------------------------------------------------*<br />
+<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;get_data<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM get_data.<br />
+<br />
+&nbsp;&nbsp;DATA:&nbsp;traceno&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;i,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;last_color(4)&nbsp;&nbsp;TYPE&nbsp;c,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;last_opid&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;sysuuid_c,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_trace&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;ty_trace,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_result&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;srt_pload_result,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_http_header&nbsp;TYPE&nbsp;srt_util_property,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lt_http_header&nbsp;TYPE&nbsp;srt_util_property_tab.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Get&nbsp;result&nbsp;by&nbsp;Transaction&nbsp;IDs<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;IF&nbsp;tids&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;cl_soap_util_db=&gt;payload_get_result_by_tids(<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tid_list&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;tids<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;error_message&nbsp;=&nbsp;m_error_message<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;result_list&nbsp;&nbsp;&nbsp;=&nbsp;mt_result<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;commtype&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;m_commtype<br />
+&nbsp;&nbsp;&nbsp;&nbsp;).<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Get&nbsp;result&nbsp;by&nbsp;Operation&nbsp;IDs<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;ELSEIF&nbsp;opids&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;cl_soap_util_db=&gt;payload_get_result_by_opids(<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;opid_list&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;opids<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;error_message&nbsp;=&nbsp;m_error_message<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;result_list&nbsp;&nbsp;&nbsp;=&nbsp;mt_result<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;commtype&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;m_commtype<br />
+&nbsp;&nbsp;&nbsp;&nbsp;).<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Get&nbsp;result&nbsp;by&nbsp;Message&nbsp;ID<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;ELSEIF&nbsp;mid&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;cl_soap_util_db=&gt;payload_get_result_by_mid(<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;message_id&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;mid<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;error_message&nbsp;=&nbsp;m_error_message<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;result_list&nbsp;&nbsp;&nbsp;=&nbsp;mt_result<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;commtype&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;m_commtype<br />
+&nbsp;&nbsp;&nbsp;&nbsp;).<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Get&nbsp;result&nbsp;by&nbsp;Transaction&nbsp;ID<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;ELSEIF&nbsp;tid&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;cl_soap_util_db=&gt;payload_get_result(<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;transaction_id&nbsp;=&nbsp;tid<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;error_message&nbsp;&nbsp;=&nbsp;m_error_message<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;result_list&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;mt_result<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;commtype&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;m_commtype<br />
+&nbsp;&nbsp;&nbsp;&nbsp;).<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Get&nbsp;result&nbsp;by&nbsp;Root&nbsp;Context&nbsp;ID<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;ELSEIF&nbsp;root_cid&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;cl_soap_util_db=&gt;payload_get_result(<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;root_ctx_id&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;root_cid<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;connection_id&nbsp;&nbsp;=&nbsp;conn_id<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;connection_cnt&nbsp;=&nbsp;conn_cnt<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;error_message&nbsp;&nbsp;=&nbsp;m_error_message<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;result_list&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;mt_result<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;commtype&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;m_commtype<br />
+&nbsp;&nbsp;&nbsp;&nbsp;).<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;m_error_message&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;i208(00)&nbsp;WITH&nbsp;m_error_message.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"#EC&nbsp;CI_USE_WANTED<br />
+&nbsp;&nbsp;&nbsp;&nbsp;LEAVE&nbsp;TO&nbsp;SCREEN&nbsp;0.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Create&nbsp;result&nbsp;entries<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;CLEAR:&nbsp;mt_trace,&nbsp;mt_transaction_id.<br />
+&nbsp;&nbsp;last_color&nbsp;=&nbsp;co_color_one.<br />
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;mt_result&nbsp;INTO&nbsp;ls_result.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;ls_trace.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;last_opid&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;last_opid&nbsp;=&nbsp;ls_result-opid.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;traceno&nbsp;=&nbsp;traceno&nbsp;+&nbsp;1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;m_userid&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;m_userid&nbsp;=&nbsp;ls_result-sapuser.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_trace-traceno&nbsp;=&nbsp;traceno.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MOVE-CORRESPONDING&nbsp;ls_result&nbsp;TO&nbsp;ls_trace.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_trace-stepno_c&nbsp;=&nbsp;ls_trace-stepno.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Save&nbsp;all&nbsp;Transaction&nbsp;IDs<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;mt_transaction_id&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"#EC&nbsp;CI_STDSEQ<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WITH&nbsp;KEY&nbsp;table_line&nbsp;=&nbsp;ls_trace-transaction_id<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TRANSPORTING&nbsp;NO&nbsp;FIELDS.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;&lt;&gt;&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;ls_trace-transaction_id&nbsp;TO&nbsp;mt_transaction_id.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;ls_trace-calltype&nbsp;=&nbsp;if_soap_util_constants=&gt;trace_type_request.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_trace-type_c&nbsp;=&nbsp;'Request'.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"#EC&nbsp;NOTEXT<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ELSEIF&nbsp;ls_trace-calltype&nbsp;=&nbsp;if_soap_util_constants=&gt;trace_type_response.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_trace-type_c&nbsp;=&nbsp;'Response'.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"#EC&nbsp;NOTEXT<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ELSEIF&nbsp;ls_trace-calltype&nbsp;=&nbsp;if_soap_util_constants=&gt;trace_type_call.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_trace-type_c&nbsp;=&nbsp;'Call'.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"#EC&nbsp;NOTEXT<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ELSE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_trace-type_c&nbsp;=&nbsp;'Unknown'.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"#EC&nbsp;NOTEXT<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;ls_trace-opid&nbsp;=&nbsp;last_opid.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_trace-linecolor&nbsp;=&nbsp;last_color.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ELSEIF&nbsp;last_color&nbsp;=&nbsp;co_color_one.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_trace-linecolor&nbsp;=&nbsp;last_color&nbsp;=&nbsp;co_color_two.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ELSE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_trace-linecolor&nbsp;=&nbsp;last_color&nbsp;=&nbsp;co_color_one.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;ls_result-appl_data&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_trace-operation_space&nbsp;=&nbsp;ls_result-component.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_trace-operation_name&nbsp;&nbsp;=&nbsp;ls_result-operation_short.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;ls_trace-http_header&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cl_soap_xml_helper=&gt;transform_to_data(<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tag_name&nbsp;=&nbsp;'HTTP_HEADER'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xml&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_trace-http_header<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;data&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lt_http_header<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;).<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;lt_http_header&nbsp;INTO&nbsp;ls_http_header&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"#EC&nbsp;CI_STDSEQ<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WITH&nbsp;KEY&nbsp;name&nbsp;=&nbsp;'soapaction'.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"#EC&nbsp;NOTEXT<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_trace-soap_action&nbsp;=&nbsp;ls_http_header-value.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;ls_trace&nbsp;TO&nbsp;mt_trace.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;last_opid&nbsp;=&nbsp;ls_trace-opid.<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+ENDFORM.                    " get_data<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;redraw_traces<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM redraw_traces.<br />
+<br />
+&nbsp;&nbsp;PERFORM&nbsp;create_layout.<br />
+<br />
+&nbsp;&nbsp;CALL&nbsp;METHOD&nbsp;mr_gui_header_grid-&gt;set_table_for_first_display<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it_toolbar_excluding&nbsp;=&nbsp;mt_hidden_code<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;is_layout&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ms_gui_layout<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_save&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'A'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;is_variant&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ms_variant<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CHANGING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it_fieldcatalog&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;mt_gui_fcat<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it_outtab&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;mt_trace.<br />
+<br />
+&nbsp;&nbsp;CALL&nbsp;METHOD&nbsp;mr_gui_context_grid-&gt;set_table_for_first_display<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it_toolbar_excluding&nbsp;=&nbsp;mt_ctx_hidden_code<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;is_layout&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ms_ctx_layout<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CHANGING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it_fieldcatalog&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;mt_ctx_fcat<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it_outtab&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;mt_property.<br />
+<br />
+ENDFORM.                    " redraw_traces<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;refresh_traces<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM refresh_traces.<br />
+<br />
+&nbsp;&nbsp;PERFORM&nbsp;get_data.<br />
+&nbsp;&nbsp;CALL&nbsp;METHOD&nbsp;mr_gui_header_grid-&gt;refresh_table_display.<br />
+<br />
+&nbsp;&nbsp;CLEAR:&nbsp;ms_current_result,&nbsp;mt_property,&nbsp;mt_prop_expand.<br />
+&nbsp;&nbsp;CALL&nbsp;METHOD&nbsp;mr_gui_context_grid-&gt;refresh_table_display.<br />
+<br />
+ENDFORM.                    " refresh_traces<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FORM&nbsp;show_trace_data<br />
+*---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM show_trace_data USING pt_row TYPE lvc_t_roid.<br />
+<br />
+&nbsp;&nbsp;CONSTANTS:&nbsp;co_one_megabyte&nbsp;TYPE&nbsp;i&nbsp;VALUE&nbsp;1048576.<br />
+<br />
+&nbsp;&nbsp;DATA:&nbsp;l_xsize&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;i,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;l_answer&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;c,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;l_error_text&nbsp;TYPE&nbsp;string,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;l_question&nbsp;&nbsp;&nbsp;TYPE&nbsp;string,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_row&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;lvc_s_roid,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_trace&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;ty_trace,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_xml_data&nbsp;&nbsp;TYPE&nbsp;srt_xml_fdata,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_property&nbsp;&nbsp;TYPE&nbsp;ty_property,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lt_xml_data&nbsp;&nbsp;TYPE&nbsp;srt_xml_fdata_tab.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Get&nbsp;the&nbsp;right&nbsp;entries<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;pt_row&nbsp;INTO&nbsp;ls_row&nbsp;INDEX&nbsp;1.<br />
+&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;mt_trace&nbsp;INDEX&nbsp;ls_row-row_id&nbsp;INTO&nbsp;ls_trace.<br />
+&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;mt_result&nbsp;INTO&nbsp;ms_current_result&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"#EC&nbsp;CI_STDSEQ<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WITH&nbsp;KEY&nbsp;opid&nbsp;&nbsp;=&nbsp;ls_trace-opid<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;subno&nbsp;=&nbsp;ls_trace-subno.<br />
+&nbsp;&nbsp;l_xsize&nbsp;=&nbsp;xstrlen(&nbsp;ms_current_result-trace_data&nbsp;).<br />
+&nbsp;&nbsp;IF&nbsp;l_xsize&nbsp;=&nbsp;0.&nbsp;EXIT.&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;l_error_text&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR:&nbsp;mt_property,&nbsp;mt_prop_expand.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;METHOD&nbsp;mr_gui_context_grid-&gt;refresh_table_display.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;i208(00)&nbsp;WITH&nbsp;l_error_text.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"#EC&nbsp;CI_USE_WANTED<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXIT.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Download&nbsp;or&nbsp;Display&nbsp;if&nbsp;Payload&nbsp;is&nbsp;too&nbsp;big<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;IF&nbsp;l_xsize&nbsp;&gt;&nbsp;co_one_megabyte.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;l_question&nbsp;=&nbsp;l_xsize.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CONCATENATE&nbsp;'Payload&nbsp;size'(q01)&nbsp;l_question<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;l_question&nbsp;SEPARATED&nbsp;BY&nbsp;space.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CONCATENATE&nbsp;l_question&nbsp;'.'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;l_question.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CONCATENATE&nbsp;l_question&nbsp;'Do&nbsp;you&nbsp;want&nbsp;to&nbsp;download&nbsp;or&nbsp;to&nbsp;display&nbsp;as&nbsp;usual?'(q02)&nbsp;"#EC&nbsp;CI_USE_WANTED<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;l_question.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'POPUP_TO_CONFIRM'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;titlebar&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'Display&nbsp;Payload'(q03)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text_question&nbsp;=&nbsp;l_question<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text_button_1&nbsp;=&nbsp;'Download'(q04)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text_button_2&nbsp;=&nbsp;'Display'(q05)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;answer&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;l_answer.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;l_answer&nbsp;=&nbsp;'1'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;download_traces&nbsp;USING&nbsp;pt_row.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXIT.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ELSEIF&nbsp;l_answer&nbsp;=&nbsp;'A'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXIT.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;cl_soap_xml_parser=&gt;get_formatted_data(<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xdoc&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ms_current_result-trace_data<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;data&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lt_xml_data<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;error_text&nbsp;=&nbsp;l_error_text<br />
+&nbsp;&nbsp;).<br />
+&nbsp;&nbsp;IF&nbsp;l_error_text&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR:&nbsp;mt_property,&nbsp;mt_prop_expand.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;METHOD&nbsp;mr_gui_context_grid-&gt;refresh_table_display.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CONCATENATE&nbsp;':'&nbsp;l_error_text<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;l_error_text&nbsp;SEPARATED&nbsp;BY&nbsp;space.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CONCATENATE&nbsp;'XML&nbsp;Parsing&nbsp;Error'(e00)&nbsp;l_error_text<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;l_error_text.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;i208(00)&nbsp;WITH&nbsp;l_error_text.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"#EC&nbsp;CI_USE_WANTED<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXIT.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Create&nbsp;Payload&nbsp;in&nbsp;Table&nbsp;Form<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;CLEAR:&nbsp;mt_property,&nbsp;mt_prop_expand.<br />
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;lt_xml_data&nbsp;INTO&nbsp;ls_xml_data.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;ls_property.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MOVE-CORRESPONDING&nbsp;ls_xml_data&nbsp;TO&nbsp;ls_property.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;ls_property-tag_type&nbsp;=&nbsp;cl_soap_xml_parser=&gt;co_tag_type_node_only.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;set_icon_collapse&nbsp;USING&nbsp;ls_property.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;ls_property&nbsp;TO&nbsp;mt_prop_expand.<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+&nbsp;&nbsp;m_total_lines&nbsp;=&nbsp;lines(&nbsp;mt_prop_expand&nbsp;).<br />
+<br />
+&nbsp;&nbsp;mt_property[]&nbsp;=&nbsp;mt_prop_expand[].<br />
+<br />
+&nbsp;&nbsp;CALL&nbsp;METHOD&nbsp;mr_gui_context_grid-&gt;refresh_table_display.<br />
+<br />
+ENDFORM.                    " show_trace_data<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;set_icon_expand<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM set_icon_expand USING ps_data TYPE ty_property.<br />
+<br />
+&nbsp;&nbsp;CLEAR&nbsp;ps_data-expanded.<br />
+<br />
+&nbsp;&nbsp;ps_data-exco_icon&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;icon_expand.<br />
+&nbsp;&nbsp;ps_data-exco_icon+3&nbsp;&nbsp;=&nbsp;'\Q'.<br />
+&nbsp;&nbsp;ps_data-exco_icon+5&nbsp;&nbsp;=&nbsp;'Expand'(d01).<br />
+&nbsp;&nbsp;ps_data-exco_icon+45&nbsp;=&nbsp;'@'.<br />
+<br />
+ENDFORM.                    "set_icon_expand<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;set_icon_collapse<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM set_icon_collapse USING ps_data TYPE ty_property.<br />
+<br />
+&nbsp;&nbsp;ps_data-expanded&nbsp;=&nbsp;'X'.<br />
+<br />
+&nbsp;&nbsp;ps_data-exco_icon&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;icon_collapse.<br />
+&nbsp;&nbsp;ps_data-exco_icon+3&nbsp;&nbsp;=&nbsp;'\Q'.<br />
+&nbsp;&nbsp;ps_data-exco_icon+5&nbsp;&nbsp;=&nbsp;'Collapse'(d02).<br />
+&nbsp;&nbsp;ps_data-exco_icon+45&nbsp;=&nbsp;'@'.<br />
+<br />
+ENDFORM.                    "set_icon_collapse<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FORM&nbsp;show_xml<br />
+*---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM show_xml.<br />
+<br />
+&nbsp;&nbsp;CONSTANTS&nbsp;lc_answer_do_not_display&nbsp;TYPE&nbsp;c&nbsp;VALUE&nbsp;'2'.<br />
+<br />
+&nbsp;&nbsp;DATA:&nbsp;l_raw&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;x&nbsp;LENGTH&nbsp;5,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;l_raw_string&nbsp;&nbsp;TYPE&nbsp;xstring,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;l_trace_data&nbsp;&nbsp;TYPE&nbsp;xstring,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;l_strace_data&nbsp;TYPE&nbsp;string,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;l_question&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;string,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;l_answer&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;c.<br />
+<br />
+&nbsp;&nbsp;DATA:&nbsp;lo_vscanner&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;REF&nbsp;TO&nbsp;cl_soap_util_vscanner,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_util_trace&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;cl_soap_util_vscanner=&gt;ty_srt_trace,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lx_root&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;REF&nbsp;TO&nbsp;cx_root,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lx_vsi_infection&nbsp;TYPE&nbsp;REF&nbsp;TO&nbsp;cx_vsi_infection.<br />
+<br />
+&nbsp;&nbsp;l_raw&nbsp;=&nbsp;ms_current_result-trace_data.<br />
+&nbsp;&nbsp;l_raw_string&nbsp;=&nbsp;l_raw.<br />
+&nbsp;&nbsp;l_strace_data&nbsp;=&nbsp;cl_soap_xml_helper=&gt;xstring_to_string(&nbsp;input&nbsp;=&nbsp;l_raw_string&nbsp;).<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Binary&nbsp;XML<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;IF&nbsp;l_strace_data&nbsp;=&nbsp;'BXML?'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;l_question&nbsp;=&nbsp;'Do&nbsp;you&nbsp;want&nbsp;to&nbsp;see&nbsp;the&nbsp;binary&nbsp;XML&nbsp;or&nbsp;standard&nbsp;XML?'(q06).<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'POPUP_TO_CONFIRM'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;titlebar&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'Display&nbsp;XML'(q07)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text_question&nbsp;=&nbsp;l_question<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text_button_1&nbsp;=&nbsp;'Binary&nbsp;XML'(q08)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text_button_2&nbsp;=&nbsp;'Standard&nbsp;XML'(q09)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;answer&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;l_answer.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CASE&nbsp;l_answer.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'1'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;l_trace_data&nbsp;=&nbsp;cl_soap_xml_helper=&gt;string_to_xstring(&nbsp;input&nbsp;=&nbsp;co_bxml_beg&nbsp;&&&nbsp;ms_current_result-trace_data&nbsp;&&&nbsp;co_bxml_end&nbsp;).<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'2'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;l_trace_data&nbsp;=&nbsp;cl_soap_xml_helper=&gt;transform_bxml_to_xml(&nbsp;bxml&nbsp;=&nbsp;ms_current_result-trace_data&nbsp;).<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;OTHERS.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;l_trace_data.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDCASE.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;XI-Protocol<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;ELSEIF&nbsp;l_strace_data&nbsp;=&nbsp;'--SAP'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;l_trace_data&nbsp;=&nbsp;cl_soap_xml_helper=&gt;transform_xi_to_xml(&nbsp;xi_xml&nbsp;=&nbsp;ms_current_result-trace_data&nbsp;).<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Normal&nbsp;XML<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;ELSE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;l_trace_data&nbsp;=&nbsp;ms_current_result-trace_data.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;l_trace_data&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;TRY.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;scan&nbsp;trace&nbsp;data&nbsp;for&nbsp;viruses<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MOVE-CORRESPONDING&nbsp;ms_current_result&nbsp;TO&nbsp;ls_util_trace.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CREATE&nbsp;OBJECT&nbsp;lo_vscanner<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;trace_result&nbsp;=&nbsp;ls_util_trace.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lo_vscanner-&gt;scan(&nbsp;).<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CATCH&nbsp;cx_soap_virus_found.&nbsp;"&nbsp;into&nbsp;lx_root.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cl_soap_util_helper=&gt;virus_message_display(&nbsp;if_soap_util_constants=&gt;srt_virus_action-message&nbsp;).<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RETURN.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CATCH&nbsp;cx_soap_virus_scan_failed."&nbsp;into&nbsp;lx_root.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cl_soap_util_helper=&gt;virus_message_display(&nbsp;if_soap_util_constants=&gt;srt_virus_action-scan_failure&nbsp;).<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RETURN.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDTRY.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;finaly&nbsp;display&nbsp;the&nbsp;message&nbsp;payload&nbsp;in&nbsp;an&nbsp;OLE&nbsp;plugin<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;cl_soap_xml_helper=&gt;xml_show(<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xdoc&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;l_trace_data<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;new_window&nbsp;=&nbsp;abap_true<br />
+&nbsp;&nbsp;&nbsp;&nbsp;).<br />
+&nbsp;&nbsp;ENDIF.&nbsp;"l_trace_data&nbsp;IS&nbsp;NOT&nbsp;INITIAL<br />
+<br />
+<br />
+ENDFORM.                    " show_xml<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;show_attachment<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM show_attachment USING p_row_no  TYPE i.<br />
+<br />
+&nbsp;&nbsp;DATA:&nbsp;l_part_no_row&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;i,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;l_file_extension&nbsp;TYPE&nbsp;string,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;l_mime_type&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;string,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;l_mime_subtype&nbsp;&nbsp;&nbsp;TYPE&nbsp;string,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lx_attachment&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;xstring,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_part_property&nbsp;TYPE&nbsp;ty_property.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Check&nbsp;SHORTCUT&nbsp;and&nbsp;REMOTE&nbsp;Format<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;l_part_no_row&nbsp;=&nbsp;p_row_no&nbsp;-&nbsp;4.<br />
+&nbsp;&nbsp;IF&nbsp;l_part_no_row&nbsp;&lt;&nbsp;1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;get_attachment_remote&nbsp;USING&nbsp;&nbsp;&nbsp;&nbsp;p_row_no<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CHANGING&nbsp;l_file_extension<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;l_mime_type<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;l_mime_subtype<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lx_attachment.<br />
+&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;mt_property&nbsp;INDEX&nbsp;l_part_no_row&nbsp;INTO&nbsp;ls_part_property.<br />
+&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;&lt;&gt;&nbsp;0.&nbsp;EXIT.&nbsp;ENDIF.<br />
+&nbsp;&nbsp;IF&nbsp;ls_part_property-tag_name&nbsp;&lt;&gt;&nbsp;'---PART_NO'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;get_attachment_remote&nbsp;USING&nbsp;&nbsp;&nbsp;&nbsp;p_row_no<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CHANGING&nbsp;l_file_extension<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;l_mime_type<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;l_mime_subtype<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lx_attachment.<br />
+&nbsp;&nbsp;ELSE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;get_attachment_shortcut&nbsp;USING&nbsp;&nbsp;&nbsp;&nbsp;l_part_no_row<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CHANGING&nbsp;l_file_extension<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;l_mime_type<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;l_mime_subtype<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lx_attachment.<br />
+&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;IF&nbsp;lx_attachment&nbsp;IS&nbsp;INITIAL.&nbsp;EXIT.&nbsp;ENDIF.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;XML&nbsp;Handling<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;IF&nbsp;l_mime_subtype&nbsp;CS&nbsp;'xml'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;cl_soap_xml_helper=&gt;xml_show(<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xdoc&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lx_attachment<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;new_window&nbsp;=&nbsp;abap_true<br />
+&nbsp;&nbsp;&nbsp;&nbsp;).<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Display&nbsp;by&nbsp;Browser<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;ELSE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;cl_soap_xml_helper=&gt;show_data_by_browser(<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xdoc&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lx_attachment<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;file_extension&nbsp;=&nbsp;l_file_extension<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mime_type&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;l_mime_type<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mime_subtype&nbsp;&nbsp;&nbsp;=&nbsp;l_mime_subtype<br />
+&nbsp;&nbsp;&nbsp;&nbsp;).<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+ENDFORM.                    " show_attachment<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;get_attachment_shortcut<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM get_attachment_shortcut USING    p_header_no      TYPE i<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CHANGING&nbsp;p_file_extension&nbsp;TYPE&nbsp;string<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;p_mime_type&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;string<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;p_mime_subtype&nbsp;&nbsp;&nbsp;TYPE&nbsp;string<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;px_attachment&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;xstring.<br />
+<br />
+&nbsp;&nbsp;DATA:&nbsp;nfill&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;i,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;offset&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;i,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;l_part_no&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;i,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;l_part_index&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;i,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_part_property&nbsp;TYPE&nbsp;ty_property.<br />
+<br />
+&nbsp;&nbsp;DATA:&nbsp;l_fragment_beg&nbsp;&nbsp;TYPE&nbsp;i,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;l_fragment_len&nbsp;&nbsp;TYPE&nbsp;i,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;l_attachment&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;string,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_match_result&nbsp;TYPE&nbsp;match_result,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lt_match_result&nbsp;TYPE&nbsp;match_result_tab.<br />
+<br />
+&nbsp;&nbsp;CLEAR:&nbsp;p_file_extension,&nbsp;p_mime_type,&nbsp;p_mime_subtype,&nbsp;px_attachment.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Part&nbsp;Number<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;mt_property&nbsp;INDEX&nbsp;p_header_no&nbsp;INTO&nbsp;ls_part_property.<br />
+&nbsp;&nbsp;l_part_no&nbsp;=&nbsp;ls_part_property-tag_value.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;File&nbsp;Extension&nbsp;from&nbsp;Part&nbsp;ID<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;l_part_index&nbsp;=&nbsp;p_header_no&nbsp;+&nbsp;1.<br />
+&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;mt_property&nbsp;INDEX&nbsp;l_part_index&nbsp;INTO&nbsp;ls_part_property.<br />
+&nbsp;&nbsp;IF&nbsp;ls_part_property-tag_name&nbsp;=&nbsp;'---PART_ID'&nbsp;AND<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_part_property-tag_value&nbsp;IS&nbsp;NOT&nbsp;INITIAL.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"#EC&nbsp;NOTEXT<br />
+&nbsp;&nbsp;&nbsp;&nbsp;FIND&nbsp;ALL&nbsp;OCCURRENCES&nbsp;OF&nbsp;'.'&nbsp;IN&nbsp;ls_part_property-tag_value<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RESULTS&nbsp;lt_match_result.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;nfill&nbsp;=&nbsp;lines(&nbsp;lt_match_result&nbsp;).<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;nfill&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;lt_match_result&nbsp;INTO&nbsp;ls_match_result&nbsp;INDEX&nbsp;nfill.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;offset&nbsp;=&nbsp;ls_match_result-offset&nbsp;+&nbsp;1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;p_file_extension&nbsp;=&nbsp;ls_part_property-tag_value+offset.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Mime&nbsp;Type<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;l_part_index&nbsp;=&nbsp;p_header_no&nbsp;+&nbsp;2.<br />
+&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;mt_property&nbsp;INDEX&nbsp;l_part_index&nbsp;INTO&nbsp;ls_part_property.<br />
+&nbsp;&nbsp;IF&nbsp;ls_part_property-tag_name&nbsp;&lt;&gt;&nbsp;'---MIME_TYPE'.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"#EC&nbsp;NOTEXT<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXIT.<br />
+&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;p_mime_type&nbsp;=&nbsp;ls_part_property-tag_value.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Mime&nbsp;Subtype<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;l_part_index&nbsp;=&nbsp;p_header_no&nbsp;+&nbsp;3.<br />
+&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;mt_property&nbsp;INDEX&nbsp;l_part_index&nbsp;INTO&nbsp;ls_part_property.<br />
+&nbsp;&nbsp;IF&nbsp;ls_part_property-tag_name&nbsp;&lt;&gt;&nbsp;'---MIME_SUBTYPE'.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"#EC&nbsp;NOTEXT<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXIT.<br />
+&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;p_mime_subtype&nbsp;=&nbsp;ls_part_property-tag_value.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Part&nbsp;Content<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;FIND&nbsp;ALL&nbsp;OCCURRENCES&nbsp;OF&nbsp;m_part_content_beg&nbsp;IN&nbsp;ms_current_result-trace_data&nbsp;IN&nbsp;BYTE&nbsp;MODE<br />
+&nbsp;&nbsp;&nbsp;&nbsp;RESULTS&nbsp;lt_match_result.<br />
+&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;lt_match_result&nbsp;INTO&nbsp;ls_match_result&nbsp;INDEX&nbsp;l_part_no.<br />
+&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;&lt;&gt;&nbsp;0.&nbsp;EXIT.&nbsp;ENDIF.<br />
+&nbsp;&nbsp;l_fragment_beg&nbsp;=&nbsp;ls_match_result-offset&nbsp;+&nbsp;xstrlen(&nbsp;m_part_content_beg&nbsp;).<br />
+&nbsp;&nbsp;SEARCH&nbsp;ms_current_result-trace_data&nbsp;FOR&nbsp;m_part_content_end&nbsp;STARTING&nbsp;AT&nbsp;l_fragment_beg&nbsp;IN&nbsp;BYTE&nbsp;MODE.<br />
+&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;&lt;&gt;&nbsp;0.&nbsp;EXIT.&nbsp;ENDIF.<br />
+&nbsp;&nbsp;l_fragment_len&nbsp;=&nbsp;sy-fdpos.<br />
+&nbsp;&nbsp;px_attachment&nbsp;=&nbsp;ms_current_result-trace_data+l_fragment_beg(l_fragment_len).<br />
+&nbsp;&nbsp;l_attachment&nbsp;&nbsp;=&nbsp;cl_soap_xml_helper=&gt;xstring_to_string(&nbsp;input&nbsp;=&nbsp;px_attachment&nbsp;).<br />
+&nbsp;&nbsp;px_attachment&nbsp;=&nbsp;l_attachment.<br />
+<br />
+ENDFORM.                    " get_attachment_shortcut<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;get_attachment_remote<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM get_attachment_remote USING    p_row_no         TYPE i<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CHANGING&nbsp;p_file_extension&nbsp;TYPE&nbsp;string<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;p_mime_type&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;string<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;p_mime_subtype&nbsp;&nbsp;&nbsp;TYPE&nbsp;string<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;px_attachment&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;xstring.<br />
+<br />
+&nbsp;&nbsp;DATA:&nbsp;nfill&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;i,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;offset&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;i,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;l_part_no&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;i,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;l_part_index&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;i,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;l_item_index&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;i,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;l_fragment_beg&nbsp;&nbsp;&nbsp;TYPE&nbsp;i,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;l_fragment_len&nbsp;&nbsp;&nbsp;TYPE&nbsp;i,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;l_attachment&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;string,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_part_property&nbsp;TYPE&nbsp;ty_property,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_match_result&nbsp;&nbsp;TYPE&nbsp;match_result,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lt_match_result&nbsp;&nbsp;TYPE&nbsp;match_result_tab.<br />
+<br />
+&nbsp;&nbsp;CLEAR:&nbsp;p_file_extension,&nbsp;p_mime_type,&nbsp;p_mime_subtype,&nbsp;px_attachment.<br />
+<br />
+&nbsp;&nbsp;l_part_index&nbsp;=&nbsp;p_row_no.<br />
+&nbsp;&nbsp;DO.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;l_part_index&nbsp;=&nbsp;l_part_index&nbsp;-&nbsp;3.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;l_part_index&nbsp;&lt;&nbsp;1.&nbsp;EXIT.&nbsp;ENDIF.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Attachment&nbsp;Attributes<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;mt_property&nbsp;INDEX&nbsp;l_part_index&nbsp;INTO&nbsp;ls_part_property.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;ls_part_property-tag_name&nbsp;=&nbsp;'----item'.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"#EC&nbsp;NOTEXT<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;l_item_index&nbsp;=&nbsp;l_part_index&nbsp;+&nbsp;1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;mt_property&nbsp;INDEX&nbsp;l_item_index&nbsp;INTO&nbsp;ls_part_property.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;ls_part_property-tag_value&nbsp;=&nbsp;'content-type'.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"#EC&nbsp;NOTEXT<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;l_item_index&nbsp;=&nbsp;l_item_index&nbsp;+&nbsp;1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;mt_property&nbsp;INDEX&nbsp;l_item_index&nbsp;INTO&nbsp;ls_part_property.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;ls_part_property-tag_value&nbsp;CS&nbsp;'/xml'&nbsp;OR<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_part_property-tag_value&nbsp;CS&nbsp;'/x-sap-bxml'.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"#EC&nbsp;NOTEXT<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;p_mime_type&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'text'.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"#EC&nbsp;NOTEXT<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;p_mime_subtype&nbsp;=&nbsp;'xml'.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"#EC&nbsp;NOTEXT<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ELSE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SPLIT&nbsp;ls_part_property-tag_value&nbsp;AT&nbsp;'/'&nbsp;INTO&nbsp;p_mime_type&nbsp;p_mime_subtype.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ELSEIF&nbsp;ls_part_property-tag_value&nbsp;=&nbsp;'content-id'.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"#EC&nbsp;NOTEXT<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;l_item_index&nbsp;=&nbsp;l_item_index&nbsp;+&nbsp;1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;mt_property&nbsp;INDEX&nbsp;l_item_index&nbsp;INTO&nbsp;ls_part_property.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FIND&nbsp;ALL&nbsp;OCCURRENCES&nbsp;OF&nbsp;'.'&nbsp;IN&nbsp;ls_part_property-tag_value<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RESULTS&nbsp;lt_match_result.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;nfill&nbsp;=&nbsp;lines(&nbsp;lt_match_result&nbsp;).<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;nfill&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;lt_match_result&nbsp;INTO&nbsp;ls_match_result&nbsp;INDEX&nbsp;nfill.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;offset&nbsp;=&nbsp;ls_match_result-offset&nbsp;+&nbsp;1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;p_file_extension&nbsp;=&nbsp;ls_part_property-tag_value+offset.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;l_item_index&nbsp;=&nbsp;l_part_index&nbsp;-&nbsp;1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;mt_property&nbsp;INDEX&nbsp;l_item_index&nbsp;INTO&nbsp;ls_part_property.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;ls_part_property-tag_name&nbsp;&lt;&gt;&nbsp;'---MIME_HEADER'.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"#EC&nbsp;NOTEXT<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CONTINUE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Attachment<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;l_item_index&nbsp;=&nbsp;l_item_index&nbsp;-&nbsp;1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;mt_property&nbsp;INDEX&nbsp;l_item_index&nbsp;INTO&nbsp;ls_part_property.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;ls_part_property-tag_name&nbsp;NS&nbsp;'--PART_'.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"#EC&nbsp;NOTEXT<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXIT.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;l_part_no&nbsp;=&nbsp;ls_part_property-tag_name+7.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Get&nbsp;the&nbsp;right&nbsp;one<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FIND&nbsp;ALL&nbsp;OCCURRENCES&nbsp;OF&nbsp;m_part_content_beg&nbsp;IN&nbsp;ms_current_result-trace_data&nbsp;IN&nbsp;BYTE&nbsp;MODE<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RESULTS&nbsp;lt_match_result.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;lt_match_result&nbsp;INTO&nbsp;ls_match_result&nbsp;INDEX&nbsp;l_part_no.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;&lt;&gt;&nbsp;0.&nbsp;EXIT.&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;l_fragment_beg&nbsp;=&nbsp;ls_match_result-offset&nbsp;+&nbsp;xstrlen(&nbsp;m_part_content_beg&nbsp;).<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SEARCH&nbsp;ms_current_result-trace_data&nbsp;FOR&nbsp;m_part_content_end&nbsp;STARTING&nbsp;AT&nbsp;l_fragment_beg&nbsp;IN&nbsp;BYTE&nbsp;MODE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;&lt;&gt;&nbsp;0.&nbsp;EXIT.&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;l_fragment_len&nbsp;=&nbsp;sy-fdpos.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;px_attachment&nbsp;=&nbsp;ms_current_result-trace_data+l_fragment_beg(l_fragment_len).<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;l_attachment&nbsp;&nbsp;=&nbsp;cl_soap_xml_helper=&gt;xstring_to_string(&nbsp;input&nbsp;=&nbsp;px_attachment&nbsp;).<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;px_attachment&nbsp;=&nbsp;l_attachment.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXIT.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;ENDDO.<br />
+<br />
+ENDFORM.                    " get_attachment_remote<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;update_property<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM update_property USING p_row_no TYPE i.<br />
+<br />
+&nbsp;&nbsp;DATA:&nbsp;l_ignore_level&nbsp;&nbsp;TYPE&nbsp;i,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;l_next_line&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;i,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;l_expand_line&nbsp;&nbsp;&nbsp;TYPE&nbsp;i,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;l_delete_line&nbsp;&nbsp;&nbsp;TYPE&nbsp;i,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;l_ignore&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;xsdboolean,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;l_no_last_line&nbsp;&nbsp;TYPE&nbsp;xsdboolean,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_prop&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;ty_property,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_org_prop&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;ty_property,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_current_prop&nbsp;TYPE&nbsp;ty_property,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_last_prop&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;ty_property.<br />
+<br />
+&nbsp;&nbsp;CLEAR&nbsp;m_update_required.<br />
+&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;mt_property&nbsp;INDEX&nbsp;p_row_no&nbsp;INTO&nbsp;ls_current_prop.<br />
+&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;&lt;&gt;&nbsp;0.&nbsp;EXIT.&nbsp;ENDIF.<br />
+&nbsp;&nbsp;ls_org_prop&nbsp;=&nbsp;ls_current_prop.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Expand&nbsp;Node&nbsp;or&nbsp;Display&nbsp;Attachments<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;IF&nbsp;ls_current_prop-tag_type&nbsp;&lt;&gt;&nbsp;cl_soap_xml_parser=&gt;co_tag_type_node_only.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;mt_property&nbsp;INTO&nbsp;ls_prop&nbsp;INDEX&nbsp;1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;ls_prop-tag_name&nbsp;=&nbsp;'-MULTIPART'&nbsp;AND&nbsp;ls_current_prop-tag_name&nbsp;=&nbsp;'---PART_CONTENT'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;show_attachment&nbsp;USING&nbsp;p_row_no.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXIT.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXIT.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Get&nbsp;location&nbsp;for&nbsp;insert<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;m_update_required&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;l_next_line&nbsp;=&nbsp;sy-tabix&nbsp;+&nbsp;1.<br />
+&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;mt_property&nbsp;INTO&nbsp;ls_last_prop&nbsp;INDEX&nbsp;l_next_line.<br />
+&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;&lt;&gt;&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;l_no_last_line&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;mt_prop_expand&nbsp;INTO&nbsp;ls_last_prop&nbsp;INDEX&nbsp;m_total_lines.<br />
+&nbsp;&nbsp;ELSE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;ls_last_prop-tag_type&nbsp;=&nbsp;cl_soap_xml_parser=&gt;co_tag_type_attribute.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DO.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;l_next_line&nbsp;=&nbsp;l_next_line&nbsp;+&nbsp;1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;mt_property&nbsp;INTO&nbsp;ls_last_prop&nbsp;INDEX&nbsp;l_next_line.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;&lt;&gt;&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;l_no_last_line&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;mt_prop_expand&nbsp;INTO&nbsp;ls_last_prop&nbsp;INDEX&nbsp;m_total_lines.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXIT.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ELSE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;ls_last_prop-tag_type&nbsp;&lt;&gt;&nbsp;cl_soap_xml_parser=&gt;co_tag_type_attribute.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXIT.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_current_prop&nbsp;=&nbsp;ls_last_prop.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDDO.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Expand<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;IF&nbsp;ls_org_prop-expanded&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;set_icon_collapse&nbsp;USING&nbsp;ls_org_prop.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MODIFY&nbsp;mt_property&nbsp;FROM&nbsp;ls_org_prop&nbsp;INDEX&nbsp;p_row_no.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MODIFY&nbsp;mt_prop_expand&nbsp;FROM&nbsp;ls_org_prop&nbsp;INDEX&nbsp;ls_org_prop-line_no.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Do&nbsp;nothing&nbsp;if&nbsp;Empty&nbsp;Node<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;ls_org_prop-line_no&nbsp;=&nbsp;ls_org_prop-last_line.&nbsp;EXIT.&nbsp;ENDIF.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Expand&nbsp;until&nbsp;next&nbsp;entry<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;l_expand_line&nbsp;=&nbsp;ls_current_prop-line_no&nbsp;+&nbsp;1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;mt_prop_expand&nbsp;FROM&nbsp;l_expand_line&nbsp;INTO&nbsp;ls_prop.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;ls_prop-line_no&nbsp;&nbsp;&nbsp;&gt;&nbsp;ls_last_prop-line_no&nbsp;OR<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(&nbsp;ls_prop-line_no&nbsp;=&nbsp;ls_last_prop-line_no&nbsp;AND&nbsp;l_no_last_line&nbsp;IS&nbsp;INITIAL&nbsp;).<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXIT.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;l_ignore&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;ls_prop-tag_level&nbsp;=&nbsp;ls_current_prop-tag_level&nbsp;AND<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_prop-tag_type&nbsp;&nbsp;=&nbsp;cl_soap_xml_parser=&gt;co_tag_type_attribute.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CONTINUE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ELSE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INSERT&nbsp;ls_prop&nbsp;INTO&nbsp;mt_property&nbsp;INDEX&nbsp;l_next_line.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;l_next_line&nbsp;=&nbsp;l_next_line&nbsp;+&nbsp;1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ELSE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;ls_prop-tag_level&nbsp;&gt;&nbsp;l_ignore_level.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CONTINUE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ELSE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INSERT&nbsp;ls_prop&nbsp;INTO&nbsp;mt_property&nbsp;INDEX&nbsp;l_next_line.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;l_next_line&nbsp;=&nbsp;l_next_line&nbsp;+&nbsp;1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;ls_prop-tag_level&nbsp;&lt;=&nbsp;l_ignore_level&nbsp;AND<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_prop-tag_type&nbsp;&lt;&gt;&nbsp;cl_soap_xml_parser=&gt;co_tag_type_attribute.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CLEAR:&nbsp;l_ignore,&nbsp;l_ignore_level.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;ls_prop-expanded&nbsp;IS&nbsp;INITIAL&nbsp;AND<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_prop-tag_type&nbsp;=&nbsp;cl_soap_xml_parser=&gt;co_tag_type_node_only.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;l_ignore&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;l_ignore_level&nbsp;=&nbsp;ls_prop-tag_level.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Collapse<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;ELSE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;set_icon_expand&nbsp;USING&nbsp;ls_org_prop.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MODIFY&nbsp;mt_property&nbsp;FROM&nbsp;ls_org_prop&nbsp;INDEX&nbsp;p_row_no.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MODIFY&nbsp;mt_prop_expand&nbsp;FROM&nbsp;ls_org_prop&nbsp;INDEX&nbsp;ls_org_prop-line_no.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Do&nbsp;nothing&nbsp;if&nbsp;Empty&nbsp;Node<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;ls_org_prop-line_no&nbsp;=&nbsp;ls_org_prop-last_line.&nbsp;EXIT.&nbsp;ENDIF.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Collapse&nbsp;until&nbsp;next&nbsp;level<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;mt_property&nbsp;FROM&nbsp;l_next_line&nbsp;INTO&nbsp;ls_prop.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;l_delete_line&nbsp;=&nbsp;sy-tabix.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;ls_prop-line_no&nbsp;&gt;&nbsp;ls_org_prop-last_line.&nbsp;EXIT.&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;ls_prop-tag_level&nbsp;=&nbsp;ls_org_prop-tag_level&nbsp;AND<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_prop-tag_type&nbsp;=&nbsp;cl_soap_xml_parser=&gt;co_tag_type_attribute.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CONTINUE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DELETE&nbsp;mt_property&nbsp;INDEX&nbsp;l_delete_line.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+ENDFORM.                    " update_property<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FORM&nbsp;show_source_code<br />
+*---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM show_source_code USING p_row_no TYPE i.<br />
+<br />
+&nbsp;&nbsp;DATA:&nbsp;ls_trace&nbsp;&nbsp;TYPE&nbsp;ty_trace.<br />
+<br />
+&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;mt_trace&nbsp;INDEX&nbsp;p_row_no&nbsp;INTO&nbsp;ls_trace.<br />
+&nbsp;&nbsp;IF&nbsp;ls_trace-component&nbsp;IS&nbsp;INITIAL.&nbsp;EXIT.&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;cl_soap_util_helper=&gt;show_source(<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;program&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_trace-component<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;include&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_trace-operation<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ftype&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_trace-optype<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rowno&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_trace-rowno<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;new_window&nbsp;=&nbsp;m_new_window<br />
+&nbsp;&nbsp;).<br />
+<br />
+ENDFORM.                   " show_source_code<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FORM&nbsp;get_download_type<br />
+*---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM get_download_type CHANGING p_download_only TYPE abap_bool.<br />
+<br />
+&nbsp;&nbsp;DATA:&nbsp;l_answer&nbsp;&nbsp;&nbsp;TYPE&nbsp;char1,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;l_question&nbsp;TYPE&nbsp;string.<br />
+<br />
+&nbsp;&nbsp;l_question&nbsp;=&nbsp;'Download&nbsp;payload&nbsp;only&nbsp;or&nbsp;with&nbsp;context?'(q11).<br />
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'POPUP_TO_CONFIRM'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;titlebar&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'Download&nbsp;Payload&nbsp;Trace'(q12)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text_question&nbsp;=&nbsp;l_question<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text_button_1&nbsp;=&nbsp;'Payload&nbsp;only'(q13)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text_button_2&nbsp;=&nbsp;'With&nbsp;context'(q14)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;answer&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;l_answer.<br />
+&nbsp;&nbsp;CASE&nbsp;l_answer.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'1'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;p_download_only&nbsp;=&nbsp;abap_true.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'2'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;p_download_only&nbsp;=&nbsp;abap_false.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;OTHERS.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;p_download_only&nbsp;=&nbsp;abap_undefined.<br />
+&nbsp;&nbsp;ENDCASE.<br />
+<br />
+ENDFORM.                    " get_download_type<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FORM&nbsp;download_traces<br />
+*---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM download_traces USING pt_row TYPE lvc_t_roid.<br />
+<br />
+&nbsp;&nbsp;DATA:&nbsp;l_download_type&nbsp;TYPE&nbsp;abap_bool,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;l_payload_only&nbsp;&nbsp;TYPE&nbsp;xsdboolean,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_trace&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;ty_trace,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_result&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;srt_pload_result,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lt_marked&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;srt_pload_result_tab.<br />
+<br />
+&nbsp;&nbsp;FIELD-SYMBOLS:&nbsp;&lt;fs&gt;&nbsp;TYPE&nbsp;lvc_s_roid.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Check&nbsp;download&nbsp;type<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;PERFORM&nbsp;get_download_type&nbsp;CHANGING&nbsp;l_download_type.<br />
+&nbsp;&nbsp;IF&nbsp;l_download_type&nbsp;=&nbsp;abap_undefined.&nbsp;EXIT.&nbsp;ENDIF.<br />
+&nbsp;&nbsp;l_payload_only&nbsp;=&nbsp;l_download_type.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Get&nbsp;all&nbsp;marked&nbsp;entries<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;pt_row&nbsp;ASSIGNING&nbsp;&lt;fs&gt;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;mt_trace&nbsp;INDEX&nbsp;&lt;fs&gt;-row_id&nbsp;INTO&nbsp;ls_trace.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;&lt;&gt;&nbsp;0.&nbsp;CONTINUE.&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;mt_result&nbsp;INTO&nbsp;ls_result&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"#EC&nbsp;CI_STDSEQ<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WITH&nbsp;KEY&nbsp;opid&nbsp;&nbsp;=&nbsp;ls_trace-opid<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;subno&nbsp;=&nbsp;ls_trace-subno.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;ls_result&nbsp;TO&nbsp;lt_marked.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+&nbsp;&nbsp;IF&nbsp;lt_marked&nbsp;IS&nbsp;INITIAL.&nbsp;EXIT.&nbsp;ENDIF.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Sort&nbsp;all&nbsp;entries&nbsp;by&nbsp;TIMESTAMP&nbsp;and&nbsp;serialize&nbsp;them&nbsp;in&nbsp;one&nbsp;XML<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;SORT&nbsp;lt_marked&nbsp;BY&nbsp;utctime&nbsp;usectime&nbsp;sectorno&nbsp;DESCENDING.<br />
+&nbsp;&nbsp;cl_soap_xml_helper=&gt;serialize_pload_trace(<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;trace_list&nbsp;&nbsp;&nbsp;=&nbsp;lt_marked<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;payload_only&nbsp;=&nbsp;l_payload_only<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;download&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'X'<br />
+&nbsp;&nbsp;).<br />
+<br />
+ENDFORM.                    " download_traces<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;get_selected_rows<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM get_selected_rows USING pt_row TYPE lvc_t_roid.<br />
+<br />
+&nbsp;&nbsp;DATA:&nbsp;ls_row&nbsp;&nbsp;TYPE&nbsp;lvc_s_roid,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_cell&nbsp;TYPE&nbsp;lvc_s_ceno,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lt_cell&nbsp;TYPE&nbsp;lvc_t_ceno.<br />
+<br />
+&nbsp;&nbsp;CALL&nbsp;METHOD&nbsp;mr_gui_header_grid-&gt;get_selected_rows<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;et_row_no&nbsp;=&nbsp;pt_row.<br />
+&nbsp;&nbsp;IF&nbsp;pt_row[]&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;METHOD&nbsp;mr_gui_header_grid-&gt;get_selected_cells_id<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;et_cells&nbsp;=&nbsp;lt_cell.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;lt_cell&nbsp;INTO&nbsp;ls_cell&nbsp;INDEX&nbsp;1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_row-row_id&nbsp;=&nbsp;ls_cell-row_id.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;ls_row&nbsp;TO&nbsp;pt_row.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+ENDFORM.                    " get_selected_rows<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;search_traces<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM search_traces.<br />
+<br />
+&nbsp;&nbsp;DATA:&nbsp;ls_trace&nbsp;TYPE&nbsp;ty_trace,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_row&nbsp;&nbsp;&nbsp;TYPE&nbsp;lvc_s_roid,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lt_row&nbsp;&nbsp;&nbsp;TYPE&nbsp;lvc_t_roid.<br />
+<br />
+&nbsp;&nbsp;PERFORM&nbsp;get_selected_rows&nbsp;USING&nbsp;lt_row.<br />
+&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;lt_row&nbsp;INTO&nbsp;ls_row&nbsp;INDEX&nbsp;1.<br />
+&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;mt_trace&nbsp;INDEX&nbsp;ls_row-row_id&nbsp;INTO&nbsp;ls_trace.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;inp_rcid&nbsp;=&nbsp;ls_trace-root_ctx_id.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;inp_cid&nbsp;&nbsp;=&nbsp;ls_trace-connection_id.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;inp_ccnt&nbsp;=&nbsp;ls_trace-connection_cnt.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;inp_tid&nbsp;&nbsp;=&nbsp;ls_trace-transaction_id.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;inp_mid&nbsp;&nbsp;=&nbsp;ls_trace-message_id.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;CALL&nbsp;SCREEN&nbsp;300&nbsp;STARTING&nbsp;AT&nbsp;10&nbsp;10.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;ok_code&nbsp;=&nbsp;'GOON'.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Show&nbsp;Traces&nbsp;by&nbsp;Root&nbsp;Context&nbsp;ID<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;rb_pid&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SUBMIT&nbsp;srt_util_pload_detail&nbsp;WITH&nbsp;root_cid&nbsp;=&nbsp;inp_rcid<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WITH&nbsp;conn_id&nbsp;&nbsp;=&nbsp;inp_cid<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WITH&nbsp;conn_cnt&nbsp;=&nbsp;inp_ccnt&nbsp;"#EC&nbsp;CI_USE_WANTED<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;RETURN.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"#EC&nbsp;CI_SUBMIT<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXIT.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Show&nbsp;Traces&nbsp;by&nbsp;Transaction&nbsp;ID<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;rb_tid&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SUBMIT&nbsp;srt_util_pload_detail&nbsp;WITH&nbsp;tid&nbsp;=&nbsp;inp_tid&nbsp;"#EC&nbsp;CI_USE_WANTED<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;RETURN.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"#EC&nbsp;CI_SUBMIT<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXIT.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Show&nbsp;Traces&nbsp;by&nbsp;Message&nbsp;ID<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;rb_mid&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SUBMIT&nbsp;srt_util_pload_detail&nbsp;WITH&nbsp;mid&nbsp;=&nbsp;inp_mid&nbsp;"#EC&nbsp;CI_USE_WANTED<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;RETURN.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"#EC&nbsp;CI_SUBMIT<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXIT.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+ENDFORM.                    " search_traces<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FORM&nbsp;show_external_tool<br />
+*---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM show_external_tool USING ps_property  TYPE ty_property.<br />
+<br />
+&nbsp;&nbsp;DATA:&nbsp;l_qname&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;qrfc_queue_name,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_property&nbsp;TYPE&nbsp;ty_property.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;ps_property-tag_value&nbsp;IS&nbsp;INITIAL.&nbsp;EXIT.&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;ps_property-tag_name&nbsp;CS&nbsp;'FUNCTION_MODULE'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;cl_soap_util_helper=&gt;show_source(<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;include&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ps_property-tag_value<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ftype&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'U'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;new_window&nbsp;=&nbsp;m_new_window<br />
+&nbsp;&nbsp;&nbsp;&nbsp;).<br />
+<br />
+&nbsp;&nbsp;ELSEIF&nbsp;ps_property-tag_name&nbsp;CS&nbsp;'SEQ_NAME'&nbsp;&nbsp;&nbsp;&nbsp;OR<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ps_property-tag_name&nbsp;CS&nbsp;'Sequence-Id'&nbsp;OR<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ps_property-tag_name&nbsp;CS&nbsp;'SEQUENCE_ID'.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"#EC&nbsp;NOTEXT<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SUBMIT&nbsp;srt_sequence_moni_exec&nbsp;WITH&nbsp;pm_sid&nbsp;=&nbsp;ps_property-tag_value&nbsp;"#EC&nbsp;CI_USE_WANTED<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;RETURN.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"#EC&nbsp;CI_SUBMIT<br />
+<br />
+&nbsp;&nbsp;ELSEIF&nbsp;ps_property-tag_name&nbsp;CS&nbsp;'SEQITEM_ID'&nbsp;OR<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ps_property-tag_name&nbsp;CS&nbsp;'MESSAGE_ID'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SUBMIT&nbsp;srt_message_moni_exec&nbsp;WITH&nbsp;pm_mid&nbsp;=&nbsp;ps_property-tag_value&nbsp;"#EC&nbsp;CI_USE_WANTED<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;RETURN.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"#EC&nbsp;CI_SUBMIT<br />
+<br />
+&nbsp;&nbsp;ELSEIF&nbsp;ps_property-tag_name&nbsp;CS&nbsp;'PERSIST_ID'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SUBMIT&nbsp;srt_message_moni_exec&nbsp;WITH&nbsp;pm_pid&nbsp;=&nbsp;ps_property-tag_value&nbsp;"#EC&nbsp;CI_USE_WANTED<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;RETURN.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"#EC&nbsp;CI_SUBMIT<br />
+<br />
+&nbsp;&nbsp;ELSEIF&nbsp;ps_property-tag_name&nbsp;CS&nbsp;'QUEUENAME'&nbsp;&nbsp;OR<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ps_property-tag_name&nbsp;CS&nbsp;'QUEUE_NAME'&nbsp;OR<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ps_property-tag_name&nbsp;CS&nbsp;'Queue-Name'.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"#EC&nbsp;NOTEXT<br />
+&nbsp;&nbsp;&nbsp;&nbsp;l_qname&nbsp;=&nbsp;ps_property-tag_value.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;strlen(&nbsp;l_qname&nbsp;)&nbsp;&lt;&gt;&nbsp;38&nbsp;AND&nbsp;ps_property-line_no&nbsp;&gt;&nbsp;2.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;mt_property&nbsp;INTO&nbsp;ls_property&nbsp;INDEX&nbsp;4.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;=&nbsp;0&nbsp;AND&nbsp;ls_property-tag_name&nbsp;CS&nbsp;'SEQ_NAME'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CONCATENATE&nbsp;l_qname(6)&nbsp;ls_property-tag_value<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;l_qname.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SUBMIT&nbsp;rs_bgrfc_monitor&nbsp;WITH&nbsp;p_qrfc&nbsp;&nbsp;&nbsp;=&nbsp;'X'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WITH&nbsp;p_inbou&nbsp;&nbsp;=&nbsp;'X'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WITH&nbsp;p_outbou&nbsp;=&nbsp;space<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WITH&nbsp;p_trfc&nbsp;&nbsp;&nbsp;=&nbsp;space<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WITH&nbsp;so_din&nbsp;&nbsp;&nbsp;=&nbsp;m_inbound_dest<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WITH&nbsp;so_queue&nbsp;=&nbsp;l_qname&nbsp;&nbsp;"#EC&nbsp;CI_USE_WANTED<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;RETURN.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"#EC&nbsp;CI_SUBMIT<br />
+<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+ENDFORM.                   " show_external_tool<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;create_layout<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM create_layout.<br />
+<br />
+&nbsp;&nbsp;DATA:&nbsp;index&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;i,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_gui_fcat&nbsp;TYPE&nbsp;lvc_s_fcat.<br />
+<br />
+&nbsp;&nbsp;CLEAR:&nbsp;mt_gui_fcat,&nbsp;mt_ctx_fcat.<br />
+<br />
+&nbsp;&nbsp;ms_gui_layout-sel_mode&nbsp;&nbsp;&nbsp;=&nbsp;'A'.<br />
+&nbsp;&nbsp;ms_gui_layout-info_fname&nbsp;=&nbsp;'LINECOLOR'.<br />
+<br />
+&nbsp;&nbsp;index&nbsp;=&nbsp;index&nbsp;+&nbsp;1.<br />
+&nbsp;&nbsp;ls_gui_fcat-col_pos&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;index.<br />
+&nbsp;&nbsp;ls_gui_fcat-fieldname&nbsp;&nbsp;=&nbsp;'TRACENO'.<br />
+&nbsp;&nbsp;ls_gui_fcat-coltext&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'Trace&nbsp;No'(011).<br />
+&nbsp;&nbsp;ls_gui_fcat-outputlen&nbsp;&nbsp;=&nbsp;7.<br />
+&nbsp;&nbsp;ls_gui_fcat-fix_column&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;APPEND&nbsp;ls_gui_fcat&nbsp;TO&nbsp;mt_gui_fcat.<br />
+<br />
+&nbsp;&nbsp;index&nbsp;=&nbsp;index&nbsp;+&nbsp;1.<br />
+&nbsp;&nbsp;CLEAR&nbsp;ls_gui_fcat.<br />
+&nbsp;&nbsp;ls_gui_fcat-col_pos&nbsp;&nbsp;&nbsp;=&nbsp;index.<br />
+&nbsp;&nbsp;ls_gui_fcat-fieldname&nbsp;=&nbsp;'SECTORNAME'.<br />
+&nbsp;&nbsp;ls_gui_fcat-coltext&nbsp;&nbsp;&nbsp;=&nbsp;'Processing&nbsp;Unit'(012).<br />
+&nbsp;&nbsp;ls_gui_fcat-outputlen&nbsp;=&nbsp;16.<br />
+&nbsp;&nbsp;ls_gui_fcat-dd_outlen&nbsp;=&nbsp;32.<br />
+&nbsp;&nbsp;ls_gui_fcat-lowercase&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;APPEND&nbsp;ls_gui_fcat&nbsp;TO&nbsp;mt_gui_fcat.<br />
+<br />
+&nbsp;&nbsp;index&nbsp;=&nbsp;index&nbsp;+&nbsp;1.<br />
+&nbsp;&nbsp;CLEAR&nbsp;ls_gui_fcat.<br />
+&nbsp;&nbsp;ls_gui_fcat-col_pos&nbsp;&nbsp;&nbsp;=&nbsp;index.<br />
+&nbsp;&nbsp;ls_gui_fcat-fieldname&nbsp;=&nbsp;'TYPE_C'.<br />
+&nbsp;&nbsp;ls_gui_fcat-coltext&nbsp;&nbsp;&nbsp;=&nbsp;'Type'(013).<br />
+&nbsp;&nbsp;ls_gui_fcat-outputlen&nbsp;=&nbsp;9.<br />
+&nbsp;&nbsp;ls_gui_fcat-hotspot&nbsp;&nbsp;&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;ls_gui_fcat-lowercase&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;APPEND&nbsp;ls_gui_fcat&nbsp;TO&nbsp;mt_gui_fcat.<br />
+<br />
+&nbsp;&nbsp;index&nbsp;=&nbsp;index&nbsp;+&nbsp;1.<br />
+&nbsp;&nbsp;CLEAR&nbsp;ls_gui_fcat.<br />
+&nbsp;&nbsp;ls_gui_fcat-col_pos&nbsp;&nbsp;&nbsp;=&nbsp;index.<br />
+&nbsp;&nbsp;ls_gui_fcat-fieldname&nbsp;=&nbsp;'STEPNO_C'.<br />
+&nbsp;&nbsp;ls_gui_fcat-coltext&nbsp;&nbsp;&nbsp;=&nbsp;'Step'(014).<br />
+&nbsp;&nbsp;ls_gui_fcat-outputlen&nbsp;=&nbsp;4.<br />
+&nbsp;&nbsp;APPEND&nbsp;ls_gui_fcat&nbsp;TO&nbsp;mt_gui_fcat.<br />
+<br />
+&nbsp;&nbsp;index&nbsp;=&nbsp;index&nbsp;+&nbsp;1.<br />
+&nbsp;&nbsp;CLEAR&nbsp;ls_gui_fcat.<br />
+&nbsp;&nbsp;ls_gui_fcat-col_pos&nbsp;&nbsp;&nbsp;=&nbsp;index.<br />
+&nbsp;&nbsp;ls_gui_fcat-fieldname&nbsp;=&nbsp;'OPERATION_SPACE'.<br />
+&nbsp;&nbsp;ls_gui_fcat-coltext&nbsp;&nbsp;&nbsp;=&nbsp;'Operation&nbsp;Namespace'(015).<br />
+&nbsp;&nbsp;ls_gui_fcat-outputlen&nbsp;=&nbsp;40.<br />
+&nbsp;&nbsp;ls_gui_fcat-dd_outlen&nbsp;=&nbsp;128.<br />
+&nbsp;&nbsp;ls_gui_fcat-lowercase&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;APPEND&nbsp;ls_gui_fcat&nbsp;TO&nbsp;mt_gui_fcat.<br />
+<br />
+&nbsp;&nbsp;index&nbsp;=&nbsp;index&nbsp;+&nbsp;1.<br />
+&nbsp;&nbsp;CLEAR&nbsp;ls_gui_fcat.<br />
+&nbsp;&nbsp;ls_gui_fcat-col_pos&nbsp;&nbsp;&nbsp;=&nbsp;index.<br />
+&nbsp;&nbsp;ls_gui_fcat-fieldname&nbsp;=&nbsp;'OPERATION_NAME'.<br />
+&nbsp;&nbsp;ls_gui_fcat-coltext&nbsp;&nbsp;&nbsp;=&nbsp;'Operation&nbsp;Name'(016).<br />
+&nbsp;&nbsp;ls_gui_fcat-outputlen&nbsp;=&nbsp;35.<br />
+&nbsp;&nbsp;ls_gui_fcat-dd_outlen&nbsp;=&nbsp;128.<br />
+&nbsp;&nbsp;ls_gui_fcat-lowercase&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;APPEND&nbsp;ls_gui_fcat&nbsp;TO&nbsp;mt_gui_fcat.<br />
+<br />
+&nbsp;&nbsp;index&nbsp;=&nbsp;index&nbsp;+&nbsp;1.<br />
+&nbsp;&nbsp;CLEAR&nbsp;ls_gui_fcat.<br />
+&nbsp;&nbsp;ls_gui_fcat-col_pos&nbsp;&nbsp;&nbsp;=&nbsp;index.<br />
+&nbsp;&nbsp;ls_gui_fcat-fieldname&nbsp;=&nbsp;'SOAP_ACTION'.<br />
+&nbsp;&nbsp;ls_gui_fcat-coltext&nbsp;&nbsp;&nbsp;=&nbsp;'SOAP&nbsp;Action'(040).<br />
+&nbsp;&nbsp;ls_gui_fcat-outputlen&nbsp;=&nbsp;35.<br />
+&nbsp;&nbsp;ls_gui_fcat-dd_outlen&nbsp;=&nbsp;128.<br />
+&nbsp;&nbsp;ls_gui_fcat-lowercase&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;APPEND&nbsp;ls_gui_fcat&nbsp;TO&nbsp;mt_gui_fcat.<br />
+<br />
+&nbsp;&nbsp;index&nbsp;=&nbsp;index&nbsp;+&nbsp;1.<br />
+&nbsp;&nbsp;CLEAR&nbsp;ls_gui_fcat.<br />
+&nbsp;&nbsp;ls_gui_fcat-col_pos&nbsp;&nbsp;&nbsp;=&nbsp;index.<br />
+&nbsp;&nbsp;ls_gui_fcat-fieldname&nbsp;=&nbsp;'COMPONENT'.<br />
+&nbsp;&nbsp;ls_gui_fcat-coltext&nbsp;&nbsp;&nbsp;=&nbsp;'Component'(020).<br />
+&nbsp;&nbsp;ls_gui_fcat-outputlen&nbsp;=&nbsp;30.<br />
+&nbsp;&nbsp;ls_gui_fcat-no_out&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;APPEND&nbsp;ls_gui_fcat&nbsp;TO&nbsp;mt_gui_fcat.<br />
+<br />
+&nbsp;&nbsp;index&nbsp;=&nbsp;index&nbsp;+&nbsp;1.<br />
+&nbsp;&nbsp;CLEAR&nbsp;ls_gui_fcat.<br />
+&nbsp;&nbsp;ls_gui_fcat-col_pos&nbsp;&nbsp;&nbsp;=&nbsp;index.<br />
+&nbsp;&nbsp;ls_gui_fcat-fieldname&nbsp;=&nbsp;'OPERATION'.<br />
+&nbsp;&nbsp;ls_gui_fcat-coltext&nbsp;&nbsp;&nbsp;=&nbsp;'Operation'(021).<br />
+&nbsp;&nbsp;ls_gui_fcat-outputlen&nbsp;=&nbsp;61.<br />
+&nbsp;&nbsp;ls_gui_fcat-no_out&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;APPEND&nbsp;ls_gui_fcat&nbsp;TO&nbsp;mt_gui_fcat.<br />
+<br />
+&nbsp;&nbsp;index&nbsp;=&nbsp;index&nbsp;+&nbsp;1.<br />
+&nbsp;&nbsp;CLEAR&nbsp;ls_gui_fcat.<br />
+&nbsp;&nbsp;ls_gui_fcat-col_pos&nbsp;&nbsp;&nbsp;=&nbsp;index.<br />
+&nbsp;&nbsp;ls_gui_fcat-fieldname&nbsp;=&nbsp;'APPLSERVER'.<br />
+&nbsp;&nbsp;ls_gui_fcat-coltext&nbsp;&nbsp;&nbsp;=&nbsp;'Application&nbsp;Server'(022).<br />
+&nbsp;&nbsp;ls_gui_fcat-outputlen&nbsp;=&nbsp;32.<br />
+&nbsp;&nbsp;ls_gui_fcat-no_out&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;ls_gui_fcat-lowercase&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;APPEND&nbsp;ls_gui_fcat&nbsp;TO&nbsp;mt_gui_fcat.<br />
+<br />
+&nbsp;&nbsp;index&nbsp;=&nbsp;index&nbsp;+&nbsp;1.<br />
+&nbsp;&nbsp;CLEAR&nbsp;ls_gui_fcat.<br />
+&nbsp;&nbsp;ls_gui_fcat-col_pos&nbsp;&nbsp;&nbsp;=&nbsp;index.<br />
+&nbsp;&nbsp;ls_gui_fcat-fieldname&nbsp;=&nbsp;'OPID'.<br />
+&nbsp;&nbsp;ls_gui_fcat-coltext&nbsp;&nbsp;&nbsp;=&nbsp;'Operation&nbsp;ID'(024).<br />
+&nbsp;&nbsp;ls_gui_fcat-outputlen&nbsp;=&nbsp;35.<br />
+&nbsp;&nbsp;ls_gui_fcat-no_out&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;APPEND&nbsp;ls_gui_fcat&nbsp;TO&nbsp;mt_gui_fcat.<br />
+<br />
+&nbsp;&nbsp;index&nbsp;=&nbsp;index&nbsp;+&nbsp;1.<br />
+&nbsp;&nbsp;CLEAR&nbsp;ls_gui_fcat.<br />
+&nbsp;&nbsp;ls_gui_fcat-col_pos&nbsp;&nbsp;&nbsp;=&nbsp;index.<br />
+&nbsp;&nbsp;ls_gui_fcat-fieldname&nbsp;=&nbsp;'COMMTYPE'.<br />
+&nbsp;&nbsp;ls_gui_fcat-coltext&nbsp;&nbsp;&nbsp;=&nbsp;'Adapter&nbsp;Type'(052).<br />
+&nbsp;&nbsp;ls_gui_fcat-outputlen&nbsp;=&nbsp;10.<br />
+&nbsp;&nbsp;APPEND&nbsp;ls_gui_fcat&nbsp;TO&nbsp;mt_gui_fcat.<br />
+<br />
+&nbsp;&nbsp;index&nbsp;=&nbsp;index&nbsp;+&nbsp;1.<br />
+&nbsp;&nbsp;CLEAR&nbsp;ls_gui_fcat.<br />
+&nbsp;&nbsp;ls_gui_fcat-col_pos&nbsp;&nbsp;&nbsp;=&nbsp;index.<br />
+&nbsp;&nbsp;ls_gui_fcat-fieldname&nbsp;=&nbsp;'WSNAME'.<br />
+&nbsp;&nbsp;ls_gui_fcat-coltext&nbsp;&nbsp;&nbsp;=&nbsp;'Web&nbsp;Service&nbsp;Name'(030).<br />
+&nbsp;&nbsp;ls_gui_fcat-outputlen&nbsp;=&nbsp;30.<br />
+&nbsp;&nbsp;ls_gui_fcat-no_out&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;ls_gui_fcat-lowercase&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;APPEND&nbsp;ls_gui_fcat&nbsp;TO&nbsp;mt_gui_fcat.<br />
+<br />
+&nbsp;&nbsp;index&nbsp;=&nbsp;index&nbsp;+&nbsp;1.<br />
+&nbsp;&nbsp;CLEAR&nbsp;ls_gui_fcat.<br />
+&nbsp;&nbsp;ls_gui_fcat-col_pos&nbsp;&nbsp;&nbsp;=&nbsp;index.<br />
+&nbsp;&nbsp;ls_gui_fcat-fieldname&nbsp;=&nbsp;'IFNAME'.<br />
+&nbsp;&nbsp;ls_gui_fcat-coltext&nbsp;&nbsp;&nbsp;=&nbsp;'Interface&nbsp;Name'(071).<br />
+&nbsp;&nbsp;ls_gui_fcat-outputlen&nbsp;=&nbsp;33.<br />
+&nbsp;&nbsp;ls_gui_fcat-lowercase&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;APPEND&nbsp;ls_gui_fcat&nbsp;TO&nbsp;mt_gui_fcat.<br />
+<br />
+&nbsp;&nbsp;index&nbsp;=&nbsp;index&nbsp;+&nbsp;1.<br />
+&nbsp;&nbsp;CLEAR&nbsp;ls_gui_fcat.<br />
+&nbsp;&nbsp;ls_gui_fcat-col_pos&nbsp;&nbsp;&nbsp;=&nbsp;index.<br />
+&nbsp;&nbsp;ls_gui_fcat-fieldname&nbsp;=&nbsp;'MESSAGE_ID'.<br />
+&nbsp;&nbsp;ls_gui_fcat-coltext&nbsp;&nbsp;&nbsp;=&nbsp;'Message&nbsp;ID'(023).<br />
+&nbsp;&nbsp;ls_gui_fcat-outputlen&nbsp;=&nbsp;35.<br />
+&nbsp;&nbsp;ls_gui_fcat-lowercase&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;APPEND&nbsp;ls_gui_fcat&nbsp;TO&nbsp;mt_gui_fcat.<br />
+<br />
+&nbsp;&nbsp;index&nbsp;=&nbsp;index&nbsp;+&nbsp;1.<br />
+&nbsp;&nbsp;CLEAR&nbsp;ls_gui_fcat.<br />
+&nbsp;&nbsp;ls_gui_fcat-col_pos&nbsp;&nbsp;&nbsp;=&nbsp;index.<br />
+&nbsp;&nbsp;ls_gui_fcat-fieldname&nbsp;=&nbsp;'OPDATE'.<br />
+&nbsp;&nbsp;ls_gui_fcat-coltext&nbsp;&nbsp;&nbsp;=&nbsp;'Date'(017).<br />
+&nbsp;&nbsp;ls_gui_fcat-outputlen&nbsp;=&nbsp;10.<br />
+&nbsp;&nbsp;APPEND&nbsp;ls_gui_fcat&nbsp;TO&nbsp;mt_gui_fcat.<br />
+<br />
+&nbsp;&nbsp;index&nbsp;=&nbsp;index&nbsp;+&nbsp;1.<br />
+&nbsp;&nbsp;CLEAR&nbsp;ls_gui_fcat.<br />
+&nbsp;&nbsp;ls_gui_fcat-col_pos&nbsp;&nbsp;&nbsp;=&nbsp;index.<br />
+&nbsp;&nbsp;ls_gui_fcat-fieldname&nbsp;=&nbsp;'OPTIME'.<br />
+&nbsp;&nbsp;ls_gui_fcat-coltext&nbsp;&nbsp;&nbsp;=&nbsp;'Time'(018).<br />
+&nbsp;&nbsp;ls_gui_fcat-outputlen&nbsp;=&nbsp;8.<br />
+&nbsp;&nbsp;APPEND&nbsp;ls_gui_fcat&nbsp;TO&nbsp;mt_gui_fcat.<br />
+<br />
+&nbsp;&nbsp;index&nbsp;=&nbsp;index&nbsp;+&nbsp;1.<br />
+&nbsp;&nbsp;CLEAR&nbsp;ls_gui_fcat.<br />
+&nbsp;&nbsp;ls_gui_fcat-col_pos&nbsp;&nbsp;&nbsp;=&nbsp;index.<br />
+&nbsp;&nbsp;ls_gui_fcat-fieldname&nbsp;=&nbsp;'SAPUSER'.<br />
+&nbsp;&nbsp;ls_gui_fcat-coltext&nbsp;&nbsp;&nbsp;=&nbsp;'User'(019).<br />
+&nbsp;&nbsp;ls_gui_fcat-outputlen&nbsp;=&nbsp;12.<br />
+&nbsp;&nbsp;APPEND&nbsp;ls_gui_fcat&nbsp;TO&nbsp;mt_gui_fcat.<br />
+<br />
+&nbsp;&nbsp;index&nbsp;=&nbsp;index&nbsp;+&nbsp;1.<br />
+&nbsp;&nbsp;CLEAR&nbsp;ls_gui_fcat.<br />
+&nbsp;&nbsp;ls_gui_fcat-col_pos&nbsp;&nbsp;&nbsp;=&nbsp;index.<br />
+&nbsp;&nbsp;ls_gui_fcat-fieldname&nbsp;=&nbsp;'ROOT_CTX_ID'.<br />
+&nbsp;&nbsp;ls_gui_fcat-coltext&nbsp;&nbsp;&nbsp;=&nbsp;'Root&nbsp;Context&nbsp;ID'(025).<br />
+&nbsp;&nbsp;ls_gui_fcat-outputlen&nbsp;=&nbsp;35.<br />
+&nbsp;&nbsp;ls_gui_fcat-lowercase&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;IF&nbsp;m_show_passport_id&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_gui_fcat-no_out&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;APPEND&nbsp;ls_gui_fcat&nbsp;TO&nbsp;mt_gui_fcat.<br />
+<br />
+&nbsp;&nbsp;index&nbsp;=&nbsp;index&nbsp;+&nbsp;1.<br />
+&nbsp;&nbsp;CLEAR&nbsp;ls_gui_fcat.<br />
+&nbsp;&nbsp;ls_gui_fcat-col_pos&nbsp;&nbsp;&nbsp;=&nbsp;index.<br />
+&nbsp;&nbsp;ls_gui_fcat-fieldname&nbsp;=&nbsp;'CONNECTION_ID'.<br />
+&nbsp;&nbsp;ls_gui_fcat-coltext&nbsp;&nbsp;&nbsp;=&nbsp;'Connection&nbsp;ID'(026).<br />
+&nbsp;&nbsp;ls_gui_fcat-outputlen&nbsp;=&nbsp;35.<br />
+&nbsp;&nbsp;ls_gui_fcat-lowercase&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;IF&nbsp;m_show_passport_id&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_gui_fcat-no_out&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;APPEND&nbsp;ls_gui_fcat&nbsp;TO&nbsp;mt_gui_fcat.<br />
+<br />
+&nbsp;&nbsp;index&nbsp;=&nbsp;index&nbsp;+&nbsp;1.<br />
+&nbsp;&nbsp;CLEAR&nbsp;ls_gui_fcat.<br />
+&nbsp;&nbsp;ls_gui_fcat-col_pos&nbsp;&nbsp;&nbsp;=&nbsp;index.<br />
+&nbsp;&nbsp;ls_gui_fcat-fieldname&nbsp;=&nbsp;'CONNECTION_CNT'.<br />
+&nbsp;&nbsp;ls_gui_fcat-coltext&nbsp;&nbsp;&nbsp;=&nbsp;'Connection&nbsp;Counter'(027).<br />
+&nbsp;&nbsp;ls_gui_fcat-outputlen&nbsp;=&nbsp;10.<br />
+&nbsp;&nbsp;IF&nbsp;m_show_passport_id&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_gui_fcat-no_out&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;APPEND&nbsp;ls_gui_fcat&nbsp;TO&nbsp;mt_gui_fcat.<br />
+<br />
+&nbsp;&nbsp;index&nbsp;=&nbsp;index&nbsp;+&nbsp;1.<br />
+&nbsp;&nbsp;CLEAR&nbsp;ls_gui_fcat.<br />
+&nbsp;&nbsp;ls_gui_fcat-col_pos&nbsp;&nbsp;&nbsp;=&nbsp;index.<br />
+&nbsp;&nbsp;ls_gui_fcat-fieldname&nbsp;=&nbsp;'TRANSACTION_ID'.<br />
+&nbsp;&nbsp;ls_gui_fcat-coltext&nbsp;&nbsp;&nbsp;=&nbsp;'Transaction&nbsp;ID'(028).<br />
+&nbsp;&nbsp;ls_gui_fcat-outputlen&nbsp;=&nbsp;35.<br />
+&nbsp;&nbsp;ls_gui_fcat-lowercase&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;IF&nbsp;m_show_passport_id&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_gui_fcat-no_out&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;APPEND&nbsp;ls_gui_fcat&nbsp;TO&nbsp;mt_gui_fcat.<br />
+<br />
+&nbsp;&nbsp;index&nbsp;=&nbsp;index&nbsp;+&nbsp;1.<br />
+&nbsp;&nbsp;CLEAR&nbsp;ls_gui_fcat.<br />
+&nbsp;&nbsp;ls_gui_fcat-col_pos&nbsp;&nbsp;&nbsp;=&nbsp;index.<br />
+&nbsp;&nbsp;ls_gui_fcat-fieldname&nbsp;=&nbsp;'ROOT_TERM_ID'.<br />
+&nbsp;&nbsp;ls_gui_fcat-coltext&nbsp;&nbsp;&nbsp;=&nbsp;'Root&nbsp;Terminal&nbsp;ID'(029).<br />
+&nbsp;&nbsp;ls_gui_fcat-outputlen&nbsp;=&nbsp;35.<br />
+&nbsp;&nbsp;ls_gui_fcat-lowercase&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;IF&nbsp;m_show_passport_id&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_gui_fcat-no_out&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;APPEND&nbsp;ls_gui_fcat&nbsp;TO&nbsp;mt_gui_fcat.<br />
+<br />
+&nbsp;&nbsp;index&nbsp;=&nbsp;index&nbsp;+&nbsp;1.<br />
+&nbsp;&nbsp;CLEAR&nbsp;ls_gui_fcat.<br />
+&nbsp;&nbsp;ls_gui_fcat-col_pos&nbsp;&nbsp;&nbsp;=&nbsp;index.<br />
+&nbsp;&nbsp;ls_gui_fcat-fieldname&nbsp;=&nbsp;'XSIZE'.<br />
+&nbsp;&nbsp;ls_gui_fcat-coltext&nbsp;&nbsp;&nbsp;=&nbsp;'XML&nbsp;Size'(031).<br />
+&nbsp;&nbsp;ls_gui_fcat-outputlen&nbsp;=&nbsp;10.<br />
+&nbsp;&nbsp;IF&nbsp;m_show_passport_id&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_gui_fcat-no_out&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;APPEND&nbsp;ls_gui_fcat&nbsp;TO&nbsp;mt_gui_fcat.<br />
+<br />
+<br />
+&nbsp;&nbsp;ms_ctx_layout-info_fname&nbsp;=&nbsp;'LINECOLOR'.<br />
+<br />
+&nbsp;&nbsp;index&nbsp;=&nbsp;1.<br />
+&nbsp;&nbsp;CLEAR&nbsp;ls_gui_fcat.<br />
+&nbsp;&nbsp;ls_gui_fcat-col_pos&nbsp;&nbsp;&nbsp;=&nbsp;index.<br />
+&nbsp;&nbsp;ls_gui_fcat-fieldname&nbsp;=&nbsp;'EXCO_ICON'.<br />
+&nbsp;&nbsp;ls_gui_fcat-coltext&nbsp;&nbsp;&nbsp;=&nbsp;'Expand/Collapse'(035).<br />
+&nbsp;&nbsp;ls_gui_fcat-outputlen&nbsp;=&nbsp;3.<br />
+&nbsp;&nbsp;ls_gui_fcat-icon&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;ls_gui_fcat-hotspot&nbsp;&nbsp;&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;APPEND&nbsp;ls_gui_fcat&nbsp;TO&nbsp;mt_ctx_fcat.<br />
+<br />
+&nbsp;&nbsp;index&nbsp;=&nbsp;index&nbsp;+&nbsp;1.<br />
+&nbsp;&nbsp;CLEAR&nbsp;ls_gui_fcat.<br />
+&nbsp;&nbsp;ls_gui_fcat-col_pos&nbsp;&nbsp;&nbsp;=&nbsp;index.<br />
+&nbsp;&nbsp;ls_gui_fcat-fieldname&nbsp;=&nbsp;'TAG_NAME'.<br />
+&nbsp;&nbsp;ls_gui_fcat-coltext&nbsp;&nbsp;&nbsp;=&nbsp;'Name'(032).<br />
+&nbsp;&nbsp;ls_gui_fcat-outputlen&nbsp;=&nbsp;35.<br />
+&nbsp;&nbsp;ls_gui_fcat-lowercase&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;APPEND&nbsp;ls_gui_fcat&nbsp;TO&nbsp;mt_ctx_fcat.<br />
+<br />
+&nbsp;&nbsp;index&nbsp;=&nbsp;index&nbsp;+&nbsp;1.<br />
+&nbsp;&nbsp;CLEAR&nbsp;ls_gui_fcat.<br />
+&nbsp;&nbsp;ls_gui_fcat-col_pos&nbsp;&nbsp;&nbsp;=&nbsp;index.<br />
+&nbsp;&nbsp;ls_gui_fcat-fieldname&nbsp;=&nbsp;'TAG_VALUE'.<br />
+&nbsp;&nbsp;ls_gui_fcat-coltext&nbsp;&nbsp;&nbsp;=&nbsp;'Value'(033).<br />
+&nbsp;&nbsp;ls_gui_fcat-outputlen&nbsp;=&nbsp;110.<br />
+&nbsp;&nbsp;ls_gui_fcat-lowercase&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;APPEND&nbsp;ls_gui_fcat&nbsp;TO&nbsp;mt_ctx_fcat.<br />
+<br />
+ENDFORM.                    " create_layout<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;hide_toolbar<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM hide_toolbar .<br />
+<br />
+&nbsp;&nbsp;APPEND&nbsp;cl_gui_alv_grid=&gt;mc_fc_col_optimize&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TO&nbsp;mt_hidden_code.<br />
+&nbsp;&nbsp;APPEND&nbsp;cl_gui_alv_grid=&gt;mc_fc_help&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TO&nbsp;mt_hidden_code.<br />
+&nbsp;&nbsp;APPEND&nbsp;cl_gui_alv_grid=&gt;mc_fc_col_invisible&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TO&nbsp;mt_hidden_code.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;APPEND&nbsp;cl_gui_alv_grid=&gt;mc_fc_find&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TO&nbsp;mt_hidden_code.<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;APPEND&nbsp;cl_gui_alv_grid=&gt;mc_fc_loc_copy&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TO&nbsp;mt_hidden_code.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;APPEND&nbsp;cl_gui_alv_grid=&gt;mc_fc_delete_filter&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TO&nbsp;mt_hidden_code.<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;APPEND&nbsp;cl_gui_alv_grid=&gt;mc_fc_unfix_columns&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TO&nbsp;mt_hidden_code.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;APPEND&nbsp;cl_gui_alv_grid=&gt;mc_fc_filter&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TO&nbsp;mt_hidden_code.<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;APPEND&nbsp;cl_gui_alv_grid=&gt;mc_fc_subtot&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TO&nbsp;mt_hidden_code.<br />
+&nbsp;&nbsp;APPEND&nbsp;cl_gui_alv_grid=&gt;mc_fc_sum&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TO&nbsp;mt_hidden_code.<br />
+&nbsp;&nbsp;APPEND&nbsp;cl_gui_alv_grid=&gt;mc_fc_print&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TO&nbsp;mt_hidden_code.<br />
+&nbsp;&nbsp;APPEND&nbsp;cl_gui_alv_grid=&gt;mc_fc_views&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TO&nbsp;mt_hidden_code.<br />
+&nbsp;&nbsp;APPEND&nbsp;cl_gui_alv_grid=&gt;mc_fc_graph&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TO&nbsp;mt_hidden_code.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;APPEND&nbsp;cl_gui_alv_grid=&gt;mc_fc_to_office&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TO&nbsp;mt_hidden_code.<br />
+*&nbsp;&nbsp;APPEND&nbsp;cl_gui_alv_grid=&gt;mc_fc_html&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TO&nbsp;mt_hidden_code.<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;APPEND&nbsp;cl_gui_alv_grid=&gt;mc_fc_info&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TO&nbsp;mt_hidden_code.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;APPEND&nbsp;cl_gui_alv_grid=&gt;mc_fc_pc_file&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TO&nbsp;mt_hidden_code.<br />
+*&nbsp;&nbsp;APPEND&nbsp;cl_gui_alv_grid=&gt;mc_fc_expcrdata&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TO&nbsp;mt_hidden_code.<br />
+*&nbsp;&nbsp;APPEND&nbsp;cl_gui_alv_grid=&gt;mc_fc_expcrdesig&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TO&nbsp;mt_hidden_code.<br />
+*&nbsp;&nbsp;APPEND&nbsp;cl_gui_alv_grid=&gt;mc_fc_extend&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TO&nbsp;mt_hidden_code.<br />
+*&nbsp;&nbsp;APPEND&nbsp;cl_gui_alv_grid=&gt;mc_fc_expmdb&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TO&nbsp;mt_hidden_code.<br />
+*&nbsp;&nbsp;APPEND&nbsp;cl_gui_alv_grid=&gt;mc_fc_expcrtempl&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TO&nbsp;mt_hidden_code.<br />
+*&nbsp;&nbsp;APPEND&nbsp;cl_gui_alv_grid=&gt;mc_fc_view_excel&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TO&nbsp;mt_hidden_code.<br />
+*&nbsp;&nbsp;APPEND&nbsp;cl_gui_alv_grid=&gt;mc_fc_view_grid&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TO&nbsp;mt_hidden_code.<br />
+*&nbsp;&nbsp;APPEND&nbsp;cl_gui_alv_grid=&gt;mc_fc_view_lotus&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TO&nbsp;mt_hidden_code.<br />
+*&nbsp;&nbsp;APPEND&nbsp;cl_gui_alv_grid=&gt;mc_fc_view_crystal&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TO&nbsp;mt_hidden_code.<br />
+*&nbsp;&nbsp;APPEND&nbsp;cl_gui_alv_grid=&gt;mc_fc_word_processor&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TO&nbsp;mt_hidden_code.<br />
+*&nbsp;&nbsp;APPEND&nbsp;cl_gui_alv_grid=&gt;mc_fc_url_copy_to_clipboard&nbsp;TO&nbsp;mt_hidden_code.<br />
+*&nbsp;&nbsp;APPEND&nbsp;cl_gui_alv_grid=&gt;mc_fc_to_rep_tree&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TO&nbsp;mt_hidden_code.<br />
+*&nbsp;&nbsp;APPEND&nbsp;cl_gui_alv_grid=&gt;mc_mb_export&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TO&nbsp;mt_hidden_code.<br />
+*&nbsp;&nbsp;APPEND&nbsp;cl_gui_alv_grid=&gt;mc_mb_view&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TO&nbsp;mt_hidden_code.<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;APPEND&nbsp;cl_gui_alv_grid=&gt;mc_mb_sum&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TO&nbsp;mt_hidden_code.<br />
+<br />
+<br />
+&nbsp;&nbsp;APPEND&nbsp;cl_gui_alv_grid=&gt;mc_fc_col_optimize&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TO&nbsp;mt_ctx_hidden_code.<br />
+&nbsp;&nbsp;APPEND&nbsp;cl_gui_alv_grid=&gt;mc_fc_help&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TO&nbsp;mt_ctx_hidden_code.<br />
+&nbsp;&nbsp;APPEND&nbsp;cl_gui_alv_grid=&gt;mc_fc_col_invisible&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TO&nbsp;mt_ctx_hidden_code.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;APPEND&nbsp;cl_gui_alv_grid=&gt;mc_fc_find&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TO&nbsp;mt_ctx_hidden_code.<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;APPEND&nbsp;cl_gui_alv_grid=&gt;mc_fc_loc_copy&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TO&nbsp;mt_ctx_hidden_code.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;APPEND&nbsp;cl_gui_alv_grid=&gt;mc_fc_delete_filter&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TO&nbsp;mt_ctx_hidden_code.<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;APPEND&nbsp;cl_gui_alv_grid=&gt;mc_fc_unfix_columns&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TO&nbsp;mt_ctx_hidden_code.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;APPEND&nbsp;cl_gui_alv_grid=&gt;mc_fc_filter&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TO&nbsp;mt_ctx_hidden_code.<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;APPEND&nbsp;cl_gui_alv_grid=&gt;mc_fc_subtot&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TO&nbsp;mt_ctx_hidden_code.<br />
+&nbsp;&nbsp;APPEND&nbsp;cl_gui_alv_grid=&gt;mc_fc_sum&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TO&nbsp;mt_ctx_hidden_code.<br />
+&nbsp;&nbsp;APPEND&nbsp;cl_gui_alv_grid=&gt;mc_fc_print&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TO&nbsp;mt_ctx_hidden_code.<br />
+&nbsp;&nbsp;APPEND&nbsp;cl_gui_alv_grid=&gt;mc_fc_views&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TO&nbsp;mt_ctx_hidden_code.<br />
+&nbsp;&nbsp;APPEND&nbsp;cl_gui_alv_grid=&gt;mc_fc_graph&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TO&nbsp;mt_ctx_hidden_code.<br />
+&nbsp;&nbsp;APPEND&nbsp;cl_gui_alv_grid=&gt;mc_fc_to_office&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TO&nbsp;mt_ctx_hidden_code.<br />
+&nbsp;&nbsp;APPEND&nbsp;cl_gui_alv_grid=&gt;mc_fc_html&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TO&nbsp;mt_ctx_hidden_code.<br />
+&nbsp;&nbsp;APPEND&nbsp;cl_gui_alv_grid=&gt;mc_fc_info&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TO&nbsp;mt_ctx_hidden_code.<br />
+&nbsp;&nbsp;APPEND&nbsp;cl_gui_alv_grid=&gt;mc_fc_pc_file&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TO&nbsp;mt_ctx_hidden_code.<br />
+&nbsp;&nbsp;APPEND&nbsp;cl_gui_alv_grid=&gt;mc_fc_expcrdata&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TO&nbsp;mt_ctx_hidden_code.<br />
+&nbsp;&nbsp;APPEND&nbsp;cl_gui_alv_grid=&gt;mc_fc_expcrdesig&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TO&nbsp;mt_ctx_hidden_code.<br />
+&nbsp;&nbsp;APPEND&nbsp;cl_gui_alv_grid=&gt;mc_fc_extend&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TO&nbsp;mt_ctx_hidden_code.<br />
+&nbsp;&nbsp;APPEND&nbsp;cl_gui_alv_grid=&gt;mc_fc_expmdb&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TO&nbsp;mt_ctx_hidden_code.<br />
+&nbsp;&nbsp;APPEND&nbsp;cl_gui_alv_grid=&gt;mc_fc_expcrtempl&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TO&nbsp;mt_ctx_hidden_code.<br />
+&nbsp;&nbsp;APPEND&nbsp;cl_gui_alv_grid=&gt;mc_fc_view_excel&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TO&nbsp;mt_ctx_hidden_code.<br />
+&nbsp;&nbsp;APPEND&nbsp;cl_gui_alv_grid=&gt;mc_fc_view_grid&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TO&nbsp;mt_ctx_hidden_code.<br />
+&nbsp;&nbsp;APPEND&nbsp;cl_gui_alv_grid=&gt;mc_fc_view_lotus&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TO&nbsp;mt_ctx_hidden_code.<br />
+&nbsp;&nbsp;APPEND&nbsp;cl_gui_alv_grid=&gt;mc_fc_view_crystal&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TO&nbsp;mt_ctx_hidden_code.<br />
+&nbsp;&nbsp;APPEND&nbsp;cl_gui_alv_grid=&gt;mc_fc_word_processor&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TO&nbsp;mt_ctx_hidden_code.<br />
+&nbsp;&nbsp;APPEND&nbsp;cl_gui_alv_grid=&gt;mc_fc_url_copy_to_clipboard&nbsp;TO&nbsp;mt_ctx_hidden_code.<br />
+&nbsp;&nbsp;APPEND&nbsp;cl_gui_alv_grid=&gt;mc_fc_to_rep_tree&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TO&nbsp;mt_ctx_hidden_code.<br />
+&nbsp;&nbsp;APPEND&nbsp;cl_gui_alv_grid=&gt;mc_mb_export&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TO&nbsp;mt_ctx_hidden_code.<br />
+&nbsp;&nbsp;APPEND&nbsp;cl_gui_alv_grid=&gt;mc_mb_view&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TO&nbsp;mt_ctx_hidden_code.<br />
+&nbsp;&nbsp;APPEND&nbsp;cl_gui_alv_grid=&gt;mc_mb_sum&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TO&nbsp;mt_ctx_hidden_code.<br />
+<br />
+ENDFORM.                    " hide_toolbar<br />
+            </div>
+          </td>
+        </tr>
+      </table>
+      </td>
+      </tr>
+   <tr>
+<td class="footer">Extracted by Mass Download version 1.5.2 - E.G.Mellodew. 1998-2022. Sap Release 755</td>
+   </tr>
+</table>
+</body>
+</html>

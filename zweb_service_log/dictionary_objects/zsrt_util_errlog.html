@@ -1,0 +1,617 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=GB2312" />
+<title>Dictionary object- ZSRT_UTIL_ERRLOG</title>
+<style type="text/css">
+  th{text-align:left}
+  .cell{
+     font-family:"Courier New", Courier, monospace;
+     color:#000;
+     font-size:12px;
+     background-color:#F2F4F7;
+  }
+  .cell td { border: thin solid #ccc; }
+</style>
+<style type="text/css">
+  .normal{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px }
+  .footer{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; text-align: center }
+  h2{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+  h3{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:14px; font-weight:800 }
+  .outerTable{
+   background-color:#E0E7ED;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-right-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+  .innerTable{
+   background-color:#F2F4F7;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-bottom-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+</style>
+</head>
+<body>
+  <table class="outerTable">
+    <tr>
+      <td><h2>Table: ZSRT_UTIL_ERRLOG</h2>
+  <h3>Description: SRT Utilities: Error Log Data</h3></td>
+    </tr>
+    <tr>
+      <td><!--This is where our main table begins  -->
+<table class="innerTable">
+<tr>
+  <th>Row</th>
+  <th>Field name</th>
+  <th>Position</th>
+  <th>Key</th>
+  <th>Data element</th>
+  <th>Domain</th>
+  <th>Datatype</th>
+  <th>Length</th>
+  <th>Lowercase</th>
+  <th>Domain text</th>
+</tr>
+<tr class="cell">
+  <td> 1</td>
+  <td>SAPCLIENT</td>
+  <td>1</td>
+  <td>X</td>
+  <td>MANDT</td>
+  <td>MANDT</td>
+  <td>CLNT</td>
+  <td>3</td>
+  <td>&nbsp;</td>
+  <td>集团</td>
+</tr>
+<tr class="cell">
+  <td> 2</td>
+  <td>OPID</td>
+  <td>2</td>
+  <td>X</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>CHAR</td>
+  <td>32</td>
+  <td>&nbsp;</td>
+  <td>Operation ID</td>
+</tr>
+<tr class="cell">
+  <td> 3</td>
+  <td>LOGNO</td>
+  <td>3</td>
+  <td>X</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>INT2</td>
+  <td>5</td>
+  <td>&nbsp;</td>
+  <td> Entry number within an operation</td>
+</tr>
+<tr class="cell">
+  <td> 4</td>
+  <td>SAPUSER</td>
+  <td>4</td>
+  <td>&nbsp;</td>
+  <td>SYUNAME</td>
+  <td>SYCHAR12</td>
+  <td>CHAR</td>
+  <td>12</td>
+  <td>&nbsp;</td>
+  <td>用户名</td>
+</tr>
+<tr class="cell">
+  <td> 5</td>
+  <td>TIMESTAMP</td>
+  <td>5</td>
+  <td>&nbsp;</td>
+  <td>TIMESTAMP</td>
+  <td>TZNTSTMPS</td>
+  <td>DEC</td>
+  <td>15</td>
+  <td>&nbsp;</td>
+  <td>简短格式的 UTC 时戳 (YYYYMMDDhhmmss)</td>
+</tr>
+<tr class="cell">
+  <td> 6</td>
+  <td>LOCATION</td>
+  <td>6</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td> C/P: Consumer / Provider</td>
+</tr>
+<tr class="cell">
+  <td> 7</td>
+  <td>ERROR_CATEGORY</td>
+  <td>7</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>CHAR</td>
+  <td>20</td>
+  <td>&nbsp;</td>
+  <td>Error Category</td>
+</tr>
+<tr class="cell">
+  <td> 8</td>
+  <td>SUBCATEGORY</td>
+  <td>8</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>CHAR</td>
+  <td>20</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+</tr>
+<tr class="cell">
+  <td> 9</td>
+  <td>T100_AREA</td>
+  <td>9</td>
+  <td>&nbsp;</td>
+  <td>ARBGB</td>
+  <td>ARBGB</td>
+  <td>CHAR</td>
+  <td>20</td>
+  <td>&nbsp;</td>
+  <td>应用区域</td>
+</tr>
+<tr class="cell">
+  <td>10</td>
+  <td>T100_MSGNO</td>
+  <td>10</td>
+  <td>&nbsp;</td>
+  <td>MSGNR</td>
+  <td>MSGNR</td>
+  <td>CHAR</td>
+  <td>3</td>
+  <td>&nbsp;</td>
+  <td>消息编号</td>
+</tr>
+<tr class="cell">
+  <td>11</td>
+  <td>SHORT_TEXT</td>
+  <td>11</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>CHAR</td>
+  <td>128</td>
+  <td>&nbsp;</td>
+  <td>Error Short Text</td>
+</tr>
+<tr class="cell">
+  <td>12</td>
+  <td>PROXY_NAME</td>
+  <td>12</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>CHAR</td>
+  <td>30</td>
+  <td>&nbsp;</td>
+  <td>ABAP Name of Consumer Proxy or Server Proxy</td>
+</tr>
+<tr class="cell">
+  <td>13</td>
+  <td>ERRLOC_COMPONENT</td>
+  <td>13</td>
+  <td>&nbsp;</td>
+  <td>UFPS_POSID</td>
+  <td>UFPS_POSID</td>
+  <td>CHAR</td>
+  <td>24</td>
+  <td>&nbsp;</td>
+  <td>应用程序组件标识</td>
+</tr>
+<tr class="cell">
+  <td>14</td>
+  <td>ERRLOC_PACKAGE</td>
+  <td>14</td>
+  <td>&nbsp;</td>
+  <td>DEVCLASS</td>
+  <td>DEVCLASS</td>
+  <td>CHAR</td>
+  <td>30</td>
+  <td>&nbsp;</td>
+  <td>包</td>
+</tr>
+<tr class="cell">
+  <td>15</td>
+  <td>ERRLOC_PROGRAM</td>
+  <td>15</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>CHAR</td>
+  <td>40</td>
+  <td>&nbsp;</td>
+  <td> Name of Class or Program</td>
+</tr>
+<tr class="cell">
+  <td>16</td>
+  <td>ERRLOC_INCLUDE</td>
+  <td>16</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>CHAR</td>
+  <td>61</td>
+  <td>&nbsp;</td>
+  <td> Name of Method or Function Module</td>
+</tr>
+<tr class="cell">
+  <td>17</td>
+  <td>ERRLOC_ROWNO</td>
+  <td>17</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>INT4</td>
+  <td>10</td>
+  <td>&nbsp;</td>
+  <td> Source Line Number</td>
+</tr>
+<tr class="cell">
+  <td>18</td>
+  <td>ERRLOC_FTYPE</td>
+  <td>18</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td> P/M/U: Program / Method / Function Module</td>
+</tr>
+<tr class="cell">
+  <td>19</td>
+  <td>MESSAGE_ID</td>
+  <td>19</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>CHAR</td>
+  <td>32</td>
+  <td>&nbsp;</td>
+  <td>Message ID</td>
+</tr>
+<tr class="cell">
+  <td>20</td>
+  <td>SEQUENCE_ID</td>
+  <td>20</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>CHAR</td>
+  <td>32</td>
+  <td>&nbsp;</td>
+  <td> Sequence ID</td>
+</tr>
+<tr class="cell">
+  <td>21</td>
+  <td>QUEUE_NAME</td>
+  <td>21</td>
+  <td>&nbsp;</td>
+  <td>QRFC_QUEUE_NAME</td>
+  <td>QRFC_QUEUE_NAME</td>
+  <td>CHAR</td>
+  <td>40</td>
+  <td>&nbsp;</td>
+  <td>Queue Name for Background RFC</td>
+</tr>
+<tr class="cell">
+  <td>22</td>
+  <td>REMOTE_ADDRESS</td>
+  <td>22</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>CHAR</td>
+  <td>32</td>
+  <td>&nbsp;</td>
+  <td>Remote IP Address</td>
+</tr>
+<tr class="cell">
+  <td>23</td>
+  <td>APPLSERVER</td>
+  <td>23</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>CHAR</td>
+  <td>32</td>
+  <td>&nbsp;</td>
+  <td>Application Server</td>
+</tr>
+<tr class="cell">
+  <td>24</td>
+  <td>APPLID</td>
+  <td>24</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>CHAR</td>
+  <td>32</td>
+  <td>&nbsp;</td>
+  <td>Application ID</td>
+</tr>
+<tr class="cell">
+  <td>25</td>
+  <td>ROOT_CTX_ID</td>
+  <td>25</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>CHAR</td>
+  <td>32</td>
+  <td>&nbsp;</td>
+  <td>EPP Root Context ID</td>
+</tr>
+<tr class="cell">
+  <td>26</td>
+  <td>CONNECTION_ID</td>
+  <td>26</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>CHAR</td>
+  <td>32</td>
+  <td>&nbsp;</td>
+  <td> EPP Connection ID</td>
+</tr>
+<tr class="cell">
+  <td>27</td>
+  <td>CONNECTION_CNT</td>
+  <td>27</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>INT4</td>
+  <td>10</td>
+  <td>&nbsp;</td>
+  <td>EPP Connection Counter</td>
+</tr>
+<tr class="cell">
+  <td>28</td>
+  <td>TRANSACTION_ID</td>
+  <td>28</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>CHAR</td>
+  <td>32</td>
+  <td>&nbsp;</td>
+  <td>EPP Transaction ID</td>
+</tr>
+<tr class="cell">
+  <td>29</td>
+  <td>ROOT_TERM_ID</td>
+  <td>29</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>CHAR</td>
+  <td>32</td>
+  <td>&nbsp;</td>
+  <td> EPP Root Terminal ID</td>
+</tr>
+<tr class="cell">
+  <td>30</td>
+  <td>EXPIRE</td>
+  <td>30</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>DATS</td>
+  <td>8</td>
+  <td>&nbsp;</td>
+  <td>Expiry Date</td>
+</tr>
+<tr class="cell">
+  <td>31</td>
+  <td>ERROR_CONTEXT</td>
+  <td>31</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>RSTR</td>
+  <td>0</td>
+  <td>&nbsp;</td>
+  <td> Error Context in XML format</td>
+</tr>
+<tr class="cell">
+  <td>32</td>
+  <td>HTML_PAGE</td>
+  <td>32</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>STRG</td>
+  <td>0</td>
+  <td>&nbsp;</td>
+  <td>HTML Page as HTTP Response</td>
+</tr>
+<tr class="cell">
+  <td>33</td>
+  <td>COMMTYPE</td>
+  <td>33</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>CHAR</td>
+  <td>8</td>
+  <td>&nbsp;</td>
+  <td> Communication Type</td>
+</tr>
+<tr class="cell">
+  <td>34</td>
+  <td>FIRST_TSTMP</td>
+  <td>34</td>
+  <td>&nbsp;</td>
+  <td>TIMESTAMP</td>
+  <td>TZNTSTMPS</td>
+  <td>DEC</td>
+  <td>15</td>
+  <td>&nbsp;</td>
+  <td>简短格式的 UTC 时戳 (YYYYMMDDhhmmss)</td>
+</tr>
+<tr class="cell">
+  <td>35</td>
+  <td>ERRCOUNT</td>
+  <td>35</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>INT4</td>
+  <td>10</td>
+  <td>&nbsp;</td>
+  <td> Error Counter</td>
+</tr>
+<tr class="cell">
+  <td>36</td>
+  <td>T100_MSGV1</td>
+  <td>36</td>
+  <td>&nbsp;</td>
+  <td>SYMSGV</td>
+  <td>SYCHAR50</td>
+  <td>CHAR</td>
+  <td>50</td>
+  <td>&nbsp;</td>
+  <td>消息变量</td>
+</tr>
+<tr class="cell">
+  <td>37</td>
+  <td>T100_MSGV2</td>
+  <td>37</td>
+  <td>&nbsp;</td>
+  <td>SYMSGV</td>
+  <td>SYCHAR50</td>
+  <td>CHAR</td>
+  <td>50</td>
+  <td>&nbsp;</td>
+  <td>消息变量</td>
+</tr>
+<tr class="cell">
+  <td>38</td>
+  <td>T100_MSGV3</td>
+  <td>38</td>
+  <td>&nbsp;</td>
+  <td>SYMSGV</td>
+  <td>SYCHAR50</td>
+  <td>CHAR</td>
+  <td>50</td>
+  <td>&nbsp;</td>
+  <td>消息变量</td>
+</tr>
+<tr class="cell">
+  <td>39</td>
+  <td>T100_MSGV4</td>
+  <td>39</td>
+  <td>&nbsp;</td>
+  <td>SYMSGV</td>
+  <td>SYCHAR50</td>
+  <td>CHAR</td>
+  <td>50</td>
+  <td>&nbsp;</td>
+  <td>消息变量</td>
+</tr>
+<tr class="cell">
+  <td>40</td>
+  <td>CALLSTACK</td>
+  <td>40</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>RSTR</td>
+  <td>0</td>
+  <td>&nbsp;</td>
+  <td>Call Stack</td>
+</tr>
+<tr class="cell">
+  <td>41</td>
+  <td>COMMTYPENAME</td>
+  <td>41</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>CHAR</td>
+  <td>18</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+</tr>
+<tr class="cell">
+  <td>42</td>
+  <td>IFNAME</td>
+  <td>42</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>CHAR</td>
+  <td>30</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+</tr>
+<tr class="cell">
+  <td>43</td>
+  <td>CALLSTACK_XSIZE</td>
+  <td>43</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>INT4</td>
+  <td>10</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+</tr>
+<tr class="cell">
+  <td>44</td>
+  <td>CONFIG_XSIZE</td>
+  <td>44</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>INT4</td>
+  <td>10</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+</tr>
+<tr class="cell">
+  <td>45</td>
+  <td>PAYLOAD_XSIZE</td>
+  <td>45</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>INT4</td>
+  <td>10</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+</tr>
+      </table>
+     </td>
+   </tr>
+<br/>
+   <tr>
+<td class="footer">Extracted by Mass Download version 1.5.2 - E.G.Mellodew. 1998-2022. Sap Release 755</td>
+   </tr>
+</table>
+</body>
+</html>

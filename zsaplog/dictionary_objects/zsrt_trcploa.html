@@ -1,0 +1,581 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=GB2312" />
+<title>Dictionary object- ZSRT_TRCPLOA</title>
+<style type="text/css">
+  th{text-align:left}
+  .cell{
+     font-family:"Courier New", Courier, monospace;
+     color:#000;
+     font-size:12px;
+     background-color:#F2F4F7;
+  }
+  .cell td { border: thin solid #ccc; }
+</style>
+<style type="text/css">
+  .normal{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px }
+  .footer{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; text-align: center }
+  h2{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+  h3{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:14px; font-weight:800 }
+  .outerTable{
+   background-color:#E0E7ED;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-right-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+  .innerTable{
+   background-color:#F2F4F7;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-bottom-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+</style>
+</head>
+<body>
+  <table class="outerTable">
+    <tr>
+      <td><h2>Table: ZSRT_TRCPLOA</h2>
+  <h3>Description: SRT Utilities: Payload Trace Data</h3></td>
+    </tr>
+    <tr>
+      <td><!--This is where our main table begins  -->
+<table class="innerTable">
+<tr>
+  <th>Row</th>
+  <th>Field name</th>
+  <th>Position</th>
+  <th>Key</th>
+  <th>Data element</th>
+  <th>Domain</th>
+  <th>Datatype</th>
+  <th>Length</th>
+  <th>Lowercase</th>
+  <th>Domain text</th>
+</tr>
+<tr class="cell">
+  <td> 1</td>
+  <td>SAPCLIENT</td>
+  <td>1</td>
+  <td>X</td>
+  <td>SYMANDT</td>
+  <td>MANDT</td>
+  <td>CLNT</td>
+  <td>3</td>
+  <td>&nbsp;</td>
+  <td>客户端标识</td>
+</tr>
+<tr class="cell">
+  <td> 2</td>
+  <td>OPID</td>
+  <td>2</td>
+  <td>X</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>CHAR</td>
+  <td>32</td>
+  <td>&nbsp;</td>
+  <td>Operation ID</td>
+</tr>
+<tr class="cell">
+  <td> 3</td>
+  <td>SUBNO</td>
+  <td>3</td>
+  <td>X</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>INT4</td>
+  <td>10</td>
+  <td>&nbsp;</td>
+  <td>Entry Number</td>
+</tr>
+<tr class="cell">
+  <td> 4</td>
+  <td>REQNO</td>
+  <td>4</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>INT4</td>
+  <td>10</td>
+  <td>&nbsp;</td>
+  <td>Request Number</td>
+</tr>
+<tr class="cell">
+  <td> 5</td>
+  <td>LEVELNO</td>
+  <td>5</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>INT4</td>
+  <td>10</td>
+  <td>&nbsp;</td>
+  <td>Level Number</td>
+</tr>
+<tr class="cell">
+  <td> 6</td>
+  <td>OPUTC</td>
+  <td>6</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>INT4</td>
+  <td>10</td>
+  <td>&nbsp;</td>
+  <td>UTC Time of an Operation</td>
+</tr>
+<tr class="cell">
+  <td> 7</td>
+  <td>OPUSEC</td>
+  <td>7</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>INT4</td>
+  <td>10</td>
+  <td>&nbsp;</td>
+  <td>Microseconds</td>
+</tr>
+<tr class="cell">
+  <td> 8</td>
+  <td>SAPUSER</td>
+  <td>8</td>
+  <td>&nbsp;</td>
+  <td>SYUNAME</td>
+  <td>SYCHAR12</td>
+  <td>CHAR</td>
+  <td>12</td>
+  <td>&nbsp;</td>
+  <td>用户名</td>
+</tr>
+<tr class="cell">
+  <td> 9</td>
+  <td>TIMESTAMPL</td>
+  <td>9</td>
+  <td>&nbsp;</td>
+  <td>TIMESTAMPL</td>
+  <td>TZNTSTMPL</td>
+  <td>DEC</td>
+  <td>21</td>
+  <td>&nbsp;</td>
+  <td>长格式的 UTC 时戳 (YYYYMMDDhhmmssmmmuuun)</td>
+</tr>
+<tr class="cell">
+  <td>10</td>
+  <td>OPSTATE</td>
+  <td>10</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Operation State</td>
+</tr>
+<tr class="cell">
+  <td>11</td>
+  <td>CALLTYPE</td>
+  <td>11</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>R / S / C: Request / Response / Call</td>
+</tr>
+<tr class="cell">
+  <td>12</td>
+  <td>SECTORNO</td>
+  <td>12</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Sector Number</td>
+</tr>
+<tr class="cell">
+  <td>13</td>
+  <td>SECTORNAME</td>
+  <td>13</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>CHAR</td>
+  <td>32</td>
+  <td>&nbsp;</td>
+  <td>Sector Name</td>
+</tr>
+<tr class="cell">
+  <td>14</td>
+  <td>WSNAME</td>
+  <td>14</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>CHAR</td>
+  <td>30</td>
+  <td>&nbsp;</td>
+  <td>Consumer Proxy or Service Definition</td>
+</tr>
+<tr class="cell">
+  <td>15</td>
+  <td>WSTYPE</td>
+  <td>15</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>C/P/R: Consumer / Provider / RFC-Provider</td>
+</tr>
+<tr class="cell">
+  <td>16</td>
+  <td>OPERATION_SPACE</td>
+  <td>16</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>CHAR</td>
+  <td>128</td>
+  <td>&nbsp;</td>
+  <td>Operation Namespace</td>
+</tr>
+<tr class="cell">
+  <td>17</td>
+  <td>OPERATION_NAME</td>
+  <td>17</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>CHAR</td>
+  <td>128</td>
+  <td>&nbsp;</td>
+  <td>Operation Name</td>
+</tr>
+<tr class="cell">
+  <td>18</td>
+  <td>COMPONENT</td>
+  <td>18</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>CHAR</td>
+  <td>40</td>
+  <td>&nbsp;</td>
+  <td>Name of Component (Class/Program/Service)</td>
+</tr>
+<tr class="cell">
+  <td>19</td>
+  <td>OPERATION</td>
+  <td>19</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>CHAR</td>
+  <td>61</td>
+  <td>&nbsp;</td>
+  <td>Name of Method / Funtion Module</td>
+</tr>
+<tr class="cell">
+  <td>20</td>
+  <td>OPTYPE</td>
+  <td>20</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Operation Type (M, U, P, X)</td>
+</tr>
+<tr class="cell">
+  <td>21</td>
+  <td>APPLSERVER</td>
+  <td>21</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>CHAR</td>
+  <td>32</td>
+  <td>&nbsp;</td>
+  <td>Application Server</td>
+</tr>
+<tr class="cell">
+  <td>22</td>
+  <td>MESSAGE_ID</td>
+  <td>22</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>CHAR</td>
+  <td>32</td>
+  <td>&nbsp;</td>
+  <td>Message ID</td>
+</tr>
+<tr class="cell">
+  <td>23</td>
+  <td>APPLICATION_ID</td>
+  <td>23</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>CHAR</td>
+  <td>32</td>
+  <td>&nbsp;</td>
+  <td>Application ID</td>
+</tr>
+<tr class="cell">
+  <td>24</td>
+  <td>ROOT_CTX_ID</td>
+  <td>24</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>CHAR</td>
+  <td>32</td>
+  <td>&nbsp;</td>
+  <td>EPP Root Context ID</td>
+</tr>
+<tr class="cell">
+  <td>25</td>
+  <td>CONNECTION_ID</td>
+  <td>25</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>CHAR</td>
+  <td>32</td>
+  <td>&nbsp;</td>
+  <td>EPP Connection ID</td>
+</tr>
+<tr class="cell">
+  <td>26</td>
+  <td>CONNECTION_CNT</td>
+  <td>26</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>INT4</td>
+  <td>10</td>
+  <td>&nbsp;</td>
+  <td>EPP Connection Counter</td>
+</tr>
+<tr class="cell">
+  <td>27</td>
+  <td>TRANSACTION_ID</td>
+  <td>27</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>CHAR</td>
+  <td>32</td>
+  <td>&nbsp;</td>
+  <td>EPP Transaction ID</td>
+</tr>
+<tr class="cell">
+  <td>28</td>
+  <td>ROOT_TERM_ID</td>
+  <td>28</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>CHAR</td>
+  <td>32</td>
+  <td>&nbsp;</td>
+  <td>EPP Root Terminal ID</td>
+</tr>
+<tr class="cell">
+  <td>29</td>
+  <td>UTCTIME</td>
+  <td>29</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>INT4</td>
+  <td>10</td>
+  <td>&nbsp;</td>
+  <td>UTC from Message Server</td>
+</tr>
+<tr class="cell">
+  <td>30</td>
+  <td>USECTIME</td>
+  <td>30</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>INT4</td>
+  <td>10</td>
+  <td>&nbsp;</td>
+  <td>Microsecond</td>
+</tr>
+<tr class="cell">
+  <td>31</td>
+  <td>EXPIRE</td>
+  <td>31</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>DATS</td>
+  <td>8</td>
+  <td>&nbsp;</td>
+  <td>Expiry Date</td>
+</tr>
+<tr class="cell">
+  <td>32</td>
+  <td>APPL_DATA</td>
+  <td>32</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Application Data</td>
+</tr>
+<tr class="cell">
+  <td>33</td>
+  <td>XSIZE</td>
+  <td>33</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>INT4</td>
+  <td>10</td>
+  <td>&nbsp;</td>
+  <td>Original XML Size</td>
+</tr>
+<tr class="cell">
+  <td>34</td>
+  <td>TRACE_DATA</td>
+  <td>34</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>RSTR</td>
+  <td>0</td>
+  <td>&nbsp;</td>
+  <td>Trace Data in XML Format</td>
+</tr>
+<tr class="cell">
+  <td>35</td>
+  <td>HTTP_HEADER</td>
+  <td>35</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>RSTR</td>
+  <td>0</td>
+  <td>&nbsp;</td>
+  <td>HTTP Header in XML Format</td>
+</tr>
+<tr class="cell">
+  <td>36</td>
+  <td>HTML_PAGE</td>
+  <td>36</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>STRG</td>
+  <td>0</td>
+  <td>&nbsp;</td>
+  <td>HTML Page as HTTP Response</td>
+</tr>
+<tr class="cell">
+  <td>37</td>
+  <td>REQUEST_URI</td>
+  <td>37</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>CHAR</td>
+  <td>255</td>
+  <td>&nbsp;</td>
+  <td>Request URI</td>
+</tr>
+<tr class="cell">
+  <td>38</td>
+  <td>COMMTYPE</td>
+  <td>38</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Communication Type - OBSOLET -</td>
+</tr>
+<tr class="cell">
+  <td>39</td>
+  <td>ROWNO</td>
+  <td>39</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>INT4</td>
+  <td>10</td>
+  <td>&nbsp;</td>
+  <td>Source Line Number</td>
+</tr>
+<tr class="cell">
+  <td>40</td>
+  <td>COMMTYPENAME</td>
+  <td>40</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>CHAR</td>
+  <td>18</td>
+  <td>&nbsp;</td>
+  <td>Communication Type</td>
+</tr>
+<tr class="cell">
+  <td>41</td>
+  <td>IFNAME</td>
+  <td>41</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>CHAR</td>
+  <td>30</td>
+  <td>&nbsp;</td>
+  <td>Internal Interface Name</td>
+</tr>
+<tr class="cell">
+  <td>42</td>
+  <td>NO_MID</td>
+  <td>42</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Operation without a Message ID assigned</td>
+</tr>
+      </table>
+     </td>
+   </tr>
+<br/>
+   <tr>
+<td class="footer">Extracted by Mass Download version 1.5.2 - E.G.Mellodew. 1998-2022. Sap Release 755</td>
+   </tr>
+</table>
+</body>
+</html>
