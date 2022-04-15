@@ -1,0 +1,2560 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=GB2312" />
+<title>ZMMR001</title>
+<style type="text/css">
+.code{ font-family:"Courier New", Courier, monospace; color:#000; font-size:14px; background-color:#F2F4F7 }
+  .codeComment {font-family:"Courier New", Courier, monospace; color:#0000F0; font-size:14px; background-color:#F2F4F7 }
+  .normalBold{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; font-weight:800 }
+  .normalBoldLarge{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+</style>
+<style type="text/css">
+  .normal{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px }
+  .footer{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; text-align: center }
+  h2{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+  h3{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:14px; font-weight:800 }
+  .outerTable{
+   background-color:#E0E7ED;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-right-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+  .innerTable{
+   background-color:#F2F4F7;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-bottom-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+</style>
+</head>
+<body>
+<table class="outerTable">
+  <tr class="normalBoldLarge">
+     <td><h2>Code listing for: ZMMR001</h2>
+<h3> Description: 信息记录期初批量创建与导入程序</h3></td>
+   </tr>
+  <tr>
+     <td>
+     <table class="innerTable">
+       <tr>
+          <td>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Report&nbsp;ZMMR001<br />
+*&---------------------------------------------------------------------*<br />
+*&<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+REPORT zmmr001 MESSAGE-ID zmm001.<br />
+TYPE-POOLS: slis,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;icon.<br />
+<br />
+TABLES: zmmt001,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;zmmt002,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;eina,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;eine,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;a017,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;konh,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;konp,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;konm.<br />
+TABLES: sscrfields.<br />
+<br />
+<br />
+TYPES:BEGIN OF ts_eina,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lifnr&nbsp;TYPE&nbsp;eina-lifnr,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;matnr&nbsp;TYPE&nbsp;eina-matnr,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;txz01&nbsp;TYPE&nbsp;eina-txz01,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sortl&nbsp;TYPE&nbsp;eina-sortl,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ekorg&nbsp;TYPE&nbsp;zmmt001-ekorg,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;werks&nbsp;TYPE&nbsp;t001l-werks,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;esokz&nbsp;TYPE&nbsp;zmmt001-esokz,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;aplfz&nbsp;TYPE&nbsp;zmmt001-aplfz,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ekgrp&nbsp;TYPE&nbsp;zmmt001-ekgrp,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;meins&nbsp;TYPE&nbsp;zmmt001-meins,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;norbm&nbsp;TYPE&nbsp;zmmt001-norbm,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;netpr&nbsp;TYPE&nbsp;zmmt001-netpr,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;waers&nbsp;TYPE&nbsp;zmmt001-waers,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;peinh&nbsp;TYPE&nbsp;zmmt001-peinh,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mwskz&nbsp;TYPE&nbsp;zmmt001-mwskz,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;webre&nbsp;TYPE&nbsp;webre,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;datab&nbsp;TYPE&nbsp;datab,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;datbi&nbsp;TYPE&nbsp;datbi,<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;KOSRT&nbsp;TYPE&nbsp;zmmt001-KOSRT,<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ZJGBS&nbsp;TYPE&nbsp;zmmt001-ZJGBS,<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;KSTBM&nbsp;TYPE&nbsp;zmmt002-KSTBM,<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;KBETR&nbsp;TYPE&nbsp;zmmt002-KBETR,<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;END&nbsp;OF&nbsp;ts_eina.<br />
+<br />
+TYPES: tt_eina TYPE STANDARD TABLE OF ts_eina.<br />
+DATA: gt_eina TYPE tt_eina.<br />
+<br />
+<br />
+TYPES: tt_excel TYPE STANDARD TABLE OF alsmex_tabline.<br />
+<br />
+<br />
+<br />
+TYPES:BEGIN OF ts_out.<br />
+TYPES:sel.<br />
+TYPES:light TYPE icon_d.<br />
+TYPES: infnr TYPE zmmt001-infnr.<br />
+TYPES: infnr_ekorg TYPE eine-infnr.<br />
+TYPES: meins_2   TYPE eina-meins.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INCLUDE&nbsp;TYPE&nbsp;ts_eina.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;include&nbsp;structure&nbsp;<a&nbsp;href&nbsp;="zmms003/dictionary-zmms003.html">zmms003</a>.<br />
+TYPES: znew_flag.    "是否新建有效日期<br />
+TYPES: END OF ts_out.<br />
+<br />
+<br />
+"TYPES: TT_ZMM005 TYPE STANDARD TABLE OF ZMMS0004.<br />
+TYPES:tt_out TYPE STANDARD TABLE OF ts_out.<br />
+DATA:gt_out TYPE tt_out.<br />
+<br />
+<br />
+DATA: dyn_table TYPE REF TO data,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dyn_wa&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;REF&nbsp;TO&nbsp;data.<br />
+FIELD-SYMBOLS: &lt;dyn_table&gt; TYPE table,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;dyn_wa&gt;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;any.<br />
+<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+****BDC<br />
+   </div>
+   <div class="code">
+CONSTANTS: c_update  TYPE c VALUE 'S',   "a\s\l<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;c_me11(4)&nbsp;TYPE&nbsp;c&nbsp;VALUE&nbsp;'ME11',<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;c_me12(4)&nbsp;TYPE&nbsp;c&nbsp;VALUE&nbsp;'ME12'.<br />
+DATA: gt_bdcdata TYPE TABLE OF bdcdata,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_bdcdata&nbsp;TYPE&nbsp;bdcdata.<br />
+<br />
+<br />
+<br />
+<br />
+DATA: ok_code    LIKE sy-ucomm,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gv_save_ok&nbsp;LIKE&nbsp;sy-ucomm.<br />
+DATA: g_grid      TYPE REF TO cl_gui_alv_grid,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;g_container&nbsp;TYPE&nbsp;REF&nbsp;TO&nbsp;cl_gui_custom_container.<br />
+DATA: gv_container TYPE scrfname VALUE 'TC_9000'.<br />
+<br />
+CLASS lcl_event_receiver DEFINITION.<br />
+&nbsp;&nbsp;PUBLIC&nbsp;SECTION.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;声明单击事件的方法<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;METHODS&nbsp;handle_hotspot_click&nbsp;FOR&nbsp;EVENT&nbsp;hotspot_click&nbsp;OF&nbsp;cl_gui_alv_grid<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING&nbsp;e_row_id<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;e_column_id.<br />
+ENDCLASS.                    "cl_event_receiver DEFINITION<br />
+<br />
+   </div>
+   <div class="codeComment">
+*----------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CLASS&nbsp;cl_event_receiver&nbsp;IMPLEMENTATION<br />
+*----------------------------------------------------------------------*<br />
+*<br />
+*----------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+CLASS lcl_event_receiver IMPLEMENTATION.<br />
+&nbsp;&nbsp;"&nbsp;单击事件方法的实现<br />
+&nbsp;&nbsp;METHOD&nbsp;handle_hotspot_click.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;gt_out&nbsp;INTO&nbsp;DATA(lw_out)&nbsp;INDEX&nbsp;e_row_id-index.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;lw_out-infnr&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SET&nbsp;PARAMETER&nbsp;ID&nbsp;'LIF'&nbsp;FIELD&nbsp;lw_out-lifnr.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SET&nbsp;PARAMETER&nbsp;ID&nbsp;'MAT'&nbsp;FIELD&nbsp;lw_out-matnr.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SET&nbsp;PARAMETER&nbsp;ID&nbsp;'EKO'&nbsp;FIELD&nbsp;lw_out-ekorg.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;lw_out-werks&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SET&nbsp;PARAMETER&nbsp;ID&nbsp;'WRK'&nbsp;FIELD&nbsp;lw_out-werks.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;TRANSACTION&nbsp;'ME13'&nbsp;AND&nbsp;SKIP&nbsp;FIRST&nbsp;SCREEN.<br />
+<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CLEAR:&nbsp;gt_bdcdata[].<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DATA:&nbsp;lt_msg&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;TABLE&nbsp;OF&nbsp;bdcmsgcoll.<br />
+   </div>
+   <div class="codeComment">
+*****100<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;bdc_dynpro&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'SAPMM06I'&nbsp;&nbsp;&nbsp;'0100'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'BDC_OKCODE'&nbsp;'/00'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'EINA-LIFNR'&nbsp;lw_out-lifnr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'EINA-MATNR'&nbsp;lw_out-matnr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'EINE-EKORG'&nbsp;lw_out-ekorg.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'EINE-WERKS'&nbsp;lw_out-werks.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'EINA-INFNR'&nbsp;space.<br />
+<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CASE&nbsp;lw_out-esokz.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'0'.&nbsp;"标准<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;USING&nbsp;'RM06I-NORMB'&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'2'.&nbsp;"寄售<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;USING&nbsp;'RM06I-KONSI'&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'3'.&nbsp;"外协加工<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;USING&nbsp;'RM06I-LOHNB'&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'P'.&nbsp;"管道<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;USING&nbsp;'RM06I-PIPEL'&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDCASE.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;&nbsp;TRANSACTION&nbsp;'ME13'&nbsp;USING&nbsp;gt_bdcdata<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MODE&nbsp;'N'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;UPDATE&nbsp;c_update<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MESSAGES&nbsp;INTO&nbsp;lt_msg.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SET&nbsp;PARAMETER&nbsp;ID&nbsp;'LIF'&nbsp;FIELD&nbsp;lw_out-lifnr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SET&nbsp;PARAMETER&nbsp;ID&nbsp;'MAT'&nbsp;FIELD&nbsp;lw_out-matnr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SET&nbsp;PARAMETER&nbsp;ID&nbsp;'EKO'&nbsp;FIELD&nbsp;lw_out-ekorg.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;lw_out-werks&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SET&nbsp;PARAMETER&nbsp;ID&nbsp;'WRK'&nbsp;FIELD&nbsp;lw_out-werks.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;TRANSACTION&nbsp;'ME13'&nbsp;AND&nbsp;SKIP&nbsp;FIRST&nbsp;SCREEN.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR:lw_out.<br />
+&nbsp;&nbsp;ENDMETHOD.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"handle_HOTSPOT_CLICK<br />
+<br />
+ENDCLASS.                    "cl_event_receiver IMPLEMENTATION<br />
+<br />
+<br />
+<br />
+<br />
+SELECTION-SCREEN: FUNCTION KEY 1.<br />
+<br />
+SELECTION-SCREEN BEGIN OF BLOCK b1 WITH FRAME TITLE TEXT-001.<br />
+&nbsp;&nbsp;PARAMETERS:&nbsp;p_file&nbsp;&nbsp;LIKE&nbsp;rlgrap-filename&nbsp;MODIF&nbsp;ID&nbsp;m01."源文件<br />
+<br />
+&nbsp;&nbsp;PARAMETERS:&nbsp;p_rd1&nbsp;RADIOBUTTON&nbsp;GROUP&nbsp;gr1,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;p_rd2&nbsp;RADIOBUTTON&nbsp;GROUP&nbsp;gr1.<br />
+<br />
+SELECTION-SCREEN END OF BLOCK b1.<br />
+<br />
+<br />
+AT SELECTION-SCREEN ON VALUE-REQUEST FOR p_file.<br />
+&nbsp;&nbsp;PERFORM&nbsp;frm_filename_find&nbsp;CHANGING&nbsp;p_file.<br />
+<br />
+<br />
+INITIALIZATION.<br />
+&nbsp;&nbsp;sscrfields-functxt_01&nbsp;=&nbsp;TEXT-002.<br />
+<br />
+<br />
+AT SELECTION-SCREEN.<br />
+<br />
+&nbsp;&nbsp;DATA:&nbsp;lv_template&nbsp;TYPE&nbsp;sy-tcode&nbsp;VALUE&nbsp;'ZMMR001',<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_tmp_name&nbsp;TYPE&nbsp;string..<br />
+<br />
+&nbsp;&nbsp;lv_tmp_name&nbsp;=&nbsp;TEXT-003.<br />
+<br />
+<br />
+&nbsp;&nbsp;CASE&nbsp;sscrfields-ucomm.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'FC01'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;NOT&nbsp;lv_template&nbsp;IS&nbsp;INITIAL&nbsp;AND&nbsp;lv_tmp_name&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;frm_download_template&nbsp;USING&nbsp;&nbsp;lv_tmp_name<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_template.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;ENDCASE.<br />
+<br />
+<br />
+<br />
+START-OF-SELECTION.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;p_file&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;s000&nbsp;WITH&nbsp;&nbsp;TEXT-004&nbsp;&nbsp;DISPLAY&nbsp;LIKE&nbsp;'E'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;LEAVE&nbsp;LIST-PROCESSING.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;PERFORM&nbsp;frm_excel_to_sap&nbsp;.<br />
+<br />
+&nbsp;&nbsp;PERFORM&nbsp;frm_alv_data&nbsp;&nbsp;TABLES&nbsp;gt_eina<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gt_out.<br />
+<br />
+END-OF-SELECTION.<br />
+<br />
+&nbsp;&nbsp;PERFORM&nbsp;frm_alv_display.<br />
+<br />
+<br />
+<br />
+<br />
+FORM frm_filename_find CHANGING xc_file.<br />
+<br />
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'WS_FILENAME_GET'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mask&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;',EXCEL&nbsp;FILE,*.XLS;*.XLSX;'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mode&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'O'&nbsp;"S为保存，O为打开<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;filename&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;xc_file<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;inv_winsys&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;no_batch&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;selection_cancel&nbsp;=&nbsp;3<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;selection_error&nbsp;&nbsp;=&nbsp;4<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTHERS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;5.<br />
+<br />
+ENDFORM. " FRM_FILENAME_FIND<br />
+<br />
+<br />
+<br />
+"FORM frm_download_template CHANGING ic_file.<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;frm_download_template<br />
+*&---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM frm_download_template USING VALUE(pv_fname) TYPE string<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;VALUE(pv_objid).<br />
+<br />
+<br />
+&nbsp;&nbsp;DATA:&nbsp;lw_objdata&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;wwwdatatab,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lw_mime&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;w3mime,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"w_filename&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;string,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_fullpath&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;string&nbsp;VALUE&nbsp;'C:/TEMP/',<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_path&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;string&nbsp;VALUE&nbsp;'C:/TEMP/',<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_destination&nbsp;LIKE&nbsp;rlgrap-filename,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_objnam&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;string,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_rc&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;sy-subrc,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_errtxt&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;string,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_dest&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;sapb-sappfad,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_action&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;i.<br />
+<br />
+&nbsp;&nbsp;CALL&nbsp;METHOD&nbsp;cl_gui_frontend_services=&gt;file_save_dialog<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;window_title&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'下载导入模板'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;default_extension&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'XLS;XLSX'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;default_file_name&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;pv_fname<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;file_filter&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'EXCEL文件|*.XLSX;*.XLS'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CHANGING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;filename&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;pv_fname<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;path&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lv_path<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fullpath&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lv_fullpath<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;user_action&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lv_action<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cntl_error&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;error_no_gui&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;not_supported_by_gui&nbsp;=&nbsp;3<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTHERS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;4.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;=&nbsp;0&nbsp;AND&nbsp;lv_action&nbsp;EQ&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;lv_dest&nbsp;=&nbsp;lv_fullpath.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CONDENSE&nbsp;lv_objnam&nbsp;NO-GAPS.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;SINGLE&nbsp;relid<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;objid<br />
+&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;CORRESPONDING&nbsp;FIELDS&nbsp;OF&nbsp;lw_objdata<br />
+&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;wwwdata<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;srtf2&nbsp;=&nbsp;0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;relid&nbsp;=&nbsp;'MI'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;objid&nbsp;=&nbsp;pv_objid.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;NE&nbsp;0&nbsp;OR&nbsp;lw_objdata-objid&nbsp;EQ&nbsp;space.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CONCATENATE&nbsp;&nbsp;'模板文件'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_objnam<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'不存在'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;lv_errtxt.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;lv_errtxt&nbsp;TYPE&nbsp;'I'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;lv_destination&nbsp;=&nbsp;lv_dest.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'DOWNLOAD_WEB_OBJECT'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;key&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lw_objdata<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;destination&nbsp;=&nbsp;lv_destination<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rc&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lv_rc.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;lv_rc&nbsp;NE&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CONCATENATE&nbsp;'模板文件：'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_objnam<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'下载失败'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;lv_errtxt.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;lv_errtxt&nbsp;TYPE&nbsp;'E'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+ENDFORM. . "FRM_DOWNLOAD_TEMPLATE<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;frm_open_excel_file<br />
+*&---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&gt;IC_FILE&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM frm_open_excel_file USING ic_file.<br />
+   </div>
+   <div class="codeComment">
+*******数据定义*******<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;TYPE-POOLS:ole2.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"OLE声明<br />
+&nbsp;&nbsp;DATA:lo_excel&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;ole2_object,&nbsp;&nbsp;&nbsp;"EXCEL应用程序<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lo_workbooks&nbsp;TYPE&nbsp;ole2_object,&nbsp;&nbsp;&nbsp;"EXCEL文件窗口<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lo_workbook&nbsp;&nbsp;TYPE&nbsp;ole2_object,&nbsp;&nbsp;&nbsp;"EXCEL文件<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lo_sheet&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;ole2_object.&nbsp;&nbsp;&nbsp;"EXCEL&nbsp;文件的SHEET页<br />
+   </div>
+   <div class="codeComment">
+*******初始化*******<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;DATA:lc_file&nbsp;&nbsp;&nbsp;TYPE&nbsp;string,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lc_result&nbsp;TYPE&nbsp;c.&nbsp;"标识:&nbsp;空表示文件不存在;否则,表示存在<br />
+   </div>
+   <div class="codeComment">
+*******程序主体*******<br />
+**判断文件是否存在<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;lc_file&nbsp;=&nbsp;ic_file.<br />
+&nbsp;&nbsp;CLEAR&nbsp;lc_result.<br />
+&nbsp;&nbsp;CALL&nbsp;METHOD&nbsp;cl_gui_frontend_services=&gt;file_exist<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;file&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lc_file<br />
+&nbsp;&nbsp;&nbsp;&nbsp;RECEIVING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;result&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lc_result<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cntl_error&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;error_no_gui&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wrong_parameter&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;3<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;not_supported_by_gui&nbsp;=&nbsp;4<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTHERS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;5.<br />
+&nbsp;&nbsp;IF&nbsp;lc_result&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;e000&nbsp;WITH&nbsp;'指定的文件不存在！'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXIT.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+   </div>
+   <div class="codeComment">
+**打开EXCEL文件<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;CREATE&nbsp;OBJECT&nbsp;lo_excel&nbsp;'EXCEL.APPLICATION'.<br />
+&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;NE&nbsp;0&nbsp;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CREATE&nbsp;OBJECT&nbsp;lo_excel&nbsp;'ET.APPLICATION'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;NE&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;e000&nbsp;WITH&nbsp;'无法创建OLE&nbsp;OBJECT,请检查是否安装金山WPS或微软Office!'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;ENDIF&nbsp;.<br />
+&nbsp;&nbsp;CALL&nbsp;METHOD&nbsp;OF<br />
+&nbsp;&nbsp;&nbsp;&nbsp;lo_excel<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'WORKBOOKS'&nbsp;=&nbsp;lo_workbooks.<br />
+&nbsp;&nbsp;CALL&nbsp;METHOD&nbsp;OF<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lo_workbooks<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'OPEN'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lo_workbook<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ic_file.<br />
+&nbsp;&nbsp;CALL&nbsp;METHOD&nbsp;OF<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lo_workbook<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'WORKSHEETS'&nbsp;=&nbsp;lo_sheet<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;1.<br />
+   </div>
+   <div class="codeComment">
+**&nbsp;&nbsp;PERFORM&nbsp;FRM_EXPORT_FILL_HEADER.<br />
+*&nbsp;&nbsp;PERFORM&nbsp;FRM_EXPORT_FILL.<br />
+*&nbsp;&nbsp;CALL&nbsp;METHOD&nbsp;OF&nbsp;SHEET&nbsp;'CELLS'&nbsp;=&nbsp;CELL&nbsp;EXPORTING&nbsp;#1&nbsp;=&nbsp;1&nbsp;#2&nbsp;=&nbsp;1.<br />
+*&nbsp;&nbsp;CALL&nbsp;METHOD&nbsp;OF&nbsp;CELL&nbsp;'SELECT'.<br />
+*&nbsp;&nbsp;SET&nbsp;PROPERTY&nbsp;OF&nbsp;EXCEL&nbsp;'CUTCOPYMODE'&nbsp;=&nbsp;0.<br />
+**&nbsp;&nbsp;SET&nbsp;PROPERTY&nbsp;OF&nbsp;WORKBOOK&nbsp;'SAVED'&nbsp;=&nbsp;1.<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;SET&nbsp;PROPERTY&nbsp;OF&nbsp;lo_excel&nbsp;'VISIBLE'&nbsp;=&nbsp;1.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;CALL&nbsp;METHOD&nbsp;OF&nbsp;WORKBOOK&nbsp;'SAVE'.<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;FREE&nbsp;OBJECT:<br />
+&nbsp;&nbsp;lo_excel,lo_workbooks,lo_workbook.&nbsp;&nbsp;&nbsp;",SHEET,RANGE,CELL.<br />
+<br />
+ENDFORM. " FRM_OPEN_EXCEL_FILE<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+FORM frm_excel_to_sap .<br />
+<br />
+   </div>
+   <div class="codeComment">
+*******数据定义*******<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;FIELD-SYMBOLS:&lt;l_feld&gt;&nbsp;.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"文件的导入中用<br />
+&nbsp;&nbsp;DATA:&nbsp;lt_excel&nbsp;TYPE&nbsp;STANDARD&nbsp;TABLE&nbsp;OF&nbsp;alsmex_tabline,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lw_excel&nbsp;TYPE&nbsp;alsmex_tabline.<br />
+&nbsp;&nbsp;DATA:&nbsp;lv_col&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;i.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"列号<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LV_ROW&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;I.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"行号<br />
+<br />
+<br />
+<br />
+**从源文件中读取到的数据<br />
+<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;CLEAR:&nbsp;lt_excel.<br />
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'ALSM_EXCEL_TO_INTERNAL_TABLE'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;filename&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;p_file<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_begin_col&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_begin_row&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;7<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_end_col&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;23<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_end_row&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;65536<br />
+&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;iv_sheetidx&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lv_do_num<br />
+&nbsp;&nbsp;&nbsp;&nbsp;TABLES<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;intern&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lt_excel<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;inconsistent_parameters&nbsp;=&nbsp;1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;upload_ole&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTHERS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;3.<br />
+&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;&lt;&gt;&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;e000&nbsp;WITH&nbsp;'打开源文件失败！'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXIT.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+***将数据整理到内表中<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;SORT&nbsp;lt_excel&nbsp;BY&nbsp;row&nbsp;col.<br />
+&nbsp;&nbsp;PERFORM&nbsp;frm_excel_to_dyntable&nbsp;&nbsp;&nbsp;TABLES&nbsp;&nbsp;lt_excel[]<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;&nbsp;'TS_EINA'.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;NOT&nbsp;&lt;dyn_table&gt;[]&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;gt_eina&nbsp;=&nbsp;&lt;dyn_table&gt;.<br />
+&nbsp;&nbsp;ELSE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;s000&nbsp;DISPLAY&nbsp;LIKE&nbsp;'E'&nbsp;WITH&nbsp;TEXT-005.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;STOP.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+ENDFORM. "frm_excel_to_sap<br />
+<br />
+<br />
+<br />
+<br />
+FORM frm_excel_to_dyntable  TABLES pt_excel TYPE tt_excel<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;VALUE(pv_type)&nbsp;TYPE&nbsp;tabname.<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*创建动态表结构<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;CREATE&nbsp;DATA&nbsp;dyn_table&nbsp;TYPE&nbsp;TABLE&nbsp;OF&nbsp;(pv_type).<br />
+   </div>
+   <div class="codeComment">
+*创建动态内表<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;ASSIGN&nbsp;dyn_table-&gt;*&nbsp;TO&nbsp;&lt;dyn_table&gt;.<br />
+   </div>
+   <div class="codeComment">
+*创建动态工作区结构<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;CREATE&nbsp;DATA&nbsp;dyn_wa&nbsp;LIKE&nbsp;LINE&nbsp;OF&nbsp;&lt;dyn_table&gt;.<br />
+   </div>
+   <div class="codeComment">
+*创建动态工作区<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;ASSIGN&nbsp;dyn_wa-&gt;*&nbsp;TO&nbsp;&lt;dyn_wa&gt;.<br />
+<br />
+<br />
+&nbsp;&nbsp;FIELD-SYMBOLS:&nbsp;&lt;l_feld&gt;.<br />
+&nbsp;&nbsp;DATA:&nbsp;lw_excel&nbsp;TYPE&nbsp;alsmex_tabline.<br />
+&nbsp;&nbsp;DATA:&nbsp;lv_col&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;i.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"列号<br />
+<br />
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;pt_excel&nbsp;INTO&nbsp;lw_excel.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;定位列<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR:&nbsp;lv_col.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;lv_col&nbsp;=&nbsp;lw_excel-col&nbsp;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;LV_COL&nbsp;=&nbsp;LV_COL&nbsp;+&nbsp;1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ASSIGN&nbsp;COMPONENT&nbsp;lv_col&nbsp;OF&nbsp;STRUCTURE&nbsp;&lt;dyn_wa&gt;&nbsp;TO&nbsp;&lt;l_feld&gt;&nbsp;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;&lt;l_feld&gt;&nbsp;IS&nbsp;ASSIGNED.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;l_feld&gt;&nbsp;=&nbsp;lw_excel-value&nbsp;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;AT&nbsp;END&nbsp;OF&nbsp;row&nbsp;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;&lt;dyn_wa&gt;&nbsp;&nbsp;TO&nbsp;&lt;dyn_table&gt;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CLEAR:&nbsp;&lt;dyn_wa&gt;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;CLEAR:&nbsp;LV_COL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDAT.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR:&nbsp;lw_excel.<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+ENDFORM. " FRM_EXCEL_TO_DYNTABLE<br />
+<br />
+<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Form&nbsp;frm_alv_data<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;text<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;--&gt;&nbsp;&nbsp;p1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*&&nbsp;&lt;--&nbsp;&nbsp;p2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*&---------------------------------------------------------------------*<br />
+*FORM&nbsp;FRM_ALV_DATA&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;PT_ZMM038&nbsp;TYPE&nbsp;TT_ZMM038<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CHANGING&nbsp;CT_ZMM038_ALV&nbsp;TYPE&nbsp;TT_ZMM038_ALV.<br />
+*<br />
+*<br />
+*<br />
+*<br />
+*ENDFORM.<br />
+<br />
+<br />
+<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;FRM_ALV_DISPLAY<br />
+*&---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;--&gt;&nbsp;&nbsp;p1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*&nbsp;&nbsp;&lt;--&nbsp;&nbsp;p2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM frm_alv_display .<br />
+<br />
+&nbsp;&nbsp;CALL&nbsp;SCREEN&nbsp;9000.<br />
+<br />
+ENDFORM. " FRM_ALV_DISPLAY<br />
+<br />
+<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;FRM_CREATE_ALV<br />
+*&---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&gt;P_GRID&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&gt;P_CONTAINER&nbsp;&nbsp;&nbsp;text<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&gt;PV_CONTAINER&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM frm_create_alv   USING p_grid TYPE REF TO cl_gui_alv_grid<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;p_container&nbsp;TYPE&nbsp;REF&nbsp;TO&nbsp;cl_gui_custom_container<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pv_container&nbsp;TYPE&nbsp;scrfname.<br />
+<br />
+&nbsp;&nbsp;CREATE&nbsp;OBJECT&nbsp;p_container<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;container_name&nbsp;=&nbsp;pv_container.<br />
+&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;&lt;&gt;&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;ID&nbsp;sy-msgid&nbsp;TYPE&nbsp;sy-msgty&nbsp;NUMBER&nbsp;sy-msgno<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WITH&nbsp;sy-msgv1&nbsp;sy-msgv2&nbsp;sy-msgv3&nbsp;sy-msgv4.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;CREATE&nbsp;OBJECT&nbsp;p_grid<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_parent&nbsp;=&nbsp;p_container.<br />
+<br />
+ENDFORM. " FRM_CREATE_ALV<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;FRM_REGISTER_EVENT<br />
+*&---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&gt;P_GRID&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM frm_register_event USING p_grid TYPE REF TO cl_gui_alv_grid.<br />
+<br />
+&nbsp;&nbsp;DATA:&nbsp;event_receiver&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;REF&nbsp;TO&nbsp;lcl_event_receiver.<br />
+&nbsp;&nbsp;CREATE&nbsp;OBJECT&nbsp;event_receiver.<br />
+<br />
+&nbsp;&nbsp;SET&nbsp;HANDLER&nbsp;event_receiver-&gt;handle_hotspot_click&nbsp;&nbsp;FOR&nbsp;p_grid.<br />
+<br />
+<br />
+ENDFORM. " FRM_REGISTER_EVENT<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;FRM_BUILD_FIELDCAT<br />
+*&---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;--LT_FIELDCAT&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM frm_build_fieldcat CHANGING lt_fieldcat TYPE lvc_t_fcat.<br />
+<br />
+&nbsp;&nbsp;PERFORM&nbsp;frm_add_field&nbsp;USING&nbsp;lt_fieldcat&nbsp;'LIGHT'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'指示灯'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;''&nbsp;'X'&nbsp;''.<br />
+&nbsp;&nbsp;PERFORM&nbsp;frm_add_field&nbsp;USING&nbsp;lt_fieldcat&nbsp;'INFNR'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'采购信息记录号'&nbsp;&nbsp;''&nbsp;''&nbsp;'X'&nbsp;'X'.<br />
+&nbsp;&nbsp;CASE&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;p_rd1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;frm_add_field&nbsp;USING&nbsp;lt_fieldcat&nbsp;'MATNR'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'物料编码'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;''&nbsp;'X'&nbsp;''.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;p_rd2.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;frm_add_field&nbsp;USING&nbsp;lt_fieldcat&nbsp;'TXZ01'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'物料文本'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;''&nbsp;'X'&nbsp;''.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;frm_add_field&nbsp;USING&nbsp;lt_fieldcat&nbsp;'SORTL'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'排序字符串'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;''&nbsp;'X'&nbsp;''.<br />
+&nbsp;&nbsp;ENDCASE.<br />
+&nbsp;&nbsp;PERFORM&nbsp;frm_add_field&nbsp;USING&nbsp;lt_fieldcat&nbsp;'LIFNR'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'供应商编码'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;''&nbsp;'X'&nbsp;''.<br />
+&nbsp;&nbsp;PERFORM&nbsp;frm_add_field&nbsp;USING&nbsp;lt_fieldcat&nbsp;'EKORG'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'采购组织'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;''&nbsp;''&nbsp;''.<br />
+&nbsp;&nbsp;PERFORM&nbsp;frm_add_field&nbsp;USING&nbsp;lt_fieldcat&nbsp;'WERKS'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'工厂'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;''&nbsp;''&nbsp;''.<br />
+&nbsp;&nbsp;PERFORM&nbsp;frm_add_field&nbsp;USING&nbsp;lt_fieldcat&nbsp;'ESOKZ'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'采购信息记录分类'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;''&nbsp;''&nbsp;''.<br />
+&nbsp;&nbsp;PERFORM&nbsp;frm_add_field&nbsp;USING&nbsp;lt_fieldcat&nbsp;'APLFZ'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'计划交货时间（天）'&nbsp;&nbsp;&nbsp;''&nbsp;''&nbsp;''&nbsp;''.<br />
+&nbsp;&nbsp;PERFORM&nbsp;frm_add_field&nbsp;USING&nbsp;lt_fieldcat&nbsp;'EKGRP'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'采购组'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;''&nbsp;''&nbsp;''.<br />
+&nbsp;&nbsp;PERFORM&nbsp;frm_add_field&nbsp;USING&nbsp;lt_fieldcat&nbsp;'MEINS'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'订单单位'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;''&nbsp;''&nbsp;''.<br />
+&nbsp;&nbsp;PERFORM&nbsp;frm_add_field&nbsp;USING&nbsp;lt_fieldcat&nbsp;'NORBM'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'标准采购订单数量'&nbsp;''&nbsp;''&nbsp;''&nbsp;''.<br />
+&nbsp;&nbsp;PERFORM&nbsp;frm_add_field&nbsp;USING&nbsp;lt_fieldcat&nbsp;'NETPR'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'净价'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;''&nbsp;''&nbsp;''.<br />
+&nbsp;&nbsp;PERFORM&nbsp;frm_add_field&nbsp;USING&nbsp;lt_fieldcat&nbsp;'WAERS'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'币种'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;''&nbsp;''&nbsp;''.<br />
+&nbsp;&nbsp;PERFORM&nbsp;frm_add_field&nbsp;USING&nbsp;lt_fieldcat&nbsp;'PEINH'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'价格单位'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;''&nbsp;''&nbsp;''.<br />
+&nbsp;&nbsp;PERFORM&nbsp;frm_add_field&nbsp;USING&nbsp;lt_fieldcat&nbsp;'MWSKZ'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'税码'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;''&nbsp;''&nbsp;''.<br />
+&nbsp;&nbsp;PERFORM&nbsp;frm_add_field&nbsp;USING&nbsp;lt_fieldcat&nbsp;'WEBRE'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'标识：基于收货的发票验证'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;''&nbsp;''&nbsp;''.<br />
+&nbsp;&nbsp;PERFORM&nbsp;frm_add_field&nbsp;USING&nbsp;lt_fieldcat&nbsp;'DATBI'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'有效截至日期'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;''&nbsp;''&nbsp;''.<br />
+&nbsp;&nbsp;PERFORM&nbsp;frm_add_field&nbsp;USING&nbsp;lt_fieldcat&nbsp;'DATAB'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'开始生效日期'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;''&nbsp;''&nbsp;''.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;PERFORM&nbsp;FRM_ADD_FIELD&nbsp;USING&nbsp;LT_FIELDCAT&nbsp;'KOSRT'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'暂估价标识'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;''&nbsp;''&nbsp;''.<br />
+*&nbsp;&nbsp;PERFORM&nbsp;FRM_ADD_FIELD&nbsp;USING&nbsp;LT_FIELDCAT&nbsp;'ZJGBS'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'价格标识'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;''&nbsp;''&nbsp;''.<br />
+*&nbsp;&nbsp;PERFORM&nbsp;FRM_ADD_FIELD&nbsp;USING&nbsp;LT_FIELDCAT&nbsp;'KSTBM'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'等级数量'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;''&nbsp;''&nbsp;''.<br />
+*&nbsp;&nbsp;PERFORM&nbsp;FRM_ADD_FIELD&nbsp;USING&nbsp;LT_FIELDCAT&nbsp;'KBETR'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'条件金额'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;''&nbsp;''&nbsp;''.<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;PERFORM&nbsp;frm_add_field&nbsp;USING&nbsp;lt_fieldcat&nbsp;'MESSAGE'&nbsp;&nbsp;&nbsp;&nbsp;'消息'&nbsp;&nbsp;''&nbsp;''&nbsp;''&nbsp;''.<br />
+<br />
+ENDFORM. "BUILD_FIELDCAT<br />
+<br />
+<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;FRM_ADD_FIELD<br />
+*&---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&gt;PT_FIELDCAT&nbsp;&nbsp;&nbsp;text<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&gt;PV_FIELDNAME&nbsp;&nbsp;text<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&gt;PV_TEXTL&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&gt;PV_TABLE&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&gt;PV_FIELD&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&gt;PV_KEY&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&gt;PV_HOTSPT&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM frm_add_field USING pt_fieldcat TYPE lvc_t_fcat<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pv_fieldname&nbsp;TYPE&nbsp;lvc_fname<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pv_textl&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;scrtext_l<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pv_table&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;lvc_rtname<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pv_field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;lvc_rfname<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"PV_ZERO&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;NO_ZERO<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pv_key&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;lvc_key<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;PV_SUM&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;LVC_DOSUM<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pv_hotspt&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;lvc_hotspt.<br />
+<br />
+&nbsp;&nbsp;DATA:&nbsp;lw_fcat&nbsp;TYPE&nbsp;lvc_s_fcat.<br />
+<br />
+&nbsp;&nbsp;lw_fcat-fieldname&nbsp;&nbsp;=&nbsp;pv_fieldname.<br />
+&nbsp;&nbsp;lw_fcat-scrtext_l&nbsp;&nbsp;=&nbsp;pv_textl.<br />
+&nbsp;&nbsp;lw_fcat-ref_table&nbsp;&nbsp;=&nbsp;pv_table.<br />
+&nbsp;&nbsp;lw_fcat-ref_field&nbsp;&nbsp;=&nbsp;pv_field.<br />
+&nbsp;&nbsp;"LW_FCAT-NO_ZERO&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;PV_ZERO.<br />
+&nbsp;&nbsp;lw_fcat-key&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;pv_key.<br />
+&nbsp;&nbsp;lw_fcat-hotspot&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;pv_hotspt.<br />
+&nbsp;&nbsp;lw_fcat-colddictxt&nbsp;=&nbsp;'L'.<br />
+&nbsp;&nbsp;IF&nbsp;pv_fieldname&nbsp;=&nbsp;'LIGHT'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;lw_fcat-icon&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;APPEND&nbsp;lw_fcat&nbsp;TO&nbsp;pt_fieldcat.<br />
+<br />
+ENDFORM. "FRM_ADD_FIELD<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;FRM_PREPARE_LAYOUT_0100<br />
+*&---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;--P_LS_LAYOUT&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM frm_prepare_layout_alv CHANGING cs_layout TYPE lvc_s_layo.<br />
+<br />
+&nbsp;&nbsp;cs_layout-cwidth_opt&nbsp;=&nbsp;'X'&nbsp;.<br />
+&nbsp;&nbsp;cs_layout-zebra&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'X'&nbsp;.<br />
+&nbsp;&nbsp;cs_layout-sel_mode&nbsp;&nbsp;&nbsp;=&nbsp;'D'&nbsp;.<br />
+ENDFORM. " FRM_PREPARE_LAYOUT_0100<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;FRM_EXCLUDE_FUNCTIONS_0100<br />
+*&---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;--P_LT_EXCLUDE&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM frm_exclude_functions_0100 CHANGING ct_exclude TYPE ui_functions.<br />
+<br />
+&nbsp;&nbsp;DATA:&nbsp;lw_exclude&nbsp;TYPE&nbsp;ui_func.<br />
+<br />
+&nbsp;&nbsp;lw_exclude&nbsp;=&nbsp;cl_gui_alv_grid=&gt;mc_fc_loc_delete_row.&nbsp;&nbsp;&nbsp;&nbsp;"删除行<br />
+&nbsp;&nbsp;APPEND&nbsp;lw_exclude&nbsp;TO&nbsp;ct_exclude.<br />
+&nbsp;&nbsp;lw_exclude&nbsp;=&nbsp;cl_gui_alv_grid=&gt;mc_fc_loc_append_row.&nbsp;&nbsp;&nbsp;&nbsp;"增加行<br />
+&nbsp;&nbsp;APPEND&nbsp;lw_exclude&nbsp;TO&nbsp;ct_exclude.<br />
+&nbsp;&nbsp;lw_exclude&nbsp;=&nbsp;cl_gui_alv_grid=&gt;mc_fc_loc_insert_row.&nbsp;&nbsp;&nbsp;&nbsp;"插入行<br />
+&nbsp;&nbsp;APPEND&nbsp;lw_exclude&nbsp;TO&nbsp;ct_exclude.<br />
+&nbsp;&nbsp;lw_exclude&nbsp;=&nbsp;cl_gui_alv_grid=&gt;mc_fc_loc_copy_row.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"复制行<br />
+&nbsp;&nbsp;APPEND&nbsp;lw_exclude&nbsp;TO&nbsp;ct_exclude.<br />
+&nbsp;&nbsp;lw_exclude&nbsp;=&nbsp;cl_gui_alv_grid=&gt;mc_fc_loc_copy.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"复制<br />
+&nbsp;&nbsp;APPEND&nbsp;lw_exclude&nbsp;TO&nbsp;ct_exclude.<br />
+&nbsp;&nbsp;lw_exclude&nbsp;=&nbsp;cl_gui_alv_grid=&gt;mc_fc_loc_cut.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"剪切<br />
+&nbsp;&nbsp;APPEND&nbsp;lw_exclude&nbsp;TO&nbsp;ct_exclude.<br />
+&nbsp;&nbsp;lw_exclude&nbsp;=&nbsp;cl_gui_alv_grid=&gt;mc_fc_loc_paste.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"粘贴<br />
+&nbsp;&nbsp;APPEND&nbsp;lw_exclude&nbsp;TO&nbsp;ct_exclude.<br />
+&nbsp;&nbsp;lw_exclude&nbsp;=&nbsp;cl_gui_alv_grid=&gt;mc_fc_loc_paste_new_row.&nbsp;"粘贴新行<br />
+&nbsp;&nbsp;APPEND&nbsp;lw_exclude&nbsp;TO&nbsp;ct_exclude.<br />
+&nbsp;&nbsp;lw_exclude&nbsp;=&nbsp;cl_gui_alv_grid=&gt;mc_fc_loc_undo.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"恢复<br />
+&nbsp;&nbsp;APPEND&nbsp;lw_exclude&nbsp;TO&nbsp;ct_exclude.<br />
+<br />
+ENDFORM. " FRM_EXCLUDE_FUNCTIONS_0100<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;FRM_SORT<br />
+*&---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;--P_LT_SORT&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM frm_sort CHANGING ct_sort TYPE lvc_t_sort.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;DATA&nbsp;LS_SORT&nbsp;TYPE&nbsp;LVC_S_SORT&nbsp;.<br />
+*&nbsp;&nbsp;"ls_sort-spos&nbsp;=&nbsp;''&nbsp;.<br />
+*&nbsp;&nbsp;LS_SORT-FIELDNAME&nbsp;=&nbsp;'BZJIN'&nbsp;.<br />
+*&nbsp;&nbsp;"LS_SORT-UP&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'X'&nbsp;.<br />
+*&nbsp;&nbsp;LS_SORT-SUBTOT&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'X'&nbsp;.<br />
+*&nbsp;&nbsp;"&nbsp;ls_sort-down&nbsp;=&nbsp;space&nbsp;.<br />
+*&nbsp;&nbsp;APPEND&nbsp;LS_SORT&nbsp;TO&nbsp;CT_SORT.<br />
+<br />
+   </div>
+   <div class="code">
+ENDFORM. " FRM_SORT<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;FRM_REFRESH_ALV<br />
+*&---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&gt;P_G_GRID&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM frm_refresh_alv USING pr_alv TYPE REF TO cl_gui_alv_grid.<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;GRID&nbsp;LAYOUT&nbsp;RESET&nbsp;=#&nbsp;&nbsp;COLUMN&nbsp;WIDTH&nbsp;OPTIMIZE&nbsp;AND&nbsp;SO&nbsp;ON<br />
+*&nbsp;refresh&nbsp;##&nbsp;####&nbsp;Grid&nbsp;#&nbsp;#####&nbsp;##&nbsp;##<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;DATA:&nbsp;ls_layout&nbsp;&nbsp;TYPE&nbsp;lvc_s_layo.<br />
+&nbsp;&nbsp;PERFORM&nbsp;frm_prepare_layout_alv&nbsp;&nbsp;&nbsp;CHANGING&nbsp;ls_layout.<br />
+&nbsp;&nbsp;CALL&nbsp;METHOD&nbsp;pr_alv-&gt;set_frontend_layout<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;is_layout&nbsp;=&nbsp;ls_layout.<br />
+<br />
+<br />
+&nbsp;&nbsp;DATA:&nbsp;ls_stable&nbsp;TYPE&nbsp;&nbsp;&nbsp;lvc_s_stbl.<br />
+   </div>
+   <div class="codeComment">
+*刷新alv<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;CHECK&nbsp;pr_alv&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+&nbsp;&nbsp;ls_stable-row&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;ls_stable-col&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;CALL&nbsp;METHOD&nbsp;pr_alv-&gt;refresh_table_display<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;is_stable&nbsp;=&nbsp;ls_stable.<br />
+<br />
+ENDFORM. " FRM_REFRESH_ALV<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;FRM_ALV_OUTPUT<br />
+*&---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&gt;P_GT_OUT&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM frm_alv_output TABLES pt_out<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pt_fcat&nbsp;TYPE&nbsp;lvc_t_fcat<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pt_sort&nbsp;TYPE&nbsp;lvc_t_sort<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;&nbsp;p_grid&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;REF&nbsp;TO&nbsp;cl_gui_alv_grid<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ps_layout&nbsp;&nbsp;TYPE&nbsp;lvc_s_layo.<br />
+<br />
+<br />
+<br />
+&nbsp;&nbsp;DATA:ls_variant&nbsp;TYPE&nbsp;disvariant.<br />
+<br />
+&nbsp;&nbsp;ls_variant-report&nbsp;=&nbsp;&nbsp;sy-repid.<br />
+<br />
+&nbsp;&nbsp;CALL&nbsp;METHOD&nbsp;p_grid-&gt;set_table_for_first_display<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;is_layout&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ps_layout<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"IT_TOOLBAR_EXCLUDING&nbsp;=&nbsp;GT_EXCLUDE<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_save&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'A'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;is_variant&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_variant<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CHANGING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it_fieldcatalog&nbsp;=&nbsp;pt_fcat[]<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it_outtab&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;pt_out[]<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it_sort&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;pt_sort[].<br />
+<br />
+ENDFORM. " FRM_ALV_OUTPUT<br />
+<br />
+<br />
+<br />
+MODULE status_9000 OUTPUT.<br />
+<br />
+&nbsp;&nbsp;DATA:&nbsp;lv_fcode&nbsp;TYPE&nbsp;fcode.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;CASE&nbsp;'X'.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;P_RD1.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LV_FCODE&nbsp;=&nbsp;'CHANGE'.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;P_RD2.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LV_FCODE&nbsp;=&nbsp;'CRET'.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;OTHERS.<br />
+*&nbsp;&nbsp;ENDCASE.<br />
+<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;SET&nbsp;PF-STATUS&nbsp;'ZSTATUS_9000'&nbsp;EXCLUDING&nbsp;lv_fcode.<br />
+&nbsp;&nbsp;SET&nbsp;TITLEBAR&nbsp;'ZTITLE_9001'.<br />
+<br />
+ENDMODULE.<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Module&nbsp;FRM_ALV&nbsp;OUTPUT<br />
+*&---------------------------------------------------------------------*<br />
+*&<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+MODULE frm_alv OUTPUT.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;NOT&nbsp;g_grid&nbsp;IS&nbsp;INITIAL&nbsp;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;frm_refresh_alv&nbsp;USING&nbsp;g_grid.&nbsp;"刷新ALV<br />
+&nbsp;&nbsp;ELSE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;DATA:&nbsp;lt_exclude&nbsp;TYPE&nbsp;ui_functions,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lt_fcat&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;lvc_t_fcat,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_fcat&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;lvc_s_fcat,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_layout&nbsp;&nbsp;TYPE&nbsp;lvc_s_layo,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"LS_VARIANT&nbsp;TYPE&nbsp;DISVARIANT,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lt_sort&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;lvc_t_sort.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;frm_create_alv&nbsp;USING&nbsp;&nbsp;g_grid<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;g_container<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gv_container.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;frm_register_event&nbsp;USING&nbsp;g_grid.&nbsp;&nbsp;"注册ALV事件<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;frm_prepare_layout_alv&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CHANGING&nbsp;ls_layout.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;frm_exclude_functions_0100&nbsp;CHANGING&nbsp;lt_exclude.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;FRM_SORT&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CHANGING&nbsp;LT_SORT.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;frm_build_fieldcat&nbsp;&nbsp;&nbsp;CHANGING&nbsp;lt_fcat.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;frm_alv_output&nbsp;&nbsp;TABLES&nbsp;gt_out<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lt_fcat<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lt_sort<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;&nbsp;g_grid<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_layout.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+ENDMODULE.<br />
+<br />
+<br />
+<br />
+MODULE user_command_9000 INPUT.<br />
+<br />
+&nbsp;&nbsp;gv_save_ok&nbsp;=&nbsp;ok_code.<br />
+&nbsp;&nbsp;CLEAR:&nbsp;ok_code.<br />
+<br />
+&nbsp;&nbsp;CASE&nbsp;gv_save_ok.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'BACK'&nbsp;OR&nbsp;'CANCEL'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LEAVE&nbsp;TO&nbsp;SCREEN&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'EXIT'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LEAVE&nbsp;PROGRAM.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'CRET'.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;frm_selected_rows&nbsp;&nbsp;TABLES&nbsp;gt_out.<br />
+   </div>
+   <div class="codeComment">
+****确认框<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DATA:&nbsp;lv_answer.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'POPUP_TO_CONFIRM'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;titlebar&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'是否导入信息记录'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text_question&nbsp;=&nbsp;'是否导入信息记录'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text_button_1&nbsp;=&nbsp;'是'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text_button_2&nbsp;=&nbsp;'否'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;answer&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lv_answer.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CHECK&nbsp;lv_answer&nbsp;=&nbsp;'1'.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CASE&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;p_rd1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;frm_create_inforecord.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;p_rd2.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;frm_create_gxww.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDCASE.<br />
+&nbsp;&nbsp;ENDCASE.<br />
+<br />
+ENDMODULE.<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Form&nbsp;FRM_ALV_DATA<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;text<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&gt;&nbsp;GT_LIFNR<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;--&nbsp;GT_ALV<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM frm_alv_data  TABLES pt_eina TYPE tt_eina<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ct_out&nbsp;TYPE&nbsp;tt_out.<br />
+<br />
+&nbsp;&nbsp;DATA:&nbsp;ls_out&nbsp;&nbsp;TYPE&nbsp;ts_out.<br />
+<br />
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;pt_eina&nbsp;INTO&nbsp;DATA(ls_eina).<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MOVE-CORRESPONDING&nbsp;ls_eina&nbsp;TO&nbsp;ls_out.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;LS_EINA-KOSRT&nbsp;IS&nbsp;INITIAL.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;S000&nbsp;WITH&nbsp;'估价标识字段必输'&nbsp;DISPLAY&nbsp;LIKE&nbsp;'E'.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LEAVE&nbsp;LIST-PROCESSING.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;p_rd1&nbsp;=&nbsp;'X'.<br />
+   </div>
+   <div class="codeComment">
+*****校验<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;LS_OUT-ZJGBS&nbsp;=&nbsp;'B'&nbsp;AND&nbsp;LS_OUT-KBETR&nbsp;IS&nbsp;INITIAL.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;S000&nbsp;WITH&nbsp;'采购标识等于B(阶梯价)时，价格与等级字段必输'&nbsp;DISPLAY&nbsp;LIKE&nbsp;'E'.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LEAVE&nbsp;LIST-PROCESSING.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ELSEIF&nbsp;LS_OUT-ZJGBS&nbsp;&lt;&gt;&nbsp;'B'&nbsp;AND&nbsp;LS_OUT-KBETR&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;S000&nbsp;WITH&nbsp;'采购标识不等于B(阶梯价)时，无需维护价格与等级字段'&nbsp;DISPLAY&nbsp;LIKE&nbsp;'E'.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LEAVE&nbsp;LIST-PROCESSING.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;NOT&nbsp;ls_out-lifnr&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'CONVERSION_EXIT_ALPHA_INPUT'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;input&nbsp;&nbsp;=&nbsp;ls_out-lifnr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;output&nbsp;=&nbsp;ls_out-lifnr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;NOT&nbsp;ls_out-matnr&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'CONVERSION_EXIT_MATN1_INPUT'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;input&nbsp;&nbsp;=&nbsp;ls_out-matnr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;output&nbsp;=&nbsp;ls_out-matnr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;NOT&nbsp;ls_out-ekgrp&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AUTHORITY-CHECK&nbsp;OBJECT&nbsp;'M_EINF_EKG'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ID&nbsp;'ACTVT'&nbsp;FIELD&nbsp;'01'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ID&nbsp;'EKGRP'&nbsp;FIELD&nbsp;ls_out-ekgrp.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;&lt;&gt;&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;s020&nbsp;WITH&nbsp;'采购组'&nbsp;ls_out-ekgrp&nbsp;DISPLAY&nbsp;LIKE&nbsp;'E'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LEAVE&nbsp;LIST-PROCESSING.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;ls_out&nbsp;TO&nbsp;ct_out.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR:&nbsp;ls_eina,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_out.<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;p_rd1&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;DATA(lt_out)&nbsp;=&nbsp;ct_out[].<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SORT&nbsp;lt_out&nbsp;BY&nbsp;matnr&nbsp;lifnr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;DELETE&nbsp;ADJACENT&nbsp;DUPLICATES&nbsp;FROM&nbsp;lt_out&nbsp;COMPARING&nbsp;matnr&nbsp;lifnr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;infnr,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;matnr,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lifnr,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;meins<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;TABLE&nbsp;@DATA(lt_infnr)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;eina&nbsp;FOR&nbsp;ALL&nbsp;ENTRIES&nbsp;IN&nbsp;@lt_out<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;matnr&nbsp;=&nbsp;@lt_out-matnr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;lifnr&nbsp;=&nbsp;@lt_out-lifnr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;loekz&nbsp;=&nbsp;@space.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;ct_out&nbsp;ASSIGNING&nbsp;FIELD-SYMBOL(&lt;ls_out&gt;).<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;lt_infnr&nbsp;INTO&nbsp;DATA(ls_infnr)&nbsp;WITH&nbsp;KEY&nbsp;&nbsp;matnr&nbsp;=&nbsp;&lt;ls_out&gt;-matnr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lifnr&nbsp;=&nbsp;&lt;ls_out&gt;-lifnr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;ls_out&gt;-infnr&nbsp;&nbsp;&nbsp;=&nbsp;ls_infnr-infnr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;ls_out&gt;-meins_2&nbsp;=&nbsp;ls_infnr-meins.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;CASE&nbsp;'X'.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;P_RD1.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;&lt;LS_OUT&gt;-INFNR&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;S018&nbsp;WITH&nbsp;&nbsp;&lt;LS_OUT&gt;-LIFNR&nbsp;&lt;LS_OUT&gt;-MATNR&nbsp;&lt;LS_OUT&gt;-INFNR&nbsp;&nbsp;DISPLAY&nbsp;LIKE&nbsp;'E'.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LEAVE&nbsp;LIST-PROCESSING.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;P_RD2.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;&lt;LS_OUT&gt;-INFNR&nbsp;IS&nbsp;INITIAL.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;S019&nbsp;WITH&nbsp;&nbsp;&lt;LS_OUT&gt;-LIFNR&nbsp;&lt;LS_OUT&gt;-MATNR&nbsp;DISPLAY&nbsp;LIKE&nbsp;'E'.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LEAVE&nbsp;LIST-PROCESSING.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;ENDCASE.<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CLEAR:&nbsp;ls_infnr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+<br />
+<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;lt_out&nbsp;=&nbsp;ct_out[].<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SORT&nbsp;lt_out&nbsp;BY&nbsp;infnr&nbsp;ekorg&nbsp;esokz&nbsp;werks.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;DELETE&nbsp;ADJACENT&nbsp;DUPLICATES&nbsp;FROM&nbsp;lt_out&nbsp;COMPARING&nbsp;infnr&nbsp;ekorg&nbsp;esokz&nbsp;werks.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;infnr,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ekorg,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;esokz,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;werks<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;TABLE&nbsp;@DATA(lt_eine)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;eine&nbsp;FOR&nbsp;ALL&nbsp;ENTRIES&nbsp;IN&nbsp;@lt_out<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;infnr&nbsp;=&nbsp;@lt_out-infnr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;ekorg&nbsp;=&nbsp;@lt_out-ekorg<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;esokz&nbsp;=&nbsp;@lt_out-esokz<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;werks&nbsp;=&nbsp;@lt_out-werks.<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+****判断是否新建有效日期<br />
+<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;lt_out&nbsp;=&nbsp;ct_out[].<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SORT&nbsp;lt_out&nbsp;BY&nbsp;lifnr&nbsp;matnr&nbsp;ekorg.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;DELETE&nbsp;ADJACENT&nbsp;DUPLICATES&nbsp;FROM&nbsp;lt_out&nbsp;COMPARING&nbsp;lifnr&nbsp;matnr&nbsp;ekorg.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;*&nbsp;&nbsp;INTO&nbsp;TABLE&nbsp;@DATA(lt_a018)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;a018&nbsp;FOR&nbsp;ALL&nbsp;ENTRIES&nbsp;IN&nbsp;@lt_out<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;lifnr&nbsp;=&nbsp;@lt_out-lifnr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;&nbsp;matnr&nbsp;=&nbsp;@lt_out-matnr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;&nbsp;ekorg&nbsp;=&nbsp;@lt_out-ekorg<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;&nbsp;knumh&nbsp;&lt;&gt;&nbsp;@space.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;ct_out&nbsp;ASSIGNING&nbsp;&lt;ls_out&gt;.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;lt_a018&nbsp;INTO&nbsp;DATA(ls_a018)&nbsp;WITH&nbsp;KEY&nbsp;lifnr&nbsp;=&nbsp;&lt;ls_out&gt;-lifnr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;matnr&nbsp;=&nbsp;&lt;ls_out&gt;-matnr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ekorg&nbsp;=&nbsp;&lt;ls_out&gt;-ekorg.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;ls_out&gt;-znew_flag&nbsp;=&nbsp;'X'.&nbsp;&nbsp;"新建有效日期<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;lt_eine&nbsp;INTO&nbsp;DATA(ls_eine)&nbsp;WITH&nbsp;KEY&nbsp;&nbsp;infnr&nbsp;=&nbsp;&lt;ls_out&gt;-infnr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ekorg&nbsp;=&nbsp;&lt;ls_out&gt;-ekorg<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;esokz&nbsp;=&nbsp;&lt;ls_out&gt;-esokz<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;werks&nbsp;=&nbsp;&lt;ls_out&gt;-werks.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;ls_out&gt;-infnr_ekorg&nbsp;&nbsp;=&nbsp;ls_eine-infnr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDLOOP.<br />
+&nbsp;&nbsp;ELSE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;"n/a<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+ENDFORM.<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Form&nbsp;FRM_CREATE_VENDOR<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;text<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;--&gt;&nbsp;&nbsp;p1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*&&nbsp;&lt;--&nbsp;&nbsp;p2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM frm_create_inforecord .<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;PERFORM&nbsp;FRM_SELECTED_ROWS&nbsp;&nbsp;TABLES&nbsp;GT_OUT.<br />
+*<br />
+*****确认框<br />
+*&nbsp;&nbsp;DATA:&nbsp;LV_ANSWER.<br />
+*&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'POPUP_TO_CONFIRM'<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TITLEBAR&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'是否导入信息记录'<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TEXT_QUESTION&nbsp;=&nbsp;'是否导入信息记录'<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TEXT_BUTTON_1&nbsp;=&nbsp;'是'<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TEXT_BUTTON_2&nbsp;=&nbsp;'否'<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ANSWER&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;LV_ANSWER.<br />
+*<br />
+*&nbsp;&nbsp;CHECK&nbsp;LV_ANSWER&nbsp;=&nbsp;'1'.<br />
+<br />
+<br />
+*&nbsp;&nbsp;DATA(LT_HEAD)&nbsp;=&nbsp;GT_OUT[].<br />
+*&nbsp;&nbsp;DELETE&nbsp;LT_HEAD&nbsp;WHERE&nbsp;SEL&nbsp;=&nbsp;''.<br />
+*&nbsp;&nbsp;SORT&nbsp;LT_HEAD&nbsp;BY&nbsp;LIFNR&nbsp;MATNR&nbsp;EKORG&nbsp;WERKS&nbsp;ESOKZ&nbsp;EKGRP&nbsp;DATBI.<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;"&nbsp;DELETE&nbsp;ADJACENT&nbsp;DUPLICATES&nbsp;FROM&nbsp;LT_HEAD&nbsp;COMPARING&nbsp;&nbsp;LIFNR&nbsp;MATNR&nbsp;EKORG&nbsp;WERKS&nbsp;ESOKZ&nbsp;EKGRP&nbsp;DATBI.<br />
+&nbsp;&nbsp;DATA:&nbsp;ls_msg&nbsp;&nbsp;TYPE&nbsp;zmms003,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_item&nbsp;TYPE&nbsp;ts_out,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lt_item&nbsp;TYPE&nbsp;tt_out.<br />
+&nbsp;&nbsp;"ls_input&nbsp;TYPE&nbsp;zmms0004.<br />
+<br />
+&nbsp;&nbsp;"DELETE&nbsp;GT_OUT&nbsp;WHERE&nbsp;SEL&nbsp;=&nbsp;''.<br />
+&nbsp;&nbsp;"&nbsp;LOOP&nbsp;AT&nbsp;LT_HEAD&nbsp;&nbsp;ASSIGNING&nbsp;FIELD-SYMBOL(&lt;LS_HEAD&gt;)&nbsp;WHERE&nbsp;SEL&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;gt_out&nbsp;&nbsp;ASSIGNING&nbsp;FIELD-SYMBOL(&lt;ls_head&gt;)&nbsp;WHERE&nbsp;sel&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;&nbsp;&nbsp;APPEND&nbsp;&lt;LS_HEAD&gt;&nbsp;TO&nbsp;LT_ITEM.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;gt_out&nbsp;INTO&nbsp;DATA(ls_out)&nbsp;WHERE&nbsp;sel&nbsp;=&nbsp;'X'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;&nbsp;lifnr&nbsp;&nbsp;=&nbsp;&lt;ls_head&gt;-lifnr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;&nbsp;matnr&nbsp;&nbsp;=&nbsp;&lt;ls_head&gt;-matnr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;&nbsp;ekorg&nbsp;&nbsp;=&nbsp;&lt;ls_head&gt;-ekorg<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;&nbsp;werks&nbsp;&nbsp;=&nbsp;&lt;ls_head&gt;-werks<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;&nbsp;esokz&nbsp;&nbsp;=&nbsp;&lt;ls_head&gt;-esokz<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;&nbsp;ekgrp&nbsp;&nbsp;=&nbsp;&lt;ls_head&gt;-ekgrp.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;&nbsp;DATBI&nbsp;&nbsp;=&nbsp;&lt;LS_HEAD&gt;-DATBI.<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;ls_out&nbsp;TO&nbsp;lt_item.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CLEAR:&nbsp;ls_out.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;&lt;ls_head&gt;-infnr&nbsp;IS&nbsp;INITIAL&nbsp;&nbsp;OR<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(&nbsp;&lt;ls_head&gt;-infnr&nbsp;IS&nbsp;NOT&nbsp;INITIAL&nbsp;&nbsp;AND&nbsp;&lt;ls_head&gt;-infnr_ekorg&nbsp;IS&nbsp;INITIAL&nbsp;).&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;OR<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(&nbsp;&lt;LS_HEAD&gt;-INFNR&nbsp;IS&nbsp;NOT&nbsp;INITIAL&nbsp;&nbsp;AND&nbsp;&lt;LS_HEAD&gt;-WERKS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IS&nbsp;INITIAL&nbsp;).<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;frm_me11_bdc&nbsp;&nbsp;&nbsp;&nbsp;TABLES&nbsp;lt_item<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CHANGING&nbsp;&lt;ls_head&gt;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ELSEIF&nbsp;(&nbsp;&lt;ls_head&gt;-infnr&nbsp;IS&nbsp;NOT&nbsp;INITIAL&nbsp;AND&nbsp;&lt;ls_head&gt;-infnr_ekorg&nbsp;IS&nbsp;NOT&nbsp;INITIAL&nbsp;)&nbsp;OR<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(&nbsp;&lt;ls_head&gt;-infnr&nbsp;IS&nbsp;NOT&nbsp;INITIAL&nbsp;AND&nbsp;&lt;ls_head&gt;-werks&nbsp;&nbsp;IS&nbsp;INITIAL&nbsp;).<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;frm_me12_bdc&nbsp;&nbsp;&nbsp;&nbsp;TABLES&nbsp;lt_item<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CHANGING&nbsp;&lt;ls_head&gt;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;&lt;ls_head&gt;-status&nbsp;=&nbsp;'E'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXIT.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;gt_out&nbsp;&nbsp;ASSIGNING&nbsp;FIELD-SYMBOL(&lt;lw_head&gt;)&nbsp;WHERE&nbsp;sel&nbsp;=&nbsp;'X'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;&nbsp;AND&nbsp;INFNR&nbsp;IS&nbsp;INITIAL<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;lifnr&nbsp;=&nbsp;&lt;ls_head&gt;-lifnr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;matnr&nbsp;=&nbsp;&lt;ls_head&gt;-matnr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;ekorg&nbsp;=&nbsp;&lt;ls_head&gt;-ekorg<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"AND&nbsp;WERKS&nbsp;=&nbsp;&lt;LS_HEAD&gt;-WERKS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;AND&nbsp;ESOKZ&nbsp;=&nbsp;&lt;LS_HEAD&gt;-ESOKZ<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;ekgrp&nbsp;=&nbsp;&lt;ls_head&gt;-ekgrp.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;&nbsp;AND&nbsp;DATBI&nbsp;=&nbsp;&lt;LS_HEAD&gt;-DATBI.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;lw_head&gt;-infnr&nbsp;=&nbsp;&lt;ls_head&gt;-infnr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;&lt;lw_head&gt;-werks&nbsp;=&nbsp;&lt;ls_head&gt;-werks.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;lw_head&gt;-infnr_ekorg&nbsp;=&nbsp;&lt;ls_head&gt;-infnr_ekorg.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR:&nbsp;lt_item.<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;GT_OUT&nbsp;ASSIGNING&nbsp;FIELD-SYMBOL(&lt;LS_OUT&gt;)&nbsp;WHERE&nbsp;SEL&nbsp;=&nbsp;'X'.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;LT_HEAD&nbsp;INTO&nbsp;DATA(LS_HEAD)&nbsp;WITH&nbsp;KEY&nbsp;LIFNR&nbsp;&nbsp;=&nbsp;&lt;LS_OUT&gt;-LIFNR<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MATNR&nbsp;&nbsp;=&nbsp;&lt;LS_OUT&gt;-MATNR<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EKORG&nbsp;&nbsp;=&nbsp;&lt;LS_OUT&gt;-EKORG<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WERKS&nbsp;&nbsp;=&nbsp;&lt;LS_OUT&gt;-WERKS<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ESOKZ&nbsp;&nbsp;=&nbsp;&lt;LS_OUT&gt;-ESOKZ<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EKGRP&nbsp;&nbsp;=&nbsp;&lt;LS_OUT&gt;-EKGRP<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DATBI&nbsp;&nbsp;=&nbsp;&lt;LS_OUT&gt;-DATBI.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;SY-SUBRC&nbsp;=&nbsp;0.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;LS_OUT&gt;-LIGHT&nbsp;&nbsp;&nbsp;=&nbsp;LS_HEAD-LIGHT.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;LS_OUT&gt;-STATUS&nbsp;&nbsp;=&nbsp;LS_HEAD-STATUS.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;LS_OUT&gt;-MESSAGE&nbsp;=&nbsp;LS_HEAD-MESSAGE.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;LS_OUT&gt;-INFNR&nbsp;&nbsp;&nbsp;=&nbsp;LS_HEAD-INFNR.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+*&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;PERFORM&nbsp;frm_refresh_alv&nbsp;USING&nbsp;g_grid.&nbsp;"刷新ALV<br />
+<br />
+&nbsp;&nbsp;CASE&nbsp;&lt;ls_head&gt;-status.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'E'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;e000&nbsp;WITH&nbsp;&lt;ls_head&gt;-message.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'S'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;s000&nbsp;WITH&nbsp;&lt;ls_head&gt;-message&nbsp;.<br />
+&nbsp;&nbsp;ENDCASE.<br />
+<br />
+ENDFORM.<br />
+<br />
+<br />
+<br />
+<br />
+FORM frm_create_gxww .<br />
+<br />
+<br />
+&nbsp;&nbsp;DATA:&nbsp;ls_msg&nbsp;&nbsp;TYPE&nbsp;zmms003,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_item&nbsp;TYPE&nbsp;ts_out,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lt_item&nbsp;TYPE&nbsp;tt_out.<br />
+&nbsp;&nbsp;"ls_input&nbsp;TYPE&nbsp;zmms0004.<br />
+<br />
+<br />
+<br />
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;gt_out&nbsp;&nbsp;ASSIGNING&nbsp;FIELD-SYMBOL(&lt;ls_head&gt;)&nbsp;WHERE&nbsp;sel&nbsp;=&nbsp;'X'.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;frm_me11_bdc_gxww&nbsp;&nbsp;CHANGING&nbsp;&lt;ls_head&gt;.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;&lt;ls_head&gt;-status&nbsp;=&nbsp;'E'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXIT.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR:&nbsp;lt_item.<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+<br />
+&nbsp;&nbsp;PERFORM&nbsp;frm_refresh_alv&nbsp;USING&nbsp;g_grid.&nbsp;"刷新ALV<br />
+<br />
+&nbsp;&nbsp;CASE&nbsp;&lt;ls_head&gt;-status.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'E'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;e000&nbsp;WITH&nbsp;&lt;ls_head&gt;-message.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'S'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;s000&nbsp;WITH&nbsp;&lt;ls_head&gt;-message&nbsp;.<br />
+&nbsp;&nbsp;ENDCASE.<br />
+<br />
+ENDFORM.<br />
+<br />
+<br />
+FORM frm_selected_rows  TABLES ct_out TYPE tt_out.<br />
+<br />
+&nbsp;&nbsp;DATA:&nbsp;lt_index_rows	TYPE&nbsp;lvc_t_row,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lt_row_no	&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;lvc_t_roid.<br />
+<br />
+&nbsp;&nbsp;CALL&nbsp;METHOD&nbsp;g_grid-&gt;get_selected_rows<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;et_index_rows&nbsp;=&nbsp;lt_index_rows<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;et_row_no&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lt_row_no.<br />
+<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;lt_row_no[]&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;e000&nbsp;WITH&nbsp;TEXT-t03.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;FIELD-SYMBOLS:&nbsp;&lt;ls_out&gt;&nbsp;TYPE&nbsp;ts_out.<br />
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;ct_out&nbsp;ASSIGNING&nbsp;&nbsp;&lt;ls_out&gt;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;lt_row_no&nbsp;INTO&nbsp;DATA(ls_rows)&nbsp;WITH&nbsp;KEY&nbsp;row_id&nbsp;=&nbsp;sy-tabix.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;ls_out&gt;-sel&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ELSE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CLEAR:&lt;ls_out&gt;-sel.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+ENDFORM.<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Form&nbsp;FRM_ME11_BDC<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;text<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&gt;&nbsp;LT_ITEM<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;--&nbsp;LS_ZMM027<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM frm_me11_bdc  TABLES   pt_item TYPE tt_out<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CHANGING&nbsp;cs_head&nbsp;TYPE&nbsp;ts_out.<br />
+<br />
+<br />
+&nbsp;&nbsp;DATA:&nbsp;lv_mode&nbsp;TYPE&nbsp;c.&nbsp;"DEFAULT&nbsp;'N'.&nbsp;&nbsp;n/e/a/p<br />
+&nbsp;&nbsp;DATA:&nbsp;lt_msg&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;TABLE&nbsp;OF&nbsp;bdcmsgcoll,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lt_return&nbsp;TYPE&nbsp;STANDARD&nbsp;TABLE&nbsp;OF&nbsp;bapiret2.<br />
+&nbsp;&nbsp;CLEAR:&nbsp;gt_bdcdata[].<br />
+   </div>
+   <div class="codeComment">
+*****100<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;PERFORM&nbsp;bdc_dynpro&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'SAPMM06I'&nbsp;&nbsp;&nbsp;'0100'.<br />
+&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'BDC_OKCODE'&nbsp;'/00'.<br />
+&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'EINA-LIFNR'&nbsp;cs_head-lifnr.<br />
+&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'EINA-MATNR'&nbsp;cs_head-matnr.<br />
+&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'EINE-EKORG'&nbsp;cs_head-ekorg.<br />
+&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'EINE-WERKS'&nbsp;cs_head-werks.<br />
+&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'EINA-INFNR'&nbsp;space.<br />
+<br />
+&nbsp;&nbsp;CASE&nbsp;cs_head-esokz.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'0'.&nbsp;"标准<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;USING&nbsp;'RM06I-NORMB'&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'2'.&nbsp;"寄售<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;USING&nbsp;'RM06I-KONSI'&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'3'.&nbsp;"外协加工<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;USING&nbsp;'RM06I-LOHNB'&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'P'.&nbsp;"管道<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;USING&nbsp;'RM06I-PIPEL'&nbsp;'X'.<br />
+&nbsp;&nbsp;ENDCASE.<br />
+<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;cs_head-infnr&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+   </div>
+   <div class="codeComment">
+****101<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;bdc_dynpro&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'SAPMM06I'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'0101'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'BDC_CURSOR'&nbsp;&nbsp;&nbsp;'EINA-INFNR'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'BDC_OKCODE'&nbsp;&nbsp;&nbsp;'=EINE'.<br />
+<br />
+&nbsp;&nbsp;ELSE.<br />
+   </div>
+   <div class="codeComment">
+****101<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;bdc_dynpro&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'SAPMM06I'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'0101'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'BDC_CURSOR'&nbsp;&nbsp;&nbsp;'EINA-MAHN1'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'BDC_OKCODE'&nbsp;&nbsp;&nbsp;'=EINE'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'EINA-MEINS'&nbsp;&nbsp;&nbsp;cs_head-meins.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;SINGLE&nbsp;matnr,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;meinh,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;umrez,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;umren<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;@DATA(ls_marm)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;marm&nbsp;&nbsp;WHERE&nbsp;matnr&nbsp;=&nbsp;@cs_head-matnr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;meinh&nbsp;=&nbsp;@cs_head-meins.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'EINA-UMREZ'&nbsp;&nbsp;&nbsp;ls_marm-umrez.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'EINA-UMREN'&nbsp;&nbsp;&nbsp;ls_marm-umren.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+   </div>
+   <div class="codeComment">
+****102<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;PERFORM&nbsp;bdc_dynpro&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'SAPMM06I'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'0102'.<br />
+&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'BDC_OKCODE'&nbsp;&nbsp;&nbsp;'=KO'.<br />
+&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'EINE-APLFZ'&nbsp;&nbsp;&nbsp;cs_head-aplfz.<br />
+&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'EINE-EKGRP'&nbsp;&nbsp;&nbsp;cs_head-ekgrp.<br />
+&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'EINE-MWSKZ'&nbsp;&nbsp;&nbsp;cs_head-mwskz.<br />
+<br />
+&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'EINE-NORBM'&nbsp;&nbsp;&nbsp;cs_head-norbm.<br />
+<br />
+&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'EINE-NETPR'&nbsp;&nbsp;&nbsp;cs_head-netpr.<br />
+&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'EINE-WAERS'&nbsp;&nbsp;&nbsp;cs_head-waers.<br />
+&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'EINE-PEINH'&nbsp;&nbsp;&nbsp;cs_head-peinh.<br />
+&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'EINE-BPRME'&nbsp;&nbsp;&nbsp;cs_head-meins.<br />
+&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'EINE-WEBRE'&nbsp;&nbsp;&nbsp;'X'.<br />
+&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'EINE-AUT_SOURCE'&nbsp;&nbsp;'X'.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*1017<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;PERFORM&nbsp;bdc_dynpro&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'SAPMV13A'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'0201'.&nbsp;"2022.1.25&nbsp;改成&nbsp;1017-0201<br />
+&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'BDC_OKCODE'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'=SICH'.<br />
+&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'RV13A-DATAB'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cs_head-datab.<br />
+&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'RV13A-DATBI'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cs_head-datbi.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*****201<br />
+*&nbsp;&nbsp;PERFORM&nbsp;bdc_dynpro&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'SAPMV13A'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'0201'.<br />
+*&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'BDC_OKCODE'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'=SICH'.<br />
+*&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'RV13A-DATAB'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cs_head-datab.<br />
+*&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'RV13A-DATBI'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cs_head-datbi.<br />
+<br />
+<br />
+<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;DATA:&nbsp;lv_fname&nbsp;&nbsp;TYPE&nbsp;bdcdata-fnam,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_num(2).<br />
+   </div>
+   <div class="codeComment">
+*<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;SET&nbsp;PARAMETER&nbsp;ID&nbsp;'LIF'&nbsp;FIELD&nbsp;space.<br />
+&nbsp;&nbsp;SET&nbsp;PARAMETER&nbsp;ID&nbsp;'MAT'&nbsp;FIELD&nbsp;space.<br />
+&nbsp;&nbsp;SET&nbsp;PARAMETER&nbsp;ID&nbsp;'EKO'&nbsp;FIELD&nbsp;space.<br />
+&nbsp;&nbsp;SET&nbsp;PARAMETER&nbsp;ID&nbsp;'WRK'&nbsp;FIELD&nbsp;space.<br />
+&nbsp;&nbsp;SET&nbsp;PARAMETER&nbsp;ID&nbsp;'INF'&nbsp;FIELD&nbsp;space.<br />
+&nbsp;&nbsp;lv_mode&nbsp;=&nbsp;'N'.<br />
+&nbsp;&nbsp;CALL&nbsp;&nbsp;TRANSACTION&nbsp;c_me11&nbsp;USING&nbsp;gt_bdcdata<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MODE&nbsp;lv_mode<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;UPDATE&nbsp;c_update<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MESSAGES&nbsp;INTO&nbsp;lt_msg.<br />
+<br />
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'CONVERT_BDCMSGCOLL_TO_BAPIRET2'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;TABLES<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;imt_bdcmsgcoll&nbsp;=&nbsp;lt_msg<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ext_return&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lt_return.<br />
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;lt_return&nbsp;INTO&nbsp;DATA(ls_return)&nbsp;WHERE&nbsp;type&nbsp;CA&nbsp;'AEX'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OR&nbsp;(&nbsp;type&nbsp;=&nbsp;'S'&nbsp;AND&nbsp;id&nbsp;=&nbsp;'00'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;number&nbsp;=&nbsp;'344'&nbsp;)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OR&nbsp;(&nbsp;type&nbsp;=&nbsp;'S'&nbsp;AND&nbsp;id&nbsp;=&nbsp;'06'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;number&nbsp;=&nbsp;'199'&nbsp;).<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXIT.<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;cs_head-light&nbsp;&nbsp;=&nbsp;icon_red_light.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;cs_head-status&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'E'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;cs_head-message&nbsp;&nbsp;&nbsp;=&nbsp;ls_return-message.&nbsp;&nbsp;&nbsp;"获取消息文本<br />
+&nbsp;&nbsp;ELSE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;cs_head-status&nbsp;&nbsp;=&nbsp;'S'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;cs_head-light&nbsp;&nbsp;=&nbsp;icon_green_light.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;lt_return&nbsp;INTO&nbsp;ls_return&nbsp;WITH&nbsp;KEY&nbsp;type&nbsp;&nbsp;&nbsp;=&nbsp;'S'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;id&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'06'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;number&nbsp;=&nbsp;'331'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cs_head-message&nbsp;=&nbsp;ls_return-message.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cs_head-infnr&nbsp;&nbsp;&nbsp;=&nbsp;ls_return-message_v1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cs_head-infnr_ekorg&nbsp;=&nbsp;ls_return-message_v1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+<br />
+ENDFORM.<br />
+<br />
+<br />
+<br />
+FORM frm_me11_bdc_gxww  CHANGING cs_head TYPE ts_out.<br />
+<br />
+<br />
+&nbsp;&nbsp;DATA:&nbsp;lv_mode&nbsp;TYPE&nbsp;c.&nbsp;"DEFAULT&nbsp;'N'.&nbsp;&nbsp;n/e/a/p<br />
+&nbsp;&nbsp;DATA:&nbsp;lt_msg&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;TABLE&nbsp;OF&nbsp;bdcmsgcoll,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lt_return&nbsp;TYPE&nbsp;STANDARD&nbsp;TABLE&nbsp;OF&nbsp;bapiret2.<br />
+<br />
+<br />
+<br />
+&nbsp;&nbsp;CLEAR:&nbsp;gt_bdcdata,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_bdcdata.<br />
+   </div>
+   <div class="codeComment">
+******100<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;PERFORM&nbsp;bdc_dynpro&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'SAPMM06I'&nbsp;&nbsp;&nbsp;'0100'.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;PERFORM&nbsp;BDC_FIELD&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'BDC_CURSOR'&nbsp;'RM06I-NORMB'.<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'BDC_OKCODE'&nbsp;'/00'.<br />
+&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'EINA-LIFNR'&nbsp;cs_head-lifnr.<br />
+&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'EINE-EKORG'&nbsp;cs_head-ekorg.<br />
+&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'EINE-WERKS'&nbsp;cs_head-werks.<br />
+&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'EINA-INFNR'&nbsp;cs_head-infnr.<br />
+<br />
+&nbsp;&nbsp;CASE&nbsp;cs_head-esokz.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'0'.&nbsp;"标准<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;USING&nbsp;'RM06I-NORMB'&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'2'.&nbsp;"寄售<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;USING&nbsp;'RM06I-KONSI'&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'3'.&nbsp;"分包合同<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;USING&nbsp;'RM06I-LOHNB'&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'P'.&nbsp;"管道<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;USING&nbsp;'RM06I-PIPEL'&nbsp;'X'.<br />
+&nbsp;&nbsp;ENDCASE.<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*****101<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;IF&nbsp;cs_head-infnr&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;bdc_dynpro&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'SAPMM06I'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'0101'.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;BDC_FIELD&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'BDC_CURSOR'&nbsp;&nbsp;&nbsp;'EINA-SORTL'.<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'BDC_OKCODE'&nbsp;&nbsp;&nbsp;'=EINE'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'EINA-TXZ01'&nbsp;&nbsp;&nbsp;cs_head-txz01.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'EINA-MATKL'&nbsp;&nbsp;&nbsp;'1001'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'EINA-MEINS'&nbsp;&nbsp;&nbsp;cs_head-meins.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'EINA-SORTL'&nbsp;&nbsp;&nbsp;cs_head-sortl.<br />
+&nbsp;&nbsp;ELSE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;bdc_dynpro&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'SAPMM06I'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'0101'.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;BDC_FIELD&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'BDC_CURSOR'&nbsp;&nbsp;&nbsp;'EINA-INFNR'.<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'BDC_OKCODE'&nbsp;&nbsp;&nbsp;'=EINE'.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*****102<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;PERFORM&nbsp;bdc_dynpro&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'SAPMM06I'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'0102'.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;PERFORM&nbsp;BDC_FIELD&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'BDC_CURSOR'&nbsp;&nbsp;&nbsp;'EINE-NETPR'.<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'BDC_OKCODE'&nbsp;&nbsp;&nbsp;'=KO'.<br />
+&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'EINE-APLFZ'&nbsp;&nbsp;&nbsp;cs_head-aplfz.<br />
+&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'EINE-EKGRP'&nbsp;&nbsp;&nbsp;cs_head-ekgrp.<br />
+&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'EINE-WEBRE'&nbsp;&nbsp;&nbsp;cs_head-webre.<br />
+&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'EINE-MWSKZ'&nbsp;&nbsp;&nbsp;cs_head-mwskz.<br />
+   </div>
+   <div class="codeComment">
+**&nbsp;PERFORM&nbsp;BDC_FIELD&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'EINE-IPRKZ'&nbsp;&nbsp;&nbsp;'D'.<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'EINE-NETPR'&nbsp;&nbsp;&nbsp;cs_head-netpr.<br />
+&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'EINE-WAERS'&nbsp;&nbsp;&nbsp;cs_head-waers.<br />
+&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'EINE-PEINH'&nbsp;&nbsp;&nbsp;cs_head-peinh.<br />
+&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'EINE-BPRME'&nbsp;&nbsp;&nbsp;cs_head-meins.<br />
+&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'EINE-BPUMZ'&nbsp;&nbsp;&nbsp;'1'.<br />
+&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'EINE-BPUMN'&nbsp;&nbsp;&nbsp;'1'.<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*****201<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;PERFORM&nbsp;bdc_dynpro&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'SAPMV13A'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'0201'.<br />
+&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'BDC_CURSOR'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'RV13A-DATBI'.<br />
+&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'BDC_OKCODE'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'=SICH'.<br />
+&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'RV13A-DATAB'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cs_head-datab.<br />
+&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'RV13A-DATBI'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cs_head-datbi.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*****200<br />
+*&nbsp;&nbsp;PERFORM&nbsp;BDC_DYNPRO&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'SAPMV13A'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'0200'.<br />
+*&nbsp;&nbsp;PERFORM&nbsp;BDC_FIELD&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'BDC_CURSOR'&nbsp;&nbsp;&nbsp;&nbsp;'RV13A-DATAB'.<br />
+*&nbsp;&nbsp;PERFORM&nbsp;BDC_FIELD&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'BDC_OKCODE'&nbsp;&nbsp;&nbsp;&nbsp;'=SICH'.<br />
+*&nbsp;&nbsp;PERFORM&nbsp;BDC_FIELD&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'RV13A-DATAB'&nbsp;&nbsp;&nbsp;CS_HEAD-DATAB.<br />
+*&nbsp;&nbsp;PERFORM&nbsp;BDC_FIELD&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'RV13A-DATBI'&nbsp;&nbsp;&nbsp;CS_HEAD-DATBI.<br />
+*&nbsp;&nbsp;PERFORM&nbsp;BDC_FIELD&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'KONH-KOSRT'&nbsp;&nbsp;&nbsp;&nbsp;CS_HEAD-KOSRT.<br />
+<br />
+<br />
+<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;SET&nbsp;PARAMETER&nbsp;ID&nbsp;'LIF'&nbsp;FIELD&nbsp;space.<br />
+&nbsp;&nbsp;SET&nbsp;PARAMETER&nbsp;ID&nbsp;'MAT'&nbsp;FIELD&nbsp;space.<br />
+&nbsp;&nbsp;SET&nbsp;PARAMETER&nbsp;ID&nbsp;'EKO'&nbsp;FIELD&nbsp;space.<br />
+&nbsp;&nbsp;SET&nbsp;PARAMETER&nbsp;ID&nbsp;'WRK'&nbsp;FIELD&nbsp;space.<br />
+&nbsp;&nbsp;SET&nbsp;PARAMETER&nbsp;ID&nbsp;'INF'&nbsp;FIELD&nbsp;space.<br />
+&nbsp;&nbsp;lv_mode&nbsp;=&nbsp;'N'.<br />
+&nbsp;&nbsp;CALL&nbsp;&nbsp;TRANSACTION&nbsp;c_me11&nbsp;USING&nbsp;gt_bdcdata<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MODE&nbsp;lv_mode<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;UPDATE&nbsp;c_update<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MESSAGES&nbsp;INTO&nbsp;lt_msg.<br />
+<br />
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'CONVERT_BDCMSGCOLL_TO_BAPIRET2'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;TABLES<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;imt_bdcmsgcoll&nbsp;=&nbsp;lt_msg<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ext_return&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lt_return.<br />
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;lt_return&nbsp;INTO&nbsp;DATA(ls_return)&nbsp;WHERE&nbsp;type&nbsp;CA&nbsp;'AEX'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXIT.<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;cs_head-light&nbsp;&nbsp;=&nbsp;icon_red_light.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;cs_head-status&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'E'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;cs_head-message&nbsp;&nbsp;&nbsp;=&nbsp;ls_return-message.&nbsp;&nbsp;&nbsp;"获取消息文本<br />
+&nbsp;&nbsp;ELSE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;cs_head-status&nbsp;&nbsp;=&nbsp;'S'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;cs_head-light&nbsp;&nbsp;=&nbsp;icon_green_light.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;lt_return&nbsp;INTO&nbsp;ls_return&nbsp;WITH&nbsp;KEY&nbsp;type&nbsp;&nbsp;&nbsp;=&nbsp;'S'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;id&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'06'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;number&nbsp;=&nbsp;'331'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cs_head-message&nbsp;=&nbsp;ls_return-message.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cs_head-infnr&nbsp;&nbsp;&nbsp;=&nbsp;ls_return-message_v1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cs_head-infnr_ekorg&nbsp;=&nbsp;ls_return-message_v1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+<br />
+ENDFORM.<br />
+<br />
+<br />
+<br />
+FORM frm_me12_bdc  TABLES   pt_item TYPE tt_out<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CHANGING&nbsp;cs_head&nbsp;TYPE&nbsp;ts_out.<br />
+<br />
+&nbsp;&nbsp;CLEAR:&nbsp;gt_bdcdata[].<br />
+   </div>
+   <div class="codeComment">
+****先修改单位再修改价格（PO单位若有变化）<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;IF&nbsp;cs_head-meins&nbsp;IS&nbsp;NOT&nbsp;INITIAL&nbsp;AND&nbsp;cs_head-meins_2&nbsp;IS&nbsp;NOT&nbsp;INITIAL<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;cs_head-meins&nbsp;&lt;&gt;&nbsp;cs_head-meins_2.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;frm_me12_meins&nbsp;&nbsp;CHANGING&nbsp;cs_head.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;PERFORM&nbsp;FRM_ME12_KSTBM&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TABLES&nbsp;PT_ITEM<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CHANGING&nbsp;CS_HEAD.<br />
+<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;PERFORM&nbsp;frm_me12&nbsp;&nbsp;TABLES&nbsp;&nbsp;&nbsp;pt_item<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CHANGING&nbsp;cs_head.<br />
+<br />
+ENDFORM.<br />
+<br />
+<br />
+<br />
+<br />
+FORM bdc_field USING pv_fnam<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pv_fval.<br />
+&nbsp;&nbsp;CLEAR&nbsp;gs_bdcdata.<br />
+&nbsp;&nbsp;gs_bdcdata-fnam&nbsp;=&nbsp;pv_fnam.<br />
+&nbsp;&nbsp;gs_bdcdata-fval&nbsp;=&nbsp;pv_fval.<br />
+&nbsp;&nbsp;IF&nbsp;gs_bdcdata-fval&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CONDENSE&nbsp;gs_bdcdata-fval.<br />
+&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;APPEND&nbsp;gs_bdcdata&nbsp;TO&nbsp;gt_bdcdata.<br />
+ENDFORM.                    "bdc_field<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bdc_dynpro<br />
+*&---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&gt;PV_PROGRAM&nbsp;PROGRAM&nbsp;NAME<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&gt;PV_DYNPRO&nbsp;&nbsp;SCREEN&nbsp;NUMBER<br />
+*----------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM bdc_dynpro USING pv_program<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pv_dynpro.<br />
+&nbsp;&nbsp;CLEAR&nbsp;gs_bdcdata.<br />
+&nbsp;&nbsp;gs_bdcdata-program&nbsp;&nbsp;=&nbsp;pv_program.<br />
+&nbsp;&nbsp;gs_bdcdata-dynpro&nbsp;&nbsp;&nbsp;=&nbsp;pv_dynpro.<br />
+&nbsp;&nbsp;gs_bdcdata-dynbegin&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;APPEND&nbsp;gs_bdcdata&nbsp;TO&nbsp;gt_bdcdata.<br />
+ENDFORM.                    "FRM_bdc_dynpro<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Form&nbsp;FRM_ME12_MEINS<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;text<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;--&nbsp;CS_ZMM027<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM frm_me12_meins  CHANGING cs_zmm027 TYPE ts_out.<br />
+<br />
+<br />
+&nbsp;&nbsp;DATA:&nbsp;lv_mode&nbsp;TYPE&nbsp;c.&nbsp;"DEFAULT&nbsp;'N'.&nbsp;&nbsp;n/e/a/p<br />
+&nbsp;&nbsp;DATA:&nbsp;lt_msg&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;TABLE&nbsp;OF&nbsp;bdcmsgcoll,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lt_return&nbsp;TYPE&nbsp;STANDARD&nbsp;TABLE&nbsp;OF&nbsp;bapiret2.<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*****100<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;PERFORM&nbsp;bdc_dynpro&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'SAPMM06I'&nbsp;&nbsp;&nbsp;'0100'.<br />
+&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'BDC_CURSOR'&nbsp;'RM06I-NORMB'.<br />
+&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'BDC_OKCODE'&nbsp;'/00'.<br />
+&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'EINA-LIFNR'&nbsp;cs_zmm027-lifnr.<br />
+&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'EINA-MATNR'&nbsp;cs_zmm027-matnr.<br />
+&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'EINE-EKORG'&nbsp;cs_zmm027-ekorg.<br />
+&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'EINE-WERKS'&nbsp;cs_zmm027-werks.<br />
+&nbsp;&nbsp;CASE&nbsp;cs_zmm027-esokz.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'0'.&nbsp;"标准<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;USING&nbsp;'RM06I-NORMB'&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'2'.&nbsp;"寄售<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;USING&nbsp;'RM06I-KONSI'&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'3'.&nbsp;"分包合同<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;USING&nbsp;'RM06I-LOHNB'&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'P'.&nbsp;"管道<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;USING&nbsp;'RM06I-PIPEL'&nbsp;'X'.<br />
+&nbsp;&nbsp;ENDCASE.<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+****101<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;PERFORM&nbsp;bdc_dynpro&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'SAPMM06I'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'0101'.<br />
+&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'BDC_CURSOR'&nbsp;&nbsp;&nbsp;'EINA-UMREZ'.<br />
+&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'BDC_OKCODE'&nbsp;&nbsp;&nbsp;'/00'.<br />
+&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'EINA-MEINS'&nbsp;&nbsp;&nbsp;cs_zmm027-meins.<br />
+<br />
+&nbsp;&nbsp;SELECT&nbsp;SINGLE&nbsp;matnr,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;meinh,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;umrez,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;umren<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;@DATA(ls_marm)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;marm&nbsp;&nbsp;WHERE&nbsp;matnr&nbsp;=&nbsp;@cs_zmm027-matnr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;meinh&nbsp;=&nbsp;@cs_zmm027-meins.<br />
+&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'EINA-UMREZ'&nbsp;&nbsp;&nbsp;ls_marm-umrez.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'EINA-UMREN'&nbsp;&nbsp;&nbsp;ls_marm-umren.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+   </div>
+   <div class="codeComment">
+****102<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;PERFORM&nbsp;bdc_dynpro&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'SAPMM06I'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'0102'.<br />
+&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'BDC_CURSOR'&nbsp;&nbsp;&nbsp;'EINE-APLFZ'.<br />
+&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'BDC_OKCODE'&nbsp;&nbsp;&nbsp;'=BU'.<br />
+<br />
+<br />
+&nbsp;&nbsp;SET&nbsp;PARAMETER&nbsp;ID&nbsp;'LIF'&nbsp;FIELD&nbsp;space.<br />
+&nbsp;&nbsp;SET&nbsp;PARAMETER&nbsp;ID&nbsp;'MAT'&nbsp;FIELD&nbsp;space.<br />
+&nbsp;&nbsp;SET&nbsp;PARAMETER&nbsp;ID&nbsp;'EKO'&nbsp;FIELD&nbsp;space.<br />
+&nbsp;&nbsp;SET&nbsp;PARAMETER&nbsp;ID&nbsp;'WRK'&nbsp;FIELD&nbsp;space.<br />
+&nbsp;&nbsp;SET&nbsp;PARAMETER&nbsp;ID&nbsp;'INF'&nbsp;FIELD&nbsp;space.<br />
+&nbsp;&nbsp;lv_mode&nbsp;=&nbsp;'N'.<br />
+&nbsp;&nbsp;CALL&nbsp;&nbsp;TRANSACTION&nbsp;c_me12&nbsp;USING&nbsp;gt_bdcdata<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MODE&nbsp;lv_mode<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;UPDATE&nbsp;c_update<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MESSAGES&nbsp;INTO&nbsp;lt_msg.<br />
+<br />
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'CONVERT_BDCMSGCOLL_TO_BAPIRET2'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;TABLES<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;imt_bdcmsgcoll&nbsp;=&nbsp;lt_msg<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ext_return&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lt_return.<br />
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;lt_return&nbsp;INTO&nbsp;DATA(ls_return)&nbsp;WHERE&nbsp;type&nbsp;CA&nbsp;'AEX'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXIT.<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;cs_zmm027-light&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;icon_red_light.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;cs_zmm027-status&nbsp;&nbsp;&nbsp;=&nbsp;'E'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;cs_zmm027-message&nbsp;&nbsp;=&nbsp;ls_return-message.&nbsp;&nbsp;&nbsp;"获取消息文本<br />
+&nbsp;&nbsp;ELSE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;cs_zmm027-light&nbsp;&nbsp;&nbsp;=&nbsp;icon_green_light.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;cs_zmm027-status&nbsp;&nbsp;=&nbsp;'S'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;lt_return&nbsp;INTO&nbsp;ls_return&nbsp;WITH&nbsp;KEY&nbsp;type&nbsp;&nbsp;&nbsp;=&nbsp;'S'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;id&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'06'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;number&nbsp;=&nbsp;'335'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cs_zmm027-message&nbsp;=&nbsp;ls_return-message.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cs_zmm027-infnr&nbsp;&nbsp;&nbsp;=&nbsp;ls_return-message_v1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+<br />
+ENDFORM.<br />
+<br />
+<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Form&nbsp;FRM_ME12_KSTBM<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;text<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&gt;&nbsp;CT_ZMM028<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;--&nbsp;CS_ZMM027<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM frm_me12_kstbm    TABLES  ct_zmm028 TYPE tt_out<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CHANGING&nbsp;&nbsp;cs_zmm027&nbsp;TYPE&nbsp;ts_out.<br />
+<br />
+<br />
+&nbsp;&nbsp;DATA:&nbsp;lv_mode&nbsp;TYPE&nbsp;c.&nbsp;"DEFAULT&nbsp;'N'.&nbsp;&nbsp;n/e/a/p<br />
+&nbsp;&nbsp;DATA:&nbsp;lt_msg&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;TABLE&nbsp;OF&nbsp;bdcmsgcoll,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lt_return&nbsp;TYPE&nbsp;STANDARD&nbsp;TABLE&nbsp;OF&nbsp;bapiret2.<br />
+<br />
+&nbsp;&nbsp;CLEAR:&nbsp;gt_bdcdata[].<br />
+<br />
+   </div>
+   <div class="codeComment">
+****全部当成新增有效期处理<br />
+*****100<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;PERFORM&nbsp;bdc_dynpro&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'SAPMM06I'&nbsp;&nbsp;&nbsp;'0100'.<br />
+&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'BDC_CURSOR'&nbsp;'RM06I-NORMB'.<br />
+&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'BDC_OKCODE'&nbsp;'/00'.<br />
+&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'EINA-LIFNR'&nbsp;cs_zmm027-lifnr.<br />
+&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'EINA-MATNR'&nbsp;cs_zmm027-matnr.<br />
+&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'EINE-EKORG'&nbsp;cs_zmm027-ekorg.<br />
+&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'EINE-WERKS'&nbsp;cs_zmm027-werks.<br />
+&nbsp;&nbsp;CASE&nbsp;cs_zmm027-esokz.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'0'.&nbsp;"标准<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;USING&nbsp;'RM06I-NORMB'&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'2'.&nbsp;"寄售<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;USING&nbsp;'RM06I-KONSI'&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'3'.&nbsp;"分包合同<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;USING&nbsp;'RM06I-LOHNB'&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'P'.&nbsp;"管道<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;USING&nbsp;'RM06I-PIPEL'&nbsp;'X'.<br />
+&nbsp;&nbsp;ENDCASE.<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+****101<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;PERFORM&nbsp;bdc_dynpro&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'SAPMM06I'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'0101'.<br />
+&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'BDC_CURSOR'&nbsp;&nbsp;&nbsp;'EINA-MAHN1'.<br />
+&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'BDC_OKCODE'&nbsp;&nbsp;&nbsp;'=EINE'.<br />
+<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+****102<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;PERFORM&nbsp;bdc_dynpro&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'SAPMM06I'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'0102'.<br />
+&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'BDC_CURSOR'&nbsp;&nbsp;&nbsp;'EINE-MWSKZ'.<br />
+&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'BDC_OKCODE'&nbsp;&nbsp;&nbsp;'=KO'.<br />
+&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'EINE-APLFZ'&nbsp;&nbsp;&nbsp;cs_zmm027-aplfz.<br />
+&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'EINE-EKGRP'&nbsp;&nbsp;&nbsp;cs_zmm027-ekgrp.<br />
+&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'EINE-MWSKZ'&nbsp;&nbsp;&nbsp;cs_zmm027-mwskz.<br />
+&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'EINE-WEBRE'&nbsp;&nbsp;&nbsp;'X'.<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*****102<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;PERFORM&nbsp;bdc_dynpro&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'SAPLV14A'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'0102'.<br />
+&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'BDC_CURSOR'&nbsp;&nbsp;&nbsp;'VAKE-DATAB(01)'.<br />
+&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'BDC_OKCODE'&nbsp;&nbsp;&nbsp;'=NEWD'.&nbsp;&nbsp;"一律视为新建<br />
+<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+****201<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;PERFORM&nbsp;bdc_dynpro&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'SAPMV13A'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'0201'.<br />
+&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'BDC_CURSOR'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'KONP-KSCHL(01)'.<br />
+&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'BDC_OKCODE'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'=PSTF'.<br />
+&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'RV13A-DATAB'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cs_zmm027-datab.<br />
+&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'RV13A-DATBI'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cs_zmm027-datbi.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;PERFORM&nbsp;BDC_FIELD&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'KONP-KBETR(01)'&nbsp;&nbsp;&nbsp;CS_ZMM027-NETPR.<br />
+<br />
+<br />
+****303<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;PERFORM&nbsp;bdc_dynpro&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'SAPMV13A'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'0303'.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;PERFORM&nbsp;BDC_FIELD&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'BDC_CURSOR'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'KONM-KBETR(03)'.<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'BDC_OKCODE'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'=KDAT'.<br />
+&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'RV13A-DATAB'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cs_zmm027-datab.<br />
+&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'RV13A-DATBI'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cs_zmm027-datbi.<br />
+<br />
+&nbsp;&nbsp;DATA:&nbsp;lv_fname&nbsp;&nbsp;TYPE&nbsp;bdcdata-fnam,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_num(2).<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;CT_ZMM028&nbsp;INTO&nbsp;DATA(LS_ZMM028)&nbsp;WHERE&nbsp;KBETR&nbsp;&lt;&gt;&nbsp;''.<br />
+*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;LV_NUM&nbsp;=&nbsp;LV_NUM&nbsp;+&nbsp;1.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;CONCATENATE&nbsp;'KONM-KSTBM'<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'(0'<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LV_NUM<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;')'<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;LV_FNAME.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;BDC_FIELD&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;LV_FNAME&nbsp;&nbsp;&nbsp;&nbsp;LS_ZMM028-KSTBM.<br />
+*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;CLEAR:&nbsp;LV_FNAME.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;CONCATENATE&nbsp;'KONM-KBETR'<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'(0'<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LV_NUM<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;')'<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;LV_FNAME.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;BDC_FIELD&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;&nbsp;LV_FNAME&nbsp;&nbsp;&nbsp;LS_ZMM028-KBETR.<br />
+*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;CLEAR:LS_ZMM028.<br />
+*&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+<br />
+****200<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;PERFORM&nbsp;bdc_dynpro&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'SAPMV13A'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'0200'.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;PERFORM&nbsp;BDC_FIELD&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'BDC_CURSOR'&nbsp;&nbsp;&nbsp;&nbsp;'KONH-KOSRT'.<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'BDC_OKCODE'&nbsp;&nbsp;&nbsp;&nbsp;'=SICH'.<br />
+&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'RV13A-DATAB'&nbsp;&nbsp;&nbsp;cs_zmm027-datab.<br />
+&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'RV13A-DATBI'&nbsp;&nbsp;&nbsp;cs_zmm027-datbi.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;PERFORM&nbsp;BDC_FIELD&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'KONH-KOSRT'&nbsp;&nbsp;&nbsp;&nbsp;CS_ZMM027-KOSRT.<br />
+<br />
+<br />
+*&nbsp;&nbsp;SET&nbsp;PARAMETER&nbsp;ID&nbsp;'LIF'&nbsp;FIELD&nbsp;SPACE.<br />
+*&nbsp;&nbsp;SET&nbsp;PARAMETER&nbsp;ID&nbsp;'MAT'&nbsp;FIELD&nbsp;SPACE.<br />
+*&nbsp;&nbsp;SET&nbsp;PARAMETER&nbsp;ID&nbsp;'EKO'&nbsp;FIELD&nbsp;SPACE.<br />
+*&nbsp;&nbsp;SET&nbsp;PARAMETER&nbsp;ID&nbsp;'WRK'&nbsp;FIELD&nbsp;SPACE.<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;lv_mode&nbsp;=&nbsp;'N'.<br />
+&nbsp;&nbsp;CALL&nbsp;&nbsp;TRANSACTION&nbsp;c_me12&nbsp;USING&nbsp;gt_bdcdata<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MODE&nbsp;lv_mode<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;UPDATE&nbsp;c_update<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MESSAGES&nbsp;INTO&nbsp;lt_msg.<br />
+<br />
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'CONVERT_BDCMSGCOLL_TO_BAPIRET2'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;TABLES<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;imt_bdcmsgcoll&nbsp;=&nbsp;lt_msg<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ext_return&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lt_return.<br />
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;lt_return&nbsp;INTO&nbsp;DATA(ls_return)&nbsp;WHERE&nbsp;type&nbsp;CA&nbsp;'AEX'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXIT.<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;cs_zmm027-light&nbsp;&nbsp;&nbsp;=&nbsp;icon_red_light.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;cs_zmm027-status&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'E'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;cs_zmm027-message&nbsp;&nbsp;&nbsp;=&nbsp;ls_return-message.&nbsp;&nbsp;&nbsp;"获取消息文本<br />
+&nbsp;&nbsp;ELSE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;cs_zmm027-status&nbsp;&nbsp;=&nbsp;'S'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;cs_zmm027-light&nbsp;&nbsp;&nbsp;=&nbsp;icon_green_light.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;lt_return&nbsp;INTO&nbsp;ls_return&nbsp;WITH&nbsp;KEY&nbsp;type&nbsp;&nbsp;&nbsp;=&nbsp;'S'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;id&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'06'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;number&nbsp;=&nbsp;'335'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cs_zmm027-message&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_return-message.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cs_zmm027-infnr&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_return-message_v1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cs_zmm027-infnr_ekorg&nbsp;=&nbsp;ls_return-message_v1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ELSE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;lt_return&nbsp;INTO&nbsp;ls_return&nbsp;INDEX&nbsp;1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cs_zmm027-message&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_return-message.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+ENDFORM.<br />
+<br />
+<br />
+FORM frm_me12    TABLES  ct_zmm028 TYPE tt_out<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CHANGING&nbsp;&nbsp;cs_zmm027&nbsp;TYPE&nbsp;ts_out.<br />
+<br />
+<br />
+&nbsp;&nbsp;DATA:&nbsp;lv_mode&nbsp;TYPE&nbsp;c.&nbsp;"DEFAULT&nbsp;'N'.&nbsp;&nbsp;n/e/a/p<br />
+&nbsp;&nbsp;DATA:&nbsp;lt_msg&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;TABLE&nbsp;OF&nbsp;bdcmsgcoll,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lt_return&nbsp;TYPE&nbsp;STANDARD&nbsp;TABLE&nbsp;OF&nbsp;bapiret2.<br />
+<br />
+&nbsp;&nbsp;CLEAR:&nbsp;gt_bdcdata[].<br />
+<br />
+   </div>
+   <div class="codeComment">
+****全部当成新增有效期处理<br />
+*****100<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;PERFORM&nbsp;bdc_dynpro&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'SAPMM06I'&nbsp;&nbsp;&nbsp;'0100'.<br />
+&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'BDC_OKCODE'&nbsp;'/00'.<br />
+&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'EINA-LIFNR'&nbsp;cs_zmm027-lifnr.<br />
+&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'EINA-MATNR'&nbsp;cs_zmm027-matnr.<br />
+&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'EINE-EKORG'&nbsp;cs_zmm027-ekorg.<br />
+&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'EINE-WERKS'&nbsp;cs_zmm027-werks.<br />
+&nbsp;&nbsp;CASE&nbsp;cs_zmm027-esokz.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'0'.&nbsp;"标准<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;USING&nbsp;'RM06I-NORMB'&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'2'.&nbsp;"寄售<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;USING&nbsp;'RM06I-KONSI'&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'3'.&nbsp;"分包合同<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;USING&nbsp;'RM06I-LOHNB'&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'P'.&nbsp;"管道<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;USING&nbsp;'RM06I-PIPEL'&nbsp;'X'.<br />
+&nbsp;&nbsp;ENDCASE.<br />
+   </div>
+   <div class="codeComment">
+****101<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;PERFORM&nbsp;bdc_dynpro&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'SAPMM06I'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'0101'.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;PERFORM&nbsp;BDC_FIELD&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'BDC_CURSOR'&nbsp;&nbsp;&nbsp;'EINA-MAHN1'.<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'BDC_OKCODE'&nbsp;&nbsp;&nbsp;'=EINE'.<br />
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'CONVERSION_EXIT_CUNIT_INPUT'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;input&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;cs_zmm027-meins<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;language&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;sy-langu<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;output&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;cs_zmm027-meins<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;unit_not_found&nbsp;=&nbsp;1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTHERS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;2.<br />
+<br />
+&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'EINA-MEINS'&nbsp;&nbsp;&nbsp;cs_zmm027-meins.<br />
+&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'EINA-URZLA'&nbsp;&nbsp;&nbsp;'CN'.<br />
+   </div>
+   <div class="codeComment">
+****102<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;PERFORM&nbsp;bdc_dynpro&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'SAPMM06I'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'0102'.<br />
+&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'BDC_OKCODE'&nbsp;&nbsp;&nbsp;'=KO'.<br />
+&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'EINE-APLFZ'&nbsp;&nbsp;&nbsp;cs_zmm027-aplfz.<br />
+&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'EINE-EKGRP'&nbsp;&nbsp;&nbsp;cs_zmm027-ekgrp.<br />
+&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'EINE-MWSKZ'&nbsp;&nbsp;&nbsp;cs_zmm027-mwskz.<br />
+&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'EINE-WEBRE'&nbsp;&nbsp;&nbsp;'X'.<br />
+   </div>
+   <div class="codeComment">
+******102<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;IF&nbsp;cs_zmm027-znew_flag&nbsp;=&nbsp;'X'.&nbsp;&nbsp;"新建有效日期.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;bdc_dynpro&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'SAPLV14A'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'0102'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'BDC_OKCODE'&nbsp;&nbsp;&nbsp;'=NEWD'.&nbsp;&nbsp;"一律视为新建<br />
+&nbsp;&nbsp;ELSE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;SINGLE&nbsp;knumh&nbsp;&nbsp;INTO&nbsp;&nbsp;@DATA(lv_kunmh)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;a017<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;lifnr&nbsp;=&nbsp;@cs_zmm027-lifnr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;&nbsp;matnr&nbsp;=&nbsp;@cs_zmm027-matnr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;&nbsp;ekorg&nbsp;=&nbsp;@cs_zmm027-ekorg<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;&nbsp;knumh&nbsp;&lt;&gt;&nbsp;@space.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;bdc_dynpro&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'SAPLV14A'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'0102'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'BDC_CURSOR'&nbsp;&nbsp;&nbsp;&nbsp;cs_zmm027-datab.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'BDC_OKCODE'&nbsp;&nbsp;&nbsp;'=NEWD'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;ENDIF.<br />
+   </div>
+   <div class="codeComment">
+****201<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;DATA:lv_kbetr&nbsp;TYPE&nbsp;konp-kbetr.<br />
+&nbsp;&nbsp;CLEAR:lv_kbetr.&nbsp;lv_kbetr&nbsp;=&nbsp;cs_zmm027-netpr.<br />
+&nbsp;&nbsp;PERFORM&nbsp;bdc_dynpro&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'SAPMV13A'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'0201'.<br />
+&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'BDC_CURSOR'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'KONP-KBETR(01)'.<br />
+&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'BDC_OKCODE'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'/00'.<br />
+&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'RV13A-DATAB'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cs_zmm027-datab.<br />
+&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'RV13A-DATBI'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cs_zmm027-datbi.<br />
+&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'KONP-KBETR(1)'&nbsp;&nbsp;&nbsp;&nbsp;cs_zmm027-netpr.<br />
+<br />
+&nbsp;&nbsp;PERFORM&nbsp;bdc_dynpro&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'SAPMV13A'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'0201'.<br />
+&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'BDC_CURSOR'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'KONP-KBETR(01)'.<br />
+&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'BDC_OKCODE'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'=SICH'.<br />
+&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'RV13A-DATAB'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cs_zmm027-datab.<br />
+&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'RV13A-DATBI'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cs_zmm027-datbi.<br />
+&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'KONP-KPEIN(01)'&nbsp;&nbsp;&nbsp;cs_zmm027-peinh.&nbsp;&nbsp;"2022.1.25<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;DATA:&nbsp;lv_fname&nbsp;&nbsp;TYPE&nbsp;bdcdata-fnam,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_num(2).<br />
+<br />
+&nbsp;&nbsp;SET&nbsp;PARAMETER&nbsp;ID&nbsp;'LIF'&nbsp;FIELD&nbsp;space.<br />
+&nbsp;&nbsp;SET&nbsp;PARAMETER&nbsp;ID&nbsp;'MAT'&nbsp;FIELD&nbsp;space.<br />
+&nbsp;&nbsp;SET&nbsp;PARAMETER&nbsp;ID&nbsp;'EKO'&nbsp;FIELD&nbsp;space.<br />
+&nbsp;&nbsp;SET&nbsp;PARAMETER&nbsp;ID&nbsp;'WRK'&nbsp;FIELD&nbsp;space.<br />
+&nbsp;&nbsp;SET&nbsp;PARAMETER&nbsp;ID&nbsp;'INF'&nbsp;FIELD&nbsp;space.<br />
+&nbsp;&nbsp;lv_mode&nbsp;=&nbsp;'N'.<br />
+&nbsp;&nbsp;CALL&nbsp;&nbsp;TRANSACTION&nbsp;c_me12&nbsp;USING&nbsp;gt_bdcdata<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MODE&nbsp;lv_mode<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;UPDATE&nbsp;c_update<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MESSAGES&nbsp;INTO&nbsp;lt_msg.<br />
+<br />
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'CONVERT_BDCMSGCOLL_TO_BAPIRET2'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;TABLES<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;imt_bdcmsgcoll&nbsp;=&nbsp;lt_msg<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ext_return&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lt_return.<br />
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;lt_return&nbsp;INTO&nbsp;DATA(ls_return)&nbsp;WHERE&nbsp;type&nbsp;CA&nbsp;'AEX'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OR&nbsp;(&nbsp;type&nbsp;=&nbsp;'S'&nbsp;AND&nbsp;id&nbsp;=&nbsp;'00'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;number&nbsp;=&nbsp;'344'&nbsp;).<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXIT.<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;cs_zmm027-light&nbsp;&nbsp;&nbsp;=&nbsp;icon_red_light.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;cs_zmm027-status&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'E'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;cs_zmm027-message&nbsp;&nbsp;&nbsp;=&nbsp;ls_return-message.&nbsp;&nbsp;&nbsp;"获取消息文本<br />
+&nbsp;&nbsp;ELSE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;cs_zmm027-status&nbsp;&nbsp;=&nbsp;'S'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;cs_zmm027-light&nbsp;&nbsp;&nbsp;=&nbsp;icon_green_light.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;lt_return&nbsp;INTO&nbsp;ls_return&nbsp;WITH&nbsp;KEY&nbsp;type&nbsp;&nbsp;&nbsp;=&nbsp;'S'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;id&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'06'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;number&nbsp;=&nbsp;'335'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cs_zmm027-message&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_return-message.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cs_zmm027-infnr&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_return-message_v1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cs_zmm027-infnr_ekorg&nbsp;=&nbsp;ls_return-message_v1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ELSE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;lt_return&nbsp;INTO&nbsp;ls_return&nbsp;INDEX&nbsp;1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cs_zmm027-message&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_return-message.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+ENDFORM.<br />
+<br />
+<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Form&nbsp;FRM_ME11_EXTEND<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;text<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&gt;&nbsp;LT_ITEM<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;--&nbsp;&lt;LS_HEAD&gt;<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM frm_me11_extend   TABLES   pt_item TYPE tt_out<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CHANGING&nbsp;cs_head&nbsp;TYPE&nbsp;ts_out.<br />
+<br />
+<br />
+&nbsp;&nbsp;DATA:&nbsp;lv_mode&nbsp;TYPE&nbsp;c.&nbsp;"DEFAULT&nbsp;'N'.&nbsp;&nbsp;n/e/a/p<br />
+&nbsp;&nbsp;DATA:&nbsp;lt_msg&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;TABLE&nbsp;OF&nbsp;bdcmsgcoll,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lt_return&nbsp;TYPE&nbsp;STANDARD&nbsp;TABLE&nbsp;OF&nbsp;bapiret2.<br />
+<br />
+<br />
+&nbsp;&nbsp;CLEAR:&nbsp;gt_bdcdata[].<br />
+   </div>
+   <div class="codeComment">
+*****100<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;PERFORM&nbsp;bdc_dynpro&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'SAPMM06I'&nbsp;&nbsp;&nbsp;'0100'.<br />
+&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'BDC_CURSOR'&nbsp;'RM06I-KONSI'.<br />
+&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'BDC_OKCODE'&nbsp;'/00'.<br />
+&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'EINA-LIFNR'&nbsp;cs_head-lifnr.<br />
+&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'EINA-MATNR'&nbsp;cs_head-matnr.<br />
+&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'EINE-EKORG'&nbsp;cs_head-ekorg.<br />
+&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'EINE-WERKS'&nbsp;cs_head-werks.<br />
+&nbsp;&nbsp;CASE&nbsp;cs_head-esokz.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'0'.&nbsp;"标准<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;USING&nbsp;'RM06I-NORMB'&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'2'.&nbsp;"寄售<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;USING&nbsp;'RM06I-KONSI'&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'3'.&nbsp;"分包合同<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;USING&nbsp;'RM06I-LOHNB'&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'P'.&nbsp;"管道<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;USING&nbsp;'RM06I-PIPEL'&nbsp;'X'.<br />
+&nbsp;&nbsp;ENDCASE.<br />
+<br />
+   </div>
+   <div class="codeComment">
+****101<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;PERFORM&nbsp;bdc_dynpro&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'SAPMM06I'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'0101'.<br />
+&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'BDC_CURSOR'&nbsp;&nbsp;&nbsp;'EINA-INFNR'.<br />
+&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'BDC_OKCODE'&nbsp;&nbsp;&nbsp;'=EINE'.<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+****102<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;PERFORM&nbsp;bdc_dynpro&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'SAPMM06I'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'0102'.<br />
+&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'BDC_CURSOR'&nbsp;&nbsp;&nbsp;'EINE-NETPR'.<br />
+&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'BDC_OKCODE'&nbsp;&nbsp;&nbsp;'=KO'.<br />
+&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'EINE-APLFZ'&nbsp;&nbsp;&nbsp;cs_head-aplfz.<br />
+&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'EINE-EKGRP'&nbsp;&nbsp;&nbsp;cs_head-ekgrp.<br />
+&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'EINE-MWSKZ'&nbsp;&nbsp;&nbsp;cs_head-mwskz.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;PERFORM&nbsp;BDC_FIELD&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'EINE-IPRKZ'&nbsp;&nbsp;&nbsp;'D'.<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'EINE-NETPR'&nbsp;&nbsp;&nbsp;cs_head-netpr.<br />
+&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'EINE-WAERS'&nbsp;&nbsp;&nbsp;cs_head-waers.<br />
+&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'EINE-PEINH'&nbsp;&nbsp;&nbsp;cs_head-peinh.<br />
+&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'EINE-BPRME'&nbsp;&nbsp;&nbsp;cs_head-meins.<br />
+&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'EINE-WEBRE'&nbsp;&nbsp;&nbsp;'X'.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;PERFORM&nbsp;BDC_FIELD&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'EINE-BPUMZ'&nbsp;&nbsp;&nbsp;'1'.<br />
+*&nbsp;&nbsp;PERFORM&nbsp;BDC_FIELD&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'EINE-BPUMN'&nbsp;&nbsp;&nbsp;'1'.<br />
+<br />
+<br />
+<br />
+****201<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;PERFORM&nbsp;bdc_dynpro&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'SAPMV13A'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'0201'.<br />
+&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'BDC_CURSOR'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'KONP-KSCHL(01)'.<br />
+&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'BDC_OKCODE'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'=PSTF'.<br />
+&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'RV13A-DATAB'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cs_head-datab.<br />
+&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'RV13A-DATBI'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cs_head-datbi.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;PERFORM&nbsp;BDC_FIELD&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'RV130-SELKZ(01)'&nbsp;&nbsp;'X'.<br />
+<br />
+<br />
+****303<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;PERFORM&nbsp;bdc_dynpro&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'SAPMV13A'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'0303'.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;PERFORM&nbsp;BDC_FIELD&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'BDC_CURSOR'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'KONM-KBETR(03)'.<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'BDC_OKCODE'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'/00'.<br />
+&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'RV13A-DATAB'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cs_head-datab.<br />
+&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'RV13A-DATBI'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cs_head-datbi.<br />
+<br />
+&nbsp;&nbsp;DATA:&nbsp;lv_fname&nbsp;&nbsp;TYPE&nbsp;bdcdata-fnam,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_num(2).<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;PT_ITEM&nbsp;INTO&nbsp;DATA(LS_ITEM)&nbsp;WHERE&nbsp;KBETR&nbsp;&lt;&gt;&nbsp;''.<br />
+*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;LV_NUM&nbsp;=&nbsp;LV_NUM&nbsp;+&nbsp;1.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;CONCATENATE&nbsp;'KONM-KSTBM'<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'(0'<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LV_NUM<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;')'<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;LV_FNAME.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;BDC_FIELD&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;LV_FNAME&nbsp;&nbsp;&nbsp;&nbsp;LS_ITEM-KSTBM.<br />
+*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;CLEAR:&nbsp;LV_FNAME.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;CONCATENATE&nbsp;'KONM-KBETR'<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'(0'<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LV_NUM<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;')'<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;LV_FNAME.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;BDC_FIELD&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;&nbsp;LV_FNAME&nbsp;&nbsp;&nbsp;LS_ITEM-KBETR.<br />
+*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;CLEAR:LS_ITEM.<br />
+*&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+****303<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;PERFORM&nbsp;bdc_dynpro&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'SAPMV13A'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'0303'.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;PERFORM&nbsp;BDC_FIELD&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'BDC_CURSOR'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'KONM-KSTBM(01)'.<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'BDC_OKCODE'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'=KDAT'.<br />
+&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'RV13A-DATAB'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cs_head-datab.<br />
+&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'RV13A-DATBI'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cs_head-datbi.<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+****200<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;PERFORM&nbsp;bdc_dynpro&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'SAPMV13A'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'0200'.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;PERFORM&nbsp;BDC_FIELD&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'BDC_CURSOR'&nbsp;&nbsp;&nbsp;&nbsp;'KONH-KOSRT'.<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'BDC_OKCODE'&nbsp;&nbsp;&nbsp;&nbsp;'/00'.<br />
+&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'RV13A-DATAB'&nbsp;&nbsp;&nbsp;cs_head-datab.<br />
+&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'RV13A-DATBI'&nbsp;&nbsp;&nbsp;cs_head-datbi.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;PERFORM&nbsp;BDC_FIELD&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'KONH-KOSRT'&nbsp;&nbsp;&nbsp;&nbsp;CS_HEAD-KOSRT.<br />
+<br />
+<br />
+****200<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;PERFORM&nbsp;bdc_dynpro&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'SAPMV13A'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'0200'.<br />
+&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'BDC_CURSOR'&nbsp;&nbsp;&nbsp;&nbsp;'RV13A-DATAB'.<br />
+&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'BDC_OKCODE'&nbsp;&nbsp;&nbsp;&nbsp;'=SICH'.<br />
+&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'RV13A-DATAB'&nbsp;&nbsp;&nbsp;cs_head-datab.<br />
+&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'RV13A-DATBI'&nbsp;&nbsp;&nbsp;cs_head-datbi.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;PERFORM&nbsp;BDC_FIELD&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'KONH-KOSRT'&nbsp;&nbsp;&nbsp;&nbsp;CS_HEAD-KOSRT.<br />
+<br />
+<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;lv_mode&nbsp;=&nbsp;'N'.<br />
+&nbsp;&nbsp;CALL&nbsp;&nbsp;TRANSACTION&nbsp;c_me11&nbsp;USING&nbsp;gt_bdcdata<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MODE&nbsp;lv_mode<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;UPDATE&nbsp;c_update<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MESSAGES&nbsp;INTO&nbsp;lt_msg.<br />
+<br />
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'CONVERT_BDCMSGCOLL_TO_BAPIRET2'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;TABLES<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;imt_bdcmsgcoll&nbsp;=&nbsp;lt_msg<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ext_return&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lt_return.<br />
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;lt_return&nbsp;INTO&nbsp;DATA(ls_return)&nbsp;WHERE&nbsp;type&nbsp;CA&nbsp;'AEX'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXIT.<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;cs_head-light&nbsp;&nbsp;=&nbsp;icon_red_light.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;cs_head-status&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'E'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;cs_head-message&nbsp;&nbsp;&nbsp;=&nbsp;ls_return-message.&nbsp;&nbsp;&nbsp;"获取消息文本<br />
+&nbsp;&nbsp;ELSE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;cs_head-status&nbsp;&nbsp;=&nbsp;'S'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;cs_head-light&nbsp;&nbsp;=&nbsp;icon_green_light.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;lt_return&nbsp;INTO&nbsp;ls_return&nbsp;WITH&nbsp;KEY&nbsp;type&nbsp;&nbsp;&nbsp;=&nbsp;'S'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;id&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'06'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;number&nbsp;=&nbsp;'331'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cs_head-message&nbsp;=&nbsp;ls_return-message.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cs_head-infnr&nbsp;&nbsp;&nbsp;=&nbsp;ls_return-message_v1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+<br />
+<br />
+<br />
+ENDFORM.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*GUI&nbsp;Texts<br />
+*----------------------------------------------------------<br />
+*&nbsp;ZTITLE_9001&nbsp;--&gt;&nbsp;信息记录期初批导程序<br />
+<br />
+*Text&nbsp;elements<br />
+*----------------------------------------------------------<br />
+*&nbsp;001&nbsp;选择条件<br />
+*&nbsp;002&nbsp;模板下载<br />
+*&nbsp;003&nbsp;信息记录批导模板<br />
+*&nbsp;004&nbsp;文件名字段不能为空<br />
+*&nbsp;005&nbsp;导入模板为空，请维护数据！<br />
+*&nbsp;006&nbsp;模板数据已上载成功<br />
+*&nbsp;T01&nbsp;是<br />
+*&nbsp;T02&nbsp;否<br />
+*&nbsp;T03&nbsp;请选定所有数据行！<br />
+*&nbsp;T04&nbsp;请先处理红色指示灯的数据的报错信息<br />
+<br />
+<br />
+*Selection&nbsp;texts<br />
+*----------------------------------------------------------<br />
+*&nbsp;P_FILE&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;文件名<br />
+*&nbsp;P_RD1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;物料<br />
+*&nbsp;P_RD2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;工序外协<br />
+            </div>
+          </td>
+        </tr>
+      </table>
+      </td>
+      </tr>
+   <tr>
+<td class="footer">Extracted by Mass Download version 1.5.2 - E.G.Mellodew. 1998-2022. Sap Release 755</td>
+   </tr>
+</table>
+</body>
+</html>

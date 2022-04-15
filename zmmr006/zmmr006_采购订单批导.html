@@ -1,0 +1,1104 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=GB2312" />
+<title>ZMMR006</title>
+<style type="text/css">
+.code{ font-family:"Courier New", Courier, monospace; color:#000; font-size:14px; background-color:#F2F4F7 }
+  .codeComment {font-family:"Courier New", Courier, monospace; color:#0000F0; font-size:14px; background-color:#F2F4F7 }
+  .normalBold{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; font-weight:800 }
+  .normalBoldLarge{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+</style>
+<style type="text/css">
+  .normal{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px }
+  .footer{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; text-align: center }
+  h2{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+  h3{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:14px; font-weight:800 }
+  .outerTable{
+   background-color:#E0E7ED;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-right-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+  .innerTable{
+   background-color:#F2F4F7;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-bottom-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+</style>
+</head>
+<body>
+<table class="outerTable">
+  <tr class="normalBoldLarge">
+     <td><h2>Code listing for: ZMMR006</h2>
+<h3> Description: 采购订单批导</h3></td>
+   </tr>
+  <tr>
+     <td>
+     <table class="innerTable">
+       <tr>
+          <td>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Report&nbsp;ZMMR006<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;采购订单批导<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+REPORT zmmr006.<br />
+<br />
+TYPE-POOLS: slis,icon.<br />
+TABLES:sscrfields , t001w .<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------&*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ALV&nbsp;parameter&nbsp;&nbsp;&nbsp;*&<br />
+*&---------------------------------------------------------------------&*<br />
+   </div>
+   <div class="code">
+DATA:g_repid     LIKE sy-repid,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it_fieldcat&nbsp;TYPE&nbsp;lvc_t_fcat&nbsp;WITH&nbsp;HEADER&nbsp;LINE,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;is_layout&nbsp;&nbsp;&nbsp;TYPE&nbsp;lvc_s_layo.<br />
+<br />
+DATA: is_functxt TYPE smp_dyntxt.<br />
+DATA: it_raw  TYPE truxs_t_text_data.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------&*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;全局变量&nbsp;&nbsp;&nbsp;*&<br />
+*&---------------------------------------------------------------------&*<br />
+   </div>
+   <div class="code">
+DATA:BEGIN OF gs_record,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;esart&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;char4,&nbsp;&nbsp;&nbsp;"&nbsp;采购订单类型<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lifnr&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;lifnr,&nbsp;&nbsp;&nbsp;"&nbsp;供应商代码<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ekorg&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;ekorg,&nbsp;&nbsp;&nbsp;"&nbsp;采购组织<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ekgrp&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;ekgrp,&nbsp;&nbsp;&nbsp;"&nbsp;采购组<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bukrs&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;bukrs,&nbsp;&nbsp;&nbsp;"&nbsp;公司代码<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;erdat&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;erdat,&nbsp;&nbsp;&nbsp;"&nbsp;订单日期<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;zterm&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;dzterm,&nbsp;&nbsp;"&nbsp;付款条件<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;verkf&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;verkf,&nbsp;&nbsp;&nbsp;"verkf,&nbsp;&nbsp;&nbsp;"&nbsp;旧采购订单号<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ebelp&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;ebelp,&nbsp;&nbsp;&nbsp;"&nbsp;订单行项目<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;knttp&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;knttp,&nbsp;&nbsp;&nbsp;"&nbsp;科目分配类别<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;item_cat&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;bapimepoitem-item_cat,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;项目类别<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;matnr&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;matnr,&nbsp;&nbsp;&nbsp;"&nbsp;物料编码<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;txz01&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;txz01,&nbsp;&nbsp;&nbsp;"&nbsp;短文本<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;matkl&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;matkl,&nbsp;&nbsp;&nbsp;"&nbsp;物料组<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;quantity&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;bstmg,&nbsp;&nbsp;&nbsp;"&nbsp;采购订单数量<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;po_unit&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;bapimepoitem-po_unit,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;订单单位<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;delivery_date&nbsp;TYPE&nbsp;bapimeposchedule-delivery_date,&nbsp;&nbsp;"&nbsp;交货日期<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;net_price&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;bapimepoitem-net_price,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;净价<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cond_p_unt&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;bapimepocondheader-cond_p_unt,&nbsp;&nbsp;&nbsp;"&nbsp;价格单位<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;currency&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;bapimepoheader-currency,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;货币<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;plant&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;bapimepoitem-plant,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;工厂<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stge_loc&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;bapimepoitem-stge_loc,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;库存地点<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tax_code&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;bapimepoitem-tax_code,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;进项税代码<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gl_account&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;bapimepoaccount-gl_account,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;总账科目编号&nbsp;ALPHA<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;costcenter&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;bapimepoaccount-costcenter,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;成本中心&nbsp;ALPHA<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;asset_no&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;bapimepoaccount-asset_no,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;固定资产号码&nbsp;ALPHA<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;preq_no&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;bapimepoitem-preq_no,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;采购申请号码&nbsp;ALPHA<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;preq_item&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;bapimepoitem-preq_item,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;采购申请行项目<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;agreement&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;konnr,&nbsp;"&nbsp;采购合同号&nbsp;ALPHA<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;agmt_item&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;ktpnr,&nbsp;"&nbsp;采购合同行项目<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;END&nbsp;OF&nbsp;gs_record.<br />
+<br />
+DATA:BEGIN OF gs_out.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INCLUDE&nbsp;STRUCTURE&nbsp;gs_record.<br />
+DATA:<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;sel,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;zlight(30),<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;zstatu&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;bapi_mtype,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;zmessg&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;bapi_msg,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ebeln(10),<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;END&nbsp;OF&nbsp;gs_out.<br />
+DATA:gt_out LIKE TABLE OF gs_out.<br />
+<br />
+DATA:BEGIN OF it_record OCCURS 0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INCLUDE&nbsp;STRUCTURE&nbsp;gs_record&nbsp;.<br />
+<br />
+DATA END OF it_record.<br />
+<br />
+DATA:BEGIN OF gt_return OCCURS 0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INCLUDE&nbsp;STRUCTURE&nbsp;bapiret2&nbsp;.<br />
+DATA:  verkf TYPE verkf,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sel,<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;END&nbsp;OF&nbsp;gt_return.<br />
+<br />
+DATA gv_werks TYPE  werks_d .<br />
+DATA: lv_f TYPE c VALUE IS INITIAL.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*----------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;选择屏幕&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*<br />
+*----------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+"SELECT-OPTIONS:s_werks FOR t001w-werks NO INTERVALS NO-EXTENSION OBLIGATORY.<br />
+<br />
+SELECTION-SCREEN BEGIN OF BLOCK  b1  WITH FRAME TITLE TEXT-001.<br />
+&nbsp;&nbsp;PARAMETERS:&nbsp;p_file&nbsp;LIKE&nbsp;rlgrap-filename.<br />
+SELECTION-SCREEN END OF BLOCK b1.<br />
+SELECTION-SCREEN FUNCTION KEY 1.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*----------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AT&nbsp;SELECTION-SCREEN)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*<br />
+*----------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+AT SELECTION-SCREEN ON VALUE-REQUEST FOR p_file.<br />
+&nbsp;&nbsp;PERFORM&nbsp;file_input&nbsp;CHANGING&nbsp;p_file&nbsp;.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*----------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AT&nbsp;SELECTION-SCREEN)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*<br />
+*----------------------------------------------------------------------*<br />
+<br />
+   </div>
+   <div class="code">
+AT SELECTION-SCREEN.<br />
+&nbsp;&nbsp;IF&nbsp;sscrfields-ucomm&nbsp;=&nbsp;'FC01'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;downdload_template&nbsp;USING&nbsp;'ZMMR006'&nbsp;'采购订单批量导入模板'.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+   </div>
+   <div class="codeComment">
+**&nbsp;&nbsp;权限检查&nbsp;.<br />
+*&nbsp;&nbsp;SELECT&nbsp;SINGLE&nbsp;werks&nbsp;FROM&nbsp;t001w&nbsp;INTO&nbsp;gv_werks&nbsp;WHERE&nbsp;werks&nbsp;IN&nbsp;s_werks.<br />
+*&nbsp;&nbsp;AUTHORITY-CHECK&nbsp;OBJECT&nbsp;'Z_BUKRS'<br />
+*&nbsp;&nbsp;&nbsp;ID&nbsp;'ACTVT'&nbsp;FIELD&nbsp;'03'<br />
+*&nbsp;&nbsp;&nbsp;ID&nbsp;'WERKS'&nbsp;FIELD&nbsp;s_werks.<br />
+*&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;&lt;&gt;&nbsp;0.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;'你没有此工厂的权限'&nbsp;TYPE&nbsp;&nbsp;'E'&nbsp;DISPLAY&nbsp;LIKE&nbsp;'S'.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;LEAVE&nbsp;LIST-PROCESSING.<br />
+*&nbsp;&nbsp;ENDIF.<br />
+<br />
+*----------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;初始化&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*<br />
+*----------------------------------------------------------------------*<br />
+<br />
+   </div>
+   <div class="code">
+INITIALIZATION.<br />
+&nbsp;&nbsp;is_functxt-icon_id&nbsp;&nbsp;&nbsp;=&nbsp;icon_xls.<br />
+&nbsp;&nbsp;is_functxt-icon_text&nbsp;=&nbsp;'下载模板'.<br />
+&nbsp;&nbsp;sscrfields-functxt_01&nbsp;=&nbsp;is_functxt.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*----------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;START-OF-SELECTION&nbsp;主程序&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*<br />
+*----------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+START-OF-SELECTION.<br />
+<br />
+&nbsp;&nbsp;PERFORM&nbsp;upload_data.<br />
+<br />
+&nbsp;&nbsp;PERFORM&nbsp;process_data.<br />
+<br />
+&nbsp;&nbsp;PERFORM&nbsp;disp_alv.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Form&nbsp;upload_data<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM upload_data .<br />
+&nbsp;&nbsp;DATA:lt_excel&nbsp;TYPE&nbsp;TABLE&nbsp;OF&nbsp;zalsmex_tabline.<br />
+&nbsp;&nbsp;DATA&nbsp;ls_excel&nbsp;LIKE&nbsp;LINE&nbsp;OF&nbsp;lt_excel.<br />
+&nbsp;&nbsp;FIELD-SYMBOLS:&lt;fs&gt;.<br />
+&nbsp;&nbsp;IF&nbsp;p_file&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;'导入数据不能为空'&nbsp;TYPE&nbsp;'S'&nbsp;DISPLAY&nbsp;LIKE&nbsp;'E'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;LEAVE&nbsp;LIST-PROCESSING.<br />
+&nbsp;&nbsp;ELSE.<br />
+   </div>
+   <div class="codeComment">
+**上传数据<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;call&nbsp;function&nbsp;<a&nbsp;href&nbsp;="zalsm_excel_to_internal_table/zalsm_excel_to_internal_table.html">'ZALSM_EXCEL_TO_INTERNAL_TABLE'</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;filename&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;p_file<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_begin_col&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_begin_row&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;3<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_end_col&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;99<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_end_row&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;19999<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TABLES<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;intern&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lt_excel<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;inconsistent_parameters&nbsp;=&nbsp;1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;upload_ole&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTHERS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;3.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;&lt;&gt;&nbsp;0.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Implement&nbsp;suitable&nbsp;error&nbsp;handling&nbsp;here<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;lt_excel&nbsp;INTO&nbsp;ls_excel.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ASSIGN&nbsp;COMPONENT&nbsp;ls_excel-col&nbsp;OF&nbsp;STRUCTURE&nbsp;gs_record&nbsp;TO&nbsp;&lt;fs&gt;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CONDENSE&nbsp;ls_excel-value&nbsp;NO-GAPS.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;去掉空格<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;fs&gt;&nbsp;=&nbsp;ls_excel-value.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AT&nbsp;END&nbsp;OF&nbsp;row.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"如果是最后一行就把工作区gs_tab存到内表gt_tab中<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"gs_tab-row&nbsp;=&nbsp;ls_excel-row.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MOVE-CORRESPONDING&nbsp;gs_record&nbsp;TO&nbsp;gs_out.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'CONVERSION_EXIT_ALPHA_INPUT'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;input&nbsp;&nbsp;=&nbsp;gs_out-lifnr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;output&nbsp;=&nbsp;gs_out-lifnr.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;gs_out-matnr&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'CONVERSION_EXIT_MATN1_INPUT'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;input&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;gs_out-matnr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;output&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;gs_out-matnr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;length_error&nbsp;=&nbsp;1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTHERS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;2.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;gs_out-gl_account&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'CONVERSION_EXIT_ALPHA_INPUT'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;input&nbsp;&nbsp;=&nbsp;gs_out-gl_account<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;output&nbsp;=&nbsp;gs_out-gl_account.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;gs_out-costcenter&nbsp;&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'CONVERSION_EXIT_ALPHA_INPUT'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;input&nbsp;&nbsp;=&nbsp;gs_out-costcenter<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;output&nbsp;=&nbsp;gs_out-costcenter.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;gs_out-asset_no&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'CONVERSION_EXIT_ALPHA_INPUT'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;input&nbsp;&nbsp;=&nbsp;gs_out-asset_no<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;output&nbsp;=&nbsp;gs_out-asset_no.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;gs_out-preq_no&nbsp;&nbsp;&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'CONVERSION_EXIT_ALPHA_INPUT'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;input&nbsp;&nbsp;=&nbsp;gs_out-preq_no<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;output&nbsp;=&nbsp;gs_out-preq_no.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;&nbsp;gs_out-agreement&nbsp;&nbsp;IS&nbsp;&nbsp;NOT&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'CONVERSION_EXIT_ALPHA_INPUT'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;input&nbsp;&nbsp;=&nbsp;gs_out-agreement<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;output&nbsp;=&nbsp;gs_out-agreement.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;gs_out&nbsp;TO&nbsp;gt_out.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;gs_out.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CLEAR:&nbsp;gs_record.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDAT.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDLOOP.<br />
+&nbsp;&nbsp;ENDIF.<br />
+ENDFORM.<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Form&nbsp;process_data<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM process_data .<br />
+&nbsp;&nbsp;DATA&nbsp;lt_lfm1&nbsp;LIKE&nbsp;TABLE&nbsp;OF&nbsp;lfm1.<br />
+&nbsp;&nbsp;DATA&nbsp;ls_lfm1&nbsp;LIKE&nbsp;lfm1.<br />
+&nbsp;&nbsp;IF&nbsp;gt_out[]&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;*<br />
+&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;lfm1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;CORRESPONDING&nbsp;FIELDS&nbsp;OF&nbsp;TABLE&nbsp;lt_lfm1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;FOR&nbsp;ALL&nbsp;ENTRIES&nbsp;IN&nbsp;gt_out<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;lifnr&nbsp;=&nbsp;gt_out-lifnr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;ekorg&nbsp;=&nbsp;gt_out-ekorg.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;maktx,matnr&nbsp;&nbsp;FROM&nbsp;makt<br />
+&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;TABLE&nbsp;@DATA(lt_makt)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FOR&nbsp;ALL&nbsp;ENTRIES&nbsp;IN&nbsp;&nbsp;@gt_out<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;matnr&nbsp;=&nbsp;@gt_out-matnr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;spras&nbsp;=&nbsp;@sy-langu.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;matkl,matnr&nbsp;&nbsp;FROM&nbsp;mara<br />
+&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;TABLE&nbsp;@DATA(lt_mara)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FOR&nbsp;ALL&nbsp;ENTRIES&nbsp;IN&nbsp;&nbsp;@gt_out<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;matnr&nbsp;=&nbsp;@gt_out-matnr.<br />
+<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;"保存不存在的数据<br />
+&nbsp;&nbsp;DATA&nbsp;lt_sadata&nbsp;LIKE&nbsp;TABLE&nbsp;OF&nbsp;gs_out.<br />
+&nbsp;&nbsp;DATA&nbsp;ls_sadata&nbsp;LIKE&nbsp;gs_out.<br />
+&nbsp;&nbsp;DATA&nbsp;lv_tabix&nbsp;LIKE&nbsp;sy-tabix.<br />
+&nbsp;&nbsp;DATA&nbsp;lv_num&nbsp;TYPE&nbsp;i.<br />
+&nbsp;&nbsp;DATA&nbsp;lv_cf.<br />
+&nbsp;&nbsp;lt_sadata[]&nbsp;=&nbsp;gt_out[].<br />
+&nbsp;&nbsp;SORT&nbsp;lt_lfm1&nbsp;BY&nbsp;lifnr&nbsp;ekorg.<br />
+&nbsp;&nbsp;"删除后剩余的就是不存在数据。<br />
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;lt_sadata&nbsp;INTO&nbsp;ls_sadata.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;lv_tabix&nbsp;=&nbsp;sy-tabix.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;lt_lfm1&nbsp;INTO&nbsp;ls_lfm1&nbsp;&nbsp;WITH&nbsp;&nbsp;KEY&nbsp;&nbsp;lifnr&nbsp;=&nbsp;ls_sadata-lifnr&nbsp;ekorg&nbsp;=&nbsp;ls_sadata-ekorg&nbsp;&nbsp;BINARY&nbsp;SEARCH.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DELETE&nbsp;lt_sadata&nbsp;INDEX&nbsp;lv_tabix.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+<br />
+&nbsp;&nbsp;DATA&nbsp;ls_data_a&nbsp;LIKE&nbsp;gs_out.<br />
+&nbsp;&nbsp;DATA&nbsp;lt_data_a&nbsp;LIKE&nbsp;TABLE&nbsp;OF&nbsp;ls_data_a.<br />
+<br />
+&nbsp;&nbsp;lt_data_a[]&nbsp;=&nbsp;gt_out[].<br />
+&nbsp;&nbsp;SORT&nbsp;lt_data_a&nbsp;BY&nbsp;lifnr&nbsp;verkf.<br />
+&nbsp;&nbsp;SORT&nbsp;lt_makt&nbsp;BY&nbsp;matnr.<br />
+&nbsp;&nbsp;SORT&nbsp;lt_mara&nbsp;BY&nbsp;matnr.<br />
+<br />
+&nbsp;&nbsp;DELETE&nbsp;ADJACENT&nbsp;DUPLICATES&nbsp;FROM&nbsp;lt_data_a&nbsp;COMPARING&nbsp;lifnr&nbsp;verkf.<br />
+<br />
+&nbsp;&nbsp;SORT&nbsp;gt_out&nbsp;BY&nbsp;lifnr&nbsp;ekorg.<br />
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;&nbsp;gt_out&nbsp;INTO&nbsp;gs_out.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;gs_out-knttp&nbsp;&lt;&gt;&nbsp;'A'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;lt_makt&nbsp;INTO&nbsp;DATA(ls_makt)&nbsp;WITH&nbsp;KEY&nbsp;matnr&nbsp;=&nbsp;gs_out-matnr&nbsp;BINARY&nbsp;SEARCH.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_out-txz01&nbsp;=&nbsp;ls_makt-maktx.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;lt_mara&nbsp;INTO&nbsp;DATA(ls_mara)&nbsp;WITH&nbsp;KEY&nbsp;matnr&nbsp;=&nbsp;gs_out-matnr&nbsp;BINARY&nbsp;SEARCH.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_out-matkl&nbsp;=&nbsp;ls_mara-matkl.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;lt_data_a&nbsp;INTO&nbsp;ls_data_a&nbsp;WITH&nbsp;&nbsp;KEY&nbsp;verkf&nbsp;=&nbsp;gs_out-verkf&nbsp;BINARY&nbsp;SEARCH.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;ls_data_a-lifnr&nbsp;&lt;&gt;&nbsp;gs_out-lifnr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_cf&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_data_a-zmessg&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MODIFY&nbsp;lt_data_a&nbsp;FROM&nbsp;ls_data_a&nbsp;TRANSPORTING&nbsp;zmessg&nbsp;WHERE&nbsp;verkf&nbsp;=&nbsp;gs_out-verkf.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;lt_data_a&nbsp;INTO&nbsp;DATA(ls_a)&nbsp;WITH&nbsp;&nbsp;KEY&nbsp;verkf&nbsp;&nbsp;=&nbsp;gs_out-verkf<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;zmessg&nbsp;=&nbsp;&nbsp;'X'&nbsp;&nbsp;BINARY&nbsp;SEARCH.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_out-zstatu&nbsp;=&nbsp;'E'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_out-zlight&nbsp;=&nbsp;icon_led_red.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_out-zmessg&nbsp;=&nbsp;'同一原采购订单存在多个供应商'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;lt_sadata&nbsp;INTO&nbsp;ls_sadata&nbsp;WITH&nbsp;&nbsp;KEY&nbsp;lifnr&nbsp;=&nbsp;gs_out-lifnr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ekorg&nbsp;=&nbsp;gs_out-ekorg&nbsp;BINARY&nbsp;SEARCH.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_num&nbsp;=&nbsp;1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;gs_out-verkf&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_out-zstatu&nbsp;=&nbsp;'E'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_out-zlight&nbsp;=&nbsp;icon_led_red.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_out-zmessg&nbsp;=&nbsp;&nbsp;'采购订单不能为空'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ELSEIF&nbsp;gs_out-esart&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_out-zstatu&nbsp;=&nbsp;'E'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_out-zlight&nbsp;=&nbsp;icon_led_red.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_out-zmessg&nbsp;=&nbsp;&nbsp;'采购订单类型不能为空'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ELSEIF&nbsp;gs_out-lifnr&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_out-zstatu&nbsp;=&nbsp;'E'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_out-zlight&nbsp;=&nbsp;icon_led_red.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_out-zmessg&nbsp;=&nbsp;&nbsp;'供应商代码不能为空'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ELSEIF&nbsp;gs_out-ekorg&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_out-zstatu&nbsp;=&nbsp;'E'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_out-zlight&nbsp;=&nbsp;icon_led_red.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_out-zmessg&nbsp;=&nbsp;&nbsp;'采购组织不能为空'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ELSEIF&nbsp;gs_out-ekgrp&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_out-zstatu&nbsp;=&nbsp;'E'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_out-zlight&nbsp;=&nbsp;icon_led_red.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_out-zmessg&nbsp;=&nbsp;&nbsp;'采购组不能为空'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ELSEIF&nbsp;gs_out-bukrs&nbsp;IS&nbsp;INITIAL&nbsp;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_out-zstatu&nbsp;=&nbsp;'E'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_out-zlight&nbsp;=&nbsp;icon_led_red.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_out-zmessg&nbsp;=&nbsp;&nbsp;'公司代码不能为空'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ELSEIF&nbsp;gs_out-knttp&nbsp;=&nbsp;'A'&nbsp;AND&nbsp;gs_out-asset_no&nbsp;IS&nbsp;INITIAL<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;gs_out-matkl&nbsp;IS&nbsp;INITIAL&nbsp;AND&nbsp;gs_out-txz01&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_out-zstatu&nbsp;=&nbsp;'E'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_out-zlight&nbsp;=&nbsp;icon_led_red.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_out-zmessg&nbsp;=&nbsp;&nbsp;'资产不能为空'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ELSEIF&nbsp;gs_out-matnr&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;gs_out-knttp&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_out-zstatu&nbsp;=&nbsp;'E'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_out-zlight&nbsp;=&nbsp;icon_led_red.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_out-zmessg&nbsp;=&nbsp;&nbsp;'物料编码不能为空'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ELSEIF&nbsp;gs_out-plant&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_out-zstatu&nbsp;=&nbsp;'E'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_out-zlight&nbsp;=&nbsp;icon_led_red.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_out-zmessg&nbsp;=&nbsp;&nbsp;'工厂不能为空'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ELSEIF&nbsp;gs_out-stge_loc&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_out-zstatu&nbsp;=&nbsp;'E'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_out-zlight&nbsp;=&nbsp;icon_led_red.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_out-zmessg&nbsp;=&nbsp;&nbsp;'库存地点不能为空'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ELSEIF&nbsp;lv_num&nbsp;=&nbsp;1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_out-zstatu&nbsp;=&nbsp;'E'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_out-zlight&nbsp;=&nbsp;icon_led_red.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_out-zmessg&nbsp;=&nbsp;&nbsp;'供应商账户与采购组织不匹配'.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;ELSE.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_out-zstatu&nbsp;=&nbsp;'S'.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_out-zlight&nbsp;=&nbsp;icon_led_green.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_out-zmessg&nbsp;=&nbsp;&nbsp;'数据未发现错误，可以创建采购订单'.<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MODIFY&nbsp;gt_out&nbsp;FROM&nbsp;gs_out.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;:lv_num.<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+&nbsp;&nbsp;DATA&nbsp;gt_out_a&nbsp;LIKE&nbsp;TABLE&nbsp;OF&nbsp;gs_out.<br />
+<br />
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;gt_out&nbsp;INTO&nbsp;gs_out.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;gs_out-zstatu&nbsp;=&nbsp;'&nbsp;'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_out-zstatu&nbsp;=&nbsp;'S'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_out-zlight&nbsp;=&nbsp;icon_led_green.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_out-zmessg&nbsp;=&nbsp;&nbsp;'数据未发现错误，可以创建采购订单'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MODIFY&nbsp;gt_out&nbsp;FROM&nbsp;gs_out.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;gs_out.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+&nbsp;&nbsp;SORT&nbsp;gt_out&nbsp;BY&nbsp;verkf.<br />
+ENDFORM.<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Form&nbsp;disp_alv<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM disp_alv .<br />
+&nbsp;&nbsp;DATA:&nbsp;l_user_command&nbsp;&nbsp;TYPE&nbsp;slis_formname,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;l_pf_status_set&nbsp;TYPE&nbsp;slis_formname.<br />
+<br />
+&nbsp;&nbsp;CLEAR&nbsp;it_fieldcat.REFRESH&nbsp;it_fieldcat.<br />
+<br />
+&nbsp;&nbsp;PERFORM&nbsp;get_catlog.<br />
+<br />
+&nbsp;&nbsp;l_user_command&nbsp;&nbsp;=&nbsp;'USER_COMMAND'.<br />
+&nbsp;&nbsp;l_pf_status_set&nbsp;=&nbsp;&nbsp;'SET_PF_STATUS'.<br />
+<br />
+&nbsp;&nbsp;is_layout-zebra&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;"&nbsp;is_layout-box_fname&nbsp;=&nbsp;'SEL'.<br />
+&nbsp;&nbsp;is_layout-cwidth_opt&nbsp;=&nbsp;'X'.<br />
+<br />
+&nbsp;&nbsp;g_repid&nbsp;=&nbsp;sy-repid.<br />
+<br />
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'REUSE_ALV_GRID_DISPLAY_LVC'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_interface_check&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'&nbsp;'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_buffer_active&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'&nbsp;'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_callback_pf_status_set&nbsp;=&nbsp;l_pf_status_set<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_callback_user_command&nbsp;&nbsp;=&nbsp;l_user_command<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_callback_program&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;g_repid<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;is_layout_lvc&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;is_layout&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"it_events&nbsp;=&nbsp;lt_event<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it_fieldcat_lvc&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;it_fieldcat[]<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_save&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'A'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;TABLES<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;t_outtab&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;gt_out[].<br />
+ENDFORM.<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;SET_PF_STATUS<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM set_pf_status USING pwa_extab TYPE slis_t_extab.<br />
+&nbsp;&nbsp;SET&nbsp;PF-STATUS&nbsp;'ZSTATUS'&nbsp;.<br />
+ENDFORM.                    " SET_PF_STATUS<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;user_command<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM user_command USING pa_ucomm LIKE sy-ucomm<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pwa_selfield&nbsp;TYPE&nbsp;slis_selfield.<br />
+&nbsp;&nbsp;DATA&nbsp;gv_out&nbsp;LIKE&nbsp;TABLE&nbsp;OF&nbsp;gs_out.<br />
+<br />
+&nbsp;&nbsp;DATA:&nbsp;lr_grid&nbsp;TYPE&nbsp;REF&nbsp;TO&nbsp;cl_gui_alv_grid.<br />
+<br />
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'GET_GLOBALS_FROM_SLVC_FULLSCR'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;e_grid&nbsp;=&nbsp;lr_grid.<br />
+<br />
+&nbsp;&nbsp;CALL&nbsp;METHOD&nbsp;lr_grid-&gt;check_changed_data.<br />
+&nbsp;&nbsp;CLEAR&nbsp;gv_out[].<br />
+&nbsp;&nbsp;CASE&nbsp;pa_ucomm.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;创建&nbsp;PO&nbsp;。<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'ZCT'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;gt_out&nbsp;INTO&nbsp;gs_out&nbsp;WHERE&nbsp;&nbsp;zstatu&nbsp;=&nbsp;'E'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;gs_out&nbsp;TO&nbsp;gv_out.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;gs_out.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDLOOP.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;lines(&nbsp;gv_out&nbsp;)&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_f&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;create_po.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pwa_selfield-refresh&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ELSE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;'导入数据存在错误，请修正以后重试'&nbsp;&nbsp;TYPE&nbsp;'E'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'&IC1'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;pwa_selfield-fieldname&nbsp;=&nbsp;'EBELN'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;pwa_selfield-value&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SET&nbsp;PARAMETER&nbsp;ID&nbsp;'BES'&nbsp;FIELD&nbsp;pwa_selfield-value.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;TRANSACTION&nbsp;'ME23'&nbsp;AND&nbsp;SKIP&nbsp;FIRST&nbsp;SCREEN.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'OTHER'.<br />
+&nbsp;&nbsp;ENDCASE.<br />
+ENDFORM.<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Form&nbsp;get_catlog<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM get_catlog .<br />
+&nbsp;&nbsp;DEFINE&nbsp;lit_fieldcat.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;it_fieldcat-tabname&nbsp;&nbsp;&nbsp;=&nbsp;'GT_OUT'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;it_fieldcat-fieldname&nbsp;=&nbsp;&1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;it_fieldcat-coltext&nbsp;&nbsp;&nbsp;=&nbsp;&2.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;it_fieldcat-just&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&3.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;it_fieldcat-ref_field&nbsp;=&nbsp;&4.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;it_fieldcat-ref_table&nbsp;=&nbsp;&5.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;it_fieldcat-outputlen&nbsp;=&nbsp;&6.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;it_fieldcat-fix_column&nbsp;=&nbsp;&7.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;&nbsp;it_fieldcat.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;&nbsp;it_fieldcat.<br />
+&nbsp;&nbsp;END-OF-DEFINITION.&nbsp;&nbsp;&nbsp;"lit_fieldcat<br />
+<br />
+&nbsp;&nbsp;lit_fieldcat&nbsp;:<br />
+&nbsp;&nbsp;'ZLIGHT'&nbsp;&nbsp;&nbsp;&nbsp;TEXT-t01&nbsp;&nbsp;'C'&nbsp;''&nbsp;&nbsp;&nbsp;''&nbsp;&nbsp;&nbsp;&nbsp;'4'&nbsp;'X',<br />
+&nbsp;&nbsp;'ZSTATU'&nbsp;&nbsp;&nbsp;&nbsp;TEXT-t02&nbsp;&nbsp;'C'&nbsp;''&nbsp;&nbsp;&nbsp;''&nbsp;&nbsp;&nbsp;&nbsp;'6'&nbsp;'X',<br />
+&nbsp;&nbsp;'ZMESSG'&nbsp;&nbsp;&nbsp;&nbsp;TEXT-t03&nbsp;&nbsp;'L'&nbsp;''&nbsp;&nbsp;&nbsp;''&nbsp;&nbsp;&nbsp;'100'&nbsp;'X',<br />
+&nbsp;&nbsp;'EBELN'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TEXT-t04&nbsp;&nbsp;'C'&nbsp;''&nbsp;&nbsp;&nbsp;''&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;'X',<br />
+&nbsp;&nbsp;'ESART'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TEXT-t05&nbsp;&nbsp;'L'&nbsp;''&nbsp;''&nbsp;'4'&nbsp;'',<br />
+&nbsp;&nbsp;'LIFNR'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TEXT-t06&nbsp;&nbsp;'L'&nbsp;'LLIEF'&nbsp;'EKKO'&nbsp;''&nbsp;'',<br />
+&nbsp;&nbsp;'EKORG'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TEXT-t07&nbsp;&nbsp;'L'&nbsp;'EKORG'&nbsp;'EKKO'&nbsp;''&nbsp;'',<br />
+&nbsp;&nbsp;'EKGRP'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TEXT-t08&nbsp;&nbsp;'L'&nbsp;'EKGRP'&nbsp;'EKKO'&nbsp;''&nbsp;'',<br />
+&nbsp;&nbsp;'BUKRS'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TEXT-t09&nbsp;&nbsp;'L'&nbsp;'BUKRS'&nbsp;'EKKO'&nbsp;''&nbsp;'',<br />
+&nbsp;&nbsp;'ERDAT'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TEXT-t10&nbsp;&nbsp;'L'&nbsp;'ERDAT'&nbsp;'EKKO'&nbsp;''&nbsp;'',<br />
+&nbsp;&nbsp;'ZTERM'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TEXT-t11&nbsp;&nbsp;'L'&nbsp;'ZTERM'&nbsp;'EKKO'&nbsp;''&nbsp;'',<br />
+&nbsp;&nbsp;'VERKF'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TEXT-t12&nbsp;&nbsp;'L'&nbsp;'EBELN'&nbsp;'EKKO'&nbsp;''&nbsp;'',<br />
+&nbsp;&nbsp;'EBELP'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TEXT-t13&nbsp;&nbsp;'L'&nbsp;'EBELP'&nbsp;'EKKO'&nbsp;''&nbsp;'',<br />
+&nbsp;&nbsp;'KNTTP'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TEXT-t14&nbsp;&nbsp;'L'&nbsp;'KNTTP'&nbsp;'EKKO'&nbsp;''&nbsp;'',<br />
+&nbsp;&nbsp;'ITEM_CAT'&nbsp;&nbsp;TEXT-t15&nbsp;&nbsp;'L'&nbsp;'ITEM_CAT'&nbsp;'BAPIMEPOITEM'&nbsp;''&nbsp;'',<br />
+&nbsp;&nbsp;'MATNR'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TEXT-t16&nbsp;&nbsp;'L'&nbsp;'MATNR'&nbsp;&nbsp;&nbsp;&nbsp;'MARA'&nbsp;''&nbsp;'',<br />
+&nbsp;&nbsp;'TXZ01'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TEXT-t17&nbsp;&nbsp;'L'&nbsp;''&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;'',<br />
+&nbsp;&nbsp;'MATKL'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TEXT-t18&nbsp;&nbsp;'L'&nbsp;''&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;'',<br />
+&nbsp;&nbsp;'QUANTITY'&nbsp;&nbsp;TEXT-t19&nbsp;&nbsp;'L'&nbsp;'QUANTITY'&nbsp;'BAPIMEPOITEM'&nbsp;''&nbsp;'',<br />
+&nbsp;&nbsp;'PO_UNIT'&nbsp;&nbsp;&nbsp;TEXT-t20&nbsp;&nbsp;'L'&nbsp;''&nbsp;&nbsp;'&nbsp;'&nbsp;&nbsp;''&nbsp;'',<br />
+&nbsp;&nbsp;'DELIVERY_DATE'&nbsp;TEXT-t21&nbsp;&nbsp;'L'&nbsp;'DELIVERY_DATE'&nbsp;'BAPIMEPOSCHEDULE'&nbsp;&nbsp;&nbsp;''&nbsp;'',<br />
+&nbsp;&nbsp;'NET_PRICE'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TEXT-t22&nbsp;&nbsp;'L'&nbsp;'NET_PRICE'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'BAPIMEPOITEM'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;'',<br />
+&nbsp;&nbsp;'COND_P_UNT'&nbsp;&nbsp;&nbsp;&nbsp;TEXT-t23&nbsp;&nbsp;'L'&nbsp;'COND_P_UNT'&nbsp;&nbsp;&nbsp;&nbsp;'BAPIMEPOCONDHEADER'&nbsp;''&nbsp;'',<br />
+&nbsp;&nbsp;'CURRENCY'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TEXT-t24&nbsp;&nbsp;'L'&nbsp;'CURRENCY'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'BAPIMEPOHEADER'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;'',<br />
+&nbsp;&nbsp;'PLANT'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TEXT-t25&nbsp;&nbsp;'L'&nbsp;'PLANT'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'BAPIMEPOITEM'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;'',<br />
+&nbsp;&nbsp;'STGE_LOC'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TEXT-t26&nbsp;&nbsp;'L'&nbsp;'STGE_LOC'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'BAPIMEPOITEM'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;'',<br />
+&nbsp;&nbsp;'TAX_CODE'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TEXT-t27&nbsp;&nbsp;'L'&nbsp;'TAX_CODE'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'BAPIMEPOITEM'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;'',<br />
+&nbsp;&nbsp;'GL_ACCOUNT'&nbsp;&nbsp;&nbsp;&nbsp;TEXT-t28&nbsp;&nbsp;'L'&nbsp;'GL_ACCOUNT'&nbsp;&nbsp;&nbsp;&nbsp;'BAPIMEPOACCOUNT'&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;'',<br />
+&nbsp;&nbsp;'COSTCENTER'&nbsp;&nbsp;&nbsp;&nbsp;TEXT-t29&nbsp;&nbsp;'L'&nbsp;'COSTCENTER'&nbsp;&nbsp;&nbsp;&nbsp;'BAPIMEPOACCOUNT'&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;'',<br />
+&nbsp;&nbsp;'ASSET_NO'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TEXT-t30&nbsp;&nbsp;'L'&nbsp;'ASSET_NO'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'BAPIMEPOACCOUNT'&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;'',<br />
+&nbsp;&nbsp;'PREQ_NO'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TEXT-t31&nbsp;&nbsp;'L'&nbsp;'PREQ_NO'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'BAPIMEPOITEM'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;'',<br />
+&nbsp;&nbsp;'PREQ_ITEM'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TEXT-t32&nbsp;&nbsp;'L'&nbsp;'PREQ_ITEM'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'BAPIMEPOITEM'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;'',<br />
+&nbsp;&nbsp;'AGREEMENT'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TEXT-t33&nbsp;&nbsp;'L'&nbsp;'AGREEMENT'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'BAPIMEPOITEM'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;'',<br />
+&nbsp;&nbsp;'AGMT_ITEM'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TEXT-t34&nbsp;&nbsp;'L'&nbsp;'AGMT_ITEM'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'BAPIMEPOITEM'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;''.<br />
+ENDFORM.<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Form&nbsp;create_pi<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;创建采购凭证<br />
+<br />
+   </div>
+   <div class="code">
+FORM create_po.<br />
+&nbsp;&nbsp;DATA:&nbsp;poheader&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;TABLE&nbsp;OF&nbsp;bapimepoheader&nbsp;&nbsp;&nbsp;WITH&nbsp;HEADER&nbsp;LINE,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;poheaderx&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;TABLE&nbsp;OF&nbsp;bapimepoheaderx&nbsp;&nbsp;WITH&nbsp;HEADER&nbsp;LINE,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;TABLE&nbsp;OF&nbsp;bapiret2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WITH&nbsp;HEADER&nbsp;LINE,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;poitem&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;TABLE&nbsp;OF&nbsp;bapimepoitem&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WITH&nbsp;HEADER&nbsp;LINE,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;poitemx&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;TABLE&nbsp;OF&nbsp;bapimepoitemx&nbsp;&nbsp;&nbsp;&nbsp;WITH&nbsp;HEADER&nbsp;LINE,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;poschedule&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;TABLE&nbsp;OF&nbsp;bapimeposchedule&nbsp;WITH&nbsp;HEADER&nbsp;LINE,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;poschedulex&nbsp;&nbsp;&nbsp;LIKE&nbsp;TABLE&nbsp;OF&nbsp;bapimeposchedulx&nbsp;WITH&nbsp;HEADER&nbsp;LINE,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;poaccount&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;TABLE&nbsp;OF&nbsp;bapimepoaccount&nbsp;&nbsp;WITH&nbsp;HEADER&nbsp;LINE,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;poaccountx&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;TABLE&nbsp;OF&nbsp;bapimepoaccountx&nbsp;WITH&nbsp;HEADER&nbsp;LINE,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pocond&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;TABLE&nbsp;OF&nbsp;bapimepocond&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WITH&nbsp;HEADER&nbsp;LINE,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pocondx&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;TABLE&nbsp;OF&nbsp;bapimepocondx&nbsp;&nbsp;&nbsp;&nbsp;WITH&nbsp;HEADER&nbsp;LINE,<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pocomponents&nbsp;&nbsp;LIKE&nbsp;TABLE&nbsp;OF&nbsp;bapimepocomponent&nbsp;&nbsp;&nbsp;&nbsp;WITH&nbsp;HEADER&nbsp;LINE,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pocomponentsx&nbsp;LIKE&nbsp;TABLE&nbsp;OF&nbsp;bapimepocomponentx&nbsp;&nbsp;&nbsp;&nbsp;WITH&nbsp;HEADER&nbsp;LINE,<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;potextitem&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;TABLE&nbsp;OF&nbsp;bapimepotext&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WITH&nbsp;HEADER&nbsp;LINE.<br />
+&nbsp;&nbsp;DATA&nbsp;&nbsp;exppurchaseorder&nbsp;LIKE&nbsp;&nbsp;bapimepoheader-po_number.<br />
+<br />
+&nbsp;&nbsp;DATA:lv_lifnr&nbsp;TYPE&nbsp;elifn.<br />
+&nbsp;&nbsp;DATA&nbsp;lt_tmp&nbsp;&nbsp;&nbsp;LIKE&nbsp;TABLE&nbsp;OF&nbsp;gs_record&nbsp;.<br />
+&nbsp;&nbsp;DATA&nbsp;lt_item&nbsp;&nbsp;LIKE&nbsp;TABLE&nbsp;OF&nbsp;gs_record.<br />
+&nbsp;&nbsp;DATA&nbsp;ls_tmp&nbsp;&nbsp;&nbsp;LIKE&nbsp;gs_record.<br />
+&nbsp;&nbsp;DATA&nbsp;ls_item&nbsp;&nbsp;LIKE&nbsp;gs_record.<br />
+&nbsp;&nbsp;CONSTANTS:c_tagx&nbsp;VALUE&nbsp;'X'.<br />
+&nbsp;&nbsp;DATA:lv_po_item(5)&nbsp;TYPE&nbsp;n.<br />
+&nbsp;&nbsp;DATA:l_return&nbsp;LIKE&nbsp;return.<br />
+&nbsp;&nbsp;DATA:lv_po&nbsp;TYPE&nbsp;char10.<br />
+&nbsp;&nbsp;DATA:&nbsp;c_flag&nbsp;VALUE&nbsp;'X',<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;l_flag.<br />
+&nbsp;&nbsp;DATA&nbsp;lv_message(255).<br />
+&nbsp;&nbsp;DATA&nbsp;lv_num&nbsp;TYPE&nbsp;i.<br />
+<br />
+&nbsp;&nbsp;DATA&nbsp;l_lin&nbsp;TYPE&nbsp;i.<br />
+&nbsp;&nbsp;DATA:l_lin1&nbsp;TYPE&nbsp;string,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;l_txt&nbsp;&nbsp;TYPE&nbsp;string,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;l_perc&nbsp;TYPE&nbsp;p&nbsp;DECIMALS&nbsp;2.<br />
+<br />
+&nbsp;&nbsp;it_record[]&nbsp;=&nbsp;gt_out[].<br />
+&nbsp;&nbsp;CLEAR&nbsp;gt_out[].<br />
+&nbsp;&nbsp;lt_tmp[]&nbsp;=&nbsp;it_record[].<br />
+&nbsp;&nbsp;SORT&nbsp;lt_tmp&nbsp;BY&nbsp;verkf&nbsp;.<br />
+&nbsp;&nbsp;DELETE&nbsp;ADJACENT&nbsp;DUPLICATES&nbsp;FROM&nbsp;lt_tmp&nbsp;COMPARING&nbsp;verkf.<br />
+&nbsp;&nbsp;lt_item[]&nbsp;=&nbsp;it_record[].<br />
+&nbsp;&nbsp;DESCRIBE&nbsp;TABLE&nbsp;lt_tmp&nbsp;LINES&nbsp;lv_num.<br />
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;lt_tmp&nbsp;&nbsp;INTO&nbsp;ls_tmp.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;l_perc&nbsp;=&nbsp;sy-tabix&nbsp;/&nbsp;lv_num&nbsp;*&nbsp;100.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CONCATENATE&nbsp;l_lin1&nbsp;'%'&nbsp;','&nbsp;'正在创建...'&nbsp;INTO&nbsp;l_txt.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;采购订单抬头<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;lv_lifnr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;lv_lifnr&nbsp;=&nbsp;ls_tmp-lifnr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'CONVERSION_EXIT_ALPHA_INPUT'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;input&nbsp;&nbsp;=&nbsp;lv_lifnr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;output&nbsp;=&nbsp;lv_lifnr.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;poheader-comp_code&nbsp;&nbsp;=&nbsp;ls_tmp-bukrs.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;公司代码<br />
+&nbsp;&nbsp;&nbsp;&nbsp;poheader-doc_type&nbsp;&nbsp;&nbsp;=&nbsp;ls_tmp-esart.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;采购凭证类型<br />
+&nbsp;&nbsp;&nbsp;&nbsp;poheader-vendor&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lv_lifnr.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;供应商帐号<br />
+&nbsp;&nbsp;&nbsp;&nbsp;poheader-purch_org&nbsp;&nbsp;=&nbsp;ls_tmp-ekorg.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;采购组织<br />
+&nbsp;&nbsp;&nbsp;&nbsp;poheader-pur_group&nbsp;&nbsp;=&nbsp;ls_tmp-ekgrp.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;采购组<br />
+&nbsp;&nbsp;&nbsp;&nbsp;poheader-sales_pers&nbsp;=&nbsp;ls_tmp-verkf.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;原采购订单<br />
+&nbsp;&nbsp;&nbsp;&nbsp;poheader-currency&nbsp;&nbsp;&nbsp;=&nbsp;ls_tmp-currency&nbsp;.&nbsp;"&nbsp;货币<br />
+&nbsp;&nbsp;&nbsp;&nbsp;poheader-pmnttrms&nbsp;&nbsp;&nbsp;=&nbsp;ls_tmp-zterm.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;付款条件<br />
+&nbsp;&nbsp;&nbsp;&nbsp;poheader-doc_date&nbsp;&nbsp;&nbsp;=&nbsp;sy-datum.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;采购凭证日期<br />
+&nbsp;&nbsp;&nbsp;&nbsp;poheader-langu&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;sy-langu.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;语言代码<br />
+<br />
+   </div>
+   <div class="codeComment">
+**&添加发货库存地点&nbsp;批次<br />
+**&by&nbsp;2021&nbsp;0514<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;ls_tmp-esart&nbsp;=&nbsp;'ZSTO'.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;poheader-suppl_plnt&nbsp;=&nbsp;lv_lifnr+6(4).<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+**&&nbsp;end&nbsp;.<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;poheaderx-comp_code&nbsp;&nbsp;&nbsp;=&nbsp;c_tagx.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;poheaderx-doc_type&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;c_tagx.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;poheaderx-vendor&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;c_tagx.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;poheaderx-purch_org&nbsp;&nbsp;&nbsp;=&nbsp;c_tagx.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;poheaderx-pur_group&nbsp;&nbsp;&nbsp;=&nbsp;c_tagx.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;poheaderx-sales_pers&nbsp;&nbsp;=&nbsp;c_tagx.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;poheaderx-doc_date&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;c_tagx.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;poheaderx-currency&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;c_tagx.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;poheaderx-pmnttrms&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;c_tagx.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;poheaderx-suppl_plnt&nbsp;&nbsp;=&nbsp;c_tagx.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;poheaderx-langu&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;c_tagx.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;lt_item&nbsp;INTO&nbsp;ls_item&nbsp;WHERE&nbsp;verkf&nbsp;=&nbsp;ls_tmp-verkf.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MOVE-CORRESPONDING&nbsp;ls_item&nbsp;TO&nbsp;gs_out.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;gs_out&nbsp;TO&nbsp;gt_out.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;gs_out.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;lv_po_item.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;ls_item-ebelp&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_po_item&nbsp;=&nbsp;lv_po_item&nbsp;+&nbsp;10.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ELSE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_po_item&nbsp;=&nbsp;ls_item-ebelp.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'CONVERSION_EXIT_MATN1_INPUT'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;input&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_item-matnr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;output&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_item-matnr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;length_error&nbsp;=&nbsp;1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTHERS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;2.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;poitem-po_item&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lv_po_item.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;采购凭证的项目编号<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;poitem-acctasscat&nbsp;=&nbsp;ls_item-knttp.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;科目分配类别<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;poitem-material&nbsp;&nbsp;&nbsp;=&nbsp;ls_item-matnr.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;物料号<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;poitem-item_cat&nbsp;&nbsp;&nbsp;=&nbsp;ls_item-item_cat.&nbsp;&nbsp;"&nbsp;项目分配类别<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;poitem-tax_code&nbsp;&nbsp;&nbsp;=&nbsp;ls_item-tax_code.&nbsp;&nbsp;"&nbsp;销售税代码<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;poitem-short_text&nbsp;=&nbsp;ls_item-txz01.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;短文本<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;poitem-matl_group&nbsp;=&nbsp;ls_item-matkl.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;物料组<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;poitem-price_unit&nbsp;=&nbsp;ls_item-cond_p_unt."&nbsp;价格单位<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;poitem-net_price&nbsp;&nbsp;=&nbsp;ls_item-net_price.&nbsp;"&nbsp;净价<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;poitem-quantity&nbsp;&nbsp;&nbsp;=&nbsp;ls_item-quantity.&nbsp;&nbsp;"&nbsp;采购订单数量<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;poitem-po_unit&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_item-po_unit.&nbsp;&nbsp;&nbsp;"&nbsp;订单单位<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;poitem-stge_loc&nbsp;&nbsp;&nbsp;=&nbsp;ls_item-stge_loc.&nbsp;&nbsp;"&nbsp;库存地点<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;poitem-plant&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_item-plant.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;工厂<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;poitem-preq_no&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_item-preq_no.&nbsp;&nbsp;&nbsp;"&nbsp;采购申请号码<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;poitem-preq_item&nbsp;&nbsp;=&nbsp;ls_item-preq_item.&nbsp;"&nbsp;采购申请行<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;poitem-agreement&nbsp;&nbsp;=&nbsp;ls_item-agreement.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;合同<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;poitem-agmt_item&nbsp;&nbsp;=&nbsp;ls_item-agmt_item.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;合同项目<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;poitem-net_price&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;poitem-po_price&nbsp;=&nbsp;'2'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ELSE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;poitem-po_price&nbsp;=&nbsp;''.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;poitem.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;poitem.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;poitemx-po_item&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lv_po_item.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;采购凭证的项目编号<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;poitemx-acctasscat&nbsp;=&nbsp;c_tagx.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;科目分配类别<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;poitemx-item_cat&nbsp;&nbsp;&nbsp;=&nbsp;c_tagx.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;项目分配类别<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;poitemx-material&nbsp;&nbsp;&nbsp;=&nbsp;c_tagx.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;物料号<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;poitemx-short_text&nbsp;=&nbsp;c_tagx.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;短文本<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;poitemx-matl_group&nbsp;=&nbsp;c_tagx.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;短文本<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;poitemx-tax_code&nbsp;&nbsp;&nbsp;=&nbsp;c_tagx.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;销售税代码<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;poitemx-price_unit&nbsp;=&nbsp;c_tagx.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;价格单位<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;poitemx-net_price&nbsp;&nbsp;=&nbsp;c_tagx.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;净价<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;poitemx-quantity&nbsp;&nbsp;&nbsp;=&nbsp;c_tagx.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;采购订单数量<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;poitemx-stge_loc&nbsp;&nbsp;&nbsp;=&nbsp;c_tagx.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;仓储地点<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;poitemx-plant&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;c_tagx.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;工厂<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;poitemx-po_unit&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;c_tagx.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;订单单位<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;poitemx-preq_no&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;c_tagx.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;采购申请号码<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;poitemx-preq_item&nbsp;&nbsp;=&nbsp;c_tagx.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;采购申请行<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;poitemx-agreement&nbsp;&nbsp;=&nbsp;c_tagx.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;合同<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;poitemx-agmt_item&nbsp;&nbsp;=&nbsp;c_tagx.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;合同行项目<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;poitemx-po_price&nbsp;=&nbsp;'X'.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;poitemx.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;poitemx.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;poschedule-po_item&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lv_po_item.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;采购凭证的项目编号<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;poschedule-sched_line&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'1'.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;采购凭证的项目编号<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;poschedule-del_datcat_ext&nbsp;=&nbsp;'D'.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;交货日期的类别<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;poschedule-delivery_date&nbsp;&nbsp;=&nbsp;ls_item-delivery_date.&nbsp;&nbsp;"&nbsp;交货日期<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;poschedule-quantity&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_item-quantity.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;采购订单数量<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;poschedule.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;poschedule.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;poschedulex-po_item&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lv_po_item..&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;采购凭证的项目编号<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;poschedulex-sched_line&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'1'.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;采购凭证的项目编号<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;poschedulex-delivery_date&nbsp;&nbsp;=&nbsp;c_tagx.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;交货日期<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;poschedulex-del_datcat_ext&nbsp;=&nbsp;c_tagx.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;交货日期的类别<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;poschedulex-quantity&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;c_tagx.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;采购订单数量<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;poschedulex.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;poschedulex.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;ls_item-knttp&nbsp;&nbsp;&lt;&gt;&nbsp;''.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;poaccount-po_item&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lv_po_item.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;采购凭证的项目编号<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;poaccount-gl_account&nbsp;=&nbsp;ls_item-gl_account.&nbsp;"&nbsp;总帐科目<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;poaccount-costcenter&nbsp;=&nbsp;ls_item-costcenter&nbsp;."&nbsp;成本中心<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;poaccount-asset_no&nbsp;&nbsp;&nbsp;=&nbsp;ls_item-asset_no.&nbsp;&nbsp;&nbsp;"&nbsp;资产号码<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;poaccount-tax_code&nbsp;&nbsp;&nbsp;=&nbsp;ls_item-tax_code.&nbsp;&nbsp;&nbsp;"&nbsp;税码<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;poaccount-sd_doc&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_item-preq_no.&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;销售和分销凭证号<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;poaccount-itm_number&nbsp;=&nbsp;ls_item-preq_item.&nbsp;&nbsp;"&nbsp;销售凭证项目<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;poaccount.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;&nbsp;poaccount.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;poaccountx-po_item&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lv_po_item.&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;采购凭证的项目编号<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;poaccountx-costcenter&nbsp;=&nbsp;c_tagx&nbsp;.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;成本中心<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;poaccountx-asset_no&nbsp;&nbsp;&nbsp;=&nbsp;c_tagx.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;资产号码<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;poaccountx-gl_account&nbsp;=&nbsp;c_tagx.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;总帐科目<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;poaccountx-tax_code&nbsp;&nbsp;&nbsp;=&nbsp;c_tagx.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;税码<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;poaccountx-sd_doc&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;c_tagx.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;销售和分销凭证号<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;poaccountx-itm_number&nbsp;=&nbsp;c_tagx.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;销售凭证项目<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;poaccountx.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;&nbsp;poaccountx.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CLEAR:ls_item,lv_po_item.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDLOOP.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;poitem[]&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;BREAK&nbsp;xx-liux.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'BAPI_PO_CREATE1'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;poheader&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;poheader<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;poheaderx&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;poheaderx<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;&nbsp;&nbsp;&nbsp;no_price_from_po&nbsp;=&nbsp;'X'&nbsp;&nbsp;"&nbsp;使用后，所有的项目必须有净价<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;exppurchaseorder&nbsp;=&nbsp;lv_po<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TABLES<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;return<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;poitem&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;poitem<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;poitemx&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;poitemx<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;poschedule&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;poschedule<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;poschedulex&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;poschedulex<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;poaccount&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;poaccount<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;poaccountx&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;poaccountx.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;return&nbsp;WHERE&nbsp;type&nbsp;CA&nbsp;'AEX'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;l_flag&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;l_flag&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SORT&nbsp;&nbsp;return&nbsp;BY&nbsp;type&nbsp;id&nbsp;message&nbsp;DESCENDING.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DELETE&nbsp;ADJACENT&nbsp;DUPLICATES&nbsp;FROM&nbsp;return&nbsp;COMPARING&nbsp;message.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DELETE&nbsp;return&nbsp;WHERE&nbsp;message&nbsp;=&nbsp;'对象类型&nbsp;PurchaseOrder&nbsp;没有被创建的实例.&nbsp;外部参考:'.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;&nbsp;return&nbsp;INTO&nbsp;DATA(ls_return)&nbsp;WHERE&nbsp;type&nbsp;=&nbsp;'E'&nbsp;OR&nbsp;type&nbsp;=&nbsp;'I'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_message&nbsp;=&nbsp;&nbsp;lv_message&nbsp;&&&nbsp;&nbsp;','&nbsp;&nbsp;&&&nbsp;ls_return-message.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_out-zlight&nbsp;&nbsp;=&nbsp;icon_led_red.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_out-zstatu&nbsp;&nbsp;=&nbsp;'E'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_out-zmessg&nbsp;&nbsp;=&nbsp;'创建失败:'&nbsp;&&&nbsp;lv_message.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MODIFY&nbsp;gt_out&nbsp;FROM&nbsp;gs_out&nbsp;TRANSPORTING&nbsp;zlight&nbsp;zstatu&nbsp;zmessg<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;verkf&nbsp;=&nbsp;ls_tmp-verkf.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;gs_out.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'BAPI_TRANSACTION_ROLLBACK'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ELSE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'BAPI_TRANSACTION_COMMIT'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wait&nbsp;=&nbsp;'X'.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_out-zlight&nbsp;&nbsp;=&nbsp;icon_led_green.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_out-zstatu&nbsp;&nbsp;=&nbsp;'S'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_out-zmessg&nbsp;&nbsp;=&nbsp;'创建成功'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_out-ebeln&nbsp;&nbsp;&nbsp;=&nbsp;lv_po.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;lv_po.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MODIFY&nbsp;gt_out&nbsp;FROM&nbsp;gs_out&nbsp;TRANSPORTING&nbsp;zlight&nbsp;zstatu&nbsp;zmessg&nbsp;ebeln<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;verkf&nbsp;=&nbsp;ls_tmp-verkf.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CLEAR:gs_out.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CLEAR:&nbsp;lv_message,l_flag.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'SAPGUI_PROGRESS_INDICATOR'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;percentage&nbsp;=&nbsp;l_perc<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;l_txt.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;l_txt.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;REFRESH:&nbsp;poitem,poitemx,poschedule,poschedulex,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;poaccount,poaccountx,return.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR:&nbsp;&nbsp;&nbsp;poitem,poitemx,poschedule,poschedulex,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;poaccount,poaccountx,poheader,poheaderx,return.<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+<br />
+ENDFORM.<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Form&nbsp;downdload_template<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM downdload_template USING p_objid TYPE wwwdatatab-objid<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;p_filename&nbsp;TYPE&nbsp;string.<br />
+<br />
+&nbsp;&nbsp;DATA:&nbsp;w_objdata&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;wwwdatatab,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;w_mime&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;w3mime,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"w_filename&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;string,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;w_fullpath&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;string&nbsp;VALUE&nbsp;'C:/TEMP/',<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;w_path&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;string&nbsp;VALUE&nbsp;'C:/TEMP/',<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;w_destination&nbsp;LIKE&nbsp;rlgrap-filename,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;w_objnam&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;string,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;w_rc&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;sy-subrc,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;w_errtxt&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;string,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;p_dest&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;sapb-sappfad,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;w_action&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;i.<br />
+<br />
+&nbsp;&nbsp;CALL&nbsp;METHOD&nbsp;cl_gui_frontend_services=&gt;file_save_dialog<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;window_title&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'下载导入模板'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;default_extension&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'XLS;XLSX'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;default_file_name&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;p_filename<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;file_filter&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'EXCEL文件|*.XLSX;*.XLS'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CHANGING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;filename&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;p_filename<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;path&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;w_path<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fullpath&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;w_fullpath<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;user_action&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;w_action<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cntl_error&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;error_no_gui&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;not_supported_by_gui&nbsp;=&nbsp;3<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTHERS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;4.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;=&nbsp;0&nbsp;AND&nbsp;w_action&nbsp;EQ&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;p_dest&nbsp;=&nbsp;w_fullpath.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CONDENSE&nbsp;w_objnam&nbsp;NO-GAPS.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;SINGLE&nbsp;relid&nbsp;objid<br />
+&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;CORRESPONDING&nbsp;FIELDS&nbsp;OF&nbsp;w_objdata<br />
+&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;wwwdata<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;srtf2&nbsp;=&nbsp;0&nbsp;AND&nbsp;relid&nbsp;=&nbsp;'MI'&nbsp;AND&nbsp;objid&nbsp;=&nbsp;p_objid.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;NE&nbsp;0&nbsp;OR&nbsp;w_objdata-objid&nbsp;EQ&nbsp;space.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CONCATENATE&nbsp;'模板文件'&nbsp;w_objnam&nbsp;'不存在'&nbsp;INTO&nbsp;w_errtxt.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;w_errtxt&nbsp;TYPE&nbsp;'I'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;w_destination&nbsp;=&nbsp;p_dest.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'DOWNLOAD_WEB_OBJECT'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;key&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;w_objdata<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;destination&nbsp;=&nbsp;w_destination<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rc&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;w_rc.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;w_rc&nbsp;NE&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CONCATENATE&nbsp;'模板文件：'&nbsp;w_objnam&nbsp;'下载失败'&nbsp;INTO&nbsp;w_errtxt.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;w_errtxt&nbsp;TYPE&nbsp;'E'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;ENDIF.<br />
+ENDFORM.<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Form&nbsp;file_input<br />
+*&---------------------------------------------------------------------*<br />
+<br />
+   </div>
+   <div class="code">
+FORM file_input  CHANGING p_p_file.<br />
+&nbsp;&nbsp;DATA:lt_tab&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;filetable,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"存放文件名的内表<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_file_filter&nbsp;TYPE&nbsp;string,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"file&nbsp;filter<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_rc&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;i.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"函数返回值<br />
+<br />
+&nbsp;&nbsp;REFRESH:lt_tab.<br />
+&nbsp;&nbsp;CLEAR:lv_file_filter,lv_rc.<br />
+<br />
+&nbsp;&nbsp;lv_file_filter&nbsp;=&nbsp;'EXCEL文件|*.XLS;*.XLSX'.<br />
+<br />
+&nbsp;&nbsp;CALL&nbsp;METHOD&nbsp;cl_gui_frontend_services=&gt;file_open_dialog<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;window_title&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'选择数据文件'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;file_filter&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lv_file_filter<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;initial_directory&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'C:\'<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;CHANGING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;file_table&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lt_tab<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rc&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lv_rc<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;file_open_dialog_failed&nbsp;=&nbsp;1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cntl_error&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;error_no_gui&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;3<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;not_supported_by_gui&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;4<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTHERS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;5.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;=&nbsp;0&nbsp;AND&nbsp;lv_rc&nbsp;=&nbsp;1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;lt_tab&nbsp;INTO&nbsp;p_file&nbsp;INDEX&nbsp;1.<br />
+&nbsp;&nbsp;ELSE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;'没有选择文件或是选择文件错误！'&nbsp;TYPE&nbsp;'S'.<br />
+&nbsp;&nbsp;ENDIF.<br />
+ENDFORM.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*Text&nbsp;elements<br />
+*----------------------------------------------------------<br />
+*&nbsp;001&nbsp;选择文件<br />
+*&nbsp;T01&nbsp;提示灯<br />
+*&nbsp;T02&nbsp;状态<br />
+*&nbsp;T03&nbsp;消息<br />
+*&nbsp;T04&nbsp;采购订单号<br />
+*&nbsp;T05&nbsp;采购订单类型<br />
+*&nbsp;T06&nbsp;SAP供应商编码<br />
+*&nbsp;T07&nbsp;采购组织<br />
+*&nbsp;T08&nbsp;采购组<br />
+*&nbsp;T09&nbsp;公司代码<br />
+*&nbsp;T10&nbsp;订单日期<br />
+*&nbsp;T11&nbsp;付款条件<br />
+*&nbsp;T12&nbsp;原采购订单号<br />
+*&nbsp;T13&nbsp;订单行项目<br />
+*&nbsp;T14&nbsp;科目分配类别<br />
+*&nbsp;T15&nbsp;项目类别<br />
+*&nbsp;T16&nbsp;SAP物料编码<br />
+*&nbsp;T17&nbsp;短文本<br />
+*&nbsp;T18&nbsp;物料组<br />
+*&nbsp;T19&nbsp;采购订单数量<br />
+*&nbsp;T20&nbsp;单位<br />
+*&nbsp;T21&nbsp;交货日期<br />
+*&nbsp;T22&nbsp;净价<br />
+*&nbsp;T23&nbsp;价格单位<br />
+*&nbsp;T24&nbsp;货币<br />
+*&nbsp;T25&nbsp;工厂<br />
+*&nbsp;T26&nbsp;库存地点<br />
+*&nbsp;T27&nbsp;进项税代码<br />
+*&nbsp;T28&nbsp;总账科目编号<br />
+*&nbsp;T29&nbsp;成本中心<br />
+*&nbsp;T30&nbsp;固定资产号码<br />
+*&nbsp;T31&nbsp;采购申请号码<br />
+*&nbsp;T32&nbsp;采购申请行项目<br />
+*&nbsp;T33&nbsp;采购合同号<br />
+*&nbsp;T34&nbsp;采购合同行项目<br />
+<br />
+<br />
+*Selection&nbsp;texts<br />
+*----------------------------------------------------------<br />
+*&nbsp;P_FILE&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;文件名<br />
+<br />
+<br />
+*Messages<br />
+*----------------------------------------------------------<br />
+*<br />
+*&nbsp;Message&nbsp;class:&nbsp;Hard&nbsp;coded<br />
+*&nbsp;&nbsp;&nbsp;导入数据不能为空<br />
+            </div>
+          </td>
+        </tr>
+      </table>
+      </td>
+      </tr>
+   <tr>
+<td class="footer">Extracted by Mass Download version 1.5.2 - E.G.Mellodew. 1998-2022. Sap Release 755</td>
+   </tr>
+</table>
+</body>
+</html>

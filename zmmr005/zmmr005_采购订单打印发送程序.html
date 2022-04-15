@@ -1,0 +1,1720 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=GB2312" />
+<title>ZMMR005</title>
+<style type="text/css">
+.code{ font-family:"Courier New", Courier, monospace; color:#000; font-size:14px; background-color:#F2F4F7 }
+  .codeComment {font-family:"Courier New", Courier, monospace; color:#0000F0; font-size:14px; background-color:#F2F4F7 }
+  .normalBold{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; font-weight:800 }
+  .normalBoldLarge{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+</style>
+<style type="text/css">
+  .normal{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px }
+  .footer{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; text-align: center }
+  h2{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+  h3{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:14px; font-weight:800 }
+  .outerTable{
+   background-color:#E0E7ED;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-right-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+  .innerTable{
+   background-color:#F2F4F7;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-bottom-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+</style>
+</head>
+<body>
+<table class="outerTable">
+  <tr class="normalBoldLarge">
+     <td><h2>Code listing for: ZMMR005</h2>
+<h3> Description: 采购订单打印发送程序</h3></td>
+   </tr>
+  <tr>
+     <td>
+     <table class="innerTable">
+       <tr>
+          <td>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Report&nbsp;ZMMR005<br />
+*&---------------------------------------------------------------------*<br />
+*&<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+REPORT zmmr005.<br />
+TABLES:ekko,ekpo,eket,zmmpopost.<br />
+TYPES:BEGIN OF ty_out,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ebeln&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;ekko-ebeln,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ebelp&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;ekpo-ebelp,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bsart&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;ekko-bsart,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bstyp&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;ekko-bstyp,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;batxt&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;t161t-batxt,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lifnr&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;ekko-lifnr,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;name_org1&nbsp;TYPE&nbsp;but000-name_org1,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bedat&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;ekko-bedat,&nbsp;&nbsp;&nbsp;"凭证日期<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bukrs&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;ekko-bukrs,&nbsp;&nbsp;&nbsp;"公司代码<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;butxt&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;t001-butxt,&nbsp;&nbsp;&nbsp;"公司描述<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ekorg&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;ekko-ekorg,&nbsp;&nbsp;&nbsp;"采购组织<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ekotx&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;t024e-ekotx,&nbsp;&nbsp;"采购组织描述<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ekgrp&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;ekko-ekgrp,&nbsp;&nbsp;&nbsp;"采购组<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;eknam&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;t024-eknam,&nbsp;&nbsp;&nbsp;"采购组描述<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;zekkotext&nbsp;TYPE&nbsp;c&nbsp;LENGTH&nbsp;220,&nbsp;"抬头文本<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;loekz&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;ekpo-loekz,&nbsp;&nbsp;&nbsp;"删除标识<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;loekT&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;c&nbsp;LENGTH&nbsp;10,&nbsp;&nbsp;"删除标识<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;elikz&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;ekpo-elikz,&nbsp;&nbsp;&nbsp;"交货完成标识<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;elikT&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;c&nbsp;LENGTH&nbsp;10,&nbsp;&nbsp;"交货完成标识<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pstyp&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;ekpo-pstyp,&nbsp;&nbsp;&nbsp;"项目类别<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pstyT&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;c&nbsp;LENGTH&nbsp;10,&nbsp;&nbsp;"项目类别<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;matnr&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;ekpo-matnr,&nbsp;&nbsp;&nbsp;"物料号<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;txz01&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;ekpo-txz01,&nbsp;&nbsp;&nbsp;"短文本<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bismt&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;mara-bismt,&nbsp;&nbsp;&nbsp;"图号<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;menge&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;ekpo-menge,&nbsp;&nbsp;&nbsp;"采购订单数量<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;meins&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;ekpo-meins,&nbsp;&nbsp;&nbsp;"订单单位<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mseh6&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;t006a-mseh6,&nbsp;&nbsp;"单位描述<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;eindt&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;eket-eindt,&nbsp;&nbsp;&nbsp;"交货日期<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;werks&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;ekPO-werks,&nbsp;&nbsp;&nbsp;"工厂<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;name1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;t001w-name1,&nbsp;&nbsp;&nbsp;"工厂描述<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lgort&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;ekpo-lgort,&nbsp;&nbsp;&nbsp;"库存地点<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lgobe&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;t001l-lgobe,&nbsp;&nbsp;"库存地点描述<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;status&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;c&nbsp;LENGTH&nbsp;1,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;message&nbsp;&nbsp;&nbsp;TYPE&nbsp;c&nbsp;LENGTH&nbsp;200,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;icon&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;c&nbsp;LENGTH&nbsp;4,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Zoano&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;Zoano,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ztype&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;c&nbsp;LENGTH&nbsp;1,&nbsp;"业务类型&nbsp;&nbsp;&nbsp;1&nbsp;首次发送&nbsp;2&nbsp;订单变更<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ztypT&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;c&nbsp;LENGTH&nbsp;10,&nbsp;"业务类型&nbsp;&nbsp;&nbsp;1&nbsp;首次发送&nbsp;2&nbsp;订单变更<br />
+<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;zbname&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;zbname,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;zlastdate&nbsp;TYPE&nbsp;zlastdate,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;zlasttime&nbsp;TYPE&nbsp;zlasttime,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;adrnr&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;ekpo-adrnr,<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sel,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;END&nbsp;OF&nbsp;ty_out.<br />
+DATA gt_out TYPE TABLE OF ty_out.<br />
+DATA gs_out TYPE          ty_out.<br />
+<br />
+FIELD-SYMBOLS &lt;fs_out&gt; TYPE ty_out.<br />
+<br />
+<br />
+TYPES:BEGIN OF ty_mara,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;matnr&nbsp;TYPE&nbsp;mara-matnr,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bismt&nbsp;TYPE&nbsp;mara-bismt,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;END&nbsp;OF&nbsp;ty_mara.<br />
+DATA gt_mara TYPE TABLE OF ty_mara.<br />
+DATA gs_mara TYPE          ty_mara.<br />
+<br />
+DATA gt_zmmpolog  TYPE TABLE OF zmmpolog.<br />
+DATA gs_zmmpolog  TYPE          zmmpolog.<br />
+FIELD-SYMBOLS &lt;FS_zmmpolog&gt; TYPE zmmpolog.<br />
+<br />
+DATA gt_zmmpopost TYPE TABLE OF zmmpopost.<br />
+DATA gs_zmmpopost TYPE          zmmpopost.<br />
+<br />
+DATA gt_t001w TYPE TABLE OF t001w.<br />
+DATA gS_t001w TYPE          t001w.<br />
+<br />
+DATA gt_t001l TYPE TABLE OF t001l.<br />
+DATA gS_t001l TYPE          t001l.<br />
+<br />
+DATA gt_t001  TYPE TABLE OF t001.<br />
+DATA gS_t001  TYPE          t001.<br />
+<br />
+DATA gt_t024  TYPE TABLE OF t024.<br />
+DATA gS_t024  TYPE          t024.<br />
+<br />
+DATA gT_T024E TYPE TABLE OF t024e.<br />
+DATA gS_T024E TYPE          t024e.<br />
+<br />
+DATA gt_t161t TYPE TABLE OF t161t.<br />
+DATA gs_t161t TYPE          t161t.<br />
+<br />
+DATA GT_t006a TYPE TABLE OF t006a.<br />
+DATA GS_t006a TYPE          t006a.<br />
+<br />
+DATA gt_t163y TYPE TABLE OF t163y.<br />
+DATA gs_t163y TYPE          t163y.<br />
+<br />
+TYPES:BEGIN OF ty_but000,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;partner&nbsp;&nbsp;&nbsp;TYPE&nbsp;but000-partner,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;name_org1&nbsp;TYPE&nbsp;but000-name_org1,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;END&nbsp;OF&nbsp;ty_but000.<br />
+DATA gt_but000 TYPE TABLE OF ty_but000.<br />
+DATA gs_but000 TYPE          ty_but000.<br />
+<br />
+<br />
+SELECTION-SCREEN BEGIN OF BLOCK b2 WITH FRAME TITLE TEXT-002.<br />
+&nbsp;&nbsp;PARAMETERS:p_get&nbsp;RADIOBUTTON&nbsp;GROUP&nbsp;gr1&nbsp;DEFAULT&nbsp;'X',<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;p_sen&nbsp;RADIOBUTTON&nbsp;GROUP&nbsp;gr1.<br />
+<br />
+&nbsp;&nbsp;PARAMETERS:p_r1&nbsp;AS&nbsp;CHECKBOX,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;p_r2&nbsp;AS&nbsp;CHECKBOX&nbsp;DEFAULT&nbsp;'X',<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;p_r3&nbsp;AS&nbsp;CHECKBOX&nbsp;DEFAULT&nbsp;'X'.<br />
+SELECTION-SCREEN END OF BLOCK b2.<br />
+<br />
+<br />
+SELECTION-SCREEN BEGIN OF BLOCK b1 WITH FRAME TITLE TEXT-001.<br />
+&nbsp;&nbsp;SELECT-OPTIONS:s_ekorg&nbsp;FOR&nbsp;ekko-ekorg&nbsp;OBLIGATORY.<br />
+&nbsp;&nbsp;SELECT-OPTIONS:s_BSART&nbsp;FOR&nbsp;ekko-bsart.<br />
+&nbsp;&nbsp;SELECT-OPTIONS:s_BUKRS&nbsp;FOR&nbsp;ekko-bukrs.<br />
+&nbsp;&nbsp;SELECT-OPTIONS:s_ERNAM&nbsp;FOR&nbsp;ekko-ernam.<br />
+&nbsp;&nbsp;SELECT-OPTIONS:s_AEDAT&nbsp;FOR&nbsp;ekko-aedat.<br />
+&nbsp;&nbsp;SELECT-OPTIONS:s_LIFNR&nbsp;FOR&nbsp;ekko-lifnr.<br />
+&nbsp;&nbsp;SELECT-OPTIONS:s_EKGRP&nbsp;FOR&nbsp;ekko-ekgrp.<br />
+&nbsp;&nbsp;SELECT-OPTIONS:s_BEDAT&nbsp;FOR&nbsp;ekko-bedat.<br />
+&nbsp;&nbsp;SELECT-OPTIONS:s_EBELN&nbsp;FOR&nbsp;ekko-ebeln.<br />
+&nbsp;&nbsp;SELECT-OPTIONS:s_EBELP&nbsp;FOR&nbsp;ekPO-ebelp.<br />
+&nbsp;&nbsp;SELECT-OPTIONS:s_KNTTP&nbsp;FOR&nbsp;ekPO-knttp.<br />
+&nbsp;&nbsp;SELECT-OPTIONS:s_PSTYP&nbsp;FOR&nbsp;ekPO-pstyp.<br />
+&nbsp;&nbsp;SELECT-OPTIONS:s_MATNR&nbsp;FOR&nbsp;ekPO-matnr.<br />
+&nbsp;&nbsp;SELECT-OPTIONS:s_TXZ01&nbsp;FOR&nbsp;ekPO-txz01.<br />
+&nbsp;&nbsp;SELECT-OPTIONS:s_MATKL&nbsp;FOR&nbsp;ekPO-matkl.<br />
+&nbsp;&nbsp;SELECT-OPTIONS:s_BEDNR&nbsp;FOR&nbsp;ekPO-bednr.<br />
+&nbsp;&nbsp;SELECT-OPTIONS:s_WERKS&nbsp;FOR&nbsp;ekPO-werks.<br />
+&nbsp;&nbsp;SELECT-OPTIONS:s_LGORT&nbsp;FOR&nbsp;ekPO-lgort.<br />
+&nbsp;&nbsp;SELECT-OPTIONS:s_EINDT&nbsp;FOR&nbsp;ekET-eindt.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;SELECT-OPTIONS:s_zbname&nbsp;FOR&nbsp;zmmpopost-zbname.<br />
+*&nbsp;&nbsp;SELECT-OPTIONS:s_zldate&nbsp;FOR&nbsp;zmmpopost-zlastdate.<br />
+*&nbsp;&nbsp;SELECT-OPTIONS:s_zltime&nbsp;FOR&nbsp;zmmpopost-zlasttime.<br />
+<br />
+<br />
+   </div>
+   <div class="code">
+SELECTION-SCREEN END OF BLOCK b1.<br />
+<br />
+AT SELECTION-SCREEN.<br />
+&nbsp;&nbsp;PERFORM&nbsp;check_parameters.<br />
+<br />
+START-OF-SELECTION.<br />
+<br />
+&nbsp;&nbsp;PERFORM&nbsp;select_data.<br />
+&nbsp;&nbsp;PERFORM&nbsp;process_data.<br />
+&nbsp;&nbsp;PERFORM&nbsp;display_data.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Form&nbsp;check_parameters<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;text<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM check_parameters.<br />
+<br />
+<br />
+<br />
+<br />
+ENDFORM.<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Form&nbsp;select_data<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;text<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM select_data.<br />
+&nbsp;&nbsp;DATA&nbsp;lt_out&nbsp;TYPE&nbsp;TABLE&nbsp;OF&nbsp;ty_out.<br />
+<br />
+&nbsp;&nbsp;SELECT&nbsp;ekko~ebeln,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ekpo~ebelp,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ekko~bsart,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ekko~bstyp,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ekko~lifnr,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ekko~bedat,&nbsp;&nbsp;&nbsp;"凭证日期<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ekko~bukrs,&nbsp;&nbsp;&nbsp;"公司代码<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ekko~ekorg,&nbsp;&nbsp;&nbsp;"采购组织<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ekko~ekgrp,&nbsp;&nbsp;&nbsp;"采购组<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ekpo~loekz,&nbsp;&nbsp;&nbsp;"删除标识<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ekpo~elikz,&nbsp;&nbsp;&nbsp;"交货完成标识<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ekpo~pstyp,&nbsp;&nbsp;&nbsp;"项目类别<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ekpo~matnr,&nbsp;&nbsp;&nbsp;"物料号<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ekpo~txz01,&nbsp;&nbsp;&nbsp;"短文本<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ekpo~menge,&nbsp;&nbsp;&nbsp;"采购订单数量<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ekpo~meins,&nbsp;&nbsp;&nbsp;"订单单位<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ekPO~werks,&nbsp;&nbsp;&nbsp;"工厂<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ekpo~lgort,&nbsp;&nbsp;&nbsp;"库存地点<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ekET~eindt,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ekpo~adrnr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;CORRESPONDING&nbsp;FIELDS&nbsp;OF&nbsp;TABLE&nbsp;@gt_out<br />
+&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;ekko<br />
+&nbsp;&nbsp;&nbsp;&nbsp;INNER&nbsp;JOIN&nbsp;ekpo&nbsp;ON&nbsp;ekpo~ebeln&nbsp;=&nbsp;ekko~ebeln<br />
+&nbsp;&nbsp;&nbsp;&nbsp;LEFT&nbsp;JOIN&nbsp;&nbsp;eket&nbsp;ON&nbsp;eket~ebeln&nbsp;=&nbsp;ekpo~ebeln<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;eket~ebelp&nbsp;=&nbsp;ekpo~ebelp<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;eket~etenr&nbsp;=&nbsp;'0001'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;ekko~ekorg&nbsp;IN&nbsp;@s_ekorg<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;ekko~bsart&nbsp;IN&nbsp;@s_bsart<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;ekko~bukrs&nbsp;IN&nbsp;@s_bukrs<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;ekko~ernam&nbsp;IN&nbsp;@s_ernam<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;ekko~aedat&nbsp;IN&nbsp;@s_aedat<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;ekko~lifnr&nbsp;IN&nbsp;@s_lifnr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;ekko~ekgrp&nbsp;IN&nbsp;@s_ekgrp<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;ekko~bedat&nbsp;IN&nbsp;@s_bedat<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;ekko~ebeln&nbsp;IN&nbsp;@s_ebeln<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;ekpo~ebelp&nbsp;IN&nbsp;@s_ebelp<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;ekpo~knttp&nbsp;IN&nbsp;@s_knttp<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;ekpo~pstyp&nbsp;IN&nbsp;@s_PSTYP<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;ekpo~matnr&nbsp;IN&nbsp;@s_MATNR<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;ekpo~txz01&nbsp;IN&nbsp;@s_TXZ01<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;ekpo~matkl&nbsp;IN&nbsp;@s_MATKL<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;ekpo~bednr&nbsp;IN&nbsp;@s_BEDNR<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;ekpo~werks&nbsp;IN&nbsp;@s_WERKS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;ekpo~lgort&nbsp;IN&nbsp;@s_LGORT<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;ekET~eindt&nbsp;IN&nbsp;@s_eindt<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;ekpo~bstyp&nbsp;&nbsp;=&nbsp;'F'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;ekko~memory&nbsp;=&nbsp;''.<br />
+<br />
+<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;p_sen&nbsp;=&nbsp;'X'&nbsp;AND&nbsp;gt_out[]&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;DATA&nbsp;lt_output&nbsp;TYPE&nbsp;TABLE&nbsp;OF&nbsp;ty_out.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR:lt_output[].<br />
+&nbsp;&nbsp;&nbsp;&nbsp;lt_output[]&nbsp;=&nbsp;gt_out[].<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SORT&nbsp;lt_output&nbsp;BY&nbsp;ebeln&nbsp;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;DELETE&nbsp;ADJACENT&nbsp;DUPLICATES&nbsp;FROM&nbsp;lt_output&nbsp;COMPARING&nbsp;ebeln.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR:gt_out[].<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;ekko~ebeln,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ekpo~ebelp,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ekko~bsart,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ekko~bstyp,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ekko~lifnr,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ekko~bedat,&nbsp;&nbsp;&nbsp;"凭证日期<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ekko~bukrs,&nbsp;&nbsp;&nbsp;"公司代码<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ekko~ekorg,&nbsp;&nbsp;&nbsp;"采购组织<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ekko~ekgrp,&nbsp;&nbsp;&nbsp;"采购组<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ekpo~loekz,&nbsp;&nbsp;&nbsp;"删除标识<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ekpo~elikz,&nbsp;&nbsp;&nbsp;"交货完成标识<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ekpo~pstyp,&nbsp;&nbsp;&nbsp;"项目类别<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ekpo~matnr,&nbsp;&nbsp;&nbsp;"物料号<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ekpo~txz01,&nbsp;&nbsp;&nbsp;"短文本<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ekpo~menge,&nbsp;&nbsp;&nbsp;"采购订单数量<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ekpo~meins,&nbsp;&nbsp;&nbsp;"订单单位<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ekPO~werks,&nbsp;&nbsp;&nbsp;"工厂<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ekpo~lgort,&nbsp;&nbsp;&nbsp;"库存地点<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ekET~eindt,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ekpo~adrnr<br />
+&nbsp;&nbsp;INTO&nbsp;CORRESPONDING&nbsp;FIELDS&nbsp;OF&nbsp;TABLE&nbsp;@gt_out<br />
+&nbsp;&nbsp;FROM&nbsp;ekko<br />
+&nbsp;&nbsp;INNER&nbsp;JOIN&nbsp;ekpo&nbsp;ON&nbsp;ekpo~ebeln&nbsp;=&nbsp;ekko~ebeln<br />
+&nbsp;&nbsp;LEFT&nbsp;JOIN&nbsp;&nbsp;eket&nbsp;ON&nbsp;eket~ebeln&nbsp;=&nbsp;ekpo~ebeln<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;eket~ebelp&nbsp;=&nbsp;ekpo~ebelp<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;eket~etenr&nbsp;=&nbsp;'0001'<br />
+&nbsp;&nbsp;FOR&nbsp;ALL&nbsp;ENTRIES&nbsp;IN&nbsp;@lt_output<br />
+&nbsp;&nbsp;WHERE&nbsp;ekko~ebeln&nbsp;=&nbsp;@lt_output-ebeln.<br />
+<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*【1】未交货完成的：勾选后增加逻辑：EKPO-ELIKZ&nbsp;=&nbsp;空<br />
+*【2】未删除的：勾选后增加逻辑：EKPO-LOEKZ&nbsp;=&nbsp;空<br />
+*【3】未曾发送OA的：勾选后增加逻辑：排除EKKO-EBELN&nbsp;=&nbsp;ZMMPO-EBELN的条目<br />
+<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;CLEAR:lt_out[].<br />
+&nbsp;&nbsp;lt_out[]&nbsp;=&nbsp;gt_out[].<br />
+&nbsp;&nbsp;SORT&nbsp;lt_out&nbsp;BY&nbsp;ebeln.<br />
+&nbsp;&nbsp;DELETE&nbsp;ADJACENT&nbsp;DUPLICATES&nbsp;FROM&nbsp;lt_out&nbsp;COMPARING&nbsp;ebeln.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;lt_out[]&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;*<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;CORRESPONDING&nbsp;FIELDS&nbsp;OF&nbsp;TABLE&nbsp;GT_zmmpopost<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;zmmpopost<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FOR&nbsp;ALL&nbsp;ENTRIES&nbsp;IN&nbsp;lt_out<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;ebeln&nbsp;=&nbsp;lt_out-ebeln.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;p_r1&nbsp;=&nbsp;'X'.&nbsp;"未交货完成的<br />
+&nbsp;&nbsp;&nbsp;&nbsp;DELETE&nbsp;gt_out&nbsp;WHERE&nbsp;elikz&nbsp;&lt;&gt;&nbsp;''.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;p_r2&nbsp;=&nbsp;'X'.&nbsp;"未删除的<br />
+&nbsp;&nbsp;&nbsp;&nbsp;DELETE&nbsp;gt_out&nbsp;WHERE&nbsp;loekz&nbsp;&lt;&gt;&nbsp;''.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;p_r3&nbsp;=&nbsp;'X'.&nbsp;"未曾发送OA的<br />
+&nbsp;&nbsp;&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;GT_zmmpopost&nbsp;INTO&nbsp;GS_zmmpopost.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DELETE&nbsp;gt_out&nbsp;WHERE&nbsp;ebeln&nbsp;=&nbsp;GS_zmmpopost-ebeln.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDLOOP.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;CLEAR:lt_out[].<br />
+&nbsp;&nbsp;lt_out[]&nbsp;=&nbsp;gt_out[].<br />
+&nbsp;&nbsp;SORT&nbsp;lt_out&nbsp;BY&nbsp;matnr.<br />
+&nbsp;&nbsp;DELETE&nbsp;ADJACENT&nbsp;DUPLICATES&nbsp;FROM&nbsp;lt_out&nbsp;COMPARING&nbsp;matnr.<br />
+&nbsp;&nbsp;IF&nbsp;lt_out[]&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;matnr&nbsp;bismt<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;CORRESPONDING&nbsp;FIELDS&nbsp;OF&nbsp;TABLE&nbsp;gt_mara<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;mara<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FOR&nbsp;ALL&nbsp;ENTRIES&nbsp;IN&nbsp;lt_out<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;matnr&nbsp;=&nbsp;lt_out-matnr.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*but000<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;CLEAR:lt_out[].<br />
+&nbsp;&nbsp;lt_out[]&nbsp;=&nbsp;gt_out[].<br />
+&nbsp;&nbsp;SORT&nbsp;lt_out&nbsp;BY&nbsp;lifnr.<br />
+&nbsp;&nbsp;DELETE&nbsp;ADJACENT&nbsp;DUPLICATES&nbsp;FROM&nbsp;lt_out&nbsp;COMPARING&nbsp;lifnr.<br />
+&nbsp;&nbsp;IF&nbsp;lt_out[]&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;partner&nbsp;name_org1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;CORRESPONDING&nbsp;FIELDS&nbsp;OF&nbsp;TABLE&nbsp;gt_but000<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;but000<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FOR&nbsp;ALL&nbsp;ENTRIES&nbsp;IN&nbsp;lt_out<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;partner&nbsp;=&nbsp;lt_out-lifnr.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*t006a<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;CLEAR:lt_out[].<br />
+&nbsp;&nbsp;lt_out[]&nbsp;=&nbsp;gt_out[].<br />
+&nbsp;&nbsp;SORT&nbsp;lt_out&nbsp;BY&nbsp;mEINS.<br />
+&nbsp;&nbsp;DELETE&nbsp;ADJACENT&nbsp;DUPLICATES&nbsp;FROM&nbsp;lt_out&nbsp;COMPARING&nbsp;meins.<br />
+&nbsp;&nbsp;IF&nbsp;lt_out[]&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;*<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;CORRESPONDING&nbsp;FIELDS&nbsp;OF&nbsp;TABLE&nbsp;gt_t006a<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;t006a<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FOR&nbsp;ALL&nbsp;ENTRIES&nbsp;IN&nbsp;lt_out<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;msehi&nbsp;=&nbsp;lt_out-meins<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;spras&nbsp;=&nbsp;sy-langu.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+<br />
+&nbsp;&nbsp;CLEAR:gt_t001w[].<br />
+&nbsp;&nbsp;SELECT&nbsp;*<br />
+&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;CORRESPONDING&nbsp;FIELDS&nbsp;OF&nbsp;TABLE&nbsp;GT_t001w<br />
+&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;t001w.<br />
+<br />
+&nbsp;&nbsp;CLEAR:GT_t001l[].<br />
+&nbsp;&nbsp;SELECT&nbsp;*<br />
+&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;CORRESPONDING&nbsp;FIELDS&nbsp;OF&nbsp;TABLE&nbsp;GT_t001l<br />
+&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;t001l.<br />
+<br />
+&nbsp;&nbsp;CLEAR:GT_t001[].<br />
+&nbsp;&nbsp;SELECT&nbsp;*<br />
+&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;CORRESPONDING&nbsp;FIELDS&nbsp;OF&nbsp;TABLE&nbsp;GT_t001<br />
+&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;t001.<br />
+<br />
+&nbsp;&nbsp;CLEAR:gt_t024[].<br />
+&nbsp;&nbsp;SELECT&nbsp;*<br />
+&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;CORRESPONDING&nbsp;FIELDS&nbsp;OF&nbsp;TABLE&nbsp;GT_t024<br />
+&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;t024.<br />
+<br />
+&nbsp;&nbsp;CLEAR:gt_t024e[].<br />
+&nbsp;&nbsp;SELECT&nbsp;*<br />
+&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;CORRESPONDING&nbsp;FIELDS&nbsp;OF&nbsp;TABLE&nbsp;GT_t024e<br />
+&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;t024e.<br />
+<br />
+&nbsp;&nbsp;CLEAR:gt_t161t.<br />
+&nbsp;&nbsp;SELECT&nbsp;*<br />
+&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;CORRESPONDING&nbsp;FIELDS&nbsp;OF&nbsp;TABLE&nbsp;gt_t161t<br />
+&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;t161t<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;spras&nbsp;=&nbsp;sy-langu.<br />
+<br />
+&nbsp;&nbsp;CLEAR:gt_t163y.<br />
+&nbsp;&nbsp;SELECT&nbsp;*<br />
+&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;CORRESPONDING&nbsp;FIELDS&nbsp;OF&nbsp;TABLE&nbsp;gt_t163y<br />
+&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;t163y<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;spras&nbsp;=&nbsp;sy-langu.<br />
+<br />
+<br />
+ENDFORM.<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Form&nbsp;process_data<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;text<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM process_data.<br />
+<br />
+&nbsp;&nbsp;SORT&nbsp;gt_mara&nbsp;&nbsp;&nbsp;BY&nbsp;matnr.<br />
+&nbsp;&nbsp;SORT&nbsp;gt_t001w&nbsp;&nbsp;BY&nbsp;werks.<br />
+&nbsp;&nbsp;SORT&nbsp;gt_t001L&nbsp;&nbsp;BY&nbsp;werks&nbsp;lgort.<br />
+&nbsp;&nbsp;SORT&nbsp;gt_t001&nbsp;&nbsp;&nbsp;BY&nbsp;bukrs.<br />
+&nbsp;&nbsp;SORT&nbsp;gt_t024&nbsp;&nbsp;&nbsp;BY&nbsp;ekgrp.<br />
+&nbsp;&nbsp;SORT&nbsp;gt_t024E&nbsp;&nbsp;BY&nbsp;ekorg.<br />
+&nbsp;&nbsp;SORT&nbsp;GT_t006a&nbsp;&nbsp;BY&nbsp;msehi.<br />
+&nbsp;&nbsp;SORT&nbsp;GT_but000&nbsp;BY&nbsp;partner.<br />
+&nbsp;&nbsp;SORT&nbsp;GT_t161t&nbsp;&nbsp;BY&nbsp;bsart&nbsp;bstyp.<br />
+<br />
+&nbsp;&nbsp;SORT&nbsp;GT_t163y&nbsp;BY&nbsp;pstyp.<br />
+<br />
+&nbsp;&nbsp;SORT&nbsp;GT_zmmpopost&nbsp;BY&nbsp;ebeln.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*取抬头文本<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;DATA&nbsp;lt_out&nbsp;TYPE&nbsp;TABLE&nbsp;OF&nbsp;ty_out.<br />
+&nbsp;&nbsp;DATA&nbsp;ls_out&nbsp;TYPE&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ty_out.<br />
+&nbsp;&nbsp;CLEAR:lt_out[].<br />
+&nbsp;&nbsp;lt_out[]&nbsp;=&nbsp;gt_out[].<br />
+&nbsp;&nbsp;SORT&nbsp;lt_out&nbsp;BY&nbsp;ebeln.<br />
+&nbsp;&nbsp;DELETE&nbsp;ADJACENT&nbsp;DUPLICATES&nbsp;FROM&nbsp;lt_out&nbsp;COMPARING&nbsp;ebeln.<br />
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;lt_out&nbsp;ASSIGNING&nbsp;FIELD-SYMBOL(&lt;ls_out&gt;).<br />
+<br />
+   </div>
+   <div class="codeComment">
+*取长文本<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;GET_zekkotext&nbsp;USING&nbsp;&lt;ls_out&gt;-ebeln<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CHANGING&nbsp;&lt;ls_out&gt;-zekkotext.<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+<br />
+&nbsp;&nbsp;SORT&nbsp;lt_out&nbsp;BY&nbsp;ebeln.<br />
+<br />
+<br />
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;gt_out&nbsp;ASSIGNING&nbsp;&lt;fs_out&gt;.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*长文本<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR:ls_out.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;lt_out&nbsp;INTO&nbsp;ls_out&nbsp;WITH&nbsp;KEY&nbsp;ebeln&nbsp;=&nbsp;&lt;fs_out&gt;-ebeln&nbsp;BINARY&nbsp;SEARCH.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;fs_out&gt;-zekkotext&nbsp;=&nbsp;ls_out-zekkotext.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*采购订单凭证类型描述<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;get_batxt&nbsp;USING&nbsp;&lt;fs_out&gt;-bsart<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;fs_out&gt;-bstyp<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CHANGING&nbsp;&lt;fs_out&gt;-batxt.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*供应商名称<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;GET_name_org1&nbsp;USING&nbsp;&lt;fs_out&gt;-lifnr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CHANGING&nbsp;&lt;fs_out&gt;-name_org1.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*单位描述<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;GET_mseh6&nbsp;USING&nbsp;&lt;fs_out&gt;-meins<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CHANGING&nbsp;&lt;fs_out&gt;-mseh6.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*公司描述<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;GET_butxt&nbsp;USING&nbsp;&lt;fs_out&gt;-bukrs<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CHANGING&nbsp;&lt;fs_out&gt;-butxt.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*采购组织描述<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;GET_ekotx&nbsp;USING&nbsp;&lt;fs_out&gt;-ekorg<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CHANGING&nbsp;&lt;fs_out&gt;-ekotx.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*采购组描述<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;GET_eknam&nbsp;USING&nbsp;&lt;fs_out&gt;-ekgrp<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CHANGING&nbsp;&lt;fs_out&gt;-eknam.<br />
+   </div>
+   <div class="codeComment">
+*工厂描述<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;get_name1&nbsp;USING&nbsp;&lt;fs_out&gt;-werks<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CHANGING&nbsp;&lt;fs_out&gt;-name1.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*库存地点描述<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;GET_lgobe&nbsp;USING&nbsp;&lt;fs_out&gt;-lgort<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;fs_out&gt;-werks<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CHANGING&nbsp;&lt;fs_out&gt;-lgobe.<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;CASE&nbsp;&lt;fs_out&gt;-loekz.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;fs_out&gt;-loekT&nbsp;=&nbsp;'冻结'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'L'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;fs_out&gt;-loekT&nbsp;=&nbsp;'删除'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;OTHERS.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;fs_out&gt;-loekT&nbsp;=&nbsp;'未删除'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDCASE.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CASE&nbsp;&lt;fs_out&gt;-elikz.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;fs_out&gt;-elikT&nbsp;=&nbsp;'交货完成或订单关闭'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;OTHERS.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;fs_out&gt;-elikT&nbsp;=&nbsp;'未完成'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDCASE.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR:GS_t163y.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;GT_t163y&nbsp;INTO&nbsp;GS_t163y&nbsp;WITH&nbsp;KEY&nbsp;pstyp&nbsp;=&nbsp;&lt;fs_out&gt;-pstyp&nbsp;BINARY&nbsp;SEARCH.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;fs_out&gt;-pstyT&nbsp;=&nbsp;GS_t163y-ptext.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*发送类型<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR:GS_zmmpopost.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;GT_zmmpopost&nbsp;INTO&nbsp;GS_zmmpopost<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WITH&nbsp;KEY&nbsp;ebeln&nbsp;=&nbsp;&lt;fs_out&gt;-ebeln&nbsp;BINARY&nbsp;SEARCH.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;fs_out&gt;-ztype&nbsp;=&nbsp;'2'.&nbsp;"2&nbsp;订单变更<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;fs_out&gt;-ztypT&nbsp;=&nbsp;'订单变更'.&nbsp;"2<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;fs_out&gt;-zbname&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;GS_zmmpopost-zbname.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;fs_out&gt;-zlastdate&nbsp;=&nbsp;GS_zmmpopost-zlastdate.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;fs_out&gt;-zlasttime&nbsp;=&nbsp;GS_zmmpopost-zlasttime.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ELSE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;fs_out&gt;-ztype&nbsp;=&nbsp;'1'.&nbsp;"1&nbsp;首次发送<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;fs_out&gt;-ztypT&nbsp;=&nbsp;'首次发送'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+ENDFORM.<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Form&nbsp;display_data<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;text<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM display_data.<br />
+<br />
+&nbsp;&nbsp;DATA&nbsp;lv_text&nbsp;TYPE&nbsp;&nbsp;string.<br />
+&nbsp;&nbsp;DATA&nbsp;lt_fcat&nbsp;TYPE&nbsp;slis_t_fieldcat_alv.<br />
+&nbsp;&nbsp;DATA&nbsp;ls_layo&nbsp;TYPE&nbsp;slis_layout_alv.<br />
+&nbsp;&nbsp;DATA&nbsp;lt_sort&nbsp;TYPE&nbsp;slis_t_sortinfo_alv.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;gt_out[]&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;s004(sv).<br />
+&nbsp;&nbsp;&nbsp;&nbsp;RETURN.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+<br />
+&nbsp;&nbsp;SORT&nbsp;gt_out&nbsp;BY&nbsp;ebeln&nbsp;ebelp.<br />
+<br />
+&nbsp;&nbsp;lv_text&nbsp;=&nbsp;'正在输出...'.<br />
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'SAPGUI_PROGRESS_INDICATOR'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text&nbsp;=&nbsp;lv_text.<br />
+<br />
+&nbsp;&nbsp;PERFORM&nbsp;grid_layo_set&nbsp;CHANGING&nbsp;&nbsp;ls_layo.<br />
+&nbsp;&nbsp;PERFORM&nbsp;grid_sort_set&nbsp;TABLES&nbsp;&nbsp;&nbsp;&nbsp;lt_sort.<br />
+&nbsp;&nbsp;PERFORM&nbsp;grid_fcat_set&nbsp;CHANGING&nbsp;&nbsp;lt_fcat.<br />
+<br />
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'REUSE_ALV_GRID_DISPLAY'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_callback_program&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;sy-repid<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_callback_pf_status_set&nbsp;=&nbsp;'GRID_PF_STATUS_SET'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_callback_user_command&nbsp;&nbsp;=&nbsp;'GRID_USER_COMMAND'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_callback_top_of_page&nbsp;&nbsp;&nbsp;=&nbsp;'GRID_TOP_OF_PAGE&nbsp;'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;is_layout&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_layo<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it_fieldcat&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lt_fcat<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it_sort&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lt_sort<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_default&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'X'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_save&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'U'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;TABLES<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;t_outtab&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;gt_out<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;program_error&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTHERS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;2.<br />
+&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;&lt;&gt;&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;ID&nbsp;sy-msgid&nbsp;TYPE&nbsp;sy-msgty&nbsp;NUMBER&nbsp;sy-msgno<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WITH&nbsp;sy-msgv1&nbsp;sy-msgv2&nbsp;sy-msgv3&nbsp;sy-msgv4.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+ENDFORM.<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;grid_layo_set<br />
+*&---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM grid_layo_set  CHANGING  cs_layo TYPE slis_layout_alv.<br />
+&nbsp;&nbsp;cs_layo-colwidth_optimize&nbsp;&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;cs_layo-box_fieldname&nbsp;=&nbsp;'SEL'.<br />
+ENDFORM.                    "grid_layo_set<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;grid_sort_set<br />
+*&---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM grid_sort_set  TABLES  ct_sort TYPE slis_t_sortinfo_alv.<br />
+&nbsp;&nbsp;DATA&nbsp;ls_sort&nbsp;TYPE&nbsp;slis_sortinfo_alv.<br />
+<br />
+ENDFORM.                    "grid_sort_set<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;grid_pf_status_set<br />
+*&---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM grid_pf_status_set USING rt_extab TYPE slis_t_extab.<br />
+<br />
+&nbsp;&nbsp;CASE&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;p_GET.&nbsp;"查询<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;'SEND'&nbsp;&nbsp;&nbsp;TO&nbsp;rt_extab.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;p_SEN.&nbsp;"发送<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;'ZPRINT'&nbsp;&nbsp;&nbsp;TO&nbsp;rt_extab.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;OTHERS.<br />
+&nbsp;&nbsp;ENDCASE.<br />
+<br />
+&nbsp;&nbsp;SET&nbsp;PF-STATUS&nbsp;'STANDARD_FULLSCREEN'&nbsp;EXCLUDING&nbsp;rt_extab.<br />
+ENDFORM.                    "grid_pf_status_set<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;grid_user_command<br />
+*&---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM grid_top_of_page.<br />
+&nbsp;&nbsp;DATA&nbsp;lv_line&nbsp;TYPE&nbsp;char10.<br />
+&nbsp;&nbsp;DATA&nbsp;lv_tabix&nbsp;TYPE&nbsp;p.<br />
+&nbsp;&nbsp;DATA:&nbsp;lt_header&nbsp;TYPE&nbsp;slis_t_listheader,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lw_header&nbsp;LIKE&nbsp;LINE&nbsp;OF&nbsp;lt_header.<br />
+&nbsp;&nbsp;CLEAR&nbsp;lw_header.<br />
+<br />
+&nbsp;&nbsp;DESCRIBE&nbsp;TABLE&nbsp;gt_out&nbsp;LINES&nbsp;lv_tabix.<br />
+&nbsp;&nbsp;lv_line&nbsp;=&nbsp;lv_tabix.<br />
+&nbsp;&nbsp;lw_header-typ&nbsp;&nbsp;=&nbsp;'S'.<br />
+&nbsp;&nbsp;CONCATENATE&nbsp;TEXT-q01&nbsp;lv_line&nbsp;INTO&nbsp;lw_header-info.<br />
+&nbsp;&nbsp;APPEND&nbsp;lw_header&nbsp;TO&nbsp;lt_header.<br />
+&nbsp;&nbsp;CLEAR&nbsp;lw_header.<br />
+<br />
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'REUSE_ALV_COMMENTARY_WRITE'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it_list_commentary&nbsp;=&nbsp;lt_header.<br />
+&nbsp;&nbsp;"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_logo&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'ENJOYSAP_LOGO'.<br />
+ENDFORM.                    "grid_top_of_page<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;GRID_USER_COMMAND<br />
+*&---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM grid_user_command USING UV_uscomm LIKE sy-ucomm<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;US_selfield&nbsp;TYPE&nbsp;slis_selfield&nbsp;.<br />
+<br />
+&nbsp;&nbsp;DATA&nbsp;lv_line&nbsp;TYPE&nbsp;i.<br />
+&nbsp;&nbsp;DATA&nbsp;wa_out&nbsp;&nbsp;TYPE&nbsp;ty_out.<br />
+&nbsp;&nbsp;lv_line&nbsp;=&nbsp;us_selfield-tabindex.<br />
+&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;gt_out&nbsp;INTO&nbsp;wa_out&nbsp;WITH&nbsp;KEY&nbsp;sel&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;&lt;&gt;&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;'请选择行.....'&nbsp;TYPE&nbsp;'E'.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;DATA&nbsp;lv_answer&nbsp;TYPE&nbsp;c.<br />
+&nbsp;&nbsp;CLEAR:lv_answer.<br />
+   </div>
+   <div class="codeComment">
+*<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;CASE&nbsp;UV_uscomm.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'SEND'.&nbsp;&nbsp;&nbsp;"发送<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;confirm<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'发送审批'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'请确认是否执行'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CHANGING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_answer.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CHECK&nbsp;&nbsp;lv_answer&nbsp;=&nbsp;1.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;send_oa.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'RECALL'.&nbsp;"撤回<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;confirm<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'撤回审批'<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'请确认是否执行'<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CHANGING<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_answer.<br />
+*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CHECK&nbsp;&nbsp;lv_answer&nbsp;=&nbsp;1.<br />
+<br />
+<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'ZPRINT'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;call_print.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'&IC1'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;OTHERS.<br />
+&nbsp;&nbsp;ENDCASE.<br />
+<br />
+&nbsp;&nbsp;us_selfield-col_stable&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;us_selfield-row_stable&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;us_selfield-refresh&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'X'.<br />
+<br />
+ENDFORM.                    "FRM_ALV_COMMAND<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;grid_fcat_set<br />
+*&---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM grid_fcat_set  CHANGING ct_fcat TYPE  slis_t_fieldcat_alv.<br />
+&nbsp;&nbsp;DATA&nbsp;ls_fcat&nbsp;TYPE&nbsp;slis_fieldcat_alv.<br />
+&nbsp;&nbsp;DATA&nbsp;lv_pos&nbsp;&nbsp;TYPE&nbsp;i.<br />
+<br />
+&nbsp;&nbsp;ct_fcat&nbsp;=&nbsp;VALUE&nbsp;#(<br />
+&nbsp;&nbsp;(&nbsp;fieldname&nbsp;=&nbsp;'ICON'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;seltext_l&nbsp;=&nbsp;'指示灯'&nbsp;)<br />
+&nbsp;&nbsp;(&nbsp;fieldname&nbsp;=&nbsp;'ZTYPT'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;seltext_l&nbsp;=&nbsp;'业务类型'&nbsp;)<br />
+&nbsp;&nbsp;(&nbsp;fieldname&nbsp;=&nbsp;'EBELN'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;seltext_l&nbsp;=&nbsp;'采购订单'&nbsp;ref_fieldname&nbsp;=&nbsp;'EBELN'&nbsp;ref_tabname&nbsp;=&nbsp;'EKKO')<br />
+&nbsp;&nbsp;(&nbsp;fieldname&nbsp;=&nbsp;'EBELP'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;seltext_l&nbsp;=&nbsp;'采购订单行'&nbsp;)<br />
+&nbsp;&nbsp;(&nbsp;fieldname&nbsp;=&nbsp;'BSART'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;seltext_l&nbsp;=&nbsp;'采购类型'&nbsp;)<br />
+&nbsp;&nbsp;(&nbsp;fieldname&nbsp;=&nbsp;'BATXT'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;seltext_l&nbsp;=&nbsp;'采购类型描述'&nbsp;)<br />
+&nbsp;&nbsp;(&nbsp;fieldname&nbsp;=&nbsp;'LIFNR'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;seltext_l&nbsp;=&nbsp;'供应商'&nbsp;ref_fieldname&nbsp;=&nbsp;'LIFNR'&nbsp;ref_tabname&nbsp;=&nbsp;'LFA1'&nbsp;)<br />
+&nbsp;&nbsp;(&nbsp;fieldname&nbsp;=&nbsp;'NAME_ORG1'&nbsp;seltext_l&nbsp;=&nbsp;'供应商名称'&nbsp;)<br />
+&nbsp;&nbsp;(&nbsp;fieldname&nbsp;=&nbsp;'BEDAT'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;seltext_l&nbsp;=&nbsp;'凭证日期'&nbsp;)<br />
+&nbsp;&nbsp;(&nbsp;fieldname&nbsp;=&nbsp;'BUKRS'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;seltext_l&nbsp;=&nbsp;'公司代码'&nbsp;)<br />
+&nbsp;&nbsp;(&nbsp;fieldname&nbsp;=&nbsp;'BUTXT'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;seltext_l&nbsp;=&nbsp;'公司名称'&nbsp;)<br />
+&nbsp;&nbsp;(&nbsp;fieldname&nbsp;=&nbsp;'EKORG'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;seltext_l&nbsp;=&nbsp;'采购组织'&nbsp;)<br />
+&nbsp;&nbsp;(&nbsp;fieldname&nbsp;=&nbsp;'EKOTX'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;seltext_l&nbsp;=&nbsp;'采购组织描述'&nbsp;)<br />
+&nbsp;&nbsp;(&nbsp;fieldname&nbsp;=&nbsp;'EKGRP'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;seltext_l&nbsp;=&nbsp;'采购组'&nbsp;)<br />
+&nbsp;&nbsp;(&nbsp;fieldname&nbsp;=&nbsp;'EKNAM'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;seltext_l&nbsp;=&nbsp;'采购组描述'&nbsp;)<br />
+&nbsp;&nbsp;(&nbsp;fieldname&nbsp;=&nbsp;'ZEKKOTEXT'&nbsp;seltext_l&nbsp;=&nbsp;'抬头文本'&nbsp;)<br />
+&nbsp;&nbsp;(&nbsp;fieldname&nbsp;=&nbsp;'LOEKT'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;seltext_l&nbsp;=&nbsp;'删除标识'&nbsp;)<br />
+&nbsp;&nbsp;(&nbsp;fieldname&nbsp;=&nbsp;'ELIKT'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;seltext_l&nbsp;=&nbsp;'交货完成标识'&nbsp;)<br />
+&nbsp;&nbsp;(&nbsp;fieldname&nbsp;=&nbsp;'PSTYT'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;seltext_l&nbsp;=&nbsp;'项目类别'&nbsp;)<br />
+<br />
+&nbsp;&nbsp;(&nbsp;fieldname&nbsp;=&nbsp;'MATNR'&nbsp;&nbsp;&nbsp;&nbsp;seltext_l&nbsp;=&nbsp;'物料编码'&nbsp;ref_fieldname&nbsp;=&nbsp;'MATNR'&nbsp;ref_tabname&nbsp;=&nbsp;'MARA'&nbsp;)<br />
+&nbsp;&nbsp;(&nbsp;fieldname&nbsp;=&nbsp;'TXZ01'&nbsp;&nbsp;&nbsp;&nbsp;seltext_l&nbsp;=&nbsp;'短文本'&nbsp;)<br />
+&nbsp;&nbsp;(&nbsp;fieldname&nbsp;=&nbsp;'BISMT'&nbsp;&nbsp;&nbsp;&nbsp;seltext_l&nbsp;=&nbsp;'图号'&nbsp;)<br />
+<br />
+&nbsp;&nbsp;(&nbsp;fieldname&nbsp;=&nbsp;'MENGE'&nbsp;&nbsp;&nbsp;&nbsp;seltext_l&nbsp;=&nbsp;'采购订单数量'&nbsp;)<br />
+&nbsp;&nbsp;(&nbsp;fieldname&nbsp;=&nbsp;'MEINS'&nbsp;&nbsp;&nbsp;&nbsp;seltext_l&nbsp;=&nbsp;'单位'&nbsp;)<br />
+&nbsp;&nbsp;(&nbsp;fieldname&nbsp;=&nbsp;'MSEH6'&nbsp;&nbsp;&nbsp;&nbsp;seltext_l&nbsp;=&nbsp;'单位描述'&nbsp;)<br />
+<br />
+&nbsp;&nbsp;(&nbsp;fieldname&nbsp;=&nbsp;'EINDT'&nbsp;&nbsp;&nbsp;&nbsp;seltext_l&nbsp;=&nbsp;'交货日期'&nbsp;)<br />
+&nbsp;&nbsp;(&nbsp;fieldname&nbsp;=&nbsp;'WERKS'&nbsp;&nbsp;&nbsp;&nbsp;seltext_l&nbsp;=&nbsp;'工厂'&nbsp;)<br />
+&nbsp;&nbsp;(&nbsp;fieldname&nbsp;=&nbsp;'NAME1'&nbsp;&nbsp;&nbsp;&nbsp;seltext_l&nbsp;=&nbsp;'工厂描述'&nbsp;)<br />
+&nbsp;&nbsp;(&nbsp;fieldname&nbsp;=&nbsp;'LGORT'&nbsp;&nbsp;&nbsp;&nbsp;seltext_l&nbsp;=&nbsp;'库存地点'&nbsp;)<br />
+&nbsp;&nbsp;(&nbsp;fieldname&nbsp;=&nbsp;'LGOBE'&nbsp;&nbsp;&nbsp;&nbsp;seltext_l&nbsp;=&nbsp;'库存地点描述'&nbsp;)<br />
+<br />
+&nbsp;&nbsp;(&nbsp;fieldname&nbsp;=&nbsp;'ZOANO'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;seltext_l&nbsp;=&nbsp;'流程编号'&nbsp;)<br />
+&nbsp;&nbsp;(&nbsp;fieldname&nbsp;=&nbsp;'ZBNAME'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;seltext_l&nbsp;=&nbsp;'最近一次发起人'&nbsp;)<br />
+&nbsp;&nbsp;(&nbsp;fieldname&nbsp;=&nbsp;'ZLASTDATE'&nbsp;&nbsp;&nbsp;seltext_l&nbsp;=&nbsp;'采购申请最近一次发送日期'&nbsp;)<br />
+&nbsp;&nbsp;(&nbsp;fieldname&nbsp;=&nbsp;'ZLASTTIME'&nbsp;&nbsp;&nbsp;seltext_l&nbsp;=&nbsp;'采购申请最近一次发送时间'&nbsp;)<br />
+<br />
+&nbsp;&nbsp;(&nbsp;fieldname&nbsp;=&nbsp;'STATUS'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;seltext_l&nbsp;=&nbsp;'状态'&nbsp;)<br />
+&nbsp;&nbsp;(&nbsp;fieldname&nbsp;=&nbsp;'MESSAGE'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;seltext_l&nbsp;=&nbsp;'消息'&nbsp;)<br />
+<br />
+&nbsp;&nbsp;).<br />
+<br />
+<br />
+ENDFORM.<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;CONFIRM<br />
+*&---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM confirm  USING uv_titl uv_ques CHANGING cv_answer.<br />
+&nbsp;&nbsp;DATA&nbsp;lv_answer&nbsp;TYPE&nbsp;c.<br />
+&nbsp;&nbsp;CLEAR:lv_answer.<br />
+<br />
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'POPUP_TO_CONFIRM'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;titlebar&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;uv_titl<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text_question&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;uv_ques<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text_button_1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'是'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text_button_2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'否'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;display_cancel_button&nbsp;=&nbsp;''<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;answer&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lv_answer.<br />
+<br />
+&nbsp;&nbsp;cv_answer&nbsp;=&nbsp;lv_answer.<br />
+<br />
+ENDFORM.                    " CONFIRM<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Form&nbsp;send_oa<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;text<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM send_oa.<br />
+<br />
+&nbsp;&nbsp;DATA&nbsp;lt_out&nbsp;TYPE&nbsp;TABLE&nbsp;OF&nbsp;ty_out.<br />
+&nbsp;&nbsp;DATA&nbsp;ls_out&nbsp;TYPE&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ty_out.<br />
+&nbsp;&nbsp;CLEAR:lt_out,ls_out.<br />
+<br />
+&nbsp;&nbsp;lt_out[]&nbsp;=&nbsp;gt_out[].<br />
+&nbsp;&nbsp;DELETE&nbsp;lt_out&nbsp;WHERE&nbsp;sel&nbsp;=&nbsp;''.<br />
+<br />
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;lt_out&nbsp;INTO&nbsp;ls_out.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;call_oa&nbsp;USING&nbsp;ls_out.<br />
+<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+ENDFORM.<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Form&nbsp;GET_butxt<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;text<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM GET_butxt  USING    UV_bukrs<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CHANGING&nbsp;CV_butxt.<br />
+&nbsp;&nbsp;CLEAR:GS_t001.<br />
+&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;GT_t001&nbsp;INTO&nbsp;GS_t001&nbsp;WITH&nbsp;KEY&nbsp;bukrs&nbsp;=&nbsp;uv_bukrs&nbsp;BINARY&nbsp;SEARCH.<br />
+&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CV_butxt&nbsp;=&nbsp;gs_t001-butxt.<br />
+&nbsp;&nbsp;ENDIF.<br />
+ENDFORM.<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Form&nbsp;GET_ekotx<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;text<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM GET_ekotx  USING    UV_ekorg<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CHANGING&nbsp;CV_ekotx.<br />
+<br />
+&nbsp;&nbsp;CLEAR:gS_t024e.<br />
+&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;GT_t024e&nbsp;INTO&nbsp;GS_t024e&nbsp;WITH&nbsp;KEY&nbsp;ekorg&nbsp;=&nbsp;uv_ekorg&nbsp;BINARY&nbsp;SEARCH.<br />
+&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CV_ekotx&nbsp;=&nbsp;gs_t024e-ekotx.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+ENDFORM.<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Form&nbsp;GET_eknam<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;text<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM GET_eknam  USING    UV_ekgrp<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CHANGING&nbsp;CV_eknam.<br />
+<br />
+&nbsp;&nbsp;CLEAR:GS_t024.<br />
+&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;GT_t024&nbsp;INTO&nbsp;GS_t024&nbsp;WITH&nbsp;KEY&nbsp;ekgrp&nbsp;=&nbsp;UV_ekgrp&nbsp;BINARY&nbsp;SEARCH.<br />
+&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CV_eknam&nbsp;=&nbsp;gs_t024-eknam.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+ENDFORM.<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Form&nbsp;get_name1<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;text<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM get_name1  USING    UV_werks<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CHANGING&nbsp;CV_name1.<br />
+<br />
+&nbsp;&nbsp;CLEAR:GS_t001w.<br />
+&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;GT_t001w&nbsp;INTO&nbsp;GS_t001w<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WITH&nbsp;KEY&nbsp;werks&nbsp;=&nbsp;uv_werks&nbsp;BINARY&nbsp;SEARCH.<br />
+&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CV_name1&nbsp;=&nbsp;gs_t001w-name1.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+ENDFORM.<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Form&nbsp;GET_lgobe<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;text<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM GET_lgobe  USING    UV_lgort<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;uv_werks<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CHANGING&nbsp;CV_lgobe.<br />
+&nbsp;&nbsp;CLEAR:gS_t001l.<br />
+&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;GT_t001l&nbsp;INTO&nbsp;GS_t001l<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WITH&nbsp;KEY&nbsp;werks&nbsp;=&nbsp;uv_werks<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lgort&nbsp;=&nbsp;uv_lgort&nbsp;BINARY&nbsp;SEARCH.<br />
+&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CV_lgobe&nbsp;=&nbsp;gs_t001l-lgobe.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+ENDFORM.<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Form&nbsp;GET_mseh6<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;text<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM GET_mseh6  USING    UV_meins<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CHANGING&nbsp;CV_mseh6.<br />
+&nbsp;&nbsp;CLEAR:GS_t006a.<br />
+&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;GT_t006a&nbsp;INTO&nbsp;GS_t006a&nbsp;WITH&nbsp;KEY&nbsp;msehi&nbsp;=&nbsp;uv_meins&nbsp;BINARY&nbsp;SEARCH.<br />
+&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CV_mseh6&nbsp;=&nbsp;gs_t006a-mseh6.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+ENDFORM.<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Form&nbsp;GET_name_org1<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;text<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM GET_name_org1  USING    UV_lifnr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CHANGING&nbsp;CV_name_org1.<br />
+&nbsp;&nbsp;CLEAR:GS_but000.<br />
+&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;GT_but000&nbsp;INTO&nbsp;GS_but000&nbsp;WITH&nbsp;KEY&nbsp;partner&nbsp;=&nbsp;uv_lifnr&nbsp;BINARY&nbsp;SEARCH.<br />
+&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CV_name_org1&nbsp;=&nbsp;gs_but000-name_org1.<br />
+&nbsp;&nbsp;ENDIF.<br />
+ENDFORM.<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Form&nbsp;GET_zekkotext<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;text<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM GET_zekkotext  USING    UV_ebeln<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CHANGING&nbsp;CV_zekkotext.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*备注<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;DATA&nbsp;lv_id&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;thead-tdid.<br />
+&nbsp;&nbsp;DATA&nbsp;lv_name&nbsp;&nbsp;&nbsp;TYPE&nbsp;thead-tdname.<br />
+&nbsp;&nbsp;DATA&nbsp;lv_object&nbsp;TYPE&nbsp;thead-tdobject.<br />
+&nbsp;&nbsp;DATA&nbsp;lt_line&nbsp;&nbsp;&nbsp;TYPE&nbsp;TABLE&nbsp;OF&nbsp;tline.<br />
+&nbsp;&nbsp;DATA&nbsp;ls_line&nbsp;&nbsp;&nbsp;TYPE&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tline.<br />
+&nbsp;&nbsp;CLEAR:lt_line,ls_line.<br />
+&nbsp;&nbsp;CLEAR:lv_id,lv_name,lv_object.<br />
+<br />
+&nbsp;&nbsp;lv_id&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'F01'.<br />
+&nbsp;&nbsp;lv_object&nbsp;=&nbsp;'EKKO'.<br />
+&nbsp;&nbsp;lv_name&nbsp;&nbsp;&nbsp;=&nbsp;UV_ebeln.<br />
+<br />
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'READ_TEXT'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CLIENT&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;SY-MANDT<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;id&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lv_id<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;language&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;sy-langu<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;name&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lv_name<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;object&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lv_object<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ARCHIVE_HANDLE&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;0<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LOCAL_CAT&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'&nbsp;'<br />
+*&nbsp;&nbsp;&nbsp;IMPORTING<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;HEADER&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OLD_LINE_COUNTER&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;TABLES<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lines&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lt_line<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;id&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;language&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;name&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;3<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;not_found&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;4<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;object&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;5<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;reference_check&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;6<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wrong_access_to_archive&nbsp;=&nbsp;7<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTHERS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;8.<br />
+&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;&lt;&gt;&nbsp;0.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Implement&nbsp;suitable&nbsp;error&nbsp;handling&nbsp;here<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;lt_line&nbsp;INTO&nbsp;ls_line.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CONCATENATE&nbsp;Cv_zekkotext&nbsp;ls_line-tdline&nbsp;INTO&nbsp;Cv_zekkotext.<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+ENDFORM.<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Form&nbsp;call_oa<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;text<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM call_oa  USING us_out TYPE ty_out.<br />
+&nbsp;&nbsp;DATA&nbsp;lv_zsn&nbsp;TYPE&nbsp;zsn.<br />
+<br />
+&nbsp;&nbsp;DATA&nbsp;LT_zmmpoPOST&nbsp;TYPE&nbsp;TABLE&nbsp;OF&nbsp;zmmpoPOST.<br />
+&nbsp;&nbsp;DATA&nbsp;LS_zmmpOPOST&nbsp;TYPE&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;zmmpoPOST.<br />
+&nbsp;&nbsp;CLEAR:LT_zmmpoPOST[].<br />
+&nbsp;&nbsp;CLEAR:GT_zmmpolog[].<br />
+&nbsp;&nbsp;DATA&nbsp;lv_uuid&nbsp;TYPE&nbsp;guid_32.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*发送到OA<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;DATA&nbsp;ls_input&nbsp;&nbsp;TYPE&nbsp;zoado_create_workflow_request1.<br />
+&nbsp;&nbsp;DATA&nbsp;ls_output&nbsp;TYPE&nbsp;zoado_create_workflow_request.<br />
+&nbsp;&nbsp;DATA&nbsp;ls_return&nbsp;TYPE&nbsp;bapiret2.<br />
+&nbsp;&nbsp;CLEAR:ls_input,ls_output,ls_return.<br />
+<br />
+&nbsp;&nbsp;BREAK&nbsp;xx-fanlz.<br />
+<br />
+&nbsp;&nbsp;DATA&nbsp;LT_record&nbsp;TYPE&nbsp;zoaworkflow_request_table__tab.<br />
+&nbsp;&nbsp;DATA&nbsp;ls_record&nbsp;TYPE&nbsp;zoaworkflow_request_table_reco.<br />
+<br />
+&nbsp;&nbsp;DATA&nbsp;lt_item&nbsp;TYPE&nbsp;zoaworkflow_request_table__tab.<br />
+&nbsp;&nbsp;DATA&nbsp;ls_item&nbsp;TYPE&nbsp;zoaworkflow_request_table_reco.<br />
+<br />
+&nbsp;&nbsp;DATA&nbsp;lt_detail&nbsp;TYPE&nbsp;zoaworkflow_detail_table_i_tab.<br />
+&nbsp;&nbsp;DATA&nbsp;ls_detail&nbsp;TYPE&nbsp;zoaworkflow_detail_table_info.<br />
+&nbsp;&nbsp;CLEAR:ls_item,lt_item.<br />
+&nbsp;&nbsp;CLEAR:ls_detail,lt_detail.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*WORKFLOW_REQUEST_TABLE_FIELDS<br />
+*WORKFLOW_REQUEST_TABLE_FIELD<br />
+<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;DATA&nbsp;lt_FIELD&nbsp;TYPE&nbsp;zoaworkflow_request_table_tab1.<br />
+&nbsp;&nbsp;DATA&nbsp;ls_FIELD&nbsp;TYPE&nbsp;zoaworkflow_request_table_fiel.<br />
+&nbsp;&nbsp;CLEAR:lt_field,ls_field.<br />
+&nbsp;&nbsp;CLEAR:LT_record,LS_record.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*生成UUID<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'TPM_TRG_UUID_CREATE'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ex_uuid_c32&nbsp;=&nbsp;lv_uuid<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;uuid_error&nbsp;&nbsp;=&nbsp;1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTHERS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;2.<br />
+<br />
+&nbsp;&nbsp;DATA&nbsp;lv_zoaid&nbsp;TYPE&nbsp;zoaid.<br />
+&nbsp;&nbsp;DATA&nbsp;Ws_return&nbsp;TYPE&nbsp;bapiret2.<br />
+&nbsp;&nbsp;CLEAR:Ws_return.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*获取用ID<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;call&nbsp;function&nbsp;<a&nbsp;href&nbsp;="zfm_sap_001/zfm_sap_001.html">'ZFM_SAP_001'</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ip_zbname&nbsp;=&nbsp;sy-uname<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ep_zoaid&nbsp;&nbsp;=&nbsp;lv_ZOAID<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ep_return&nbsp;=&nbsp;Ws_return.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;Ws_return-type&nbsp;=&nbsp;'E'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;'调OA接口获取用户&nbsp;ID&nbsp;失败'&nbsp;TYPE&nbsp;'E'.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*创建日期<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;ls_INPUT-in0-create_time&nbsp;=&nbsp;sy-datum.<br />
+   </div>
+   <div class="codeComment">
+*创建人ID<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;ls_INPUT-in0-creator_id&nbsp;&nbsp;=&nbsp;lv_ZOAID.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*是否自动流转1是，0否<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;ls_INPUT-in0-isnextflow&nbsp;&nbsp;=&nbsp;'1'.<br />
+   </div>
+   <div class="codeComment">
+*流程标题<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;ls_INPUT-in0-request_name&nbsp;&nbsp;=&nbsp;'采购订单'.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*workflowBaseInfo<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;ls_INPUT-in0-workflow_base_info-workflow_id&nbsp;=&nbsp;'39'.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*workflowMainTableInfo<br />
+*requestRecords<br />
+*workflow_request_table_record&nbsp;&nbsp;&nbsp;"Zero&nbsp;or&nbsp;more&nbsp;repetitions<br />
+<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;PERFORM&nbsp;output&nbsp;USING&nbsp;us_out-lifnr&nbsp;CHANGING&nbsp;us_out-lifnr.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*抬头<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;lt_FIELD&nbsp;=&nbsp;VALUE&nbsp;#(<br />
+&nbsp;&nbsp;(&nbsp;view&nbsp;=&nbsp;'X'&nbsp;edit&nbsp;=&nbsp;'X'&nbsp;&nbsp;field_name&nbsp;&nbsp;=&nbsp;'ZBNAME'&nbsp;&nbsp;field_value&nbsp;=&nbsp;sy-uname&nbsp;)&nbsp;&nbsp;"发起人姓名<br />
+&nbsp;&nbsp;(&nbsp;view&nbsp;=&nbsp;'X'&nbsp;edit&nbsp;=&nbsp;'X'&nbsp;&nbsp;field_name&nbsp;&nbsp;=&nbsp;'ZOAID'&nbsp;&nbsp;&nbsp;field_value&nbsp;=&nbsp;lv_ZOAID&nbsp;)&nbsp;&nbsp;"发起人<br />
+&nbsp;&nbsp;(&nbsp;view&nbsp;=&nbsp;'X'&nbsp;edit&nbsp;=&nbsp;'X'&nbsp;&nbsp;field_name&nbsp;&nbsp;=&nbsp;'ZTYPE'&nbsp;&nbsp;&nbsp;field_value&nbsp;=&nbsp;us_out-ztype&nbsp;)&nbsp;&nbsp;"业务类型&nbsp;&nbsp;1&nbsp;首次发送&nbsp;&nbsp;2&nbsp;订单变更<br />
+&nbsp;&nbsp;(&nbsp;view&nbsp;=&nbsp;'X'&nbsp;edit&nbsp;=&nbsp;'X'&nbsp;&nbsp;field_name&nbsp;&nbsp;=&nbsp;'BSART'&nbsp;&nbsp;&nbsp;field_value&nbsp;=&nbsp;us_out-bsart&nbsp;)&nbsp;&nbsp;"采购订单类型<br />
+&nbsp;&nbsp;(&nbsp;view&nbsp;=&nbsp;'X'&nbsp;edit&nbsp;=&nbsp;'X'&nbsp;&nbsp;field_name&nbsp;&nbsp;=&nbsp;'BATXT'&nbsp;&nbsp;&nbsp;field_value&nbsp;=&nbsp;us_out-batxt&nbsp;)&nbsp;&nbsp;"采购订单凭证类型描述<br />
+&nbsp;&nbsp;(&nbsp;view&nbsp;=&nbsp;'X'&nbsp;edit&nbsp;=&nbsp;'X'&nbsp;&nbsp;field_name&nbsp;&nbsp;=&nbsp;'LIFNR'&nbsp;&nbsp;&nbsp;field_value&nbsp;=&nbsp;us_out-lifnr&nbsp;)&nbsp;&nbsp;"<br />
+&nbsp;&nbsp;(&nbsp;view&nbsp;=&nbsp;'X'&nbsp;edit&nbsp;=&nbsp;'X'&nbsp;&nbsp;field_name&nbsp;&nbsp;=&nbsp;'NAME_ORG1'&nbsp;&nbsp;&nbsp;field_value&nbsp;=&nbsp;us_out-name_org1&nbsp;)&nbsp;&nbsp;"<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;(&nbsp;view&nbsp;=&nbsp;'X'&nbsp;edit&nbsp;=&nbsp;'X'&nbsp;&nbsp;field_name&nbsp;&nbsp;=&nbsp;'ZOAID2'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;field_value&nbsp;=&nbsp;us_out-zoaid2&nbsp;)&nbsp;&nbsp;"<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;(&nbsp;view&nbsp;=&nbsp;'X'&nbsp;edit&nbsp;=&nbsp;'X'&nbsp;&nbsp;field_name&nbsp;&nbsp;=&nbsp;'EBELN'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;field_value&nbsp;=&nbsp;us_out-ebeln&nbsp;)&nbsp;&nbsp;"<br />
+&nbsp;&nbsp;(&nbsp;view&nbsp;=&nbsp;'X'&nbsp;edit&nbsp;=&nbsp;'X'&nbsp;&nbsp;field_name&nbsp;&nbsp;=&nbsp;'BUDAT'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;field_value&nbsp;=&nbsp;us_out-bedat&nbsp;)&nbsp;&nbsp;"<br />
+&nbsp;&nbsp;(&nbsp;view&nbsp;=&nbsp;'X'&nbsp;edit&nbsp;=&nbsp;'X'&nbsp;&nbsp;field_name&nbsp;&nbsp;=&nbsp;'BUKRS'&nbsp;&nbsp;&nbsp;field_value&nbsp;=&nbsp;us_out-bukrs&nbsp;)&nbsp;&nbsp;"公司<br />
+&nbsp;&nbsp;(&nbsp;view&nbsp;=&nbsp;'X'&nbsp;edit&nbsp;=&nbsp;'X'&nbsp;&nbsp;field_name&nbsp;&nbsp;=&nbsp;'BUTXT'&nbsp;&nbsp;&nbsp;field_value&nbsp;=&nbsp;us_out-butxt&nbsp;)&nbsp;&nbsp;"公司描述<br />
+&nbsp;&nbsp;(&nbsp;view&nbsp;=&nbsp;'X'&nbsp;edit&nbsp;=&nbsp;'X'&nbsp;&nbsp;field_name&nbsp;&nbsp;=&nbsp;'EKORG'&nbsp;&nbsp;&nbsp;field_value&nbsp;=&nbsp;us_out-ekorg&nbsp;)&nbsp;&nbsp;"<br />
+&nbsp;&nbsp;(&nbsp;view&nbsp;=&nbsp;'X'&nbsp;edit&nbsp;=&nbsp;'X'&nbsp;&nbsp;field_name&nbsp;&nbsp;=&nbsp;'EKOTX'&nbsp;&nbsp;&nbsp;field_value&nbsp;=&nbsp;us_out-ekotx&nbsp;)&nbsp;&nbsp;"<br />
+&nbsp;&nbsp;(&nbsp;view&nbsp;=&nbsp;'X'&nbsp;edit&nbsp;=&nbsp;'X'&nbsp;&nbsp;field_name&nbsp;&nbsp;=&nbsp;'EKGRP'&nbsp;&nbsp;&nbsp;field_value&nbsp;=&nbsp;us_out-ekgrp&nbsp;)&nbsp;&nbsp;"<br />
+&nbsp;&nbsp;(&nbsp;view&nbsp;=&nbsp;'X'&nbsp;edit&nbsp;=&nbsp;'X'&nbsp;&nbsp;field_name&nbsp;&nbsp;=&nbsp;'EKNAM'&nbsp;&nbsp;&nbsp;field_value&nbsp;=&nbsp;us_out-eknam&nbsp;)&nbsp;&nbsp;"<br />
+&nbsp;&nbsp;(&nbsp;view&nbsp;=&nbsp;'X'&nbsp;edit&nbsp;=&nbsp;'X'&nbsp;&nbsp;field_name&nbsp;&nbsp;=&nbsp;'ZEKKOTEXT'&nbsp;&nbsp;&nbsp;field_value&nbsp;=&nbsp;us_out-zekkotext&nbsp;)&nbsp;&nbsp;"<br />
+<br />
+&nbsp;&nbsp;).<br />
+<br />
+&nbsp;&nbsp;LS_record-workflow_request_table_fields-workflow_request_table_field[]&nbsp;=&nbsp;lt_FIELD[].<br />
+&nbsp;&nbsp;APPEND&nbsp;LS_record&nbsp;TO&nbsp;LT_record.<br />
+<br />
+<br />
+&nbsp;&nbsp;CLEAR:lv_zsn.<br />
+<br />
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;gt_out&nbsp;INTO&nbsp;gs_out&nbsp;WHERE&nbsp;ebeln&nbsp;=&nbsp;us_out-ebeln<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;icon&nbsp;&lt;&gt;&nbsp;icon_red_light.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR:lt_FIELD[].<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;output&nbsp;USING&nbsp;gs_out-matnr&nbsp;CHANGING&nbsp;gs_out-matnr.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;lt_FIELD&nbsp;=&nbsp;VALUE&nbsp;#(<br />
+&nbsp;&nbsp;&nbsp;&nbsp;(&nbsp;view&nbsp;=&nbsp;'X'&nbsp;edit&nbsp;=&nbsp;'X'&nbsp;&nbsp;field_name&nbsp;&nbsp;=&nbsp;'EBELP'&nbsp;&nbsp;&nbsp;field_value&nbsp;=&nbsp;gs_out-ebelp&nbsp;)&nbsp;&nbsp;"<br />
+&nbsp;&nbsp;&nbsp;&nbsp;(&nbsp;view&nbsp;=&nbsp;'X'&nbsp;edit&nbsp;=&nbsp;'X'&nbsp;&nbsp;field_name&nbsp;&nbsp;=&nbsp;'LOEKZ'&nbsp;&nbsp;&nbsp;field_value&nbsp;=&nbsp;gs_out-loekT&nbsp;)&nbsp;&nbsp;"<br />
+&nbsp;&nbsp;&nbsp;&nbsp;(&nbsp;view&nbsp;=&nbsp;'X'&nbsp;edit&nbsp;=&nbsp;'X'&nbsp;&nbsp;field_name&nbsp;&nbsp;=&nbsp;'ELIKZ'&nbsp;&nbsp;&nbsp;field_value&nbsp;=&nbsp;gs_out-elikT&nbsp;)&nbsp;&nbsp;"<br />
+&nbsp;&nbsp;&nbsp;&nbsp;(&nbsp;view&nbsp;=&nbsp;'X'&nbsp;edit&nbsp;=&nbsp;'X'&nbsp;&nbsp;field_name&nbsp;&nbsp;=&nbsp;'PSTYP'&nbsp;&nbsp;&nbsp;field_value&nbsp;=&nbsp;gs_out-pstyT&nbsp;)&nbsp;&nbsp;"<br />
+&nbsp;&nbsp;&nbsp;&nbsp;(&nbsp;view&nbsp;=&nbsp;'X'&nbsp;edit&nbsp;=&nbsp;'X'&nbsp;&nbsp;field_name&nbsp;&nbsp;=&nbsp;'MATNR'&nbsp;&nbsp;&nbsp;field_value&nbsp;=&nbsp;gs_out-matnr&nbsp;)&nbsp;&nbsp;"<br />
+&nbsp;&nbsp;&nbsp;&nbsp;(&nbsp;view&nbsp;=&nbsp;'X'&nbsp;edit&nbsp;=&nbsp;'X'&nbsp;&nbsp;field_name&nbsp;&nbsp;=&nbsp;'TXZ01'&nbsp;&nbsp;&nbsp;field_value&nbsp;=&nbsp;gs_out-txz01&nbsp;)&nbsp;&nbsp;"<br />
+&nbsp;&nbsp;&nbsp;&nbsp;(&nbsp;view&nbsp;=&nbsp;'X'&nbsp;edit&nbsp;=&nbsp;'X'&nbsp;&nbsp;field_name&nbsp;&nbsp;=&nbsp;'BISMT'&nbsp;&nbsp;&nbsp;field_value&nbsp;=&nbsp;gs_out-bismt&nbsp;)&nbsp;&nbsp;"<br />
+&nbsp;&nbsp;&nbsp;&nbsp;(&nbsp;view&nbsp;=&nbsp;'X'&nbsp;edit&nbsp;=&nbsp;'X'&nbsp;&nbsp;field_name&nbsp;&nbsp;=&nbsp;'MENGE'&nbsp;&nbsp;&nbsp;field_value&nbsp;=&nbsp;gs_out-menge&nbsp;)&nbsp;&nbsp;"<br />
+&nbsp;&nbsp;&nbsp;&nbsp;(&nbsp;view&nbsp;=&nbsp;'X'&nbsp;edit&nbsp;=&nbsp;'X'&nbsp;&nbsp;field_name&nbsp;&nbsp;=&nbsp;'MEINS'&nbsp;&nbsp;&nbsp;field_value&nbsp;=&nbsp;gs_out-meins&nbsp;)&nbsp;&nbsp;"<br />
+&nbsp;&nbsp;&nbsp;&nbsp;(&nbsp;view&nbsp;=&nbsp;'X'&nbsp;edit&nbsp;=&nbsp;'X'&nbsp;&nbsp;field_name&nbsp;&nbsp;=&nbsp;'MSEH6'&nbsp;&nbsp;&nbsp;field_value&nbsp;=&nbsp;gs_out-mseh6&nbsp;)&nbsp;&nbsp;"<br />
+&nbsp;&nbsp;&nbsp;&nbsp;(&nbsp;view&nbsp;=&nbsp;'X'&nbsp;edit&nbsp;=&nbsp;'X'&nbsp;&nbsp;field_name&nbsp;&nbsp;=&nbsp;'EINDT'&nbsp;&nbsp;&nbsp;field_value&nbsp;=&nbsp;gs_out-eindt&nbsp;)&nbsp;&nbsp;"<br />
+&nbsp;&nbsp;&nbsp;&nbsp;(&nbsp;view&nbsp;=&nbsp;'X'&nbsp;edit&nbsp;=&nbsp;'X'&nbsp;&nbsp;field_name&nbsp;&nbsp;=&nbsp;'WERKS'&nbsp;&nbsp;&nbsp;field_value&nbsp;=&nbsp;gs_out-werks&nbsp;)&nbsp;&nbsp;"<br />
+&nbsp;&nbsp;&nbsp;&nbsp;(&nbsp;view&nbsp;=&nbsp;'X'&nbsp;edit&nbsp;=&nbsp;'X'&nbsp;&nbsp;field_name&nbsp;&nbsp;=&nbsp;'NAME1'&nbsp;&nbsp;&nbsp;field_value&nbsp;=&nbsp;gs_out-name1&nbsp;)&nbsp;&nbsp;"<br />
+&nbsp;&nbsp;&nbsp;&nbsp;(&nbsp;view&nbsp;=&nbsp;'X'&nbsp;edit&nbsp;=&nbsp;'X'&nbsp;&nbsp;field_name&nbsp;&nbsp;=&nbsp;'LGORT'&nbsp;&nbsp;&nbsp;field_value&nbsp;=&nbsp;gs_out-lgort&nbsp;)&nbsp;&nbsp;"<br />
+&nbsp;&nbsp;&nbsp;&nbsp;(&nbsp;view&nbsp;=&nbsp;'X'&nbsp;edit&nbsp;=&nbsp;'X'&nbsp;&nbsp;field_name&nbsp;&nbsp;=&nbsp;'LGOBE'&nbsp;&nbsp;&nbsp;field_value&nbsp;=&nbsp;gs_out-lgobe&nbsp;)&nbsp;&nbsp;"<br />
+&nbsp;&nbsp;&nbsp;&nbsp;).<br />
+<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_item-workflow_request_table_fields-workflow_request_table_field[]&nbsp;=&nbsp;lt_FIELD[].<br />
+&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;ls_item&nbsp;TO&nbsp;lt_item.<br />
+<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR:GS_zmmpolog.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ADD&nbsp;1&nbsp;TO&nbsp;lv_zsn.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MOVE-CORRESPONDING&nbsp;gs_out&nbsp;TO&nbsp;GS_zmmpolog.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;GS_zmmpolog-uuid&nbsp;&nbsp;&nbsp;=&nbsp;lv_uuid.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;GS_zmmpolog-zsn&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lv_ZSN.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;GS_zmmpolog-zoaid&nbsp;&nbsp;=&nbsp;lv_ZOAID.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;GS_zmmpolog&nbsp;TO&nbsp;GT_zmmpolog.<br />
+<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR:LS_zmmpOPOST.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MOVE-CORRESPONDING&nbsp;gs_out&nbsp;TO&nbsp;LS_zmmpOPOST.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_zmmpOPOST-zbname&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;sy-uname.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_zmmpOPOST-zlastdate&nbsp;=&nbsp;sy-datum.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_zmmpOPOST-zlasttime&nbsp;=&nbsp;sy-uzeit.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_zmmpOPOST-zoano&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;''.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;LS_zmmpOPOST&nbsp;TO&nbsp;LT_zmmpOPOST.<br />
+<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+<br />
+&nbsp;&nbsp;CLEAR:LS_detail.<br />
+&nbsp;&nbsp;ls_detail-table_dbname&nbsp;=&nbsp;'formtable_main_36_dt1'.<br />
+&nbsp;&nbsp;LS_detail-workflow_request_table_records-workflow_request_table_record[]&nbsp;=&nbsp;lt_item[].<br />
+&nbsp;&nbsp;APPEND&nbsp;LS_detail&nbsp;TO&nbsp;LT_detail.<br />
+<br />
+&nbsp;&nbsp;ls_INPUT-in0-workflow_detail_table_infos-workflow_detail_table_info[]&nbsp;=&nbsp;lt_detail[].<br />
+&nbsp;&nbsp;ls_INPUT-in0-workflow_main_table_info-request_records-workflow_request_table_record[]&nbsp;=&nbsp;LT_record.<br />
+<br />
+&nbsp;&nbsp;call&nbsp;function&nbsp;<a&nbsp;href&nbsp;="zfm_sap_003/zfm_sap_003.html">'ZFM_SAP_003'</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ip_input&nbsp;&nbsp;=&nbsp;ls_input<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ep_output&nbsp;=&nbsp;ls_output<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ep_return&nbsp;=&nbsp;ls_return.<br />
+<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;ls_return-type&nbsp;=&nbsp;'E'&nbsp;OR&nbsp;ls_output-out&nbsp;IS&nbsp;INITIAL.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;GT_zmmpolog&nbsp;ASSIGNING&nbsp;&lt;FS_zmmpolog&gt;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;FS_zmmpolog&gt;-Zoano&nbsp;&nbsp;&nbsp;=&nbsp;ls_output-out.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;FS_zmmpolog&gt;-status&nbsp;&nbsp;=&nbsp;'E'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;FS_zmmpolog&gt;-message&nbsp;=&nbsp;'失败'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;gt_out&nbsp;ASSIGNING&nbsp;&lt;fs_out&gt;&nbsp;WHERE&nbsp;ebeln&nbsp;=&nbsp;us_out-ebeln<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;icon&nbsp;&lt;&gt;&nbsp;icon_red_light.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;fs_out&gt;-icon&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;icon_red_light.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;fs_out&gt;-Zoano&nbsp;&nbsp;&nbsp;=&nbsp;ls_output-out.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;fs_out&gt;-status&nbsp;&nbsp;=&nbsp;'E'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;fs_out&gt;-message&nbsp;=&nbsp;'失败'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+&nbsp;&nbsp;ELSE.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;LT_zmmpOPOST&nbsp;ASSIGNING&nbsp;FIELD-SYMBOL(&lt;FS_zmmpOPOST&gt;).<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;FS_zmmpOPOST&gt;-Zoano&nbsp;=&nbsp;ls_output-out.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;GT_zmmpolog&nbsp;ASSIGNING&nbsp;&lt;FS_zmmpolog&gt;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;FS_zmmpolog&gt;-Zoano&nbsp;&nbsp;&nbsp;=&nbsp;ls_output-out.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;FS_zmmpolog&gt;-status&nbsp;&nbsp;=&nbsp;'S'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;FS_zmmpolog&gt;-message&nbsp;=&nbsp;'成功'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;gt_out&nbsp;ASSIGNING&nbsp;&lt;fs_out&gt;&nbsp;WHERE&nbsp;ebeln&nbsp;=&nbsp;us_out-ebeln<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;icon&nbsp;&lt;&gt;&nbsp;icon_red_light.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;fs_out&gt;-icon&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;icon_green_light.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;fs_out&gt;-Zoano&nbsp;&nbsp;&nbsp;=&nbsp;ls_output-out.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;fs_out&gt;-status&nbsp;&nbsp;=&nbsp;'S'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;fs_out&gt;-message&nbsp;=&nbsp;'成功'.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*更新状态<br />
+<br />
+<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;LT_zmmpOPOST[]&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MODIFY&nbsp;zmmpOPOST&nbsp;FROM&nbsp;TABLE&nbsp;LT_zmmpOPOST.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;&nbsp;GT_zmmpolog[]&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MODIFY&nbsp;zmmpolog&nbsp;FROM&nbsp;TABLE&nbsp;GT_zmmpolog.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;COMMIT&nbsp;WORK.<br />
+<br />
+&nbsp;&nbsp;MESSAGE&nbsp;'数据发送完成'&nbsp;TYPE&nbsp;'S'.<br />
+<br />
+ENDFORM.<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Form&nbsp;get_batxt<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;text<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM get_batxt  USING    UV_bsart<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;UV_bstyp<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CHANGING&nbsp;CV_batxt.<br />
+<br />
+&nbsp;&nbsp;CLEAR:gS_T161T.<br />
+&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;gt_t161t&nbsp;INTO&nbsp;gs_t161t<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WITH&nbsp;KEY&nbsp;&nbsp;bsart&nbsp;=&nbsp;UV_bsart<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bstyp&nbsp;=&nbsp;UV_bstyp&nbsp;BINARY&nbsp;SEARCH.<br />
+<br />
+&nbsp;&nbsp;CV_batxt&nbsp;=&nbsp;gs_t161t-batxt.<br />
+<br />
+ENDFORM.<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Form&nbsp;output<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;text<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM output  USING    UV_sellifnr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CHANGING&nbsp;CV_sellifnr.<br />
+<br />
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'CONVERSION_EXIT_ALPHA_OUTPUT'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;input&nbsp;&nbsp;=&nbsp;UV_sellifnr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;output&nbsp;=&nbsp;CV_sellifnr.<br />
+<br />
+ENDFORM.<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Form&nbsp;call_print<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;text<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM call_print.<br />
+&nbsp;&nbsp;DATA&nbsp;lt_out&nbsp;TYPE&nbsp;TABLE&nbsp;OF&nbsp;ty_out.<br />
+&nbsp;&nbsp;DATA&nbsp;ls_out&nbsp;TYPE&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ty_out.<br />
+<br />
+&nbsp;&nbsp;CLEAR:lt_out.<br />
+&nbsp;&nbsp;lt_out[]&nbsp;=&nbsp;gt_out[].<br />
+&nbsp;&nbsp;DELETE&nbsp;lt_out&nbsp;WHERE&nbsp;sel&nbsp;=&nbsp;''.<br />
+&nbsp;&nbsp;SORT&nbsp;lt_out&nbsp;BY&nbsp;ebeln.<br />
+&nbsp;&nbsp;DELETE&nbsp;ADJACENT&nbsp;DUPLICATES&nbsp;FROM&nbsp;lt_out&nbsp;COMPARING&nbsp;ebeln.<br />
+<br />
+<br />
+&nbsp;&nbsp;CHECK&nbsp;lt_out[]&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+<br />
+&nbsp;&nbsp;DATA&nbsp;ls_T024&nbsp;TYPE&nbsp;t024.<br />
+<br />
+&nbsp;&nbsp;DATA:lv_formname&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;rs38l_fnam.<br />
+&nbsp;&nbsp;DATA:output_options&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;ssfcompop.<br />
+&nbsp;&nbsp;DATA:control_parameters&nbsp;TYPE&nbsp;ssfctrlop.<br />
+&nbsp;&nbsp;DATA:job_output_options&nbsp;TYPE&nbsp;ssfcresop.<br />
+&nbsp;&nbsp;DATA:ls_outinfo&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;ssfcrescl.<br />
+&nbsp;&nbsp;DATA:lv_name&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;tdsfname.<br />
+&nbsp;&nbsp;DATA:ls_head&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;zsmmr005_head.<br />
+&nbsp;&nbsp;DATA:lt_item&nbsp;TYPE&nbsp;TABLE&nbsp;OF&nbsp;zsmmr005_item.<br />
+&nbsp;&nbsp;DATA:ls_item&nbsp;TYPE&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;zsmmr005_item.<br />
+<br />
+<br />
+&nbsp;&nbsp;lv_name&nbsp;=&nbsp;'ZMMR005'.<br />
+<br />
+&nbsp;&nbsp;output_options-tdimmed&nbsp;&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;output_options-tddelete&nbsp;=&nbsp;'X'.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;output_options-rqposname&nbsp;&nbsp;=&nbsp;'BTP'.<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;output_options-tddest&nbsp;&nbsp;&nbsp;=&nbsp;'LP01'.<br />
+<br />
+&nbsp;&nbsp;control_parameters-langu&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'1'.<br />
+&nbsp;&nbsp;control_parameters-no_open&nbsp;&nbsp;&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;control_parameters-no_close&nbsp;&nbsp;=&nbsp;'X'.<br />
+<br />
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'SSF_OPEN'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;user_settings&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;''<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;output_options&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;output_options<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;control_parameters&nbsp;=&nbsp;control_parameters<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;job_output_options&nbsp;=&nbsp;job_output_options<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;formatting_error&nbsp;&nbsp;&nbsp;=&nbsp;1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;internal_error&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;send_error&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;3<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;user_canceled&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;4<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTHERS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;5.<br />
+&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;&lt;&gt;&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;ID&nbsp;sy-msgid&nbsp;TYPE&nbsp;sy-msgty<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;NUMBER&nbsp;sy-msgno<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WITH&nbsp;sy-msgv1&nbsp;sy-msgv2&nbsp;sy-msgv3&nbsp;sy-msgv4.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+<br />
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'SSF_FUNCTION_MODULE_NAME'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;formname&nbsp;=&nbsp;lv_name<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fm_name&nbsp;&nbsp;=&nbsp;lv_formname.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;&lt;&gt;&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;ID&nbsp;sy-msgid&nbsp;TYPE&nbsp;sy-msgty<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;NUMBER&nbsp;sy-msgno<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WITH&nbsp;sy-msgv1&nbsp;sy-msgv2&nbsp;sy-msgv3&nbsp;sy-msgv4.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+<br />
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;LT_out&nbsp;INTO&nbsp;Ls_out&nbsp;WHERE&nbsp;sel&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR:lt_ITEM.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR:ls_head.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_head-ebeln&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_out-ebeln.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_head-lifnr&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_out-lifnr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_head-butxt&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_out-butxt.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_head-budat&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_out-bedat.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_head-name1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_out-name_org1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_head-zekkotext&nbsp;=&nbsp;ls_out-zekkotext.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;ls_out-adrnr&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;SINGLE&nbsp;stras<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;ls_head-street<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;t001w<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;werks&nbsp;=&nbsp;ls_out-werks.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ELSE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;SINGLE&nbsp;street<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;ls_head-street<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;adrc<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;addrnumber&nbsp;=&nbsp;ls_out-adrnr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;"T024-EKNAM与T024-EKTEL&nbsp;进行拼接，中间用空格隔开<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;SINGLE&nbsp;*<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;CORRESPONDING&nbsp;FIELDS&nbsp;OF&nbsp;ls_T024<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;t024<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;ekgrp&nbsp;=&nbsp;ls_out-ekgrp.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CONCATENATE&nbsp;ls_T024-eknam&nbsp;ls_t024-ektel&nbsp;INTO&nbsp;ls_head-zname&nbsp;&nbsp;SEPARATED&nbsp;BY&nbsp;''&nbsp;.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;SINGLE&nbsp;verkf&nbsp;telf1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;(&nbsp;ls_head-verkf,ls_head-telf1&nbsp;)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;lfm1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;lifnr&nbsp;=&nbsp;ls_out-lifnr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;ekorg&nbsp;=&nbsp;ls_out-ekorg.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;gt_out&nbsp;INTO&nbsp;gs_out&nbsp;WHERE&nbsp;ebeln&nbsp;=&nbsp;ls_out-ebeln.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CLEAR:ls_ITEM.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_item-ebeln&nbsp;=&nbsp;gs_out-ebeln.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_item-ebelp&nbsp;=&nbsp;gs_out-ebelp.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_item-matnr&nbsp;=&nbsp;gs_out-matnr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_item-txz01&nbsp;=&nbsp;gs_out-txz01.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_item-bismt&nbsp;=&nbsp;gs_out-bismt.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_item-menge&nbsp;=&nbsp;gs_out-menge.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_item-meins&nbsp;=&nbsp;gs_out-meins.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_item-eindt&nbsp;=&nbsp;gs_out-eindt.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;ls_ITEM&nbsp;TO&nbsp;lt_ITEM.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;lv_formname<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;control_parameters&nbsp;=&nbsp;control_parameters<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;output_options&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;output_options<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;user_settings&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;space<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ip_head&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_head<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TABLES<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tb_item&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lt_ITEM<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;formatting_error&nbsp;&nbsp;&nbsp;=&nbsp;1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;internal_error&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;send_error&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;3<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;user_canceled&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;4<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTHERS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;5.<br />
+<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+<br />
+<br />
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'SSF_CLOSE'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;job_output_info&nbsp;&nbsp;=&nbsp;ls_outinfo<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;formatting_error&nbsp;=&nbsp;1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;internal_error&nbsp;&nbsp;&nbsp;=&nbsp;2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;send_error&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;3<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTHERS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;4.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;&lt;&gt;&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;ID&nbsp;sy-msgid&nbsp;TYPE&nbsp;sy-msgty<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;NUMBER&nbsp;sy-msgno<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WITH&nbsp;sy-msgv1&nbsp;sy-msgv2&nbsp;sy-msgv3&nbsp;sy-msgv4.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+<br />
+ENDFORM.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*Text&nbsp;elements<br />
+*----------------------------------------------------------<br />
+*&nbsp;001&nbsp;输入<br />
+*&nbsp;002&nbsp;选择<br />
+<br />
+<br />
+*Selection&nbsp;texts<br />
+*----------------------------------------------------------<br />
+*&nbsp;P_GET&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;打印采购订单<br />
+*&nbsp;P_R1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;排除交货完成的<br />
+*&nbsp;P_R2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;排除已删除的<br />
+*&nbsp;P_R3&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;排除已发送OA的<br />
+*&nbsp;P_SEN&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;采购订单发送OA(整单发送)<br />
+*&nbsp;S_AEDAT&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;创建日期<br />
+*&nbsp;S_BEDAT&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;凭证日期<br />
+*&nbsp;S_BEDNR&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;需求跟踪编号<br />
+*&nbsp;S_BSART&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;采购凭证类型<br />
+*&nbsp;S_BUKRS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;公司代码<br />
+*&nbsp;S_EBELN&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;采购凭证<br />
+*&nbsp;S_EBELP&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;项目<br />
+*&nbsp;S_EINDT&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;交货日期<br />
+*&nbsp;S_EKGRP&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;采购组<br />
+*&nbsp;S_EKORG&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;采购组织<br />
+*&nbsp;S_ERNAM&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;创建者<br />
+*&nbsp;S_KNTTP&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;科目分配类别<br />
+*&nbsp;S_LGORT&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;存储地点<br />
+*&nbsp;S_LIFNR&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;供应商<br />
+*&nbsp;S_MATKL&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;物料组<br />
+*&nbsp;S_MATNR&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;物料<br />
+*&nbsp;S_PSTYP&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;项目类别<br />
+*&nbsp;S_TXZ01&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;短文本<br />
+*&nbsp;S_WERKS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;工厂<br />
+<br />
+<br />
+*Messages<br />
+*----------------------------------------------------------<br />
+*<br />
+*&nbsp;Message&nbsp;class:&nbsp;Hard&nbsp;coded<br />
+*&nbsp;&nbsp;&nbsp;请选择行.....<br />
+*<br />
+*&nbsp;Message&nbsp;class:&nbsp;SV<br />
+*004&nbsp;&nbsp;&nbsp;未找到与选择条件相匹配的条目。<br />
+            </div>
+          </td>
+        </tr>
+      </table>
+      </td>
+      </tr>
+   <tr>
+<td class="footer">Extracted by Mass Download version 1.5.2 - E.G.Mellodew. 1998-2022. Sap Release 755</td>
+   </tr>
+</table>
+</body>
+</html>

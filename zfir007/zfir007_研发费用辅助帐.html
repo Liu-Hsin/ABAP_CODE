@@ -1,0 +1,421 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=GB2312" />
+<title>ZFIR007</title>
+<style type="text/css">
+.code{ font-family:"Courier New", Courier, monospace; color:#000; font-size:14px; background-color:#F2F4F7 }
+  .codeComment {font-family:"Courier New", Courier, monospace; color:#0000F0; font-size:14px; background-color:#F2F4F7 }
+  .normalBold{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; font-weight:800 }
+  .normalBoldLarge{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+</style>
+<style type="text/css">
+  .normal{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px }
+  .footer{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; text-align: center }
+  h2{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+  h3{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:14px; font-weight:800 }
+  .outerTable{
+   background-color:#E0E7ED;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-right-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+  .innerTable{
+   background-color:#F2F4F7;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-bottom-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+</style>
+</head>
+<body>
+<table class="outerTable">
+  <tr class="normalBoldLarge">
+     <td><h2>Code listing for: ZFIR007</h2>
+<h3> Description: 研发费用辅助帐</h3></td>
+   </tr>
+  <tr>
+     <td>
+     <table class="innerTable">
+       <tr>
+          <td>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Report&nbsp;ZFIR007<br />
+*&---------------------------------------------------------------------*<br />
+*&<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+REPORT zfir007.<br />
+<br />
+include <a href ="zfi007top.html">zfi007top</a>.<br />
+<br />
+START-OF-SELECTION.<br />
+&nbsp;&nbsp;PERFORM:&nbsp;check_data.<br />
+&nbsp;&nbsp;IF&nbsp;p_bukrs&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;s888(sabapdocu)&nbsp;WITH&nbsp;'公司代码不可为空!'&nbsp;DISPLAY&nbsp;LIKE&nbsp;'E'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;LEAVE&nbsp;TO&nbsp;LIST-PROCESSING.<br />
+&nbsp;&nbsp;ELSE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;p2&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;i888(sabapdocu)&nbsp;WITH&nbsp;'功能暂未开发'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LEAVE&nbsp;TO&nbsp;LIST-PROCESSING.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ELSE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;get_data.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;PERFORM&nbsp;prcoess_data.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;alv_disp.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Form&nbsp;get_data<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM get_data .<br />
+&nbsp;&nbsp;DATA:&nbsp;ls_out&nbsp;LIKE&nbsp;gs_out.<br />
+&nbsp;&nbsp;DATA:&nbsp;lt_out&nbsp;LIKE&nbsp;TABLE&nbsp;OF&nbsp;gs_out.<br />
+<br />
+&nbsp;&nbsp;SELECT&nbsp;*&nbsp;INTO&nbsp;CORRESPONDING&nbsp;FIELDS&nbsp;OF&nbsp;TABLE&nbsp;gt_out<br />
+&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;bseg<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;hkont&nbsp;LIKE&nbsp;'5301%'&nbsp;"&nbsp;科目表以5301&nbsp;开头的科目<br />
+&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;(&nbsp;aufnr&nbsp;LIKE&nbsp;'000003%'&nbsp;OR&nbsp;aufnr&nbsp;LIKE&nbsp;'000004%'&nbsp;)&nbsp;"&nbsp;订单号以3&nbsp;和&nbsp;4&nbsp;开始的订单。<br />
+&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;&nbsp;aufnr&nbsp;IN&nbsp;s_aufnr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;&nbsp;bukrs&nbsp;=&nbsp;p_bukrs<br />
+&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;&nbsp;gjahr&nbsp;IN&nbsp;s_gjahr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;&nbsp;h_monat&nbsp;IN&nbsp;s_monat.<br />
+<br />
+&nbsp;&nbsp;SELECT&nbsp;rbukrs&nbsp;AS&nbsp;bukrs&nbsp;belnr&nbsp;docln&nbsp;&nbsp;gjahr&nbsp;poper&nbsp;AS&nbsp;h_monat&nbsp;hsl&nbsp;AS&nbsp;dmbtr&nbsp;racct&nbsp;AS&nbsp;hkont&nbsp;aufnr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;CORRESPONDING&nbsp;FIELDS&nbsp;OF&nbsp;TABLE&nbsp;lt_out<br />
+&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;acdoca<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;racct&nbsp;LIKE&nbsp;'5301%'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;(&nbsp;aufnr&nbsp;LIKE&nbsp;'000003%'&nbsp;OR&nbsp;aufnr&nbsp;LIKE&nbsp;'000004%'&nbsp;)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;rbukrs&nbsp;=&nbsp;p_bukrs<br />
+&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;aufnr&nbsp;IN&nbsp;s_aufnr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;gjahr&nbsp;IN&nbsp;s_gjahr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;poper&nbsp;IN&nbsp;s_monat<br />
+&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;blart&nbsp;=&nbsp;'AF'.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;lt_out[]&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;将LT_OUT&nbsp;APPEND&nbsp;到&nbsp;gt_out&nbsp;内表里面。<br />
+&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;LINES&nbsp;OF&nbsp;lt_out&nbsp;TO&nbsp;gt_out.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR:&nbsp;lt_out[].<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;gt_out[]&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;科目描述，<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;txt50,saknr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;TABLE&nbsp;@DATA(lt_skat)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;skat<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FOR&nbsp;ALL&nbsp;ENTRIES&nbsp;IN&nbsp;@gt_out<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;saknr&nbsp;=&nbsp;@gt_out-hkont.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;内部订单描述<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;aufnr,ktext<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;TABLE&nbsp;@DATA(lt_aufk)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;aufk<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FOR&nbsp;ALL&nbsp;ENTRIES&nbsp;IN&nbsp;@gt_out<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;aufnr&nbsp;=&nbsp;@gt_out-aufnr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;"凭证抬头，类型&nbsp;日期等。<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;belnr,budat,blart,bktxt<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;TABLE&nbsp;@DATA(lt_bkpf)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;bkpf<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FOR&nbsp;ALL&nbsp;ENTRIES&nbsp;IN&nbsp;@gt_out<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;belnr&nbsp;=&nbsp;@gt_out-belnr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;"根据&nbsp;内部订单&nbsp;获取DR编号&nbsp;aufex,研发周期&nbsp;USER0。<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;aufex,user0,aufnr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;TABLE&nbsp;@DATA(lt_coas)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;coas<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FOR&nbsp;ALL&nbsp;ENTRIES&nbsp;IN&nbsp;@gt_out<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;aufnr&nbsp;=&nbsp;@gt_out-aufnr.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;排序&nbsp;&nbsp;用于二分法读内表。<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SORT&nbsp;lt_skat&nbsp;BY&nbsp;saknr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SORT&nbsp;lt_aufk&nbsp;BY&nbsp;aufnr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SORT&nbsp;lt_bkpf&nbsp;BY&nbsp;belnr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SORT&nbsp;lt_coas&nbsp;BY&nbsp;aufnr.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;gt_out&nbsp;INTO&nbsp;gs_out.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;凭证编号字段统一<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;gs_out-docln&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_out-docln&nbsp;=&nbsp;gs_out-buzei.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;&nbsp;&nbsp;SELECT&nbsp;SINGLE&nbsp;txt50&nbsp;FROM&nbsp;skat&nbsp;INTO&nbsp;gs_out-txt50&nbsp;WHERE&nbsp;spras&nbsp;=&nbsp;sy-langu&nbsp;AND&nbsp;saknr&nbsp;=&nbsp;gs_out-hkont&nbsp;AND&nbsp;ktopl&nbsp;=&nbsp;'HXCN'.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;lt_skat&nbsp;INTO&nbsp;DATA(ls_skat)&nbsp;WITH&nbsp;KEY&nbsp;saknr&nbsp;=&nbsp;gs_out-hkont&nbsp;BINARY&nbsp;SEARCH.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_out-txt50&nbsp;=&nbsp;ls_skat-txt50.&nbsp;"&nbsp;科目文本<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;lt_aufk&nbsp;INTO&nbsp;DATA(ls_aufk)&nbsp;WITH&nbsp;KEY&nbsp;aufnr&nbsp;=&nbsp;gs_out-aufnr&nbsp;BINARY&nbsp;SEARCH.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_out-ktext&nbsp;=&nbsp;ls_aufk-ktext.&nbsp;"&nbsp;内部订单文本描述<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;lt_coas&nbsp;INTO&nbsp;DATA(ls_coas)&nbsp;WITH&nbsp;KEY&nbsp;aufnr&nbsp;=&nbsp;gs_out-aufnr&nbsp;BINARY&nbsp;SEARCH.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_out-aufex&nbsp;=&nbsp;ls_coas-aufex.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_out-user0&nbsp;=&nbsp;ls_coas-user0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;lt_bkpf&nbsp;INTO&nbsp;DATA(ls_bkpf)&nbsp;WITH&nbsp;KEY&nbsp;belnr&nbsp;=&nbsp;gs_out-belnr&nbsp;BINARY&nbsp;SEARCH.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_out-budat&nbsp;=&nbsp;ls_bkpf-budat.&nbsp;"&nbsp;凭证中的过账日期<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_out-blart&nbsp;=&nbsp;ls_bkpf-blart.&nbsp;"&nbsp;凭证类型<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_out-bktxt&nbsp;=&nbsp;ls_bkpf-bktxt.&nbsp;"&nbsp;凭证抬头文本<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;gs_out-blart&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;SINGLE&nbsp;ltext&nbsp;FROM&nbsp;t003t&nbsp;INTO&nbsp;gs_out-ltext&nbsp;WHERE&nbsp;blart&nbsp;=&nbsp;gs_out-blart&nbsp;AND&nbsp;spras&nbsp;=&nbsp;'1'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;凭证类型描述<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;gs_out-shkzg&nbsp;=&nbsp;'H'.&nbsp;"&nbsp;根据借贷标志&nbsp;判断金额的正负值。<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_out-dmbtr&nbsp;=&nbsp;gs_out-dmbtr&nbsp;*&nbsp;(&nbsp;-1&nbsp;).<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PERFORM:&nbsp;divide_data&nbsp;.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MODIFY&nbsp;gt_out&nbsp;FROM&nbsp;gs_out.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CLEAR:&nbsp;gs_out,ls_skat,ls_aufk,ls_bkpf.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDLOOP.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;SORT&nbsp;gt_out&nbsp;BY&nbsp;aufnr&nbsp;belnr.<br />
+ENDFORM.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Form&nbsp;Divide_data<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM divide_data .<br />
+&nbsp;&nbsp;IF&nbsp;gs_out-hkont+0(6)&nbsp;=&nbsp;'530101'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;gs_out-zlx&nbsp;=&nbsp;'费用化'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;gs_out-hkont+0(8)&nbsp;=&nbsp;'53010101'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_out-dmbtr_1&nbsp;=&nbsp;gs_out-dmbtr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ELSEIF&nbsp;gs_out-hkont+0(8)&nbsp;=&nbsp;'53010102'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_out-dmbtr_2&nbsp;=&nbsp;gs_out-dmbtr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ELSEIF&nbsp;gs_out-hkont+0(8)&nbsp;=&nbsp;'53010103'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_out-dmbtr_3&nbsp;=&nbsp;gs_out-dmbtr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ELSEIF&nbsp;gs_out-hkont+0(8)&nbsp;=&nbsp;'53010104'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_out-dmbtr_4&nbsp;=&nbsp;gs_out-dmbtr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ELSEIF&nbsp;gs_out-hkont+0(8)&nbsp;=&nbsp;'53010105'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_out-dmbtr_5&nbsp;=&nbsp;gs_out-dmbtr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ELSEIF&nbsp;gs_out-hkont+0(8)&nbsp;=&nbsp;'53010199'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_out-dmbtr_6&nbsp;=&nbsp;gs_out-dmbtr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ELSEIF&nbsp;gs_out-hkont&nbsp;=&nbsp;'5301019001'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_out-dmbtr_7&nbsp;=&nbsp;gs_out-dmbtr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ELSEIF&nbsp;gs_out-hkont&nbsp;=&nbsp;'5301019002'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_out-dmbtr_8&nbsp;=&nbsp;gs_out-dmbtr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;ELSEIF&nbsp;gs_out-hkont+0(6)&nbsp;=&nbsp;'530102'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;gs_out-zlx&nbsp;=&nbsp;'资本化'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;gs_out-hkont+0(8)&nbsp;=&nbsp;'53010201'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_out-dmbtr_1&nbsp;=&nbsp;gs_out-dmbtr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ELSEIF&nbsp;gs_out-hkont+0(8)&nbsp;=&nbsp;'53010202'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_out-dmbtr_2&nbsp;=&nbsp;gs_out-dmbtr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ELSEIF&nbsp;gs_out-hkont+0(8)&nbsp;=&nbsp;'53010203'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_out-dmbtr_3&nbsp;=&nbsp;gs_out-dmbtr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ELSEIF&nbsp;gs_out-hkont+0(8)&nbsp;=&nbsp;'53010204'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_out-dmbtr_4&nbsp;=&nbsp;gs_out-dmbtr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ELSEIF&nbsp;gs_out-hkont+0(8)&nbsp;=&nbsp;'53010205'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_out-dmbtr_5&nbsp;=&nbsp;gs_out-dmbtr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ELSEIF&nbsp;gs_out-hkont+0(8)&nbsp;=&nbsp;'53010299'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_out-dmbtr_6&nbsp;=&nbsp;gs_out-dmbtr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ELSEIF&nbsp;gs_out-hkont&nbsp;=&nbsp;'5301029001'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_out-dmbtr_7&nbsp;=&nbsp;gs_out-dmbtr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ELSEIF&nbsp;gs_out-hkont&nbsp;=&nbsp;'5301029002'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_out-dmbtr_8&nbsp;=&nbsp;gs_out-dmbtr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;ENDIF.<br />
+ENDFORM.<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Form&nbsp;prcoess_data<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM prcoess_data .<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;gt_out&nbsp;INTO&nbsp;gs_out.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;根据不同的科目，划分数据类别。<br />
+*<br />
+*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;MODIFY&nbsp;gt_out&nbsp;FROM&nbsp;gs_out.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;CLEAR:&nbsp;gs_out.<br />
+*&nbsp;&nbsp;ENDLOOP.<br />
+   </div>
+   <div class="code">
+ENDFORM.<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Form&nbsp;alv_disp<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM alv_disp .<br />
+&nbsp;&nbsp;DATA:&nbsp;l_user_command&nbsp;&nbsp;TYPE&nbsp;slis_formname,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;l_pf_status_set&nbsp;TYPE&nbsp;slis_formname.<br />
+<br />
+&nbsp;&nbsp;CLEAR&nbsp;it_fieldcat.REFRESH&nbsp;it_fieldcat.<br />
+<br />
+&nbsp;&nbsp;PERFORM&nbsp;get_catlog.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;l_user_command&nbsp;&nbsp;=&nbsp;'USER_COMMAND'.<br />
+*&nbsp;&nbsp;l_pf_status_set&nbsp;=&nbsp;&nbsp;'SET_PF_STATUS'.<br />
+<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;is_layout-zebra&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;is_layout-box_fname&nbsp;=&nbsp;'SEL'.<br />
+&nbsp;&nbsp;is_layout-cwidth_opt&nbsp;=&nbsp;'X'.<br />
+<br />
+&nbsp;&nbsp;g_repid&nbsp;=&nbsp;sy-repid.<br />
+<br />
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'REUSE_ALV_GRID_DISPLAY_LVC'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_interface_check&nbsp;&nbsp;=&nbsp;'&nbsp;'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_buffer_active&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'&nbsp;'<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_callback_pf_status_set&nbsp;=&nbsp;l_pf_status_set<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_callback_user_command&nbsp;&nbsp;=&nbsp;l_user_command<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_callback_program&nbsp;=&nbsp;g_repid<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;is_layout_lvc&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;is_layout&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"it_events&nbsp;=&nbsp;lt_event<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it_fieldcat_lvc&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;it_fieldcat[]<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_save&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'A'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;TABLES<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;t_outtab&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;gt_out[].<br />
+ENDFORM.<br />
+<br />
+FORM get_catlog .<br />
+&nbsp;&nbsp;DEFINE&nbsp;lit_fieldcat.&nbsp;"<br />
+&nbsp;&nbsp;&nbsp;&nbsp;it_fieldcat-tabname&nbsp;&nbsp;=&nbsp;'GT_OUT'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;it_fieldcat-fieldname&nbsp;=&nbsp;&1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;it_fieldcat-just&nbsp;=&nbsp;&2.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;it_fieldcat-coltext&nbsp;=&nbsp;&3.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;it_fieldcat-ref_field&nbsp;=&nbsp;&4.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;it_fieldcat-ref_table&nbsp;=&nbsp;&5.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;it_fieldcat-no_zero&nbsp;=&nbsp;'X'.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;&nbsp;it_fieldcat.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;&nbsp;it_fieldcat.<br />
+&nbsp;&nbsp;END-OF-DEFINITION.&nbsp;&nbsp;&nbsp;"lit_fieldcat<br />
+<br />
+&nbsp;&nbsp;lit_fieldcat&nbsp;:<br />
+&nbsp;&nbsp;&nbsp;&nbsp;'BUKRS'&nbsp;&nbsp;&nbsp;'L'&nbsp;'公司代码'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'BUKRS'&nbsp;&nbsp;'BSEG',<br />
+&nbsp;&nbsp;&nbsp;&nbsp;'AUFNR'&nbsp;&nbsp;&nbsp;'L'&nbsp;'内部订单'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'AUFNR'&nbsp;&nbsp;'BSEG',<br />
+&nbsp;&nbsp;&nbsp;&nbsp;'AUFEX'&nbsp;&nbsp;&nbsp;'L'&nbsp;'RD编号'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;'',<br />
+&nbsp;&nbsp;&nbsp;&nbsp;'KTEXT'&nbsp;&nbsp;&nbsp;'L'&nbsp;'内部订单描述'&nbsp;&nbsp;'KTEXT'&nbsp;&nbsp;'AUFK',<br />
+&nbsp;&nbsp;&nbsp;&nbsp;'USER0'&nbsp;&nbsp;&nbsp;'C'&nbsp;'研发周期'&nbsp;&nbsp;''&nbsp;'',<br />
+&nbsp;&nbsp;&nbsp;&nbsp;'GJAHR'&nbsp;&nbsp;&nbsp;'C'&nbsp;'会计年度'&nbsp;&nbsp;'GJAHR'&nbsp;&nbsp;'BSEG',<br />
+&nbsp;&nbsp;&nbsp;&nbsp;'H_MONAT'&nbsp;'C'&nbsp;'期间'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'H_MONAT'&nbsp;&nbsp;'BSEG',<br />
+&nbsp;&nbsp;&nbsp;&nbsp;'BUDAT'&nbsp;&nbsp;&nbsp;'C'&nbsp;'过账日期'&nbsp;&nbsp;'BUDAT'&nbsp;&nbsp;'BKPF',<br />
+&nbsp;&nbsp;&nbsp;&nbsp;'BLART'&nbsp;&nbsp;&nbsp;'C'&nbsp;'凭证类型'&nbsp;&nbsp;'BLART'&nbsp;&nbsp;'BKPF',<br />
+&nbsp;&nbsp;&nbsp;&nbsp;'LTEXT'&nbsp;&nbsp;&nbsp;'L'&nbsp;'凭证类型描述'&nbsp;&nbsp;'LTEXT'&nbsp;&nbsp;'T003T',<br />
+&nbsp;&nbsp;&nbsp;&nbsp;'BELNR'&nbsp;&nbsp;&nbsp;'C'&nbsp;'凭证编号'&nbsp;&nbsp;'BELNR'&nbsp;&nbsp;'BSEG',<br />
+&nbsp;&nbsp;&nbsp;&nbsp;'BKTXT'&nbsp;&nbsp;&nbsp;'L'&nbsp;'凭证摘要'&nbsp;&nbsp;'BKTXT'&nbsp;&nbsp;'BKPF',<br />
+&nbsp;&nbsp;&nbsp;&nbsp;'DOCLN'&nbsp;&nbsp;&nbsp;'C'&nbsp;'凭证行项目'&nbsp;''&nbsp;&nbsp;'',<br />
+&nbsp;&nbsp;&nbsp;&nbsp;'HKONT'&nbsp;&nbsp;&nbsp;'C'&nbsp;'会计科目'&nbsp;&nbsp;'HKONT'&nbsp;&nbsp;'BSEG',<br />
+&nbsp;&nbsp;&nbsp;&nbsp;'TXT50'&nbsp;&nbsp;&nbsp;'L'&nbsp;'科目描述'&nbsp;&nbsp;'TXT50'&nbsp;&nbsp;'SKAT',<br />
+&nbsp;&nbsp;&nbsp;&nbsp;'DMBTR'&nbsp;&nbsp;&nbsp;'L'&nbsp;'金额'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'DMBTR'&nbsp;&nbsp;'BSEG',<br />
+&nbsp;&nbsp;&nbsp;&nbsp;'ZLX'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'C'&nbsp;'类型'&nbsp;&nbsp;''&nbsp;&nbsp;'',<br />
+&nbsp;&nbsp;&nbsp;&nbsp;'DMBTR_1'&nbsp;'L'&nbsp;'人员人工'&nbsp;&nbsp;'DMBTR'&nbsp;&nbsp;'BSEG',<br />
+&nbsp;&nbsp;&nbsp;&nbsp;'DMBTR_2'&nbsp;'L'&nbsp;'直接投入'&nbsp;&nbsp;'DMBTR'&nbsp;&nbsp;'BSEG',<br />
+&nbsp;&nbsp;&nbsp;&nbsp;'DMBTR_3'&nbsp;'L'&nbsp;'折旧'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'DMBTR'&nbsp;&nbsp;'BSEG',<br />
+&nbsp;&nbsp;&nbsp;&nbsp;'DMBTR_4'&nbsp;'L'&nbsp;'无形资产摊销'&nbsp;&nbsp;'DMBTR'&nbsp;&nbsp;'BSEG',<br />
+&nbsp;&nbsp;&nbsp;&nbsp;'DMBTR_5'&nbsp;'L'&nbsp;'新产品设计费'&nbsp;&nbsp;'DMBTR'&nbsp;&nbsp;'BSEG',<br />
+&nbsp;&nbsp;&nbsp;&nbsp;'DMBTR_6'&nbsp;'L'&nbsp;'其他相关费用'&nbsp;&nbsp;'DMBTR'&nbsp;&nbsp;'BSEG',<br />
+&nbsp;&nbsp;&nbsp;&nbsp;'DMBTR_7'&nbsp;'L'&nbsp;'委托研发费用-境内'&nbsp;'DMBTR'&nbsp;&nbsp;'BSEG',<br />
+&nbsp;&nbsp;&nbsp;&nbsp;'DMBTR_8'&nbsp;'L'&nbsp;'委托研发费用-境外'&nbsp;'DMBTR'&nbsp;&nbsp;'BSEG'.<br />
+<br />
+ENDFORM.<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Form&nbsp;check_data<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM check_data .<br />
+&nbsp;&nbsp;"&nbsp;权限检查。<br />
+&nbsp;&nbsp;SELECT&nbsp;*<br />
+&nbsp;&nbsp;INTO&nbsp;TABLE&nbsp;@DATA(gt_bukrs)<br />
+&nbsp;&nbsp;FROM&nbsp;t001<br />
+&nbsp;&nbsp;WHERE&nbsp;bukrs&nbsp;=&nbsp;@p_bukrs.<br />
+<br />
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;gt_bukrs&nbsp;INTO&nbsp;DATA(gs_bukrs).<br />
+&nbsp;&nbsp;&nbsp;&nbsp;AUTHORITY-CHECK&nbsp;OBJECT&nbsp;'F_BKPF_BUK'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ID&nbsp;'ACTVT'&nbsp;FIELD&nbsp;'03'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ID&nbsp;'BUKRS'&nbsp;FIELD&nbsp;&nbsp;gs_bukrs-bukrs.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;&lt;&gt;&nbsp;0.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;'你没有公司'&nbsp;&&&nbsp;gs_bukrs-bukrs&nbsp;&&&nbsp;'的权限!'&nbsp;TYPE&nbsp;'S'&nbsp;DISPLAY&nbsp;LIKE&nbsp;'E'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LEAVE&nbsp;LIST-PROCESSING.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+ENDFORM.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*Text&nbsp;elements<br />
+*----------------------------------------------------------<br />
+*&nbsp;001&nbsp;选择条件<br />
+*&nbsp;002&nbsp;功能选项<br />
+<br />
+<br />
+*Selection&nbsp;texts<br />
+*----------------------------------------------------------<br />
+*&nbsp;P1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;订单明细查看<br />
+*&nbsp;P2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;订单汇总查看<br />
+*&nbsp;P_BUKRS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;公司代码<br />
+*&nbsp;S_AUFNR&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;内部订单<br />
+*&nbsp;S_GJAHR&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;会计年度<br />
+*&nbsp;S_MONAT&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;期间<br />
+<br />
+<br />
+*Messages<br />
+*----------------------------------------------------------<br />
+*<br />
+*&nbsp;Message&nbsp;class:&nbsp;Hard&nbsp;coded<br />
+*&nbsp;&nbsp;&nbsp;你没有公司<br />
+*<br />
+*&nbsp;Message&nbsp;class:&nbsp;SABAPDOCU<br />
+*888&nbsp;&nbsp;&nbsp;&&nbsp;&&nbsp;&&nbsp;&<br />
+            </div>
+          </td>
+        </tr>
+      </table>
+      </td>
+      </tr>
+   <tr>
+<td class="footer">Extracted by Mass Download version 1.5.2 - E.G.Mellodew. 1998-2022. Sap Release 755</td>
+   </tr>
+</table>
+</body>
+</html>

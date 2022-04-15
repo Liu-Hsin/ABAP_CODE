@@ -1,0 +1,170 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=GB2312" />
+<title>ZFI004TOP</title>
+<style type="text/css">
+.code{ font-family:"Courier New", Courier, monospace; color:#000; font-size:14px; background-color:#F2F4F7 }
+  .codeComment {font-family:"Courier New", Courier, monospace; color:#0000F0; font-size:14px; background-color:#F2F4F7 }
+  .normalBold{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; font-weight:800 }
+  .normalBoldLarge{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+</style>
+<style type="text/css">
+  .normal{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px }
+  .footer{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; text-align: center }
+  h2{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+  h3{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:14px; font-weight:800 }
+  .outerTable{
+   background-color:#E0E7ED;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-right-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+  .innerTable{
+   background-color:#F2F4F7;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-bottom-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+</style>
+</head>
+<body>
+<table class="outerTable">
+  <tr class="normalBoldLarge">
+     <td><h2>Code listing for: ZFI004TOP</h2>
+<h3> Description: Include ZFI004TOP</h3></td>
+   </tr>
+  <tr>
+     <td>
+     <table class="innerTable">
+       <tr>
+          <td>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;包含&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ZFI004TOP<br />
+*&---------------------------------------------------------------------*<br />
+<br />
+   </div>
+   <div class="code">
+TYPE-POOLS: slis,icon,truxs.<br />
+TABLES: sscrfields,bkpf.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------&*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;alv&nbsp;parameter&nbsp;&nbsp;&nbsp;*&<br />
+*&---------------------------------------------------------------------&*<br />
+<br />
+   </div>
+   <div class="code">
+DATA: g_repid     LIKE sy-repid,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it_fieldcat&nbsp;TYPE&nbsp;lvc_t_fcat&nbsp;WITH&nbsp;HEADER&nbsp;LINE,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;is_layout&nbsp;&nbsp;&nbsp;TYPE&nbsp;lvc_s_layo.<br />
+<br />
+DATA: is_functxt TYPE smp_dyntxt.<br />
+DATA: it_raw  TYPE truxs_t_text_data.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&----------------------------------------------------------------------&<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;print<br />
+*&----------------------------------------------------------------------&<br />
+   </div>
+   <div class="code">
+DATA:  fm_name TYPE rs38l_fnam.<br />
+DATA   func_module_name    TYPE rs38l_fnam.<br />
+DATA   func_module_name2   TYPE rs38l_fnam.<br />
+DATA   output_options      TYPE ssfcompop.<br />
+DATA   control_parameters  TYPE ssfctrlop.<br />
+DATA   output_info         TYPE ssfcrescl.<br />
+DATA   job_output_options  TYPE ssfcresop.<br />
+   </div>
+   <div class="codeComment">
+*----------------&nbsp;end&nbsp;of&nbsp;defination&nbsp;------------------*<br />
+<br />
+<br />
+<br />
+*&----------------------------------------------------------------------&<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;全局字段<br />
+*&----------------------------------------------------------------------&<br />
+   </div>
+   <div class="code">
+DATA: BEGIN OF gs_out.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;include&nbsp;structure&nbsp;<a&nbsp;href&nbsp;="zfis002/dictionary-zfis002.html">zfis002</a>.<br />
+DATA:<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sel,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;checkbox,<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bukrs&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;&nbsp;bkpf-bukrs&nbsp;&nbsp;,&nbsp;"公司代码<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gjahr&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;&nbsp;bkpf-gjahr&nbsp;&nbsp;,&nbsp;"会计年度<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;blart&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;&nbsp;bkpf-blart&nbsp;&nbsp;,&nbsp;"凭证类型<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;budat&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;&nbsp;bkpf-budat&nbsp;&nbsp;,&nbsp;"过账日期<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;belnr&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;&nbsp;bkpf-belnr&nbsp;&nbsp;,&nbsp;"凭证编号<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;waers&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;&nbsp;bkpf-waers&nbsp;&nbsp;,&nbsp;"货币<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;kursf&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;&nbsp;bkpf-kursf&nbsp;&nbsp;,&nbsp;"汇率<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xblnr&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;&nbsp;bkpf-xblnr&nbsp;&nbsp;,&nbsp;"参照<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bktxt&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;&nbsp;bkpf-bktxt&nbsp;&nbsp;,&nbsp;"抬头文本<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stblg&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;&nbsp;bkpf-stblg&nbsp;&nbsp;,&nbsp;"冲销凭证<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;usnam&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;&nbsp;bkpf-usnam&nbsp;&nbsp;,&nbsp;"用户名<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;END&nbsp;OF&nbsp;gs_out.<br />
+DATA: gt_out LIKE TABLE OF gs_out.<br />
+<br />
+DATA: gs_tab LIKE gs_out,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gt_tab&nbsp;LIKE&nbsp;TABLE&nbsp;OF&nbsp;&nbsp;gs_tab.<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&----------------------------------------------------------------------&<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;选择屏幕<br />
+*&----------------------------------------------------------------------&<br />
+   </div>
+   <div class="code">
+SELECTION-SCREEN BEGIN OF BLOCK b1 WITH FRAME TITLE TEXT-001.<br />
+<br />
+&nbsp;&nbsp;PARAMETERS:&nbsp;p_bukrs&nbsp;LIKE&nbsp;bkpf-bukrs&nbsp;OBLIGATORY,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;p_gjahr&nbsp;LIKE&nbsp;bkpf-gjahr&nbsp;OBLIGATORY,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;p_monat&nbsp;LIKE&nbsp;bkpf-monat&nbsp;OBLIGATORY.<br />
+<br />
+&nbsp;&nbsp;SELECT-OPTIONS:&nbsp;s_budat&nbsp;FOR&nbsp;bkpf-budat,&nbsp;"DEFAULT&nbsp;sy-datum,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;s_bldat&nbsp;FOR&nbsp;bkpf-bldat,&nbsp;"DEFAULT&nbsp;sy-datum,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;s_blart&nbsp;FOR&nbsp;bkpf-blart,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;s_belnr&nbsp;FOR&nbsp;bkpf-belnr.<br />
+<br />
+&nbsp;&nbsp;PARAMETERS:&nbsp;"p_shname&nbsp;TYPE&nbsp;char6,&nbsp;"审核人<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;p_jzname&nbsp;TYPE&nbsp;char6.&nbsp;"&nbsp;记账人<br />
+<br />
+SELECTION-SCREEN END OF BLOCK b1.<br />
+<br />
+<br />
+SELECTION-SCREEN BEGIN OF BLOCK b2 WITH FRAME TITLE TEXT-002.<br />
+&nbsp;&nbsp;PARAMETERS:&nbsp;p_box1&nbsp;AS&nbsp;CHECKBOX,&nbsp;"&nbsp;仅打印自有凭证<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;p_box2&nbsp;AS&nbsp;CHECKBOX.&nbsp;"&nbsp;同科目同借贷合并打印<br />
+SELECTION-SCREEN END OF BLOCK b2 .<br />
+            </div>
+          </td>
+        </tr>
+      </table>
+      </td>
+      </tr>
+   <tr>
+<td class="footer">Extracted by Mass Download version 1.5.2 - E.G.Mellodew. 1998-2022. Sap Release 755</td>
+   </tr>
+</table>
+</body>
+</html>

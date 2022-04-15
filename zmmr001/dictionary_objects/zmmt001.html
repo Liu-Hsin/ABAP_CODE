@@ -1,0 +1,2037 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=GB2312" />
+<title>Dictionary object- ZMMT001</title>
+<style type="text/css">
+  th{text-align:left}
+  .cell{
+     font-family:"Courier New", Courier, monospace;
+     color:#000;
+     font-size:12px;
+     background-color:#F2F4F7;
+  }
+  .cell td { border: thin solid #ccc; }
+</style>
+<style type="text/css">
+  .normal{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px }
+  .footer{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; text-align: center }
+  h2{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+  h3{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:14px; font-weight:800 }
+  .outerTable{
+   background-color:#E0E7ED;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-right-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+  .innerTable{
+   background-color:#F2F4F7;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-bottom-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+</style>
+</head>
+<body>
+  <table class="outerTable">
+    <tr>
+      <td><h2>Table: ZMMT001</h2>
+  <h3>Description: SRM信息记录的创建与修改-EINE</h3></td>
+    </tr>
+    <tr>
+      <td><!--This is where our main table begins  -->
+<table class="innerTable">
+<tr>
+  <th>Row</th>
+  <th>Field name</th>
+  <th>Position</th>
+  <th>Key</th>
+  <th>Data element</th>
+  <th>Domain</th>
+  <th>Datatype</th>
+  <th>Length</th>
+  <th>Lowercase</th>
+  <th>Domain text</th>
+</tr>
+<tr class="cell">
+  <td> 1</td>
+  <td>MANDT</td>
+  <td>1</td>
+  <td>X</td>
+  <td>MANDT</td>
+  <td>MANDT</td>
+  <td>CLNT</td>
+  <td>3</td>
+  <td>&nbsp;</td>
+  <td>集团</td>
+</tr>
+<tr class="cell">
+  <td> 2</td>
+  <td>UUID</td>
+  <td>2</td>
+  <td>X</td>
+  <td>UUID</td>
+  <td>UUID</td>
+  <td>RAW</td>
+  <td>16</td>
+  <td>&nbsp;</td>
+  <td>针对表的通用唯一标识符</td>
+</tr>
+<tr class="cell">
+  <td> 3</td>
+  <td>LIFNR</td>
+  <td>3</td>
+  <td>X</td>
+  <td>ELIFN</td>
+  <td>LIFNR</td>
+  <td>CHAR</td>
+  <td>10</td>
+  <td>&nbsp;</td>
+  <td>供应商帐户号</td>
+</tr>
+<tr class="cell">
+  <td> 4</td>
+  <td>MATNR</td>
+  <td>4</td>
+  <td>X</td>
+  <td>MATNR</td>
+  <td>MATNR</td>
+  <td>CHAR</td>
+  <td>40</td>
+  <td>&nbsp;</td>
+  <td>物料编号</td>
+</tr>
+<tr class="cell">
+  <td> 5</td>
+  <td>ZGXWW</td>
+  <td>5</td>
+  <td>X</td>
+  <td>ZMM_E_001</td>
+  <td>&nbsp;</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>工序委外</td>
+</tr>
+<tr class="cell">
+  <td> 6</td>
+  <td>EKORG</td>
+  <td>6</td>
+  <td>X</td>
+  <td>EKORG</td>
+  <td>EKORG</td>
+  <td>CHAR</td>
+  <td>4</td>
+  <td>&nbsp;</td>
+  <td>采购组织</td>
+</tr>
+<tr class="cell">
+  <td> 7</td>
+  <td>WERKS</td>
+  <td>7</td>
+  <td>X</td>
+  <td>WERKS_D</td>
+  <td>WERKS</td>
+  <td>CHAR</td>
+  <td>4</td>
+  <td>&nbsp;</td>
+  <td>工厂</td>
+</tr>
+<tr class="cell">
+  <td> 8</td>
+  <td>ESOKZ</td>
+  <td>8</td>
+  <td>X</td>
+  <td>ESOKZ</td>
+  <td>ESOKZ</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>采购信息记录分类</td>
+</tr>
+<tr class="cell">
+  <td> 9</td>
+  <td>DATBI</td>
+  <td>9</td>
+  <td>X</td>
+  <td>DATBI</td>
+  <td>DATUM</td>
+  <td>DATS</td>
+  <td>8</td>
+  <td>&nbsp;</td>
+  <td>有效截至日期</td>
+</tr>
+<tr class="cell">
+  <td>10</td>
+  <td>DATAB</td>
+  <td>10</td>
+  <td>&nbsp;</td>
+  <td>DATAB</td>
+  <td>DATUM</td>
+  <td>DATS</td>
+  <td>8</td>
+  <td>&nbsp;</td>
+  <td>开始生效日期</td>
+</tr>
+<tr class="cell">
+  <td>11</td>
+  <td>INFNR</td>
+  <td>11</td>
+  <td>&nbsp;</td>
+  <td>INFNR</td>
+  <td>INFNR</td>
+  <td>CHAR</td>
+  <td>10</td>
+  <td>&nbsp;</td>
+  <td>采购信息记录号</td>
+</tr>
+<tr class="cell">
+  <td>12</td>
+  <td>KNUMH</td>
+  <td>12</td>
+  <td>&nbsp;</td>
+  <td>KNUMH</td>
+  <td>KNUMH</td>
+  <td>CHAR</td>
+  <td>10</td>
+  <td>&nbsp;</td>
+  <td>条件记录编号</td>
+</tr>
+<tr class="cell">
+  <td>13</td>
+  <td>TXZ01</td>
+  <td>13</td>
+  <td>&nbsp;</td>
+  <td>EINATX</td>
+  <td>TEXT40</td>
+  <td>CHAR</td>
+  <td>40</td>
+  <td>X</td>
+  <td>采购信息记录的短文本</td>
+</tr>
+<tr class="cell">
+  <td>14</td>
+  <td>MATKL</td>
+  <td>14</td>
+  <td>&nbsp;</td>
+  <td>MATKL</td>
+  <td>MATKL</td>
+  <td>CHAR</td>
+  <td>9</td>
+  <td>&nbsp;</td>
+  <td>物料组</td>
+</tr>
+<tr class="cell">
+  <td>15</td>
+  <td>SORTL</td>
+  <td>15</td>
+  <td>&nbsp;</td>
+  <td>SORTI</td>
+  <td>CHAR10</td>
+  <td>CHAR</td>
+  <td>10</td>
+  <td>&nbsp;</td>
+  <td>无库存信息记录的排序字符串</td>
+</tr>
+<tr class="cell">
+  <td>16</td>
+  <td>APLFZ</td>
+  <td>16</td>
+  <td>&nbsp;</td>
+  <td>PLIFZ</td>
+  <td>DEC3</td>
+  <td>DEC</td>
+  <td>3</td>
+  <td>&nbsp;</td>
+  <td>计划交货时间（天）</td>
+</tr>
+<tr class="cell">
+  <td>17</td>
+  <td>EKGRP</td>
+  <td>17</td>
+  <td>&nbsp;</td>
+  <td>EKGRP</td>
+  <td>EKGRP</td>
+  <td>CHAR</td>
+  <td>3</td>
+  <td>&nbsp;</td>
+  <td>采购组</td>
+</tr>
+<tr class="cell">
+  <td>18</td>
+  <td>MEINS</td>
+  <td>18</td>
+  <td>&nbsp;</td>
+  <td>MEINS</td>
+  <td>MEINS</td>
+  <td>UNIT</td>
+  <td>3</td>
+  <td>X</td>
+  <td>基本计量单位</td>
+</tr>
+<tr class="cell">
+  <td>19</td>
+  <td>NORBM</td>
+  <td>19</td>
+  <td>&nbsp;</td>
+  <td>NORBM</td>
+  <td>MENG13</td>
+  <td>QUAN</td>
+  <td>13</td>
+  <td>&nbsp;</td>
+  <td>标准采购订单数量</td>
+</tr>
+<tr class="cell">
+  <td>20</td>
+  <td>NETPR</td>
+  <td>20</td>
+  <td>&nbsp;</td>
+  <td>NETPR</td>
+  <td>WERTV6</td>
+  <td>CURR</td>
+  <td>11</td>
+  <td>&nbsp;</td>
+  <td>净价</td>
+</tr>
+<tr class="cell">
+  <td>21</td>
+  <td>WAERS</td>
+  <td>21</td>
+  <td>&nbsp;</td>
+  <td>WAERS</td>
+  <td>WAERS</td>
+  <td>CUKY</td>
+  <td>5</td>
+  <td>&nbsp;</td>
+  <td>货币码</td>
+</tr>
+<tr class="cell">
+  <td>22</td>
+  <td>PEINH</td>
+  <td>22</td>
+  <td>&nbsp;</td>
+  <td>EPEIN</td>
+  <td>DEC5</td>
+  <td>DEC</td>
+  <td>5</td>
+  <td>&nbsp;</td>
+  <td>价格单位</td>
+</tr>
+<tr class="cell">
+  <td>23</td>
+  <td>MWSKZ</td>
+  <td>23</td>
+  <td>&nbsp;</td>
+  <td>MWSKZ</td>
+  <td>MWSKZ</td>
+  <td>CHAR</td>
+  <td>2</td>
+  <td>&nbsp;</td>
+  <td>销售/购买税代码</td>
+</tr>
+<tr class="cell">
+  <td>24</td>
+  <td>WEBRE</td>
+  <td>24</td>
+  <td>&nbsp;</td>
+  <td>WEBRE</td>
+  <td>XFELD</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>标识：基于收货的发票验证</td>
+</tr>
+<tr class="cell">
+  <td>25</td>
+  <td>KOSRT</td>
+  <td>25</td>
+  <td>&nbsp;</td>
+  <td>KOSRT</td>
+  <td>CHAR10</td>
+  <td>CHAR</td>
+  <td>10</td>
+  <td>&nbsp;</td>
+  <td>条件寻找条件</td>
+</tr>
+<tr class="cell">
+  <td>26</td>
+  <td>ZYUNFEI</td>
+  <td>26</td>
+  <td>&nbsp;</td>
+  <td>ZMM_E_002</td>
+  <td>ZMM_D_002</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>是否含运费</td>
+</tr>
+<tr class="cell">
+  <td>27</td>
+  <td>ZJGBS</td>
+  <td>27</td>
+  <td>&nbsp;</td>
+  <td>ZMM_E_003</td>
+  <td>ZMM_D_003</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>价格标识</td>
+</tr>
+<tr class="cell">
+  <td>28</td>
+  <td>ZSRMNO</td>
+  <td>28</td>
+  <td>&nbsp;</td>
+  <td>ZMM_E_004</td>
+  <td>&nbsp;</td>
+  <td>CHAR</td>
+  <td>20</td>
+  <td>&nbsp;</td>
+  <td>SRM洽谈表</td>
+</tr>
+<tr class="cell">
+  <td>29</td>
+  <td>ZSRMITEM</td>
+  <td>29</td>
+  <td>&nbsp;</td>
+  <td>ZMM_E_005</td>
+  <td>&nbsp;</td>
+  <td>CHAR</td>
+  <td>20</td>
+  <td>&nbsp;</td>
+  <td>SRM洽谈表行号</td>
+</tr>
+<tr class="cell">
+  <td>30</td>
+  <td>ERNAM</td>
+  <td>30</td>
+  <td>&nbsp;</td>
+  <td>ERNAM</td>
+  <td>USNAM</td>
+  <td>CHAR</td>
+  <td>12</td>
+  <td>&nbsp;</td>
+  <td>创建对象的人员名称</td>
+</tr>
+<tr class="cell">
+  <td>31</td>
+  <td>ERSDA</td>
+  <td>31</td>
+  <td>&nbsp;</td>
+  <td>ERSDA</td>
+  <td>DATUM</td>
+  <td>DATS</td>
+  <td>8</td>
+  <td>&nbsp;</td>
+  <td>创建日期</td>
+</tr>
+<tr class="cell">
+  <td>32</td>
+  <td>ZCRTIME</td>
+  <td>32</td>
+  <td>&nbsp;</td>
+  <td>CREATED_AT_TIME</td>
+  <td>TIME</td>
+  <td>TIMS</td>
+  <td>6</td>
+  <td>&nbsp;</td>
+  <td>创建时间</td>
+</tr>
+<tr class="cell">
+  <td>33</td>
+  <td>STATUS</td>
+  <td>33</td>
+  <td>&nbsp;</td>
+  <td>ZMM_E_006</td>
+  <td>ZMM_D_006</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>处理状态</td>
+</tr>
+<tr class="cell">
+  <td>34</td>
+  <td>MESSAGE</td>
+  <td>34</td>
+  <td>&nbsp;</td>
+  <td>ZMM_E_007</td>
+  <td>&nbsp;</td>
+  <td>CHAR</td>
+  <td>220</td>
+  <td>&nbsp;</td>
+  <td>消息描述</td>
+</tr>
+<tr class="cell">
+  <td>35</td>
+  <td>AENAM</td>
+  <td>35</td>
+  <td>&nbsp;</td>
+  <td>AENAM</td>
+  <td>USNAM</td>
+  <td>CHAR</td>
+  <td>12</td>
+  <td>&nbsp;</td>
+  <td>更改对象用户的名称</td>
+</tr>
+<tr class="cell">
+  <td>36</td>
+  <td>LAEDA</td>
+  <td>36</td>
+  <td>&nbsp;</td>
+  <td>LAEDA</td>
+  <td>DATUM</td>
+  <td>DATS</td>
+  <td>8</td>
+  <td>&nbsp;</td>
+  <td>上次更改的日期</td>
+</tr>
+<tr class="cell">
+  <td>37</td>
+  <td>ZCHGTIME</td>
+  <td>37</td>
+  <td>&nbsp;</td>
+  <td>DMS_CHANGED_AT_TIME</td>
+  <td>TIME</td>
+  <td>TIMS</td>
+  <td>6</td>
+  <td>&nbsp;</td>
+  <td>上次更改的时间</td>
+</tr>
+      </table>
+     </td>
+   </tr>
+<br/>
+  <table class="outerTable">
+    <tr>
+      <td><h2>Fixed Domain Values </h2>
+    </tr>
+    <tr>
+      <td><!--This is where our main table begins  -->
+<table class="innerTable">
+<tr>
+  <th>Domain Name</th>
+  <th>Value Low</th>
+  <th>Value High</th>
+  <th>Text</th>
+</tr>
+<tr class="cell">
+  <td>ESOKZ</td>
+  <td>0</td>
+  <td>&nbsp;</td>
+  <td>标准</td>
+</tr>
+<tr class="cell">
+  <td>ESOKZ</td>
+  <td>2</td>
+  <td>&nbsp;</td>
+  <td>寄售</td>
+</tr>
+<tr class="cell">
+  <td>ESOKZ</td>
+  <td>3</td>
+  <td>&nbsp;</td>
+  <td>分包合同</td>
+</tr>
+<tr class="cell">
+  <td>ESOKZ</td>
+  <td>P</td>
+  <td>&nbsp;</td>
+  <td>管道</td>
+</tr>
+<tr class="cell">
+  <td>ESOKZ</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>可记帐</td>
+</tr>
+<tr class="cell">
+  <td>ESOKZ</td>
+  <td>0</td>
+  <td>&nbsp;</td>
+  <td>标准</td>
+</tr>
+<tr class="cell">
+  <td>ESOKZ</td>
+  <td>2</td>
+  <td>&nbsp;</td>
+  <td>寄售</td>
+</tr>
+<tr class="cell">
+  <td>ESOKZ</td>
+  <td>3</td>
+  <td>&nbsp;</td>
+  <td>分包合同</td>
+</tr>
+<tr class="cell">
+  <td>ESOKZ</td>
+  <td>P</td>
+  <td>&nbsp;</td>
+  <td>管道</td>
+</tr>
+<tr class="cell">
+  <td>ESOKZ</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>可记帐</td>
+</tr>
+<tr class="cell">
+  <td>ESOKZ</td>
+  <td>0</td>
+  <td>&nbsp;</td>
+  <td>标准</td>
+</tr>
+<tr class="cell">
+  <td>ESOKZ</td>
+  <td>2</td>
+  <td>&nbsp;</td>
+  <td>寄售</td>
+</tr>
+<tr class="cell">
+  <td>ESOKZ</td>
+  <td>3</td>
+  <td>&nbsp;</td>
+  <td>分包合同</td>
+</tr>
+<tr class="cell">
+  <td>ESOKZ</td>
+  <td>P</td>
+  <td>&nbsp;</td>
+  <td>管道</td>
+</tr>
+<tr class="cell">
+  <td>ESOKZ</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>可记帐</td>
+</tr>
+<tr class="cell">
+  <td>ESOKZ</td>
+  <td>0</td>
+  <td>&nbsp;</td>
+  <td>标准</td>
+</tr>
+<tr class="cell">
+  <td>ESOKZ</td>
+  <td>2</td>
+  <td>&nbsp;</td>
+  <td>寄售</td>
+</tr>
+<tr class="cell">
+  <td>ESOKZ</td>
+  <td>3</td>
+  <td>&nbsp;</td>
+  <td>分包合同</td>
+</tr>
+<tr class="cell">
+  <td>ESOKZ</td>
+  <td>P</td>
+  <td>&nbsp;</td>
+  <td>管道</td>
+</tr>
+<tr class="cell">
+  <td>ESOKZ</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>可记帐</td>
+</tr>
+<tr class="cell">
+  <td>ESOKZ</td>
+  <td>0</td>
+  <td>&nbsp;</td>
+  <td>标准</td>
+</tr>
+<tr class="cell">
+  <td>ESOKZ</td>
+  <td>2</td>
+  <td>&nbsp;</td>
+  <td>寄售</td>
+</tr>
+<tr class="cell">
+  <td>ESOKZ</td>
+  <td>3</td>
+  <td>&nbsp;</td>
+  <td>分包合同</td>
+</tr>
+<tr class="cell">
+  <td>ESOKZ</td>
+  <td>P</td>
+  <td>&nbsp;</td>
+  <td>管道</td>
+</tr>
+<tr class="cell">
+  <td>ESOKZ</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>可记帐</td>
+</tr>
+<tr class="cell">
+  <td>ESOKZ</td>
+  <td>0</td>
+  <td>&nbsp;</td>
+  <td>标准</td>
+</tr>
+<tr class="cell">
+  <td>ESOKZ</td>
+  <td>2</td>
+  <td>&nbsp;</td>
+  <td>寄售</td>
+</tr>
+<tr class="cell">
+  <td>ESOKZ</td>
+  <td>3</td>
+  <td>&nbsp;</td>
+  <td>分包合同</td>
+</tr>
+<tr class="cell">
+  <td>ESOKZ</td>
+  <td>P</td>
+  <td>&nbsp;</td>
+  <td>管道</td>
+</tr>
+<tr class="cell">
+  <td>ESOKZ</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>可记帐</td>
+</tr>
+<tr class="cell">
+  <td>ESOKZ</td>
+  <td>0</td>
+  <td>&nbsp;</td>
+  <td>标准</td>
+</tr>
+<tr class="cell">
+  <td>ESOKZ</td>
+  <td>2</td>
+  <td>&nbsp;</td>
+  <td>寄售</td>
+</tr>
+<tr class="cell">
+  <td>ESOKZ</td>
+  <td>3</td>
+  <td>&nbsp;</td>
+  <td>分包合同</td>
+</tr>
+<tr class="cell">
+  <td>ESOKZ</td>
+  <td>P</td>
+  <td>&nbsp;</td>
+  <td>管道</td>
+</tr>
+<tr class="cell">
+  <td>ESOKZ</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>可记帐</td>
+</tr>
+<tr class="cell">
+  <td>ESOKZ</td>
+  <td>0</td>
+  <td>&nbsp;</td>
+  <td>标准</td>
+</tr>
+<tr class="cell">
+  <td>ESOKZ</td>
+  <td>2</td>
+  <td>&nbsp;</td>
+  <td>寄售</td>
+</tr>
+<tr class="cell">
+  <td>ESOKZ</td>
+  <td>3</td>
+  <td>&nbsp;</td>
+  <td>分包合同</td>
+</tr>
+<tr class="cell">
+  <td>ESOKZ</td>
+  <td>P</td>
+  <td>&nbsp;</td>
+  <td>管道</td>
+</tr>
+<tr class="cell">
+  <td>ESOKZ</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>可记帐</td>
+</tr>
+<tr class="cell">
+  <td>ESOKZ</td>
+  <td>0</td>
+  <td>&nbsp;</td>
+  <td>标准</td>
+</tr>
+<tr class="cell">
+  <td>ESOKZ</td>
+  <td>2</td>
+  <td>&nbsp;</td>
+  <td>寄售</td>
+</tr>
+<tr class="cell">
+  <td>ESOKZ</td>
+  <td>3</td>
+  <td>&nbsp;</td>
+  <td>分包合同</td>
+</tr>
+<tr class="cell">
+  <td>ESOKZ</td>
+  <td>P</td>
+  <td>&nbsp;</td>
+  <td>管道</td>
+</tr>
+<tr class="cell">
+  <td>ESOKZ</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>可记帐</td>
+</tr>
+<tr class="cell">
+  <td>ESOKZ</td>
+  <td>0</td>
+  <td>&nbsp;</td>
+  <td>标准</td>
+</tr>
+<tr class="cell">
+  <td>ESOKZ</td>
+  <td>2</td>
+  <td>&nbsp;</td>
+  <td>寄售</td>
+</tr>
+<tr class="cell">
+  <td>ESOKZ</td>
+  <td>3</td>
+  <td>&nbsp;</td>
+  <td>分包合同</td>
+</tr>
+<tr class="cell">
+  <td>ESOKZ</td>
+  <td>P</td>
+  <td>&nbsp;</td>
+  <td>管道</td>
+</tr>
+<tr class="cell">
+  <td>ESOKZ</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>可记帐</td>
+</tr>
+<tr class="cell">
+  <td>ESOKZ</td>
+  <td>0</td>
+  <td>&nbsp;</td>
+  <td>标准</td>
+</tr>
+<tr class="cell">
+  <td>ESOKZ</td>
+  <td>2</td>
+  <td>&nbsp;</td>
+  <td>寄售</td>
+</tr>
+<tr class="cell">
+  <td>ESOKZ</td>
+  <td>3</td>
+  <td>&nbsp;</td>
+  <td>分包合同</td>
+</tr>
+<tr class="cell">
+  <td>ESOKZ</td>
+  <td>P</td>
+  <td>&nbsp;</td>
+  <td>管道</td>
+</tr>
+<tr class="cell">
+  <td>ESOKZ</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>可记帐</td>
+</tr>
+<tr class="cell">
+  <td>ESOKZ</td>
+  <td>0</td>
+  <td>&nbsp;</td>
+  <td>标准</td>
+</tr>
+<tr class="cell">
+  <td>ESOKZ</td>
+  <td>2</td>
+  <td>&nbsp;</td>
+  <td>寄售</td>
+</tr>
+<tr class="cell">
+  <td>ESOKZ</td>
+  <td>3</td>
+  <td>&nbsp;</td>
+  <td>分包合同</td>
+</tr>
+<tr class="cell">
+  <td>ESOKZ</td>
+  <td>P</td>
+  <td>&nbsp;</td>
+  <td>管道</td>
+</tr>
+<tr class="cell">
+  <td>ESOKZ</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>可记帐</td>
+</tr>
+<tr class="cell">
+  <td>ESOKZ</td>
+  <td>0</td>
+  <td>&nbsp;</td>
+  <td>标准</td>
+</tr>
+<tr class="cell">
+  <td>ESOKZ</td>
+  <td>2</td>
+  <td>&nbsp;</td>
+  <td>寄售</td>
+</tr>
+<tr class="cell">
+  <td>ESOKZ</td>
+  <td>3</td>
+  <td>&nbsp;</td>
+  <td>分包合同</td>
+</tr>
+<tr class="cell">
+  <td>ESOKZ</td>
+  <td>P</td>
+  <td>&nbsp;</td>
+  <td>管道</td>
+</tr>
+<tr class="cell">
+  <td>ESOKZ</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>可记帐</td>
+</tr>
+<tr class="cell">
+  <td>ESOKZ</td>
+  <td>0</td>
+  <td>&nbsp;</td>
+  <td>标准</td>
+</tr>
+<tr class="cell">
+  <td>ESOKZ</td>
+  <td>2</td>
+  <td>&nbsp;</td>
+  <td>寄售</td>
+</tr>
+<tr class="cell">
+  <td>ESOKZ</td>
+  <td>3</td>
+  <td>&nbsp;</td>
+  <td>分包合同</td>
+</tr>
+<tr class="cell">
+  <td>ESOKZ</td>
+  <td>P</td>
+  <td>&nbsp;</td>
+  <td>管道</td>
+</tr>
+<tr class="cell">
+  <td>ESOKZ</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>可记帐</td>
+</tr>
+<tr class="cell">
+  <td>ESOKZ</td>
+  <td>0</td>
+  <td>&nbsp;</td>
+  <td>标准</td>
+</tr>
+<tr class="cell">
+  <td>ESOKZ</td>
+  <td>2</td>
+  <td>&nbsp;</td>
+  <td>寄售</td>
+</tr>
+<tr class="cell">
+  <td>ESOKZ</td>
+  <td>3</td>
+  <td>&nbsp;</td>
+  <td>分包合同</td>
+</tr>
+<tr class="cell">
+  <td>ESOKZ</td>
+  <td>P</td>
+  <td>&nbsp;</td>
+  <td>管道</td>
+</tr>
+<tr class="cell">
+  <td>ESOKZ</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>可记帐</td>
+</tr>
+<tr class="cell">
+  <td>ESOKZ</td>
+  <td>0</td>
+  <td>&nbsp;</td>
+  <td>标准</td>
+</tr>
+<tr class="cell">
+  <td>ESOKZ</td>
+  <td>2</td>
+  <td>&nbsp;</td>
+  <td>寄售</td>
+</tr>
+<tr class="cell">
+  <td>ESOKZ</td>
+  <td>3</td>
+  <td>&nbsp;</td>
+  <td>分包合同</td>
+</tr>
+<tr class="cell">
+  <td>ESOKZ</td>
+  <td>P</td>
+  <td>&nbsp;</td>
+  <td>管道</td>
+</tr>
+<tr class="cell">
+  <td>ESOKZ</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>可记帐</td>
+</tr>
+<tr class="cell">
+  <td>ESOKZ</td>
+  <td>0</td>
+  <td>&nbsp;</td>
+  <td>标准</td>
+</tr>
+<tr class="cell">
+  <td>ESOKZ</td>
+  <td>2</td>
+  <td>&nbsp;</td>
+  <td>寄售</td>
+</tr>
+<tr class="cell">
+  <td>ESOKZ</td>
+  <td>3</td>
+  <td>&nbsp;</td>
+  <td>分包合同</td>
+</tr>
+<tr class="cell">
+  <td>ESOKZ</td>
+  <td>P</td>
+  <td>&nbsp;</td>
+  <td>管道</td>
+</tr>
+<tr class="cell">
+  <td>ESOKZ</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>可记帐</td>
+</tr>
+<tr class="cell">
+  <td>XFELD</td>
+  <td>X</td>
+  <td>&nbsp;</td>
+  <td>是</td>
+</tr>
+<tr class="cell">
+  <td>XFELD</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>否</td>
+</tr>
+<tr class="cell">
+  <td>ESOKZ</td>
+  <td>0</td>
+  <td>&nbsp;</td>
+  <td>标准</td>
+</tr>
+<tr class="cell">
+  <td>ESOKZ</td>
+  <td>2</td>
+  <td>&nbsp;</td>
+  <td>寄售</td>
+</tr>
+<tr class="cell">
+  <td>ESOKZ</td>
+  <td>3</td>
+  <td>&nbsp;</td>
+  <td>分包合同</td>
+</tr>
+<tr class="cell">
+  <td>ESOKZ</td>
+  <td>P</td>
+  <td>&nbsp;</td>
+  <td>管道</td>
+</tr>
+<tr class="cell">
+  <td>ESOKZ</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>可记帐</td>
+</tr>
+<tr class="cell">
+  <td>XFELD</td>
+  <td>X</td>
+  <td>&nbsp;</td>
+  <td>是</td>
+</tr>
+<tr class="cell">
+  <td>XFELD</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>否</td>
+</tr>
+<tr class="cell">
+  <td>ESOKZ</td>
+  <td>0</td>
+  <td>&nbsp;</td>
+  <td>标准</td>
+</tr>
+<tr class="cell">
+  <td>ESOKZ</td>
+  <td>2</td>
+  <td>&nbsp;</td>
+  <td>寄售</td>
+</tr>
+<tr class="cell">
+  <td>ESOKZ</td>
+  <td>3</td>
+  <td>&nbsp;</td>
+  <td>分包合同</td>
+</tr>
+<tr class="cell">
+  <td>ESOKZ</td>
+  <td>P</td>
+  <td>&nbsp;</td>
+  <td>管道</td>
+</tr>
+<tr class="cell">
+  <td>ESOKZ</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>可记帐</td>
+</tr>
+<tr class="cell">
+  <td>XFELD</td>
+  <td>X</td>
+  <td>&nbsp;</td>
+  <td>是</td>
+</tr>
+<tr class="cell">
+  <td>XFELD</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>否</td>
+</tr>
+<tr class="cell">
+  <td>ZMM_D_002</td>
+  <td>Y</td>
+  <td>&nbsp;</td>
+  <td>是</td>
+</tr>
+<tr class="cell">
+  <td>ZMM_D_002</td>
+  <td>N</td>
+  <td>&nbsp;</td>
+  <td>否</td>
+</tr>
+<tr class="cell">
+  <td>ESOKZ</td>
+  <td>0</td>
+  <td>&nbsp;</td>
+  <td>标准</td>
+</tr>
+<tr class="cell">
+  <td>ESOKZ</td>
+  <td>2</td>
+  <td>&nbsp;</td>
+  <td>寄售</td>
+</tr>
+<tr class="cell">
+  <td>ESOKZ</td>
+  <td>3</td>
+  <td>&nbsp;</td>
+  <td>分包合同</td>
+</tr>
+<tr class="cell">
+  <td>ESOKZ</td>
+  <td>P</td>
+  <td>&nbsp;</td>
+  <td>管道</td>
+</tr>
+<tr class="cell">
+  <td>ESOKZ</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>可记帐</td>
+</tr>
+<tr class="cell">
+  <td>XFELD</td>
+  <td>X</td>
+  <td>&nbsp;</td>
+  <td>是</td>
+</tr>
+<tr class="cell">
+  <td>XFELD</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>否</td>
+</tr>
+<tr class="cell">
+  <td>ZMM_D_002</td>
+  <td>Y</td>
+  <td>&nbsp;</td>
+  <td>是</td>
+</tr>
+<tr class="cell">
+  <td>ZMM_D_002</td>
+  <td>N</td>
+  <td>&nbsp;</td>
+  <td>否</td>
+</tr>
+<tr class="cell">
+  <td>ZMM_D_003</td>
+  <td>A</td>
+  <td>&nbsp;</td>
+  <td>普通价</td>
+</tr>
+<tr class="cell">
+  <td>ZMM_D_003</td>
+  <td>B</td>
+  <td>&nbsp;</td>
+  <td>阶梯价</td>
+</tr>
+<tr class="cell">
+  <td>ZMM_D_003</td>
+  <td>C</td>
+  <td>&nbsp;</td>
+  <td>基准价</td>
+</tr>
+<tr class="cell">
+  <td>ESOKZ</td>
+  <td>0</td>
+  <td>&nbsp;</td>
+  <td>标准</td>
+</tr>
+<tr class="cell">
+  <td>ESOKZ</td>
+  <td>2</td>
+  <td>&nbsp;</td>
+  <td>寄售</td>
+</tr>
+<tr class="cell">
+  <td>ESOKZ</td>
+  <td>3</td>
+  <td>&nbsp;</td>
+  <td>分包合同</td>
+</tr>
+<tr class="cell">
+  <td>ESOKZ</td>
+  <td>P</td>
+  <td>&nbsp;</td>
+  <td>管道</td>
+</tr>
+<tr class="cell">
+  <td>ESOKZ</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>可记帐</td>
+</tr>
+<tr class="cell">
+  <td>XFELD</td>
+  <td>X</td>
+  <td>&nbsp;</td>
+  <td>是</td>
+</tr>
+<tr class="cell">
+  <td>XFELD</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>否</td>
+</tr>
+<tr class="cell">
+  <td>ZMM_D_002</td>
+  <td>Y</td>
+  <td>&nbsp;</td>
+  <td>是</td>
+</tr>
+<tr class="cell">
+  <td>ZMM_D_002</td>
+  <td>N</td>
+  <td>&nbsp;</td>
+  <td>否</td>
+</tr>
+<tr class="cell">
+  <td>ZMM_D_003</td>
+  <td>A</td>
+  <td>&nbsp;</td>
+  <td>普通价</td>
+</tr>
+<tr class="cell">
+  <td>ZMM_D_003</td>
+  <td>B</td>
+  <td>&nbsp;</td>
+  <td>阶梯价</td>
+</tr>
+<tr class="cell">
+  <td>ZMM_D_003</td>
+  <td>C</td>
+  <td>&nbsp;</td>
+  <td>基准价</td>
+</tr>
+<tr class="cell">
+  <td>ESOKZ</td>
+  <td>0</td>
+  <td>&nbsp;</td>
+  <td>标准</td>
+</tr>
+<tr class="cell">
+  <td>ESOKZ</td>
+  <td>2</td>
+  <td>&nbsp;</td>
+  <td>寄售</td>
+</tr>
+<tr class="cell">
+  <td>ESOKZ</td>
+  <td>3</td>
+  <td>&nbsp;</td>
+  <td>分包合同</td>
+</tr>
+<tr class="cell">
+  <td>ESOKZ</td>
+  <td>P</td>
+  <td>&nbsp;</td>
+  <td>管道</td>
+</tr>
+<tr class="cell">
+  <td>ESOKZ</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>可记帐</td>
+</tr>
+<tr class="cell">
+  <td>XFELD</td>
+  <td>X</td>
+  <td>&nbsp;</td>
+  <td>是</td>
+</tr>
+<tr class="cell">
+  <td>XFELD</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>否</td>
+</tr>
+<tr class="cell">
+  <td>ZMM_D_002</td>
+  <td>Y</td>
+  <td>&nbsp;</td>
+  <td>是</td>
+</tr>
+<tr class="cell">
+  <td>ZMM_D_002</td>
+  <td>N</td>
+  <td>&nbsp;</td>
+  <td>否</td>
+</tr>
+<tr class="cell">
+  <td>ZMM_D_003</td>
+  <td>A</td>
+  <td>&nbsp;</td>
+  <td>普通价</td>
+</tr>
+<tr class="cell">
+  <td>ZMM_D_003</td>
+  <td>B</td>
+  <td>&nbsp;</td>
+  <td>阶梯价</td>
+</tr>
+<tr class="cell">
+  <td>ZMM_D_003</td>
+  <td>C</td>
+  <td>&nbsp;</td>
+  <td>基准价</td>
+</tr>
+<tr class="cell">
+  <td>ESOKZ</td>
+  <td>0</td>
+  <td>&nbsp;</td>
+  <td>标准</td>
+</tr>
+<tr class="cell">
+  <td>ESOKZ</td>
+  <td>2</td>
+  <td>&nbsp;</td>
+  <td>寄售</td>
+</tr>
+<tr class="cell">
+  <td>ESOKZ</td>
+  <td>3</td>
+  <td>&nbsp;</td>
+  <td>分包合同</td>
+</tr>
+<tr class="cell">
+  <td>ESOKZ</td>
+  <td>P</td>
+  <td>&nbsp;</td>
+  <td>管道</td>
+</tr>
+<tr class="cell">
+  <td>ESOKZ</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>可记帐</td>
+</tr>
+<tr class="cell">
+  <td>XFELD</td>
+  <td>X</td>
+  <td>&nbsp;</td>
+  <td>是</td>
+</tr>
+<tr class="cell">
+  <td>XFELD</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>否</td>
+</tr>
+<tr class="cell">
+  <td>ZMM_D_002</td>
+  <td>Y</td>
+  <td>&nbsp;</td>
+  <td>是</td>
+</tr>
+<tr class="cell">
+  <td>ZMM_D_002</td>
+  <td>N</td>
+  <td>&nbsp;</td>
+  <td>否</td>
+</tr>
+<tr class="cell">
+  <td>ZMM_D_003</td>
+  <td>A</td>
+  <td>&nbsp;</td>
+  <td>普通价</td>
+</tr>
+<tr class="cell">
+  <td>ZMM_D_003</td>
+  <td>B</td>
+  <td>&nbsp;</td>
+  <td>阶梯价</td>
+</tr>
+<tr class="cell">
+  <td>ZMM_D_003</td>
+  <td>C</td>
+  <td>&nbsp;</td>
+  <td>基准价</td>
+</tr>
+<tr class="cell">
+  <td>ESOKZ</td>
+  <td>0</td>
+  <td>&nbsp;</td>
+  <td>标准</td>
+</tr>
+<tr class="cell">
+  <td>ESOKZ</td>
+  <td>2</td>
+  <td>&nbsp;</td>
+  <td>寄售</td>
+</tr>
+<tr class="cell">
+  <td>ESOKZ</td>
+  <td>3</td>
+  <td>&nbsp;</td>
+  <td>分包合同</td>
+</tr>
+<tr class="cell">
+  <td>ESOKZ</td>
+  <td>P</td>
+  <td>&nbsp;</td>
+  <td>管道</td>
+</tr>
+<tr class="cell">
+  <td>ESOKZ</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>可记帐</td>
+</tr>
+<tr class="cell">
+  <td>XFELD</td>
+  <td>X</td>
+  <td>&nbsp;</td>
+  <td>是</td>
+</tr>
+<tr class="cell">
+  <td>XFELD</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>否</td>
+</tr>
+<tr class="cell">
+  <td>ZMM_D_002</td>
+  <td>Y</td>
+  <td>&nbsp;</td>
+  <td>是</td>
+</tr>
+<tr class="cell">
+  <td>ZMM_D_002</td>
+  <td>N</td>
+  <td>&nbsp;</td>
+  <td>否</td>
+</tr>
+<tr class="cell">
+  <td>ZMM_D_003</td>
+  <td>A</td>
+  <td>&nbsp;</td>
+  <td>普通价</td>
+</tr>
+<tr class="cell">
+  <td>ZMM_D_003</td>
+  <td>B</td>
+  <td>&nbsp;</td>
+  <td>阶梯价</td>
+</tr>
+<tr class="cell">
+  <td>ZMM_D_003</td>
+  <td>C</td>
+  <td>&nbsp;</td>
+  <td>基准价</td>
+</tr>
+<tr class="cell">
+  <td>ESOKZ</td>
+  <td>0</td>
+  <td>&nbsp;</td>
+  <td>标准</td>
+</tr>
+<tr class="cell">
+  <td>ESOKZ</td>
+  <td>2</td>
+  <td>&nbsp;</td>
+  <td>寄售</td>
+</tr>
+<tr class="cell">
+  <td>ESOKZ</td>
+  <td>3</td>
+  <td>&nbsp;</td>
+  <td>分包合同</td>
+</tr>
+<tr class="cell">
+  <td>ESOKZ</td>
+  <td>P</td>
+  <td>&nbsp;</td>
+  <td>管道</td>
+</tr>
+<tr class="cell">
+  <td>ESOKZ</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>可记帐</td>
+</tr>
+<tr class="cell">
+  <td>XFELD</td>
+  <td>X</td>
+  <td>&nbsp;</td>
+  <td>是</td>
+</tr>
+<tr class="cell">
+  <td>XFELD</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>否</td>
+</tr>
+<tr class="cell">
+  <td>ZMM_D_002</td>
+  <td>Y</td>
+  <td>&nbsp;</td>
+  <td>是</td>
+</tr>
+<tr class="cell">
+  <td>ZMM_D_002</td>
+  <td>N</td>
+  <td>&nbsp;</td>
+  <td>否</td>
+</tr>
+<tr class="cell">
+  <td>ZMM_D_003</td>
+  <td>A</td>
+  <td>&nbsp;</td>
+  <td>普通价</td>
+</tr>
+<tr class="cell">
+  <td>ZMM_D_003</td>
+  <td>B</td>
+  <td>&nbsp;</td>
+  <td>阶梯价</td>
+</tr>
+<tr class="cell">
+  <td>ZMM_D_003</td>
+  <td>C</td>
+  <td>&nbsp;</td>
+  <td>基准价</td>
+</tr>
+<tr class="cell">
+  <td>ESOKZ</td>
+  <td>0</td>
+  <td>&nbsp;</td>
+  <td>标准</td>
+</tr>
+<tr class="cell">
+  <td>ESOKZ</td>
+  <td>2</td>
+  <td>&nbsp;</td>
+  <td>寄售</td>
+</tr>
+<tr class="cell">
+  <td>ESOKZ</td>
+  <td>3</td>
+  <td>&nbsp;</td>
+  <td>分包合同</td>
+</tr>
+<tr class="cell">
+  <td>ESOKZ</td>
+  <td>P</td>
+  <td>&nbsp;</td>
+  <td>管道</td>
+</tr>
+<tr class="cell">
+  <td>ESOKZ</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>可记帐</td>
+</tr>
+<tr class="cell">
+  <td>XFELD</td>
+  <td>X</td>
+  <td>&nbsp;</td>
+  <td>是</td>
+</tr>
+<tr class="cell">
+  <td>XFELD</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>否</td>
+</tr>
+<tr class="cell">
+  <td>ZMM_D_002</td>
+  <td>Y</td>
+  <td>&nbsp;</td>
+  <td>是</td>
+</tr>
+<tr class="cell">
+  <td>ZMM_D_002</td>
+  <td>N</td>
+  <td>&nbsp;</td>
+  <td>否</td>
+</tr>
+<tr class="cell">
+  <td>ZMM_D_003</td>
+  <td>A</td>
+  <td>&nbsp;</td>
+  <td>普通价</td>
+</tr>
+<tr class="cell">
+  <td>ZMM_D_003</td>
+  <td>B</td>
+  <td>&nbsp;</td>
+  <td>阶梯价</td>
+</tr>
+<tr class="cell">
+  <td>ZMM_D_003</td>
+  <td>C</td>
+  <td>&nbsp;</td>
+  <td>基准价</td>
+</tr>
+<tr class="cell">
+  <td>ZMM_D_006</td>
+  <td>S</td>
+  <td>&nbsp;</td>
+  <td>成功</td>
+</tr>
+<tr class="cell">
+  <td>ZMM_D_006</td>
+  <td>E</td>
+  <td>&nbsp;</td>
+  <td>失败</td>
+</tr>
+<tr class="cell">
+  <td>ZMM_D_006</td>
+  <td>W</td>
+  <td>&nbsp;</td>
+  <td>警告</td>
+</tr>
+<tr class="cell">
+  <td>ESOKZ</td>
+  <td>0</td>
+  <td>&nbsp;</td>
+  <td>标准</td>
+</tr>
+<tr class="cell">
+  <td>ESOKZ</td>
+  <td>2</td>
+  <td>&nbsp;</td>
+  <td>寄售</td>
+</tr>
+<tr class="cell">
+  <td>ESOKZ</td>
+  <td>3</td>
+  <td>&nbsp;</td>
+  <td>分包合同</td>
+</tr>
+<tr class="cell">
+  <td>ESOKZ</td>
+  <td>P</td>
+  <td>&nbsp;</td>
+  <td>管道</td>
+</tr>
+<tr class="cell">
+  <td>ESOKZ</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>可记帐</td>
+</tr>
+<tr class="cell">
+  <td>XFELD</td>
+  <td>X</td>
+  <td>&nbsp;</td>
+  <td>是</td>
+</tr>
+<tr class="cell">
+  <td>XFELD</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>否</td>
+</tr>
+<tr class="cell">
+  <td>ZMM_D_002</td>
+  <td>Y</td>
+  <td>&nbsp;</td>
+  <td>是</td>
+</tr>
+<tr class="cell">
+  <td>ZMM_D_002</td>
+  <td>N</td>
+  <td>&nbsp;</td>
+  <td>否</td>
+</tr>
+<tr class="cell">
+  <td>ZMM_D_003</td>
+  <td>A</td>
+  <td>&nbsp;</td>
+  <td>普通价</td>
+</tr>
+<tr class="cell">
+  <td>ZMM_D_003</td>
+  <td>B</td>
+  <td>&nbsp;</td>
+  <td>阶梯价</td>
+</tr>
+<tr class="cell">
+  <td>ZMM_D_003</td>
+  <td>C</td>
+  <td>&nbsp;</td>
+  <td>基准价</td>
+</tr>
+<tr class="cell">
+  <td>ZMM_D_006</td>
+  <td>S</td>
+  <td>&nbsp;</td>
+  <td>成功</td>
+</tr>
+<tr class="cell">
+  <td>ZMM_D_006</td>
+  <td>E</td>
+  <td>&nbsp;</td>
+  <td>失败</td>
+</tr>
+<tr class="cell">
+  <td>ZMM_D_006</td>
+  <td>W</td>
+  <td>&nbsp;</td>
+  <td>警告</td>
+</tr>
+<tr class="cell">
+  <td>ESOKZ</td>
+  <td>0</td>
+  <td>&nbsp;</td>
+  <td>标准</td>
+</tr>
+<tr class="cell">
+  <td>ESOKZ</td>
+  <td>2</td>
+  <td>&nbsp;</td>
+  <td>寄售</td>
+</tr>
+<tr class="cell">
+  <td>ESOKZ</td>
+  <td>3</td>
+  <td>&nbsp;</td>
+  <td>分包合同</td>
+</tr>
+<tr class="cell">
+  <td>ESOKZ</td>
+  <td>P</td>
+  <td>&nbsp;</td>
+  <td>管道</td>
+</tr>
+<tr class="cell">
+  <td>ESOKZ</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>可记帐</td>
+</tr>
+<tr class="cell">
+  <td>XFELD</td>
+  <td>X</td>
+  <td>&nbsp;</td>
+  <td>是</td>
+</tr>
+<tr class="cell">
+  <td>XFELD</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>否</td>
+</tr>
+<tr class="cell">
+  <td>ZMM_D_002</td>
+  <td>Y</td>
+  <td>&nbsp;</td>
+  <td>是</td>
+</tr>
+<tr class="cell">
+  <td>ZMM_D_002</td>
+  <td>N</td>
+  <td>&nbsp;</td>
+  <td>否</td>
+</tr>
+<tr class="cell">
+  <td>ZMM_D_003</td>
+  <td>A</td>
+  <td>&nbsp;</td>
+  <td>普通价</td>
+</tr>
+<tr class="cell">
+  <td>ZMM_D_003</td>
+  <td>B</td>
+  <td>&nbsp;</td>
+  <td>阶梯价</td>
+</tr>
+<tr class="cell">
+  <td>ZMM_D_003</td>
+  <td>C</td>
+  <td>&nbsp;</td>
+  <td>基准价</td>
+</tr>
+<tr class="cell">
+  <td>ZMM_D_006</td>
+  <td>S</td>
+  <td>&nbsp;</td>
+  <td>成功</td>
+</tr>
+<tr class="cell">
+  <td>ZMM_D_006</td>
+  <td>E</td>
+  <td>&nbsp;</td>
+  <td>失败</td>
+</tr>
+<tr class="cell">
+  <td>ZMM_D_006</td>
+  <td>W</td>
+  <td>&nbsp;</td>
+  <td>警告</td>
+</tr>
+<tr class="cell">
+  <td>ESOKZ</td>
+  <td>0</td>
+  <td>&nbsp;</td>
+  <td>标准</td>
+</tr>
+<tr class="cell">
+  <td>ESOKZ</td>
+  <td>2</td>
+  <td>&nbsp;</td>
+  <td>寄售</td>
+</tr>
+<tr class="cell">
+  <td>ESOKZ</td>
+  <td>3</td>
+  <td>&nbsp;</td>
+  <td>分包合同</td>
+</tr>
+<tr class="cell">
+  <td>ESOKZ</td>
+  <td>P</td>
+  <td>&nbsp;</td>
+  <td>管道</td>
+</tr>
+<tr class="cell">
+  <td>ESOKZ</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>可记帐</td>
+</tr>
+<tr class="cell">
+  <td>XFELD</td>
+  <td>X</td>
+  <td>&nbsp;</td>
+  <td>是</td>
+</tr>
+<tr class="cell">
+  <td>XFELD</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>否</td>
+</tr>
+<tr class="cell">
+  <td>ZMM_D_002</td>
+  <td>Y</td>
+  <td>&nbsp;</td>
+  <td>是</td>
+</tr>
+<tr class="cell">
+  <td>ZMM_D_002</td>
+  <td>N</td>
+  <td>&nbsp;</td>
+  <td>否</td>
+</tr>
+<tr class="cell">
+  <td>ZMM_D_003</td>
+  <td>A</td>
+  <td>&nbsp;</td>
+  <td>普通价</td>
+</tr>
+<tr class="cell">
+  <td>ZMM_D_003</td>
+  <td>B</td>
+  <td>&nbsp;</td>
+  <td>阶梯价</td>
+</tr>
+<tr class="cell">
+  <td>ZMM_D_003</td>
+  <td>C</td>
+  <td>&nbsp;</td>
+  <td>基准价</td>
+</tr>
+<tr class="cell">
+  <td>ZMM_D_006</td>
+  <td>S</td>
+  <td>&nbsp;</td>
+  <td>成功</td>
+</tr>
+<tr class="cell">
+  <td>ZMM_D_006</td>
+  <td>E</td>
+  <td>&nbsp;</td>
+  <td>失败</td>
+</tr>
+<tr class="cell">
+  <td>ZMM_D_006</td>
+  <td>W</td>
+  <td>&nbsp;</td>
+  <td>警告</td>
+</tr>
+<tr class="cell">
+  <td>ESOKZ</td>
+  <td>0</td>
+  <td>&nbsp;</td>
+  <td>标准</td>
+</tr>
+<tr class="cell">
+  <td>ESOKZ</td>
+  <td>2</td>
+  <td>&nbsp;</td>
+  <td>寄售</td>
+</tr>
+<tr class="cell">
+  <td>ESOKZ</td>
+  <td>3</td>
+  <td>&nbsp;</td>
+  <td>分包合同</td>
+</tr>
+<tr class="cell">
+  <td>ESOKZ</td>
+  <td>P</td>
+  <td>&nbsp;</td>
+  <td>管道</td>
+</tr>
+<tr class="cell">
+  <td>ESOKZ</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>可记帐</td>
+</tr>
+<tr class="cell">
+  <td>XFELD</td>
+  <td>X</td>
+  <td>&nbsp;</td>
+  <td>是</td>
+</tr>
+<tr class="cell">
+  <td>XFELD</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>否</td>
+</tr>
+<tr class="cell">
+  <td>ZMM_D_002</td>
+  <td>Y</td>
+  <td>&nbsp;</td>
+  <td>是</td>
+</tr>
+<tr class="cell">
+  <td>ZMM_D_002</td>
+  <td>N</td>
+  <td>&nbsp;</td>
+  <td>否</td>
+</tr>
+<tr class="cell">
+  <td>ZMM_D_003</td>
+  <td>A</td>
+  <td>&nbsp;</td>
+  <td>普通价</td>
+</tr>
+<tr class="cell">
+  <td>ZMM_D_003</td>
+  <td>B</td>
+  <td>&nbsp;</td>
+  <td>阶梯价</td>
+</tr>
+<tr class="cell">
+  <td>ZMM_D_003</td>
+  <td>C</td>
+  <td>&nbsp;</td>
+  <td>基准价</td>
+</tr>
+<tr class="cell">
+  <td>ZMM_D_006</td>
+  <td>S</td>
+  <td>&nbsp;</td>
+  <td>成功</td>
+</tr>
+<tr class="cell">
+  <td>ZMM_D_006</td>
+  <td>E</td>
+  <td>&nbsp;</td>
+  <td>失败</td>
+</tr>
+<tr class="cell">
+  <td>ZMM_D_006</td>
+  <td>W</td>
+  <td>&nbsp;</td>
+  <td>警告</td>
+</tr>
+      </table>
+     </td>
+   </tr>
+   <tr>
+<td class="footer">Extracted by Mass Download version 1.5.2 - E.G.Mellodew. 1998-2022. Sap Release 755</td>
+   </tr>
+</table>
+</body>
+</html>

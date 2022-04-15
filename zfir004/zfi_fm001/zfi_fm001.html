@@ -1,0 +1,162 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=GB2312" />
+<title>ZFI_FM001</title>
+<style type="text/css">
+.code{ font-family:"Courier New", Courier, monospace; color:#000; font-size:14px; background-color:#F2F4F7 }
+  .codeComment {font-family:"Courier New", Courier, monospace; color:#0000F0; font-size:14px; background-color:#F2F4F7 }
+  .normalBold{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; font-weight:800 }
+  .normalBoldLarge{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+</style>
+<style type="text/css">
+  .normal{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px }
+  .footer{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; text-align: center }
+  h2{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+  h3{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:14px; font-weight:800 }
+  .outerTable{
+   background-color:#E0E7ED;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-right-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+  .innerTable{
+   background-color:#F2F4F7;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-bottom-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+</style>
+</head>
+<body>
+<table class="outerTable">
+  <tr class="normalBoldLarge">
+     <td><h2>Code listing for function ZFI_FM001</h2>
+<h3> Description: 金额转换中文大写</h3></td>
+   </tr>
+  <tr>
+     <td>
+     <table class="innerTable">
+       <tr>
+          <td>
+   <div class="code">
+FUNCTION zfi_fm001.<br />
+   </div>
+   <div class="codeComment">
+*"----------------------------------------------------------------------<br />
+*"*"本地接口：<br />
+*"  IMPORTING<br />
+*"     VALUE(I_DMBTR) TYPE  TDMHAB OPTIONAL<br />
+*"  EXPORTING<br />
+*"     VALUE(O_DMBTR) TYPE  CHAR50<br />
+*"----------------------------------------------------------------------<br />
+
+<div class="codeComment">*       <a href ="global-zfi_fm001.html">Global data declarations</a></div><br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;DATA:&nbsp;scr(30)&nbsp;TYPE&nbsp;c,&nbsp;res(60)&nbsp;TYPE&nbsp;c,fen(2)&nbsp;TYPE&nbsp;c&nbsp;.<br />
+&nbsp;&nbsp;DATA:&nbsp;len&nbsp;TYPE&nbsp;i,&nbsp;c1&nbsp;TYPE&nbsp;i,&nbsp;c2&nbsp;TYPE&nbsp;i,&nbsp;c3&nbsp;TYPE&nbsp;i,&nbsp;c4&nbsp;TYPE&nbsp;i.<br />
+&nbsp;&nbsp;DATA:&nbsp;d1(1)&nbsp;TYPE&nbsp;c,&nbsp;d2(1)&nbsp;TYPE&nbsp;c,&nbsp;d3&nbsp;TYPE&nbsp;i.<br />
+&nbsp;&nbsp;DATA:&nbsp;digit(2)&nbsp;&nbsp;TYPE&nbsp;c,&nbsp;weight(2)&nbsp;TYPE&nbsp;c.<br />
+&nbsp;&nbsp;DATA:&nbsp;rule1(20)&nbsp;TYPE&nbsp;c&nbsp;VALUE&nbsp;'零壹贰叁肆伍陆柒捌玖'.<br />
+&nbsp;&nbsp;DATA:&nbsp;rule2(30)&nbsp;TYPE&nbsp;c&nbsp;VALUE&nbsp;'分角元拾佰仟万拾佰仟亿拾佰仟万'.<br />
+&nbsp;&nbsp;DATA:&nbsp;lv_dmbtr&nbsp;TYPE&nbsp;tdmhab.<br />
+<br />
+&nbsp;&nbsp;lv_dmbtr&nbsp;=&nbsp;i_dmbtr.<br />
+<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;i_dmbtr&nbsp;&gt;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;i_dmbtr&nbsp;=&nbsp;i_dmbtr.<br />
+&nbsp;&nbsp;ELSE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;i_dmbtr&nbsp;=&nbsp;abs(&nbsp;i_dmbtr&nbsp;).<br />
+<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;scr&nbsp;=&nbsp;i_dmbtr&nbsp;*&nbsp;100.<br />
+&nbsp;&nbsp;CONDENSE&nbsp;scr&nbsp;NO-GAPS.<br />
+&nbsp;&nbsp;IF&nbsp;scr&nbsp;=&nbsp;'0'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;res&nbsp;=&nbsp;'零元'.<br />
+&nbsp;&nbsp;ELSE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;len&nbsp;=&nbsp;strlen(&nbsp;scr&nbsp;).<br />
+&nbsp;&nbsp;&nbsp;&nbsp;c1&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;d1&nbsp;=&nbsp;'0'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;res.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;DO&nbsp;len&nbsp;TIMES.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;c1&nbsp;=&nbsp;c1&nbsp;+&nbsp;1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;c2&nbsp;=&nbsp;len&nbsp;-&nbsp;c1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;d2&nbsp;=&nbsp;scr+c2(1)&nbsp;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;d2&nbsp;=&nbsp;'0'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;d3&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ELSE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;d3&nbsp;=&nbsp;d2.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;digit&nbsp;=&nbsp;rule1+d3(1)&nbsp;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;c3&nbsp;=&nbsp;(&nbsp;c1&nbsp;-&nbsp;1&nbsp;)&nbsp;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;weight&nbsp;=&nbsp;rule2+c3(1)&nbsp;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;d2&nbsp;=&nbsp;'0'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;c1&nbsp;=&nbsp;3.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;digit&nbsp;=&nbsp;''.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ELSEIF&nbsp;c1&nbsp;=&nbsp;7.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;digit&nbsp;=&nbsp;''.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;len&nbsp;&gt;&nbsp;10&nbsp;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;c4&nbsp;=&nbsp;len&nbsp;-&nbsp;10.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;scr+c4(4)&nbsp;=&nbsp;'0000'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;weight&nbsp;=&nbsp;''.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ELSEIF&nbsp;c1&nbsp;=&nbsp;11.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;digit&nbsp;=&nbsp;''.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ELSEIF&nbsp;d1&nbsp;=&nbsp;'0'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;digit&nbsp;=&nbsp;''.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;weight&nbsp;=&nbsp;''.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ELSE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;weight&nbsp;=&nbsp;''.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CONCATENATE&nbsp;digit&nbsp;weight&nbsp;res&nbsp;INTO&nbsp;res&nbsp;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;d1&nbsp;=&nbsp;d2.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDDO.<br />
+&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;len&nbsp;=&nbsp;strlen(&nbsp;res&nbsp;)&nbsp;-&nbsp;1.<br />
+&nbsp;&nbsp;fen&nbsp;=&nbsp;res+len(1).<br />
+&nbsp;&nbsp;IF&nbsp;fen&nbsp;&lt;&gt;&nbsp;'分'&nbsp;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CONCATENATE&nbsp;res&nbsp;'整'&nbsp;INTO&nbsp;o_dmbtr.<br />
+&nbsp;&nbsp;ELSE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;o_dmbtr&nbsp;=&nbsp;res.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;lv_dmbtr&nbsp;&gt;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;o_dmbtr&nbsp;=&nbsp;o_dmbtr.<br />
+&nbsp;&nbsp;ELSE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;o_dmbtr&nbsp;=&nbsp;'负'&nbsp;&&&nbsp;o_dmbtr.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+<br />
+<br />
+<br />
+ENDFUNCTION.<br />
+            </div>
+          </td>
+        </tr>
+      </table>
+      </td>
+      </tr>
+   <tr>
+<td class="footer">Extracted by Mass Download version 1.5.2 - E.G.Mellodew. 1998-2022. Sap Release 755</td>
+   </tr>
+</table>
+</body>
+</html>

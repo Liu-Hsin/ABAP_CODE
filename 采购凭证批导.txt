@@ -1,0 +1,912 @@
+*&---------------------------------------------------------------------*
+*& REPORT zsy_mm_030.
+*&---------------------------------------------------------------------*
+*&
+*& Author              : 李光耀                                        *
+*& Create Date         : 2020/08/06                                    *
+*& Description         : 采购订单批导                                  *
+*&                                                                     *
+*& <Function Spec       :>
+*& Modifications       :                                               *
+*&   Date        Programmer   <需求说明号>    Description              *
+*&   YYYY/MM/DD  修改人员名   <xxxxx>         说明                     *
+*&---------------------------------------------------------------------*
+REPORT zsy_mm_030.
+
+TYPE-POOLS: slis,icon.
+TABLES:sscrfields , t001w .
+
+*&---------------------------------------------------------------------&*
+*&              ALV parameter   *&
+*&---------------------------------------------------------------------&*
+DATA:g_repid     LIKE sy-repid,
+     it_fieldcat TYPE lvc_t_fcat WITH HEADER LINE,
+     is_layout   TYPE lvc_s_layo.
+
+DATA: is_functxt TYPE smp_dyntxt.
+DATA: it_raw  TYPE truxs_t_text_data.
+
+*&---------------------------------------------------------------------&*
+*&              全局变量   *&
+*&---------------------------------------------------------------------&*
+DATA:BEGIN OF gs_record,
+       esart         TYPE char4,   " 采购订单类型
+       lifnr         TYPE lifnr,   " 供应商代码
+       ekorg         TYPE ekorg,   " 采购组织
+       ekgrp         TYPE ekgrp,   " 采购组
+       bukrs         TYPE bukrs,   " 公司代码
+       erdat         TYPE erdat,   " 订单日期
+       zterm         TYPE dzterm,  " 付款条件
+       verkf         TYPE verkf,   "verkf,   " 旧采购订单号
+       ebelp         TYPE ebelp,   " 订单行项目
+       knttp         TYPE knttp,   " 科目分配类别
+       item_cat      TYPE bapimepoitem-item_cat,           " 项目类别
+       matnr         TYPE matnr,   " 物料编码
+       txz01         TYPE txz01,   " 短文本
+       matkl         TYPE matkl,   " 物料组
+       quantity      TYPE bstmg,   " 采购订单数量
+       po_unit       TYPE bapimepoitem-po_unit,            " 订单单位
+       delivery_date TYPE bapimeposchedule-delivery_date,  " 交货日期
+       net_price     TYPE bapimepoitem-net_price,          " 净价
+       cond_p_unt    TYPE bapimepocondheader-cond_p_unt,   " 价格单位
+       currency      TYPE bapimepoheader-currency,         " 货币
+       plant         TYPE bapimepoitem-plant,              " 工厂
+       stge_loc      TYPE bapimepoitem-stge_loc,           " 库存地点
+       tax_code      TYPE bapimepoitem-tax_code,           " 进项税代码
+       gl_account    TYPE bapimepoaccount-gl_account,      " 总账科目编号
+       costcenter    TYPE bapimepoaccount-costcenter,      " 成本中心
+       asset_no      TYPE bapimepoaccount-asset_no,        " 固定资产号码
+       preq_no       TYPE bapimepoitem-preq_no,            " 采购申请号码
+       preq_item     TYPE bapimepoitem-preq_item,          " 采购申请行项目
+       konnr         TYPE ekpo-konnr,                      " 合同
+       ktpnr         TYPE ekpo-ktpnr,                      " 合同行项目
+       vend_mat      TYPE bapimepoitem-vend_mat,           " 供应商物料编号
+       batch         TYPE charg_d,
+       suppl         TYPE lgort_d,
+
+     END OF gs_record.
+
+DATA:BEGIN OF gs_out.
+       INCLUDE STRUCTURE gs_record.
+DATA:
+     " sel,
+       zlight(30),
+       zstatu     TYPE bapi_mtype,
+       zmessg     TYPE bapi_msg,
+       ebeln(10),
+     END OF gs_out.
+DATA:gt_out LIKE TABLE OF gs_out.
+
+DATA:BEGIN OF it_record OCCURS 0.
+       INCLUDE STRUCTURE gs_record .
+
+DATA END OF it_record.
+
+DATA:BEGIN OF gt_return OCCURS 0.
+       INCLUDE STRUCTURE bapiret2.
+DATA:  verkf TYPE verkf,
+       sel,
+
+     END OF gt_return.
+
+DATA gv_werks TYPE  werks_d .
+
+*----------------------------------------------------------------------*
+*          选择屏幕                                               *
+*----------------------------------------------------------------------*
+"SELECT-OPTIONS:s_werks FOR t001w-werks NO INTERVALS NO-EXTENSION OBLIGATORY.
+
+PARAMETERS: p_file LIKE rlgrap-filename.
+
+SELECTION-SCREEN FUNCTION KEY 1.
+
+*----------------------------------------------------------------------*
+*          AT SELECTION-SCREEN)                                        *
+*----------------------------------------------------------------------*
+AT SELECTION-SCREEN ON VALUE-REQUEST FOR p_file.
+  PERFORM file_input CHANGING p_file .
+
+*----------------------------------------------------------------------*
+*          AT SELECTION-SCREEN)                                        *
+*----------------------------------------------------------------------*
+
+AT SELECTION-SCREEN.
+  IF sscrfields-ucomm = 'FC01'.
+    PERFORM downdload_template USING 'ZSY_MM_030' '采购订单批量导入模板'.
+  ENDIF.
+
+**  权限检查 .
+*  SELECT SINGLE werks FROM t001w INTO gv_werks WHERE werks IN s_werks.
+*  AUTHORITY-CHECK OBJECT 'Z_BUKRS'
+*   ID 'ACTVT' FIELD '03'
+*   ID 'WERKS' FIELD s_werks.
+*  IF sy-subrc <> 0.
+*    MESSAGE '你没有此工厂的权限' TYPE  'E' DISPLAY LIKE 'S'.
+*    LEAVE LIST-PROCESSING.
+*  ENDIF.
+*----------------------------------------------------------------------*
+*       初始化                                           *
+*----------------------------------------------------------------------*
+
+INITIALIZATION.
+  is_functxt-icon_id   = icon_xls.
+  is_functxt-icon_text = '下载模板'.
+  sscrfields-functxt_01 = is_functxt.
+
+*----------------------------------------------------------------------*
+*          START-OF-SELECTION 主程序                     *
+*----------------------------------------------------------------------*
+START-OF-SELECTION.
+
+  PERFORM upload_data.
+
+  PERFORM process_data.
+
+  PERFORM disp_alv.
+*&---------------------------------------------------------------------*
+*& Form upload_data
+*&---------------------------------------------------------------------*
+*& 上传数据
+*&---------------------------------------------------------------------*
+*& -->  p1        text
+*& <--  p2        text
+*&---------------------------------------------------------------------*
+FORM upload_data .
+  DATA:lt_excel TYPE TABLE OF zalsmex_tabline.
+  DATA ls_excel LIKE LINE OF lt_excel.
+  FIELD-SYMBOLS:<fs>.
+  IF p_file IS INITIAL.
+    MESSAGE '导入数据不能为空' TYPE 'S' DISPLAY LIKE 'E'.
+    LEAVE LIST-PROCESSING.
+  ELSE.
+**上传数据
+    CALL FUNCTION 'ZALSM_EXCEL_TO_INTERNAL_TABLE'
+      EXPORTING
+        filename                = p_file
+        i_begin_col             = 1
+        i_begin_row             = 2
+        i_end_col               = 99
+        i_end_row               = 19999
+      TABLES
+        intern                  = lt_excel
+      EXCEPTIONS
+        inconsistent_parameters = 1
+        upload_ole              = 2
+        OTHERS                  = 3.
+    IF sy-subrc <> 0.
+* Implement suitable error handling here
+    ENDIF.
+
+    LOOP AT lt_excel INTO ls_excel.
+      ASSIGN COMPONENT ls_excel-col OF STRUCTURE gs_record TO <fs>.
+      CONDENSE ls_excel-value NO-GAPS.                  " 去掉空格
+      <fs> = ls_excel-value.
+      AT END OF row.                                    "如果是最后一行就把工作区gs_tab存到内表gt_tab中
+        "gs_tab-row = ls_excel-row.
+        MOVE-CORRESPONDING gs_record TO gs_out.
+        CALL FUNCTION 'CONVERSION_EXIT_ALPHA_INPUT'
+          EXPORTING
+            input  = gs_out-lifnr
+          IMPORTING
+            output = gs_out-lifnr.
+
+        IF gs_out-matnr IS NOT INITIAL.
+          CALL FUNCTION 'CONVERSION_EXIT_MATN1_INPUT'
+            EXPORTING
+              input        = gs_out-matnr
+            IMPORTING
+              output       = gs_out-matnr
+            EXCEPTIONS
+              length_error = 1
+              OTHERS       = 2.
+        ENDIF.
+        APPEND gs_out TO gt_out.
+        CLEAR gs_out.
+        CLEAR: gs_record.
+      ENDAT.
+    ENDLOOP.
+  ENDIF.
+ENDFORM.
+*&---------------------------------------------------------------------*
+*& Form process_data
+*&---------------------------------------------------------------------*
+*& 处理数据
+*&---------------------------------------------------------------------*
+*& -->  p1        text
+*& <--  p2        text
+*&---------------------------------------------------------------------*
+FORM process_data .
+  DATA lt_lfm1 LIKE TABLE OF lfm1.
+  DATA ls_lfm1 LIKE lfm1.
+  IF gt_out[] IS NOT INITIAL.
+    SELECT *
+      FROM lfm1
+      INTO CORRESPONDING FIELDS OF TABLE lt_lfm1
+      FOR ALL ENTRIES IN gt_out
+      WHERE lifnr = gt_out-lifnr
+        AND ekorg = gt_out-ekorg.
+
+    SELECT maktx,matnr  FROM makt
+      INTO TABLE @DATA(lt_makt)
+      FOR ALL ENTRIES IN  @gt_out
+      WHERE matnr = @gt_out-matnr
+        AND spras = @sy-langu.
+
+    SELECT matkl,matnr  FROM mara
+      INTO TABLE @DATA(lt_mara)
+      FOR ALL ENTRIES IN  @gt_out
+      WHERE matnr = @gt_out-matnr.
+
+  ENDIF.
+
+  "保存不存在的数据
+  DATA lt_sadata LIKE TABLE OF gs_out.
+  DATA ls_sadata LIKE gs_out.
+  DATA lv_tabix LIKE sy-tabix.
+  DATA lv_num TYPE i.
+  DATA lv_cf.
+  lt_sadata[] = gt_out[].
+  SORT lt_lfm1 BY lifnr ekorg.
+  "删除后剩余的就是不存在数据。
+  LOOP AT lt_sadata INTO ls_sadata.
+    lv_tabix = sy-tabix.
+    READ TABLE lt_lfm1 INTO ls_lfm1  WITH  KEY  lifnr = ls_sadata-lifnr
+                                                ekorg = ls_sadata-ekorg
+                                                BINARY SEARCH.
+    IF sy-subrc = 0.
+      DELETE lt_sadata INDEX lv_tabix.
+    ENDIF.
+  ENDLOOP.
+
+
+  DATA ls_data_a LIKE gs_out.
+  DATA lt_data_a LIKE TABLE OF ls_data_a.
+
+  lt_data_a[] = gt_out[].
+  SORT lt_data_a BY lifnr verkf.
+  SORT lt_makt BY matnr.
+  SORT lt_mara BY matnr.
+
+  DELETE ADJACENT DUPLICATES FROM lt_data_a COMPARING lifnr verkf.
+
+  SORT gt_out BY lifnr ekorg.
+  LOOP AT  gt_out INTO gs_out.
+
+    IF gs_out-knttp <> 'A'.
+      READ TABLE lt_makt INTO DATA(ls_makt) WITH KEY matnr = gs_out-matnr BINARY SEARCH.
+      IF sy-subrc = 0.
+        gs_out-txz01 = ls_makt-maktx.
+      ENDIF.
+
+      READ TABLE lt_mara INTO DATA(ls_mara) WITH KEY matnr = gs_out-matnr BINARY SEARCH.
+      IF sy-subrc = 0.
+        gs_out-matkl = ls_mara-matkl.
+      ENDIF.
+    ENDIF.
+
+    READ TABLE lt_data_a INTO ls_data_a WITH  KEY verkf = gs_out-verkf BINARY SEARCH.
+    IF sy-subrc = 0.
+      IF ls_data_a-lifnr <> gs_out-lifnr.
+        lv_cf = 'X'.
+        ls_data_a-zmessg = 'X'.
+      ENDIF.
+      MODIFY lt_data_a FROM ls_data_a TRANSPORTING zmessg WHERE verkf = gs_out-verkf.
+    ENDIF.
+
+    READ TABLE lt_data_a INTO DATA(ls_a) WITH  KEY verkf  = gs_out-verkf
+                                                   zmessg =  'X'  BINARY SEARCH.
+    IF sy-subrc = 0.
+      gs_out-zstatu = 'E'.
+      gs_out-zlight = icon_led_red.
+      gs_out-zmessg = '同一原采购订单存在多个供应商'.
+    ENDIF.
+
+
+    READ TABLE lt_sadata INTO ls_sadata WITH  KEY lifnr = gs_out-lifnr
+                                                  ekorg = gs_out-ekorg BINARY SEARCH.
+    IF sy-subrc = 0.
+      lv_num = 1.
+    ENDIF.
+    IF gs_out-verkf IS INITIAL.
+      gs_out-zstatu = 'E'.
+      gs_out-zlight = icon_led_red.
+      gs_out-zmessg =  '采购订单不能为空'.
+    ELSEIF gs_out-esart IS INITIAL.
+      gs_out-zstatu = 'E'.
+      gs_out-zlight = icon_led_red.
+      gs_out-zmessg =  '采购订单类型不能为空'.
+    ELSEIF gs_out-lifnr IS INITIAL.
+      gs_out-zstatu = 'E'.
+      gs_out-zlight = icon_led_red.
+      gs_out-zmessg =  '供应商代码不能为空'.
+    ELSEIF gs_out-ekorg IS INITIAL.
+      gs_out-zstatu = 'E'.
+      gs_out-zlight = icon_led_red.
+      gs_out-zmessg =  '采购组织不能为空'.
+    ELSEIF gs_out-ekgrp IS INITIAL.
+      gs_out-zstatu = 'E'.
+      gs_out-zlight = icon_led_red.
+      gs_out-zmessg =  '采购组不能为空'.
+    ELSEIF gs_out-bukrs IS INITIAL .
+      gs_out-zstatu = 'E'.
+      gs_out-zlight = icon_led_red.
+      gs_out-zmessg =  '公司代码不能为空'.
+    ELSEIF gs_out-knttp = 'A' AND gs_out-asset_no IS INITIAL
+      AND gs_out-matkl IS INITIAL AND gs_out-txz01 IS INITIAL.
+      gs_out-zstatu = 'E'.
+      gs_out-zlight = icon_led_red.
+      gs_out-zmessg =  '资产不能为空'.
+    ELSEIF gs_out-matnr IS INITIAL.
+      IF gs_out-knttp IS INITIAL.
+        gs_out-zstatu = 'E'.
+        gs_out-zlight = icon_led_red.
+        gs_out-zmessg =  '物料编码不能为空'.
+      ENDIF.
+    ELSEIF gs_out-plant IS INITIAL.
+      gs_out-zstatu = 'E'.
+      gs_out-zlight = icon_led_red.
+      gs_out-zmessg =  '工厂不能为空'.
+    ELSEIF gs_out-stge_loc IS INITIAL.
+      gs_out-zstatu = 'E'.
+      gs_out-zlight = icon_led_red.
+      gs_out-zmessg =  '库存地点不能为空'.
+    ELSEIF lv_num = 1.
+      gs_out-zstatu = 'E'.
+      gs_out-zlight = icon_led_red.
+      gs_out-zmessg =  '供应商账户与采购组织不匹配'.
+*    ELSE.
+*      gs_out-zstatu = 'S'.
+*      gs_out-zlight = icon_led_green.
+*      gs_out-zmessg =  '数据未发现错误，可以创建采购订单'.
+    ENDIF.
+    MODIFY gt_out FROM gs_out.
+    CLEAR :lv_num.
+  ENDLOOP.
+  DATA gt_out_a LIKE TABLE OF gs_out.
+
+  LOOP AT gt_out INTO gs_out.
+    IF gs_out-zstatu = ' '.
+      gs_out-zstatu = 'S'.
+      gs_out-zlight = icon_led_green.
+      gs_out-zmessg =  '数据未发现错误，可以创建采购订单'.
+      MODIFY gt_out FROM gs_out.
+      CLEAR gs_out.
+    ENDIF.
+  ENDLOOP.
+
+  SORT gt_out BY verkf.
+ENDFORM.
+*&---------------------------------------------------------------------*
+*& Form disp_alv
+*&---------------------------------------------------------------------*
+*& alv显示
+*&---------------------------------------------------------------------*
+*& -->  p1        text
+*& <--  p2        text
+*&---------------------------------------------------------------------*
+FORM disp_alv .
+  DATA: l_user_command  TYPE slis_formname,
+        l_pf_status_set TYPE slis_formname.
+
+  CLEAR it_fieldcat.REFRESH it_fieldcat.
+
+  PERFORM get_catlog.
+
+  l_user_command  = 'USER_COMMAND'.
+  l_pf_status_set =  'SET_PF_STATUS'.
+
+  is_layout-zebra = 'X'.
+  " is_layout-box_fname = 'SEL'.
+  is_layout-cwidth_opt = 'X'.
+
+  g_repid = sy-repid.
+
+  CALL FUNCTION 'REUSE_ALV_GRID_DISPLAY_LVC'
+    EXPORTING
+      i_interface_check        = ' '
+      i_buffer_active          = ' '
+      i_callback_pf_status_set = l_pf_status_set
+      i_callback_user_command  = l_user_command
+      i_callback_program       = g_repid
+      is_layout_lvc            = is_layout      "it_events = lt_event
+      it_fieldcat_lvc          = it_fieldcat[]
+      i_save                   = 'A'
+    TABLES
+      t_outtab                 = gt_out[].
+ENDFORM.
+*&---------------------------------------------------------------------*
+*&      Form  SET_PF_STATUS
+*&---------------------------------------------------------------------*
+*      status显示
+*----------------------------------------------------------------------*
+*  -->  p1        text
+*  <--  p2        text
+*----------------------------------------------------------------------*
+FORM set_pf_status USING pwa_extab TYPE slis_t_extab.
+  SET PF-STATUS 'STATUS' .
+ENDFORM.                    " SET_PF_STATUS
+**&---------------------------------------------------------------------*
+**&      Form  user_command
+**&---------------------------------------------------------------------*
+**       command
+**----------------------------------------------------------------------*
+**      -->R_UCOMM   like   sy-ucomm
+**      -->RS_SELFIELD  TYPE slis_selfield.
+**----------------------------------------------------------------------*
+FORM user_command USING pa_ucomm LIKE sy-ucomm
+      pwa_selfield TYPE slis_selfield.
+  DATA gv_out LIKE TABLE OF gs_out.
+
+  DATA: lr_grid TYPE REF TO cl_gui_alv_grid.
+
+  CALL FUNCTION 'GET_GLOBALS_FROM_SLVC_FULLSCR'
+    IMPORTING
+      e_grid = lr_grid.
+
+  CALL METHOD lr_grid->check_changed_data.
+  CLEAR gv_out[].
+  CASE pa_ucomm.
+    WHEN 'ZCT'.
+      LOOP AT gt_out INTO gs_out WHERE  zstatu = 'E'.
+        APPEND gs_out TO gv_out.
+        CLEAR gs_out.
+      ENDLOOP.
+      IF lines( gv_out ) = 0.
+        PERFORM create_po.
+        pwa_selfield-refresh = 'X'.
+      ELSE.
+        MESSAGE '导入数据存在错误，请修正以后重试'  TYPE 'E'.
+      ENDIF.
+    WHEN 'OTHER'.
+  ENDCASE.
+*& 处理后重新加载ALV
+  CALL METHOD lr_grid->get_frontend_layout
+    IMPORTING
+      es_layout = is_layout.
+  is_layout-cwidth_opt = 'X'.
+  CALL METHOD lr_grid->set_frontend_layout
+    EXPORTING
+      is_layout = is_layout.
+  CALL METHOD lr_grid->refresh_table_display.
+ENDFORM.
+*&---------------------------------------------------------------------*
+*& Form get_catlog
+*&---------------------------------------------------------------------*
+*&  fieldcat
+*&---------------------------------------------------------------------*
+*& -->  p1        text
+*& <--  p2        text
+*&---------------------------------------------------------------------*
+FORM get_catlog .
+  DEFINE lit_fieldcat.
+    it_fieldcat-tabname   = 'GT_OUT'.
+    it_fieldcat-fieldname = &1.
+    it_fieldcat-coltext   = &2.
+    it_fieldcat-just      = &3.
+    it_fieldcat-ref_field = &4.
+    it_fieldcat-ref_table = &5.
+    it_fieldcat-outputlen = &6.
+    APPEND  it_fieldcat.
+    CLEAR  it_fieldcat.
+  END-OF-DEFINITION.   "lit_fieldcat
+
+  lit_fieldcat :
+  'ZLIGHT'    TEXT-t01  'C' ''   ''    '4',
+  'ZSTATU'    TEXT-t02  'C' ''   ''    '6',
+  'ZMESSG'    TEXT-t03  'C' ''   ''   '100',
+  'EBELN'     TEXT-t32  'C' ''   ''      '',
+  'ESART'     TEXT-t05  'L' '' '' '4',
+  'LIFNR'     TEXT-t06  'L' 'LLIEF' 'EKKO' '',
+  'EKORG'     TEXT-t07  'L' 'EKORG' 'EKKO' '',
+  'EKGRP'     TEXT-t08  'L' 'EKGRP' 'EKKO' '',
+  'BUKRS'     TEXT-t09  'L' 'BUKRS' 'EKKO' '',
+  'ERDAT'     TEXT-t10  'L' 'ERDAT' 'EKKO' '',
+  'ZTERM'     TEXT-t11  'L' 'ZTERM' 'EKKO' '',
+  'VERKF'     TEXT-t12  'L' 'EBELN' 'EKKO' '',
+  'EBELP'     TEXT-t13  'L' 'EBELP' 'EKKO' '',
+  'BATCH'     TEXT-t38  'L' ''    ''       '',
+  'SUPPL'     TEXT-t39  'L' ''    ''       '',
+  'KNTTP'     TEXT-t14  'L' 'KNTTP' 'EKKO' '',
+  'ITEM_CAT'  TEXT-t15  'L' 'ITEM_CAT' 'bapimepoitem' '',
+  'MATNR'     TEXT-t16  'L' 'MATNR'    'MARA' '',
+  'TXZ01'     TEXT-t34  'L' ''    ''     '',
+  'MATKL'     TEXT-t35  'L' ''    ''     '',
+  'QUANTITY'  TEXT-t17  'L' 'QUANTITY' 'BAPIMEPOITEM' '',
+  'PO_UNIT'   TEXT-t18  'L' ''  ' '  '',
+  'DELIVERY_DATE' TEXT-t19  'L' 'DELIVERY_DATE' 'BAPIMEPOSCHEDULE'   '',
+  'NET_PRICE'     TEXT-t20  'L' 'NET_PRICE'     'BAPIMEPOITEM'       '',
+  'COND_P_UNT'    TEXT-t21  'L' 'COND_P_UNT'    'BAPIMEPOCONDHEADER' '',
+  'CURRENCY'      TEXT-t22  'L' 'CURRENCY'      'BAPIMEPOHEADER'     '',
+  'PLANT'         TEXT-t23  'L' 'PLANT'         'BAPIMEPOITEM'       '',
+  'STGE_LOC'      TEXT-t24  'L' 'STGE_LOC'      'BAPIMEPOITEM'       '',
+  'TAX_CODE'      TEXT-t25  'L' 'TAX_CODE'      'BAPIMEPOITEM'       '',
+  'GL_ACCOUNT'    TEXT-t26  'L' 'GL_ACCOUNT'    'BAPIMEPOACCOUNT'    '',
+  'COSTCENTER'    TEXT-t27  'L' 'COSTCENTER'    'BAPIMEPOACCOUNT'    '',
+  'ASSET_NO'      TEXT-t28  'L' 'ASSET_NO'      'BAPIMEPOACCOUNT'    '',
+  'PREQ_NO'       TEXT-t29  'L' 'PREQ_NO'       'BAPIMEPOITEM'       '',
+  'PREQ_ITEM'     TEXT-t30  'L' 'PREQ_ITEM'     'BAPIMEPOITEM'       '',
+  'KONNR'         TEXT-t36  'L' ''      ''       '',
+  'KTPNR'         TEXT-t37  'L' ''      ''       '',
+  'VEND_MAT'      TEXT-t31  'L' 'VEND_MAT'      'BAPIMEPOITEM'       ''.
+ENDFORM.
+*&---------------------------------------------------------------------*
+*& Form create_pi
+*&---------------------------------------------------------------------*
+*&   创建采购凭证
+*&---------------------------------------------------------------------*
+*& -->  p1        text
+*& <--  p2        text
+*&---------------------------------------------------------------------*
+FORM create_po.
+
+  DATA: poheader      LIKE TABLE OF bapimepoheader   WITH HEADER LINE,
+        poheaderx     LIKE TABLE OF bapimepoheaderx  WITH HEADER LINE,
+        return        LIKE TABLE OF bapiret2         WITH HEADER LINE,
+        poitem        LIKE TABLE OF bapimepoitem     WITH HEADER LINE,
+        poitemx       LIKE TABLE OF bapimepoitemx    WITH HEADER LINE,
+        poschedule    LIKE TABLE OF bapimeposchedule WITH HEADER LINE,
+        poschedulex   LIKE TABLE OF bapimeposchedulx WITH HEADER LINE,
+        poaccount     LIKE TABLE OF bapimepoaccount  WITH HEADER LINE,
+        poaccountx    LIKE TABLE OF bapimepoaccountx WITH HEADER LINE,
+        pocond        LIKE TABLE OF bapimepocond     WITH HEADER LINE,
+        pocondx       LIKE TABLE OF bapimepocondx    WITH HEADER LINE,
+
+        pocomponents  LIKE TABLE OF bapimepocomponent    WITH HEADER LINE,
+        pocomponentsx LIKE TABLE OF bapimepocomponentx    WITH HEADER LINE,
+
+        potextitem    LIKE TABLE OF bapimepotext     WITH HEADER LINE.
+  DATA  exppurchaseorder LIKE  bapimepoheader-po_number.
+
+  DATA:lv_lifnr TYPE elifn.
+  DATA lt_tmp   LIKE TABLE OF gs_record .
+  DATA lt_item  LIKE TABLE OF gs_record.
+  DATA ls_tmp   LIKE gs_record.
+  DATA ls_item  LIKE gs_record.
+  CONSTANTS:c_tagx VALUE 'X'.
+  DATA:lv_po_item(5) TYPE n.
+  DATA:l_return LIKE return.
+  DATA:lv_po TYPE char10.
+  DATA: c_flag VALUE 'X',
+        l_flag.
+  DATA lv_message(255).
+  DATA lv_num TYPE i.
+
+  DATA l_lin TYPE i.
+  DATA:l_lin1 TYPE string,
+       l_txt  TYPE string,
+       l_perc TYPE p DECIMALS 2.
+
+  it_record[] = gt_out[].
+  CLEAR gt_out[].
+  lt_tmp[] = it_record[].
+  SORT lt_tmp BY verkf .
+  DELETE ADJACENT DUPLICATES FROM lt_tmp COMPARING verkf.
+  lt_item[] = it_record[].
+  DESCRIBE TABLE lt_tmp LINES lv_num.
+  LOOP AT lt_tmp  INTO ls_tmp.
+    l_perc = sy-tabix / lv_num * 100.
+    CONCATENATE l_lin1 '%' ',' '正在创建...' INTO l_txt.
+* 采购订单抬头
+    CLEAR lv_lifnr.
+    lv_lifnr = ls_tmp-lifnr.
+    CALL FUNCTION 'CONVERSION_EXIT_ALPHA_INPUT'
+      EXPORTING
+        input  = lv_lifnr
+      IMPORTING
+        output = lv_lifnr.
+
+    poheader-comp_code  = ls_tmp-bukrs.     " 公司代码
+    poheader-doc_type   = ls_tmp-esart.     " 采购凭证类型
+    poheader-vendor     = lv_lifnr.         " 供应商帐号
+    poheader-purch_org  = ls_tmp-ekorg.     " 采购组织
+    poheader-pur_group  = ls_tmp-ekgrp.     " 采购组
+    poheader-sales_pers = ls_tmp-verkf.     " 原采购订单
+    poheader-currency   = ls_tmp-currency . " 货币
+    poheader-pmnttrms   = ls_tmp-zterm.     " 付款条件
+    poheader-doc_date   = sy-datum.         " 采购凭证日期
+    poheader-langu      = sy-langu.         " 语言代码
+
+*&添加发货库存地点 批次
+*&by 2021 0514
+    IF ls_tmp-esart = 'ZSTO'.
+      poheader-suppl_plnt = lv_lifnr+6(4).
+    ENDIF.
+*& end .
+    poheaderx-comp_code   = c_tagx.
+    poheaderx-doc_type    = c_tagx.
+    poheaderx-vendor      = c_tagx.
+    poheaderx-purch_org   = c_tagx.
+    poheaderx-pur_group   = c_tagx.
+    poheaderx-sales_pers  = c_tagx.
+    poheaderx-doc_date    = c_tagx.
+    poheaderx-currency    = c_tagx.
+    poheaderx-pmnttrms    = c_tagx.
+    poheaderx-suppl_plnt  = c_tagx.
+    poheaderx-langu       = c_tagx.
+
+    LOOP AT lt_item INTO ls_item WHERE verkf = ls_tmp-verkf.
+
+      MOVE-CORRESPONDING ls_item TO gs_out.
+      APPEND gs_out TO gt_out.
+      CLEAR gs_out.
+
+      CLEAR lv_po_item.
+      IF ls_item-ebelp IS INITIAL.
+        lv_po_item = lv_po_item + 10.
+      ELSE.
+        lv_po_item = ls_item-ebelp.
+      ENDIF.
+
+      CALL FUNCTION 'CONVERSION_EXIT_MATN1_INPUT'
+        EXPORTING
+          input        = ls_item-matnr
+        IMPORTING
+          output       = ls_item-matnr
+        EXCEPTIONS
+          length_error = 1
+          OTHERS       = 2.
+
+      poitem-po_item    = lv_po_item.        " 采购凭证的项目编号
+      poitem-acctasscat = ls_item-knttp.     " 科目分配类别
+      poitem-material   = ls_item-matnr.     " 物料号
+      poitem-item_cat   = ls_item-item_cat.  " 项目分配类别
+      poitem-tax_code   = ls_item-tax_code.  " 销售税代码
+      poitem-short_text = ls_item-txz01.     " 短文本
+      poitem-matl_group = ls_item-matkl.     " 物料组
+      poitem-price_unit = ls_item-cond_p_unt." 价格单位
+      poitem-net_price  = ls_item-net_price. " 净价
+      poitem-quantity   = ls_item-quantity.  " 采购订单数量
+      poitem-po_unit    = ls_item-po_unit.   " 订单单位
+      poitem-stge_loc   = ls_item-stge_loc.  " 库存地点
+      poitem-plant      = ls_item-plant.     " 工厂
+      poitem-vend_mat   = ls_item-vend_mat.  " 供应商物料编码
+      poitem-preq_no    = ls_item-preq_no.   " 采购申请号码
+      poitem-preq_item  = ls_item-preq_item. " 采购申请行
+      poitem-agreement  = ls_item-konnr.     " 合同
+      poitem-agmt_item  = ls_item-ktpnr.     " 合同项目
+*&————————
+      poitem-batch      = ls_item-batch.     " 批次
+      poitem-suppl_stloc  = ls_item-suppl.   "发货库存地点
+*&----------------
+*     poitem-srm_contract_id  = ls_item-konnr.      " 合同
+*     poitem-srm_contract_itm  = ls_item-ktpnr.     " 合同
+
+
+      APPEND poitem.
+      CLEAR poitem.
+
+      poitemx-po_item    = lv_po_item.       " 采购凭证的项目编号
+      poitemx-acctasscat = c_tagx.           " 科目分配类别
+      poitemx-item_cat   = c_tagx.           " 项目分配类别
+      poitemx-material   = c_tagx.           " 物料号
+      poitemx-short_text = c_tagx.           " 短文本
+      poitemx-matl_group = c_tagx.           " 短文本
+      poitemx-tax_code   = c_tagx.           " 销售税代码
+      poitemx-price_unit = c_tagx.           " 价格单位
+      poitemx-net_price  = c_tagx.           " 净价
+      poitemx-quantity   = c_tagx.           " 采购订单数量
+      poitemx-stge_loc   = c_tagx.           " 仓储地点
+      poitemx-plant      = c_tagx.           " 工厂
+      poitemx-po_unit    = c_tagx.           " 订单单位
+      poitemx-vend_mat   = c_tagx.           " 供应商物料编码
+      poitemx-preq_no    = c_tagx.           " 采购申请号码
+      poitemx-preq_item  = c_tagx.           " 采购申请行
+      poitemx-agreement  = c_tagx.           " 合同
+      poitemx-agmt_item  = c_tagx.           " 合同行项目
+*&----------------
+      poitemx-batch      = c_tagx.           " 批次
+      poitemx-suppl_stloc = c_tagx.          " 发货储存地点
+*&----------------
+      " poitemx-srm_contract_id   = c_tagx.     " 合同
+      " poitemx-srm_contract_itm  = c_tagx.     " 合同
+
+      APPEND poitemx.
+      CLEAR poitemx.
+
+      poschedule-po_item        = lv_po_item.             " 采购凭证的项目编号
+      poschedule-sched_line     = '1'.                    " 采购凭证的项目编号
+      poschedule-del_datcat_ext = 'D'.                    " 交货日期的类别
+      poschedule-delivery_date  = ls_item-delivery_date.  " 交货日期
+      poschedule-quantity       = ls_item-quantity.       " 采购订单数量
+      APPEND poschedule.
+      CLEAR poschedule.
+
+      poschedulex-po_item        = lv_po_item..    " 采购凭证的项目编号
+      poschedulex-sched_line     = '1'.            " 采购凭证的项目编号
+      poschedulex-delivery_date  = c_tagx.         " 交货日期
+      poschedulex-del_datcat_ext = c_tagx.         " 交货日期的类别
+      poschedulex-quantity       = c_tagx.         " 采购订单数量
+      APPEND poschedulex.
+      CLEAR poschedulex.
+
+      IF ls_item-knttp  <> ''.
+        poaccount-po_item    = lv_po_item.         " 采购凭证的项目编号
+        poaccount-gl_account = ls_item-gl_account. " 总帐科目
+        poaccount-costcenter = ls_item-costcenter ." 成本中心
+        poaccount-asset_no   = ls_item-asset_no.   " 资产号码
+        poaccount-tax_code   = ls_item-tax_code.   " 税码
+        poaccount-sd_doc     = ls_item-preq_no.    " 销售和分销凭证号
+        poaccount-itm_number = ls_item-preq_item.  " 销售凭证项目
+        APPEND poaccount.
+        CLEAR  poaccount.
+
+        poaccountx-po_item    = lv_po_item.    " 采购凭证的项目编号
+        poaccountx-costcenter = c_tagx .       " 成本中心
+        poaccountx-asset_no   = c_tagx.        " 资产号码
+        poaccountx-gl_account = c_tagx.        " 总帐科目
+        poaccountx-tax_code   = c_tagx.        " 税码
+        poaccountx-sd_doc     = c_tagx.        " 销售和分销凭证号
+        poaccountx-itm_number = c_tagx.        " 销售凭证项目
+        APPEND poaccountx.
+        CLEAR  poaccountx.
+
+      ENDIF.
+      CLEAR:ls_item,lv_po_item.
+    ENDLOOP.
+    IF poitem[] IS NOT INITIAL.
+      CALL FUNCTION 'BAPI_PO_CREATE1'
+        EXPORTING
+          poheader         = poheader
+          poheaderx        = poheaderx
+        IMPORTING
+          exppurchaseorder = lv_po
+        TABLES
+          return           = return
+          poitem           = poitem
+          poitemx          = poitemx
+          poschedule       = poschedule
+          poschedulex      = poschedulex
+          poaccount        = poaccount
+          poaccountx       = poaccountx.
+      LOOP AT return WHERE type CA 'AEX'.
+        l_flag = 'X'.
+      ENDLOOP.
+
+      IF l_flag = 'X'.
+        SORT  return BY type id message DESCENDING.
+        DELETE ADJACENT DUPLICATES FROM return COMPARING message.
+        DELETE return WHERE message = '对象类型 PurchaseOrder 没有被创建的实例. 外部参考:'.
+
+        LOOP AT  return INTO DATA(ls_return) WHERE type = 'E' OR type = 'I'.
+          lv_message =  lv_message &&  ','  && ls_return-message.
+        ENDLOOP.
+
+        gs_out-zlight  = icon_led_red.
+        gs_out-zstatu  = 'E'.
+        gs_out-zmessg  = '创建失败:' && lv_message.
+        MODIFY gt_out FROM gs_out TRANSPORTING zlight zstatu zmessg
+                                         WHERE verkf = ls_tmp-verkf.
+        CLEAR gs_out.
+        CALL FUNCTION 'BAPI_TRANSACTION_ROLLBACK'.
+      ELSE.
+        CALL FUNCTION 'BAPI_TRANSACTION_COMMIT'
+          EXPORTING
+            wait = 'X'.
+
+        gs_out-zlight  = icon_led_green.
+        gs_out-zstatu  = 'S'.
+        gs_out-zmessg  = '创建成功'.
+        gs_out-ebeln   = lv_po.
+        CLEAR lv_po.
+        MODIFY gt_out FROM gs_out TRANSPORTING zlight zstatu zmessg ebeln
+                                              WHERE verkf = ls_tmp-verkf.
+        CLEAR:gs_out.
+      ENDIF.
+      CLEAR: lv_message,l_flag.
+    ENDIF.
+
+    CALL FUNCTION 'SAPGUI_PROGRESS_INDICATOR'
+      EXPORTING
+        percentage = l_perc
+        text       = l_txt.
+    CLEAR l_txt.
+
+    REFRESH: poitem,poitemx,poschedule,poschedulex,
+    poaccount,poaccountx,return.
+    CLEAR:   poitem,poitemx,poschedule,poschedulex,
+    poaccount,poaccountx,poheader,poheaderx,return.
+  ENDLOOP.
+
+ENDFORM.
+*&---------------------------------------------------------------------*
+*& Form downdload_template
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+*&      --> P_
+*&      --> P_
+*&---------------------------------------------------------------------*
+FORM downdload_template USING p_objid TYPE wwwdatatab-objid
+      p_filename TYPE string.
+
+  DATA: w_objdata     LIKE wwwdatatab,
+        w_mime        LIKE w3mime,
+        "w_filename    TYPE string,
+        w_fullpath    TYPE string VALUE 'C:/TEMP/',
+        w_path        TYPE string VALUE 'C:/TEMP/',
+        w_destination LIKE rlgrap-filename,
+        w_objnam      TYPE string,
+        w_rc          LIKE sy-subrc,
+        w_errtxt      TYPE string,
+        p_dest        LIKE sapb-sappfad,
+        w_action      TYPE i.
+
+  CALL METHOD cl_gui_frontend_services=>file_save_dialog
+    EXPORTING
+      window_title         = '下载导入模板'
+      default_extension    = 'XLS;XLSX'
+      default_file_name    = p_filename
+      file_filter          = 'EXCEL文件|*.XLSX;*.XLS'
+    CHANGING
+      filename             = p_filename
+      path                 = w_path
+      fullpath             = w_fullpath
+      user_action          = w_action
+    EXCEPTIONS
+      cntl_error           = 1
+      error_no_gui         = 2
+      not_supported_by_gui = 3
+      OTHERS               = 4.
+
+  IF sy-subrc = 0 AND w_action EQ 0.
+    p_dest = w_fullpath.
+    CONDENSE w_objnam NO-GAPS.
+    SELECT SINGLE relid objid
+    INTO CORRESPONDING FIELDS OF w_objdata
+    FROM wwwdata
+    WHERE srtf2 = 0 AND relid = 'MI' AND objid = p_objid.
+    IF sy-subrc NE 0 OR w_objdata-objid EQ space.
+      CONCATENATE '模板文件' w_objnam '不存在' INTO w_errtxt.
+      MESSAGE w_errtxt TYPE 'I'.
+    ENDIF.
+    w_destination = p_dest.
+    CALL FUNCTION 'DOWNLOAD_WEB_OBJECT'
+      EXPORTING
+        key         = w_objdata
+        destination = w_destination
+      IMPORTING
+        rc          = w_rc.
+    IF w_rc NE 0.
+      CONCATENATE '模板文件：' w_objnam '下载失败' INTO w_errtxt.
+      MESSAGE w_errtxt TYPE 'E'.
+    ENDIF.
+  ENDIF.
+ENDFORM.
+*&---------------------------------------------------------------------*
+*& Form file_input
+*&---------------------------------------------------------------------*
+*& text
+*&---------------------------------------------------------------------*
+*&      <-- P_FILE
+*&---------------------------------------------------------------------*
+FORM file_input  CHANGING p_p_file.
+  DATA:lt_tab         TYPE filetable,         "存放文件名的内表
+       lv_file_filter TYPE string,            "file filter
+       lv_rc          TYPE i.                 "函数返回值
+
+  REFRESH:lt_tab.
+  CLEAR:lv_file_filter,lv_rc.
+
+  lv_file_filter = 'EXCEL文件|*.XLS;*.XLSX'.
+
+  CALL METHOD cl_gui_frontend_services=>file_open_dialog
+    EXPORTING
+      window_title            = '选择数据文件'
+      file_filter             = lv_file_filter
+*     initial_directory       = 'C:\'
+    CHANGING
+      file_table              = lt_tab
+      rc                      = lv_rc
+    EXCEPTIONS
+      file_open_dialog_failed = 1
+      cntl_error              = 2
+      error_no_gui            = 3
+      not_supported_by_gui    = 4
+      OTHERS                  = 5.
+
+  IF sy-subrc = 0 AND lv_rc = 1.
+    READ TABLE lt_tab INTO p_file INDEX 1.
+  ELSE.
+    MESSAGE '没有选择文件或是选择文件错误！' TYPE 'S'.
+  ENDIF.
+ENDFORM.

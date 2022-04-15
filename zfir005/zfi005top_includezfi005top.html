@@ -1,0 +1,167 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=GB2312" />
+<title>ZFI005TOP</title>
+<style type="text/css">
+.code{ font-family:"Courier New", Courier, monospace; color:#000; font-size:14px; background-color:#F2F4F7 }
+  .codeComment {font-family:"Courier New", Courier, monospace; color:#0000F0; font-size:14px; background-color:#F2F4F7 }
+  .normalBold{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; font-weight:800 }
+  .normalBoldLarge{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+</style>
+<style type="text/css">
+  .normal{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px }
+  .footer{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; text-align: center }
+  h2{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+  h3{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:14px; font-weight:800 }
+  .outerTable{
+   background-color:#E0E7ED;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-right-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+  .innerTable{
+   background-color:#F2F4F7;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-bottom-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+</style>
+</head>
+<body>
+<table class="outerTable">
+  <tr class="normalBoldLarge">
+     <td><h2>Code listing for: ZFI005TOP</h2>
+<h3> Description: Include ZFI005TOP</h3></td>
+   </tr>
+  <tr>
+     <td>
+     <table class="innerTable">
+       <tr>
+          <td>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;包含&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;zfi005top<br />
+*&---------------------------------------------------------------------*<br />
+<br />
+   </div>
+   <div class="code">
+TYPE-POOLS: slis,icon,truxs.<br />
+TABLES: sscrfields.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------&*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;alv&nbsp;parameter&nbsp;&nbsp;&nbsp;*&<br />
+*&---------------------------------------------------------------------&*<br />
+<br />
+   </div>
+   <div class="code">
+DATA: g_repid     LIKE sy-repid,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it_fieldcat&nbsp;TYPE&nbsp;lvc_t_fcat&nbsp;WITH&nbsp;HEADER&nbsp;LINE,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;is_layout&nbsp;&nbsp;&nbsp;TYPE&nbsp;lvc_s_layo.<br />
+<br />
+DATA: is_functxt TYPE smp_dyntxt.<br />
+DATA: it_raw  TYPE truxs_t_text_data.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*--------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;导入字段<br />
+*--------------------------------------------------------------------*、、<br />
+<br />
+   </div>
+   <div class="code">
+DATA: BEGIN OF gs_record,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;headid&nbsp;TYPE&nbsp;char5,&nbsp;"&nbsp;凭证序号<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bukrs&nbsp;&nbsp;TYPE&nbsp;bukrs,&nbsp;"&nbsp;公司代码&nbsp;h&nbsp;COMP_CODE<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;blart&nbsp;&nbsp;TYPE&nbsp;blart,&nbsp;"&nbsp;凭证类型&nbsp;h&nbsp;DOC_TYPE<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bldat&nbsp;&nbsp;TYPE&nbsp;bldat,&nbsp;"&nbsp;凭证日期&nbsp;h&nbsp;DOC_DATE<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;budat&nbsp;&nbsp;TYPE&nbsp;budat,&nbsp;"&nbsp;过账日期&nbsp;h&nbsp;PSTNG_DATE<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;monat&nbsp;&nbsp;TYPE&nbsp;monat,&nbsp;"&nbsp;期间&nbsp;h&nbsp;FIS_PERIOD&nbsp;&nbsp;/&nbsp;FIS_PERIOD<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;waers&nbsp;&nbsp;TYPE&nbsp;waers&nbsp;,&nbsp;"&nbsp;货币&nbsp;09&nbsp;&nbsp;WAERS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xblnr&nbsp;&nbsp;TYPE&nbsp;xblnr,&nbsp;"&nbsp;参考凭证号&nbsp;h&nbsp;&nbsp;REF_DOC_NO<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;numpg&nbsp;&nbsp;TYPE&nbsp;j_1anopg,&nbsp;"&nbsp;页数<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bktxt&nbsp;&nbsp;TYPE&nbsp;bktxt,&nbsp;"&nbsp;凭证抬头文本&nbsp;h&nbsp;HEADER_TXT<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bschl&nbsp;&nbsp;TYPE&nbsp;bschl,&nbsp;"&nbsp;过账代码<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;newko&nbsp;&nbsp;TYPE&nbsp;bu_partner,&nbsp;"&nbsp;屏幕科目&nbsp;&nbsp;&nbsp;PART_ACCT<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;umskz&nbsp;&nbsp;TYPE&nbsp;umskz,&nbsp;"&nbsp;特别总帐标识<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;hkont&nbsp;&nbsp;TYPE&nbsp;hkont,&nbsp;"&nbsp;总账科目&nbsp;1&nbsp;GL_ACCOUNT<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wrbtr&nbsp;&nbsp;TYPE&nbsp;wrbtr,&nbsp;"&nbsp;凭证货币金额&nbsp;&nbsp;09&nbsp;&nbsp;AMT_DOCCUR<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dmbtr&nbsp;&nbsp;TYPE&nbsp;dmbtr,&nbsp;"&nbsp;按本位币计的金额<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mwskz&nbsp;&nbsp;TYPE&nbsp;mwskz,&nbsp;"&nbsp;税码，<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;hwbas&nbsp;&nbsp;TYPE&nbsp;hwbas,&nbsp;"&nbsp;计税基础<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;kostl&nbsp;&nbsp;TYPE&nbsp;kostl,&nbsp;"&nbsp;成本中心编号&nbsp;&nbsp;1&nbsp;COSTCENTER&nbsp;"&nbsp;ITEMNO_ACC<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;aufnr&nbsp;&nbsp;TYPE&nbsp;aufnr,&nbsp;"&nbsp;订单号&nbsp;09&nbsp;/&nbsp;ORDERID<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;matnr&nbsp;&nbsp;TYPE&nbsp;matnr,&nbsp;"&nbsp;物料&nbsp;1&nbsp;MATERIAL<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;werks&nbsp;&nbsp;TYPE&nbsp;werks_d,&nbsp;"&nbsp;工厂&nbsp;1&nbsp;PLANT<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;menge&nbsp;&nbsp;TYPE&nbsp;menge_d,&nbsp;"&nbsp;数量&nbsp;&nbsp;1&nbsp;&nbsp;QUANTITY<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;meins&nbsp;&nbsp;TYPE&nbsp;meins,&nbsp;&nbsp;"&nbsp;单位&nbsp;1&nbsp;BASE_UOM<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;zfbdt&nbsp;&nbsp;TYPE&nbsp;dzfbdt,&nbsp;"&nbsp;基准日期<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;zuonr&nbsp;&nbsp;TYPE&nbsp;acpi_zuonr,&nbsp;"&nbsp;分配<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sgtxt&nbsp;&nbsp;TYPE&nbsp;sgtxt,&nbsp;"&nbsp;项目文本&nbsp;1&nbsp;&nbsp;ITEM_TEXT<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rstgr&nbsp;&nbsp;TYPE&nbsp;rstgr,&nbsp;"&nbsp;原因代码<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xnegp&nbsp;&nbsp;TYPE&nbsp;xnegp,&nbsp;"&nbsp;反记账标识&nbsp;h&nbsp;NEG_POSTNG<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;END&nbsp;OF&nbsp;gs_record,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gt_record&nbsp;LIKE&nbsp;TABLE&nbsp;OF&nbsp;gs_record.<br />
+<br />
+<br />
+DATA: BEGIN OF gs_out.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INCLUDE&nbsp;STRUCTURE&nbsp;gs_record.<br />
+DATA: sel ,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;message&nbsp;TYPE&nbsp;bapi_msg,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;type,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;belnr&nbsp;&nbsp;&nbsp;TYPE&nbsp;belnr_d,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;END&nbsp;OF&nbsp;gs_out,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gt_out&nbsp;LIKE&nbsp;TABLE&nbsp;OF&nbsp;gs_out.<br />
+<br />
+<br />
+" bapi 数据<br />
+DATA: ls_header     TYPE bapiache09, "表头<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lt_amount&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;TABLE&nbsp;OF&nbsp;bapiaccr09,&nbsp;"货币项目<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_amount&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bapiaccr09,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lt_return&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;TABLE&nbsp;OF&nbsp;bapiret2,&nbsp;&nbsp;"返回参数<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_return&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bapiret2,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lt_accountgl&nbsp;&nbsp;TYPE&nbsp;TABLE&nbsp;OF&nbsp;bapiacgl09,&nbsp;"总账科目<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_accountgl&nbsp;&nbsp;TYPE&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bapiacgl09,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lt_vendor&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;TABLE&nbsp;OF&nbsp;bapiacap09,&nbsp;"供应商科目<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_vendor&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bapiacap09,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lt_customer&nbsp;&nbsp;&nbsp;TYPE&nbsp;TABLE&nbsp;OF&nbsp;bapiacar09,&nbsp;"客户科目<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_customer&nbsp;&nbsp;&nbsp;TYPE&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bapiacar09,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_accounttax&nbsp;TYPE&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bapiactx09,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lt_accounttax&nbsp;TYPE&nbsp;TABLE&nbsp;OF&nbsp;bapiactx09.<br />
+DATA lt_extension2 TYPE TABLE OF bapiparex.<br />
+DATA ls_extension2 TYPE          bapiparex.<br />
+DATA: lv_item TYPE i,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_x&nbsp;.<br />
+<br />
+<br />
+DATA: ls_zexten TYPE  zbadi_acc.<br />
+<br />
+DATA: lv_awtype TYPE  awtyp,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_awkey&nbsp;&nbsp;TYPE&nbsp;&nbsp;awkey,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_awsys&nbsp;&nbsp;TYPE&nbsp;&nbsp;awsys.<br />
+            </div>
+          </td>
+        </tr>
+      </table>
+      </td>
+      </tr>
+   <tr>
+<td class="footer">Extracted by Mass Download version 1.5.2 - E.G.Mellodew. 1998-2022. Sap Release 755</td>
+   </tr>
+</table>
+</body>
+</html>

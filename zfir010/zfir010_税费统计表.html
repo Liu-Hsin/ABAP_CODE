@@ -1,0 +1,110 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=GB2312" />
+<title>ZFIR010</title>
+<style type="text/css">
+.code{ font-family:"Courier New", Courier, monospace; color:#000; font-size:14px; background-color:#F2F4F7 }
+  .codeComment {font-family:"Courier New", Courier, monospace; color:#0000F0; font-size:14px; background-color:#F2F4F7 }
+  .normalBold{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; font-weight:800 }
+  .normalBoldLarge{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+</style>
+<style type="text/css">
+  .normal{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px }
+  .footer{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; text-align: center }
+  h2{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+  h3{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:14px; font-weight:800 }
+  .outerTable{
+   background-color:#E0E7ED;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-right-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+  .innerTable{
+   background-color:#F2F4F7;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-bottom-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+</style>
+</head>
+<body>
+<table class="outerTable">
+  <tr class="normalBoldLarge">
+     <td><h2>Code listing for: ZFIR010</h2>
+<h3> Description: 税费统计表</h3></td>
+   </tr>
+  <tr>
+     <td>
+     <table class="innerTable">
+       <tr>
+          <td>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Report&nbsp;ZFIR010<br />
+*&---------------------------------------------------------------------*<br />
+*&<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+REPORT zfir010.<br />
+<br />
+include <a href ="zfi010top.html">zfi010top</a>.<br />
+include <a href ="zfi010f01.html">zfi010f01</a>.<br />
+<br />
+INITIALIZATION.<br />
+&nbsp;&nbsp;is_functxt-icon_id&nbsp;=&nbsp;&nbsp;icon_change.<br />
+&nbsp;&nbsp;is_functxt-icon_text&nbsp;=&nbsp;'维护基础数据表'.<br />
+&nbsp;&nbsp;sscrfields-functxt_01&nbsp;=&nbsp;is_functxt.<br />
+<br />
+&nbsp;&nbsp;p_rbukrs&nbsp;=&nbsp;'1000'.<br />
+&nbsp;&nbsp;p_gjahr&nbsp;=&nbsp;sy-datum+0(4).<br />
+&nbsp;&nbsp;p_poper&nbsp;=&nbsp;sy-datum+4(2).<br />
+<br />
+START-OF-SELECTION.<br />
+<br />
+&nbsp;&nbsp;PERFORM:&nbsp;frm_init_data.&nbsp;"&nbsp;检查ZFIT002表数据是否存在<br />
+&nbsp;&nbsp;PERFORM:&nbsp;frm_get_data.&nbsp;&nbsp;"&nbsp;从acdoca&nbsp;表里获取数据。<br />
+&nbsp;&nbsp;PERFORM:&nbsp;frm_pro_data.&nbsp;&nbsp;"&nbsp;根据科目、借贷,期间，汇总处理数据<br />
+&nbsp;&nbsp;PERFORM:&nbsp;frm_sum_data.&nbsp;&nbsp;"&nbsp;不同行列数据累加。<br />
+&nbsp;&nbsp;PERFORM:&nbsp;frm_alv_disp.&nbsp;&nbsp;"&nbsp;ALV数据&nbsp;输出<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*Selection&nbsp;texts<br />
+*----------------------------------------------------------<br />
+*&nbsp;P_GJAHR&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;会计年度<br />
+*&nbsp;P_POPER&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;期间<br />
+*&nbsp;P_RBUKRS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;公司代码<br />
+<br />
+<br />
+*Messages<br />
+*----------------------------------------------------------<br />
+*<br />
+*&nbsp;Message&nbsp;class:&nbsp;SABAPDOCU<br />
+*888&nbsp;&nbsp;&nbsp;&&nbsp;&&nbsp;&&nbsp;&<br />
+            </div>
+          </td>
+        </tr>
+      </table>
+      </td>
+      </tr>
+   <tr>
+<td class="footer">Extracted by Mass Download version 1.5.2 - E.G.Mellodew. 1998-2022. Sap Release 755</td>
+   </tr>
+</table>
+</body>
+</html>

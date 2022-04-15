@@ -1,0 +1,1001 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=GB2312" />
+<title>ZMM003_FRM</title>
+<style type="text/css">
+.code{ font-family:"Courier New", Courier, monospace; color:#000; font-size:14px; background-color:#F2F4F7 }
+  .codeComment {font-family:"Courier New", Courier, monospace; color:#0000F0; font-size:14px; background-color:#F2F4F7 }
+  .normalBold{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; font-weight:800 }
+  .normalBoldLarge{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+</style>
+<style type="text/css">
+  .normal{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px }
+  .footer{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; text-align: center }
+  h2{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+  h3{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:14px; font-weight:800 }
+  .outerTable{
+   background-color:#E0E7ED;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-right-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+  .innerTable{
+   background-color:#F2F4F7;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-bottom-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+</style>
+</head>
+<body>
+<table class="outerTable">
+  <tr class="normalBoldLarge">
+     <td><h2>Code listing for: ZMM003_FRM</h2>
+<h3> Description: Include ZHX_MM_004_FRM</h3></td>
+   </tr>
+  <tr>
+     <td>
+     <table class="innerTable">
+       <tr>
+          <td>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;包含&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ZHX_MM_004_FRM<br />
+*&---------------------------------------------------------------------*<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;包含&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ZBAW_MM_004_FRM<br />
+*&---------------------------------------------------------------------*<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Form&nbsp;FRM_INIT<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;text<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;--&gt;&nbsp;&nbsp;p1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*&&nbsp;&lt;--&nbsp;&nbsp;p2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM frm_init .<br />
+&nbsp;&nbsp;sscrfields-functxt_01&nbsp;=&nbsp;'@49@模板导出'.<br />
+ENDFORM.<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Form&nbsp;FRM_CONVERT_DATA<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;text<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;--&gt;&nbsp;&nbsp;p1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*&&nbsp;&lt;--&nbsp;&nbsp;p2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM frm_convert_data .<br />
+<br />
+<br />
+&nbsp;&nbsp;DATA:cl_descr&nbsp;TYPE&nbsp;REF&nbsp;TO&nbsp;cl_abap_structdescr.<br />
+&nbsp;&nbsp;FIELD-SYMBOLS:&lt;lfs_comp&gt;&nbsp;&nbsp;TYPE&nbsp;abap_compdescr,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;lfs_file&gt;&nbsp;&nbsp;TYPE&nbsp;gty_file,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;lfs_field&gt;.<br />
+<br />
+&nbsp;&nbsp;DATA:lv_col&nbsp;TYPE&nbsp;i,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_row&nbsp;TYPE&nbsp;i.<br />
+<br />
+&nbsp;&nbsp;CLEAR:gt_list,gt_item[].<br />
+&nbsp;&nbsp;CLEAR:lv_row,gv_error1.<br />
+&nbsp;&nbsp;cl_descr&nbsp;?=&nbsp;cl_abap_typedescr=&gt;describe_by_data(&nbsp;gt_file&nbsp;).<br />
+<br />
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;gt_file&nbsp;ASSIGNING&nbsp;&lt;lfs_file&gt;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR:lv_col.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;"将所有导入的字段改为大写<br />
+&nbsp;&nbsp;&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;cl_descr-&gt;components&nbsp;ASSIGNING&nbsp;&lt;lfs_comp&gt;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_col&nbsp;=&nbsp;lv_col&nbsp;+&nbsp;1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ASSIGN&nbsp;COMPONENT&nbsp;lv_col&nbsp;OF&nbsp;STRUCTURE&nbsp;&lt;lfs_file&gt;&nbsp;TO&nbsp;&lt;lfs_field&gt;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TRANSLATE&nbsp;&lt;lfs_field&gt;&nbsp;TO&nbsp;UPPER&nbsp;CASE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CATCH&nbsp;SYSTEM-EXCEPTIONS&nbsp;arithmetic_errors&nbsp;=&nbsp;4&nbsp;OTHERS&nbsp;=&nbsp;8.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MOVE-CORRESPONDING&nbsp;&lt;lfs_file&gt;&nbsp;TO&nbsp;gt_list.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDCATCH.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;&lt;&gt;&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gt_list-error&nbsp;=&nbsp;&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;frm_check_date&nbsp;USING&nbsp;&lt;lfs_file&gt;-bldat&nbsp;CHANGING&nbsp;gt_list-error.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;frm_check_date&nbsp;USING&nbsp;&lt;lfs_file&gt;-budat&nbsp;CHANGING&nbsp;gt_list-error.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;frm_check_date&nbsp;USING&nbsp;&lt;lfs_file&gt;-hsdat&nbsp;CHANGING&nbsp;gt_list-error.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;frm_matn1_input&nbsp;&nbsp;CHANGING&nbsp;gt_list-matnr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;frm_cunit_input&nbsp;&nbsp;CHANGING&nbsp;gt_list-meins.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;frm_alpha_input&nbsp;&nbsp;CHANGING&nbsp;gt_list-kdauf.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;frm_alpha_input&nbsp;&nbsp;CHANGING&nbsp;gt_list-vbeln.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;frm_alpha_input&nbsp;&nbsp;CHANGING&nbsp;gt_list-kunnr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;frm_alpha_input&nbsp;&nbsp;CHANGING&nbsp;gt_list-aufnr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;frm_alpha_input&nbsp;&nbsp;CHANGING&nbsp;gt_list-ebeln.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;frm_alpha_input&nbsp;&nbsp;CHANGING&nbsp;gt_list-kostl.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;frm_abpsp_input&nbsp;&nbsp;USING&nbsp;&nbsp;gt_list-posid&nbsp;CHANGING&nbsp;gt_list-pspnr.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;frm_alpha_input&nbsp;&nbsp;CHANGING&nbsp;gt_list-lifnr.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;PERFORM&nbsp;FRM_ALPHA_INPUT&nbsp;&nbsp;CHANGING&nbsp;GT_LIST-ZSPNO.<br />
+<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;gt_list-error&nbsp;=&nbsp;&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gt_list-zzmsg&nbsp;&nbsp;&nbsp;=&nbsp;'数据类型错误！'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gt_list-icon&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;gc_red.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gv_error1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;lv_row&nbsp;=&nbsp;lv_row&nbsp;+&nbsp;1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;gt_list-zzrow&nbsp;=&nbsp;lv_row.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;gt_list.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;&nbsp;gt_list.<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;gt_list[]&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;werks,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;lgort<br />
+&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;t320<br />
+&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;TABLE&nbsp;@DATA(lt_t320)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FOR&nbsp;ALL&nbsp;ENTRIES&nbsp;IN&nbsp;@gt_list<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;werks&nbsp;=&nbsp;@gt_list-werks<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;&nbsp;lgort&nbsp;=&nbsp;@gt_list-lgort.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SORT&nbsp;lt_t320&nbsp;BY&nbsp;werks&nbsp;lgort.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;matnr,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;werks,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;xchpf<br />
+&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;marc<br />
+&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;TABLE&nbsp;@DATA(it_marc)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FOR&nbsp;ALL&nbsp;ENTRIES&nbsp;IN&nbsp;@gt_list<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;matnr&nbsp;=&nbsp;@gt_list-matnr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;&nbsp;&nbsp;werks&nbsp;=&nbsp;@gt_list-werks.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SORT&nbsp;it_marc&nbsp;BY&nbsp;matnr&nbsp;werks.<br />
+<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;gt_list[]&nbsp;ASSIGNING&nbsp;FIELD-SYMBOL(&lt;fs_s_list&gt;).<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;it_marc&nbsp;INTO&nbsp;DATA(is_marc)&nbsp;WITH&nbsp;KEY&nbsp;matnr&nbsp;=&nbsp;&lt;fs_s_list&gt;-matnr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;werks&nbsp;=&nbsp;&lt;fs_s_list&gt;-werks&nbsp;BINARY&nbsp;SEARCH.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;is_marc-xchpf&nbsp;IS&nbsp;NOT&nbsp;INITIAL&nbsp;AND&nbsp;&lt;fs_s_list&gt;-charg&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;fs_s_list&gt;-error&nbsp;=&nbsp;&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;fs_s_list&gt;-zzmsg&nbsp;&nbsp;&nbsp;=&nbsp;'批次不能为空！'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;fs_s_list&gt;-icon&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;gc_red.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gv_error1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;is_marc.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CONTINUE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;is_marc-xchpf&nbsp;IS&nbsp;INITIAL&nbsp;AND&nbsp;&lt;fs_s_list&gt;-charg&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;fs_s_list&gt;-error&nbsp;=&nbsp;&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;fs_s_list&gt;-zzmsg&nbsp;&nbsp;&nbsp;=&nbsp;'未启用批次管理！'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;fs_s_list&gt;-icon&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;gc_red.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gv_error1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;is_marc.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CONTINUE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ELSE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;fs_s_list&gt;-error&nbsp;=&nbsp;&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;fs_s_list&gt;-zzmsg&nbsp;&nbsp;&nbsp;=&nbsp;'该工厂下此物料不存在！'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;fs_s_list&gt;-icon&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;gc_red.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gv_error1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CONTINUE.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;IF&nbsp;&lt;FS_S_LIST&gt;-ZSPNO&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;SINGLE&nbsp;VBELN<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;LIKP<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;@DATA(IS_LIKP)<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;VBELN&nbsp;=&nbsp;@&lt;FS_S_LIST&gt;-ZSPNO+10(10).<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;SY-SUBRC&nbsp;&lt;&gt;&nbsp;0.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;FS_S_LIST&gt;-ERROR&nbsp;=&nbsp;&nbsp;'X'.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;FS_S_LIST&gt;-ZZMSG&nbsp;=&nbsp;'交货单不存在！'.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;FS_S_LIST&gt;-ICON&nbsp;&nbsp;=&nbsp;GC_RED.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;GV_ERROR1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;'X'.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;IS_LIKP.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CONTINUE.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+*&nbsp;&nbsp;ENDIF.<br />
+<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;(&nbsp;&lt;fs_s_list&gt;-bwart&nbsp;=&nbsp;'101'&nbsp;OR&nbsp;&lt;fs_s_list&gt;-bwart&nbsp;=&nbsp;'102'&nbsp;)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;&lt;fs_s_list&gt;-ebeln&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;SINGLE&nbsp;ebeln,ebelp,meins,bprme<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;ekpo<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;@DATA(ls_ekpo)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;ebeln&nbsp;=&nbsp;@&lt;fs_s_list&gt;-ebeln<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;&nbsp;&nbsp;ebelp&nbsp;=&nbsp;@&lt;fs_s_list&gt;-ebelp.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;=&nbsp;0&nbsp;AND&nbsp;ls_ekpo-meins&nbsp;&lt;&gt;&nbsp;ls_ekpo-bprme.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;&lt;fs_s_list&gt;-bpmng&nbsp;IS&nbsp;INITIAL&nbsp;OR&nbsp;&lt;fs_s_list&gt;-bbprm&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;fs_s_list&gt;-error&nbsp;=&nbsp;&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;fs_s_list&gt;-zzmsg&nbsp;=&nbsp;'价格单位和数量必填！'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;fs_s_list&gt;-icon&nbsp;&nbsp;=&nbsp;gc_red.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gv_error1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CONTINUE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;&lt;fs_s_list&gt;-bbprm&nbsp;&lt;&gt;&nbsp;ls_ekpo-bprme.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;fs_s_list&gt;-error&nbsp;=&nbsp;&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;fs_s_list&gt;-zzmsg&nbsp;=&nbsp;'价格单位必须等于采购订单价格单位！'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;fs_s_list&gt;-icon&nbsp;&nbsp;=&nbsp;gc_red.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gv_error1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CONTINUE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;&lt;fs_s_list&gt;-sakto&nbsp;IS&nbsp;INITIAL&nbsp;AND&nbsp;&lt;fs_s_list&gt;-bwart&nbsp;=&nbsp;'201'.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;fs_s_list&gt;-error&nbsp;=&nbsp;&nbsp;'X'.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;fs_s_list&gt;-zzmsg&nbsp;=&nbsp;'总账科目必填！'.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;fs_s_list&gt;-icon&nbsp;&nbsp;=&nbsp;gc_red.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gv_error1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;'X'.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CONTINUE.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;gv_error1&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;s888(sabapdocu)&nbsp;WITH&nbsp;'数据有错误'&nbsp;DISPLAY&nbsp;LIKE'E'.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+ENDFORM.<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Form&nbsp;FRM_GET_DATA_OTHER<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;text<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;--&gt;&nbsp;&nbsp;p1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*&&nbsp;&lt;--&nbsp;&nbsp;p2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM frm_get_data .<br />
+<br />
+&nbsp;&nbsp;DATA&nbsp;lt_list&nbsp;TYPE&nbsp;gty_list&nbsp;OCCURS&nbsp;0&nbsp;WITH&nbsp;HEADER&nbsp;LINE.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;gt_list[]&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;matnr&nbsp;maktx<br />
+&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;TABLE&nbsp;gt_makt<br />
+&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;makt<br />
+&nbsp;&nbsp;&nbsp;&nbsp;FOR&nbsp;ALL&nbsp;ENTRIES&nbsp;IN&nbsp;gt_list<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;matnr&nbsp;=&nbsp;gt_list-matnr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;spras&nbsp;=&nbsp;sy-langu.<br />
+<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;lt_list[]&nbsp;=&nbsp;gt_list[].<br />
+&nbsp;&nbsp;&nbsp;&nbsp;DELETE&nbsp;lt_list[]&nbsp;WHERE&nbsp;ebeln&nbsp;IS&nbsp;INITIAL.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;lt_list[]&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;key1&nbsp;&nbsp;key2&nbsp;&nbsp;key3&nbsp;&nbsp;key4&nbsp;&nbsp;key5&nbsp;&nbsp;key6<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bwart&nbsp;menge&nbsp;ebeln&nbsp;ebelp<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mblnr&nbsp;mjahr&nbsp;zeile&nbsp;lfbja&nbsp;lfbnr&nbsp;lfpos<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;CORRESPONDING&nbsp;FIELDS&nbsp;OF&nbsp;TABLE&nbsp;gt_matdoc1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;matdoc<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FOR&nbsp;ALL&nbsp;ENTRIES&nbsp;IN&nbsp;lt_list<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;ebeln&nbsp;=&nbsp;lt_list-ebeln<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;ebelp&nbsp;=&nbsp;lt_list-ebelp<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;cancelled&nbsp;=&nbsp;''.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;gt_matdoc2[]&nbsp;=&nbsp;gt_matdoc1[].<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SORT:gt_matdoc1&nbsp;BY&nbsp;mblnr&nbsp;mjahr&nbsp;zeile,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;gt_matdoc2&nbsp;BY&nbsp;mblnr&nbsp;mjahr&nbsp;zeile.<br />
+&nbsp;&nbsp;ENDIF.<br />
+ENDFORM.<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Form&nbsp;FRM_FILL_DATA_OTHER<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;text<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;--&gt;&nbsp;&nbsp;p1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*&&nbsp;&lt;--&nbsp;&nbsp;p2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM frm_fill_data.<br />
+&nbsp;&nbsp;FIELD-SYMBOLS:&lt;lfs_list&gt;&nbsp;TYPE&nbsp;gty_list.<br />
+<br />
+&nbsp;&nbsp;SORT&nbsp;&nbsp;gt_makt&nbsp;BY&nbsp;matnr.<br />
+&nbsp;&nbsp;CLEAR:gt_head,gt_head[].<br />
+<br />
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;gt_list&nbsp;ASSIGNING&nbsp;&lt;lfs_list&gt;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;&nbsp;gt_makt&nbsp;WITH&nbsp;KEY&nbsp;matnr&nbsp;=&nbsp;&lt;lfs_list&gt;-matnr&nbsp;BINARY&nbsp;SEARCH.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;lfs_list&gt;-maktx&nbsp;=&nbsp;gt_makt-maktx.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;gt_head-zzzxm&nbsp;=&nbsp;&lt;lfs_list&gt;-zzzxm.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;COLLECT&nbsp;gt_head.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;&nbsp;&nbsp;gt_head.<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+ENDFORM.<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Form&nbsp;FRM_TEST<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;text<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;--&gt;&nbsp;&nbsp;p1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*&&nbsp;&lt;--&nbsp;&nbsp;p2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM frm_test .<br />
+&nbsp;&nbsp;DATA:lv_error&nbsp;TYPE&nbsp;char1.<br />
+&nbsp;&nbsp;FIELD-SYMBOLS:&lt;lfs_list&gt;&nbsp;TYPE&nbsp;gty_list.<br />
+<br />
+&nbsp;&nbsp;gt_list-icon&nbsp;&nbsp;=&nbsp;''.<br />
+&nbsp;&nbsp;gt_list-error&nbsp;=&nbsp;''.<br />
+&nbsp;&nbsp;gt_list-zzmsg&nbsp;=&nbsp;''.<br />
+&nbsp;&nbsp;MODIFY&nbsp;gt_list&nbsp;TRANSPORTING&nbsp;icon&nbsp;error&nbsp;zzmsg&nbsp;WHERE&nbsp;icon&nbsp;&lt;&gt;&nbsp;&nbsp;''&nbsp;OR&nbsp;&nbsp;error&nbsp;&lt;&gt;&nbsp;''&nbsp;OR&nbsp;zzmsg&nbsp;&lt;&gt;&nbsp;''.<br />
+&nbsp;&nbsp;CLEAR&nbsp;gt_list.<br />
+<br />
+&nbsp;&nbsp;SELECT&nbsp;werks&nbsp;,matnr,sernp&nbsp;INTO&nbsp;TABLE&nbsp;@lt_marc<br />
+&nbsp;&nbsp;FROM&nbsp;marc<br />
+&nbsp;&nbsp;FOR&nbsp;ALL&nbsp;ENTRIES&nbsp;IN&nbsp;@gt_list<br />
+&nbsp;&nbsp;WHERE&nbsp;werks&nbsp;=&nbsp;@gt_list-werks<br />
+&nbsp;&nbsp;AND&nbsp;&nbsp;&nbsp;matnr&nbsp;=&nbsp;@gt_list-matnr.<br />
+<br />
+<br />
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;gt_list&nbsp;ASSIGNING&nbsp;&lt;lfs_list&gt;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;frm_clear_data.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;frm_check_data&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;&lt;lfs_list&gt;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;frm_fill_bapi_data&nbsp;&nbsp;USING&nbsp;&lt;lfs_list&gt;&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;frm_call_bapi&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'X'&nbsp;CHANGING&nbsp;&lt;lfs_list&gt;-error&nbsp;&lt;lfs_list&gt;-zzmsg.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;&lt;lfs_list&gt;-error&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_error&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;lfs_list&gt;-icon&nbsp;=&nbsp;gc_red.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ELSE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;lfs_list&gt;-icon&nbsp;=&nbsp;gc_green.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;lv_error&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;s888(sabapdocu)&nbsp;WITH&nbsp;'测试运行完成，但是有错误'&nbsp;DISPLAY&nbsp;LIKE'E'.<br />
+&nbsp;&nbsp;ELSE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;s888(sabapdocu)&nbsp;WITH&nbsp;'测试运行成功'&nbsp;DISPLAY&nbsp;LIKE'S'.<br />
+&nbsp;&nbsp;ENDIF.<br />
+ENDFORM.<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Form&nbsp;FRM_POST<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;text<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;--&gt;&nbsp;&nbsp;p1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*&&nbsp;&lt;--&nbsp;&nbsp;p2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM frm_post.<br />
+&nbsp;&nbsp;FIELD-SYMBOLS:&lt;lfs_head&gt;&nbsp;TYPE&nbsp;gty_head,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;lfs_list&gt;&nbsp;TYPE&nbsp;gty_list.<br />
+&nbsp;&nbsp;DATA:lv_error&nbsp;TYPE&nbsp;char1.<br />
+<br />
+&nbsp;&nbsp;gv_run&nbsp;=&nbsp;'X'.<br />
+<br />
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;gt_head&nbsp;ASSIGNING&nbsp;&lt;lfs_head&gt;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;frm_clear_data.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;gt_list&nbsp;ASSIGNING&nbsp;&lt;lfs_list&gt;&nbsp;WHERE&nbsp;zzzxm&nbsp;=&nbsp;&lt;lfs_head&gt;-zzzxm.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;frm_check_data&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;&lt;lfs_list&gt;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;frm_fill_bapi_data&nbsp;&nbsp;USING&nbsp;&lt;lfs_list&gt;&nbsp;''.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;&lt;lfs_list&gt;-error&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;lfs_head&gt;-error&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;frm_call_bapi&nbsp;USING&nbsp;''&nbsp;CHANGING&nbsp;&lt;lfs_head&gt;-error&nbsp;&lt;lfs_head&gt;-zzmsg.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;gt_list&nbsp;ASSIGNING&nbsp;&lt;lfs_list&gt;&nbsp;WHERE&nbsp;zzzxm&nbsp;=&nbsp;&lt;lfs_head&gt;-zzzxm.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;&lt;lfs_head&gt;-error&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;lfs_list&gt;-icon&nbsp;=&nbsp;gc_red.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;frm_out_msg&nbsp;USING&nbsp;&lt;lfs_list&gt;-zzmsg&nbsp;&lt;lfs_head&gt;-zzmsg&nbsp;';'&nbsp;CHANGING&nbsp;&lt;lfs_list&gt;-zzmsg.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ELSE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;lfs_list&gt;-mblnr&nbsp;=&nbsp;gs_headret-mat_doc.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;lfs_list&gt;-icon&nbsp;&nbsp;=&nbsp;gc_green.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;&lt;lfs_head&gt;-error&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_error&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'BAPI_TRANSACTION_ROLLBACK'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ELSE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'BAPI_TRANSACTION_COMMIT'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wait&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;FRM_CREATE_OBJCL&nbsp;USING&nbsp;&lt;LFS_HEAD&gt;-ZZZXM.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;lv_error&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;s888(sabapdocu)&nbsp;WITH&nbsp;'过账完成，但是有错误'&nbsp;DISPLAY&nbsp;LIKE'E'.<br />
+&nbsp;&nbsp;ELSE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;s888(sabapdocu)&nbsp;WITH&nbsp;'过账成功'&nbsp;DISPLAY&nbsp;LIKE'S'.<br />
+&nbsp;&nbsp;ENDIF.<br />
+ENDFORM.<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Form&nbsp;FRM_CLEAR_DATA<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;text<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;--&gt;&nbsp;&nbsp;p1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*&&nbsp;&lt;--&nbsp;&nbsp;p2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM frm_clear_data .<br />
+&nbsp;&nbsp;CLEAR:gs_header,<br />
+&nbsp;&nbsp;gs_code,<br />
+&nbsp;&nbsp;gs_headret,<br />
+&nbsp;&nbsp;gt_item,gt_item[].<br />
+ENDFORM.<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Form&nbsp;FRM_CHECK_DATA<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;text<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&gt;&nbsp;&lt;LFS_LIST&gt;<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM frm_check_data  USING  ls_list TYPE gty_list                            .<br />
+&nbsp;&nbsp;DATA:lt_list&nbsp;&nbsp;TYPE&nbsp;gty_list&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OCCURS&nbsp;0&nbsp;WITH&nbsp;HEADER&nbsp;LINE,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_row_c&nbsp;TYPE&nbsp;char10.<br />
+<br />
+&nbsp;&nbsp;lt_list[]&nbsp;=&nbsp;gt_list[].<br />
+&nbsp;&nbsp;DELETE&nbsp;lt_list&nbsp;WHERE&nbsp;zzzxm&nbsp;&lt;&gt;&nbsp;ls_list-zzzxm.<br />
+&nbsp;&nbsp;DELETE&nbsp;lt_list&nbsp;WHERE&nbsp;bwart&nbsp;=&nbsp;ls_list-bwart.<br />
+<br />
+&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;lt_list&nbsp;INDEX&nbsp;1.<br />
+&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_list-error&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;lv_row_c&nbsp;=&nbsp;lt_list-zzrow.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CONDENSE&nbsp;lv_row_c.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_list-zzmsg&nbsp;=&nbsp;'与行号'&nbsp;&&&nbsp;lv_row_c&nbsp;&&&nbsp;'移动类型不同'.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;lt_marc&nbsp;INTO&nbsp;ls_marc&nbsp;&nbsp;WITH&nbsp;KEY&nbsp;werks&nbsp;=&nbsp;ls_list-werks<br />
+&nbsp;&nbsp;matnr&nbsp;=&nbsp;ls_list-matnr.<br />
+&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;ls_marc-sernp&nbsp;IS&nbsp;NOT&nbsp;INITIAL&nbsp;AND&nbsp;ls_list-serialno&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_list-error&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_list-zzmsg&nbsp;=&nbsp;'请输入序列号'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;CLEAR&nbsp;ls_marc.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;ls_list-bwart&nbsp;=&nbsp;'941'&nbsp;AND&nbsp;ls_list-move_reas&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_list-error&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_list-zzmsg&nbsp;=&nbsp;'请输入移动原因'.<br />
+&nbsp;&nbsp;ENDIF.<br />
+ENDFORM.<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Form&nbsp;FRM_FILL_BAPI_DATA<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;text<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&gt;&nbsp;&lt;LFS_LIST&gt;<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM frm_fill_bapi_data  USING  ls_list TYPE gty_list<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_flag&nbsp;TYPE&nbsp;&nbsp;char1.<br />
+&nbsp;&nbsp;IF&nbsp;ls_list-error&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXIT.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;gs_header-pstng_date&nbsp;=&nbsp;ls_list-budat.<br />
+&nbsp;&nbsp;gs_header-doc_date&nbsp;&nbsp;&nbsp;=&nbsp;ls_list-bldat.<br />
+&nbsp;&nbsp;gs_header-pr_uname&nbsp;&nbsp;&nbsp;=&nbsp;sy-uname.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'CONVERSION_EXIT_ALPHA_INPUT'<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INPUT&nbsp;&nbsp;=&nbsp;LS_LIST-ZSPNO<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OUTPUT&nbsp;=&nbsp;GS_HEADER-REF_DOC_NO.<br />
+<br />
+*GS_HEADER-REF_DOC_NO&nbsp;=&nbsp;|{&nbsp;LS_LIST-ZSPNO&nbsp;ALPHA&nbsp;=&nbsp;IN&nbsp;WIDTH&nbsp;=&nbsp;10&nbsp;}|.<br />
+<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;CASE&nbsp;ls_list-bwart.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'101'&nbsp;OR&nbsp;'102'&nbsp;OR&nbsp;'103'&nbsp;OR&nbsp;'104'&nbsp;OR&nbsp;'105'&nbsp;OR&nbsp;'106'&nbsp;OR&nbsp;'124'&nbsp;&nbsp;OR&nbsp;'122'&nbsp;OR&nbsp;'967'&nbsp;OR&nbsp;'968'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_code-gm_code&nbsp;=&nbsp;'01'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'Z23'&nbsp;OR&nbsp;'Z24'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_code-gm_code&nbsp;=&nbsp;'05'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;OTHERS.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_code-gm_code&nbsp;=&nbsp;'06'.<br />
+&nbsp;&nbsp;ENDCASE.<br />
+<br />
+&nbsp;&nbsp;CASE&nbsp;ls_list-bwart.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'101'&nbsp;OR&nbsp;'102'&nbsp;OR&nbsp;'967'&nbsp;OR&nbsp;'968'.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;ls_list-lifnr&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gt_item-vendor&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_list-lifnr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gt_item-mvt_ind&nbsp;&nbsp;&nbsp;=&nbsp;'B'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;ls_list-ebeln&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gt_item-po_number&nbsp;=&nbsp;ls_list-ebeln.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gt_item-po_item&nbsp;&nbsp;&nbsp;=&nbsp;ls_list-ebelp.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gt_item-prod_date&nbsp;=&nbsp;ls_list-hsdat.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gt_item-mvt_ind&nbsp;&nbsp;&nbsp;=&nbsp;'B'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;ls_list-aufnr&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gt_item-spec_stock&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_list-sobkz.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;GT_ITEM-GL_ACCOUNT&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;LS_LIST-SAKTO.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gt_item-costcenter&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_list-kostl.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gt_item-orderid&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_list-aufnr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gt_item-wbs_elem&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_list-posid.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gt_item-val_sales_ord&nbsp;&nbsp;&nbsp;=&nbsp;ls_list-kdauf.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gt_item-val_s_ord_item&nbsp;&nbsp;=&nbsp;ls_list-kdpos.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gt_item-prod_date&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_list-hsdat.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gt_item-mvt_ind&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'F'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;&nbsp;'103'&nbsp;OR&nbsp;'104'&nbsp;&nbsp;OR&nbsp;'106'&nbsp;OR&nbsp;'124'&nbsp;&nbsp;OR&nbsp;'122'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gt_item-po_number&nbsp;=&nbsp;ls_list-ebeln.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gt_item-po_item&nbsp;&nbsp;&nbsp;=&nbsp;ls_list-ebelp.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gt_item-prod_date&nbsp;=&nbsp;ls_list-hsdat.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gt_item-mvt_ind&nbsp;&nbsp;&nbsp;=&nbsp;'B'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'105'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;frm_get_mblnf_105&nbsp;USING&nbsp;ls_list.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gt_item-po_number&nbsp;&nbsp;=&nbsp;ls_list-ebeln.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gt_item-po_item&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_list-ebelp.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gt_item-prod_date&nbsp;&nbsp;=&nbsp;ls_list-hsdat.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gt_item-ref_doc_yr&nbsp;=&nbsp;ls_list-lfbja.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gt_item-ref_doc&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_list-lfbnr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gt_item-ref_doc_it&nbsp;=&nbsp;ls_list-lfpos.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gt_item-mvt_ind&nbsp;&nbsp;&nbsp;=&nbsp;'B'.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;OTHERS.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gt_item-spec_stock&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_list-sobkz.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gt_item-move_stloc&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_list-umlgo.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gt_item-val_sales_ord&nbsp;&nbsp;&nbsp;=&nbsp;ls_list-kdauf.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gt_item-val_s_ord_item&nbsp;&nbsp;=&nbsp;ls_list-kdpos.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gt_item-gl_account&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_list-sakto.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gt_item-costcenter&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_list-kostl.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gt_item-orderid&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_list-aufnr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gt_item-wbs_elem&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_list-posid.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gt_item-val_sales_ord&nbsp;&nbsp;&nbsp;=&nbsp;ls_list-kdauf.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gt_item-val_s_ord_item&nbsp;&nbsp;=&nbsp;ls_list-kdpos.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gt_item-prod_date&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_list-hsdat.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gt_item-customer&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_list-kunnr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gt_item-vendor&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_list-lifnr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gt_item-move_mat&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_list-move_mat.<br />
+&nbsp;&nbsp;ENDCASE.<br />
+<br />
+<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;ls_list-serialno&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;i_flag&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_goodsmvt_serialnumber-matdoc_itm&nbsp;=&nbsp;&nbsp;'0001'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_goodsmvt_serialnumber-serialno&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;ls_list-serialno.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;ls_goodsmvt_serialnumber&nbsp;TO&nbsp;lt_goodsmvt_serialnumber.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;ls_goodsmvt_serialnumber.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ELSE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_goodsmvt_serialnumber-matdoc_itm&nbsp;=&nbsp;&nbsp;ls_list-zzrow.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_goodsmvt_serialnumber-serialno&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;ls_list-serialno.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;ls_goodsmvt_serialnumber&nbsp;TO&nbsp;lt_goodsmvt_serialnumber.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;ls_goodsmvt_serialnumber.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;ls_list-error&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;gt_item-material_long&nbsp;&nbsp;&nbsp;=&nbsp;ls_list-matnr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;gt_item-plant&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_list-werks.&nbsp;&nbsp;&nbsp;&nbsp;"工厂<br />
+&nbsp;&nbsp;&nbsp;&nbsp;gt_item-move_plant&nbsp;=&nbsp;ls_list-umwrk.&nbsp;&nbsp;&nbsp;&nbsp;"收发工厂<br />
+&nbsp;&nbsp;&nbsp;&nbsp;gt_item-stge_loc&nbsp;&nbsp;&nbsp;=&nbsp;ls_list-lgort.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;gt_item-batch&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_list-charg.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;gt_item-move_type&nbsp;&nbsp;=&nbsp;ls_list-bwart.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;gt_item-entry_qnt&nbsp;&nbsp;=&nbsp;ls_list-menge.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;gt_item-entry_uom&nbsp;&nbsp;=&nbsp;ls_list-meins.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;gt_item-po_pr_qnt&nbsp;&nbsp;=&nbsp;ls_list-bpmng.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;gt_item-orderpr_un&nbsp;=&nbsp;ls_list-bbprm.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;gt_item-item_text&nbsp;&nbsp;=&nbsp;ls_list-sgtxt.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;gt_item-move_batch&nbsp;=&nbsp;ls_list-charg_sid.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;gt_item-move_reas&nbsp;&nbsp;=&nbsp;ls_list-move_reas.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;gt_item.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;&nbsp;gt_item.<br />
+&nbsp;&nbsp;ENDIF.<br />
+ENDFORM.<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Form&nbsp;FRM_GET_MBLNF<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;text<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&gt;&nbsp;LS_LIST<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM frm_get_mblnf_105  USING  ls_list TYPE gty_list.<br />
+&nbsp;&nbsp;FIELD-SYMBOLS:&lt;lfs_matdoc1&gt;&nbsp;TYPE&nbsp;gty_matdoc,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;lfs_matdoc2&gt;&nbsp;TYPE&nbsp;gty_matdoc.<br />
+&nbsp;&nbsp;DATA:lv_used&nbsp;TYPE&nbsp;char1.<br />
+<br />
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;gt_matdoc1&nbsp;ASSIGNING&nbsp;&lt;lfs_matdoc1&gt;&nbsp;WHERE&nbsp;ebeln&nbsp;=&nbsp;ls_list-ebeln<br />
+&nbsp;&nbsp;AND&nbsp;ebelp&nbsp;=&nbsp;ls_list-ebelp<br />
+&nbsp;&nbsp;AND&nbsp;bwart&nbsp;=&nbsp;'103'<br />
+&nbsp;&nbsp;AND&nbsp;menge&nbsp;=&nbsp;ls_list-menge.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR:lv_used.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;gt_matdoc2&nbsp;ASSIGNING&nbsp;&lt;lfs_matdoc2&gt;&nbsp;WHERE&nbsp;lfbja&nbsp;=&nbsp;&lt;lfs_matdoc1&gt;-mjahr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;lfbnr&nbsp;=&nbsp;&lt;lfs_matdoc1&gt;-mblnr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;lfpos&nbsp;=&nbsp;&lt;lfs_matdoc1&gt;-zeile.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;lfs_matdoc2&gt;-lfbja&nbsp;&lt;&gt;&nbsp;&lt;lfs_matdoc2&gt;-mjahr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OR&nbsp;&nbsp;&lt;lfs_matdoc2&gt;-lfbnr&nbsp;&lt;&gt;&nbsp;&lt;lfs_matdoc2&gt;-mblnr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OR&nbsp;&nbsp;&lt;lfs_matdoc2&gt;-lfpos&nbsp;&lt;&gt;&nbsp;&lt;lfs_matdoc2&gt;-zeile.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_used&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXIT.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDLOOP.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;lv_used&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_list-lfbja&nbsp;=&nbsp;&lt;lfs_matdoc1&gt;-mjahr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_list-lfbnr&nbsp;=&nbsp;&lt;lfs_matdoc1&gt;-mblnr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_list-lfpos&nbsp;=&nbsp;&lt;lfs_matdoc1&gt;-zeile.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXIT.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+ENDFORM.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Form&nbsp;FRM_CALL_BAPI<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;text<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&gt;&nbsp;P_<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM frm_call_bapi  USING  p_test TYPE char1 CHANGING p_error TYPE char1 p_zzmsg TYPE bapi_msg.<br />
+&nbsp;&nbsp;DATA:lt_return&nbsp;&nbsp;TYPE&nbsp;bapiret2&nbsp;&nbsp;OCCURS&nbsp;0&nbsp;WITH&nbsp;HEADER&nbsp;LINE.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;p_error&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXIT.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'BAPI_GOODSMVT_CREATE'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;goodsmvt_header&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;gs_header<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;goodsmvt_code&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;gs_code<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;testrun&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;p_test<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;goodsmvt_headret&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;gs_headret<br />
+&nbsp;&nbsp;&nbsp;&nbsp;TABLES<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;goodsmvt_item&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;gt_item<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lt_return<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;goodsmvt_serialnumber&nbsp;=&nbsp;lt_goodsmvt_serialnumber.<br />
+<br />
+&nbsp;&nbsp;CLEAR&nbsp;lt_goodsmvt_serialnumber.<br />
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;lt_return&nbsp;WHERE&nbsp;type&nbsp;=&nbsp;'E'&nbsp;OR&nbsp;type&nbsp;=&nbsp;'A'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;p_error&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;frm_out_msg&nbsp;USING&nbsp;p_zzmsg&nbsp;lt_return-message&nbsp;';'&nbsp;CHANGING&nbsp;p_zzmsg.<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+ENDFORM.<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Form&nbsp;FRM_create_objcl<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;text<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;--&gt;&nbsp;&nbsp;p1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*&&nbsp;&lt;--&nbsp;&nbsp;p2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM frm_create_objcl USING zzzxm TYPE char100.<br />
+&nbsp;&nbsp;DATA&nbsp;:&nbsp;BEGIN&nbsp;OF&nbsp;gt_tmp,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;werks&nbsp;LIKE&nbsp;marc-werks,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;matnr&nbsp;LIKE&nbsp;marc-matnr,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;charg&nbsp;LIKE&nbsp;mcha-charg,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;objek&nbsp;LIKE&nbsp;mcha-cuobj_bm,<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;ZSPNO&nbsp;TYPE&nbsp;ZBAW_DE_ZSPNO,<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;END&nbsp;OF&nbsp;gt_tmp.<br />
+<br />
+&nbsp;&nbsp;DATA&nbsp;:&nbsp;BEGIN&nbsp;OF&nbsp;gt_trans,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;werks&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;marc-werks,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;matnr&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;marc-matnr,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;charg&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;mcha-charg,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cuobj_bm&nbsp;LIKE&nbsp;mcha-cuobj_bm,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;END&nbsp;OF&nbsp;gt_trans.<br />
+<br />
+&nbsp;&nbsp;DATA&nbsp;:&nbsp;lt_tmp&nbsp;&nbsp;&nbsp;LIKE&nbsp;TABLE&nbsp;OF&nbsp;gt_tmp,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_tmp&nbsp;&nbsp;&nbsp;LIKE&nbsp;LINE&nbsp;&nbsp;OF&nbsp;lt_tmp,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lt_trans&nbsp;LIKE&nbsp;TABLE&nbsp;OF&nbsp;gt_trans.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*DATA:&nbsp;IT_ZBAWT_BATCH_ATTR&nbsp;LIKE&nbsp;TABLE&nbsp;OF&nbsp;ZBAWT_BATCH_ATTR,<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IS_ZBAWT_BATCH_ATTR&nbsp;LIKE&nbsp;ZBAWT_BATCH_ATTR.<br />
+<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;DATA:&nbsp;l_object_guid&nbsp;&nbsp;LIKE&nbsp;&nbsp;bapi1003_key-object_guid.<br />
+<br />
+&nbsp;&nbsp;DATA:&nbsp;l_object&nbsp;TYPE&nbsp;bapi1003_key-object_long,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lt_list&nbsp;&nbsp;LIKE&nbsp;bapi1003_alloc_list&nbsp;OCCURS&nbsp;0&nbsp;WITH&nbsp;HEADER&nbsp;LINE.<br />
+<br />
+&nbsp;&nbsp;DATA:&nbsp;ls_head&nbsp;&nbsp;&nbsp;TYPE&nbsp;&nbsp;bapi1003_key,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lt_snum&nbsp;&nbsp;&nbsp;LIKE&nbsp;&nbsp;bapi1003_alloc_values_num&nbsp;OCCURS&nbsp;0&nbsp;WITH&nbsp;HEADER&nbsp;LINE,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lt_schar&nbsp;&nbsp;LIKE&nbsp;&nbsp;bapi1003_alloc_values_char&nbsp;OCCURS&nbsp;0&nbsp;WITH&nbsp;HEADER&nbsp;LINE,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it_schar&nbsp;&nbsp;LIKE&nbsp;&nbsp;bapi1003_alloc_values_char,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lt_scurr&nbsp;&nbsp;LIKE&nbsp;&nbsp;bapi1003_alloc_values_curr&nbsp;OCCURS&nbsp;0&nbsp;WITH&nbsp;HEADER&nbsp;LINE,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gt_return&nbsp;LIKE&nbsp;&nbsp;bapiret2&nbsp;OCCURS&nbsp;0&nbsp;WITH&nbsp;HEADER&nbsp;LINE.<br />
+&nbsp;&nbsp;DATA:&nbsp;l_flag.<br />
+   </div>
+   <div class="codeComment">
+*IF&nbsp;GT_LIST[]&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+*&nbsp;&nbsp;SELECT&nbsp;*<br />
+*&nbsp;&nbsp;FROM&nbsp;ZBAWT_BATCH_ATTR<br />
+*&nbsp;&nbsp;INTO&nbsp;CORRESPONDING&nbsp;FIELDS&nbsp;OF&nbsp;TABLE&nbsp;@IT_ZBAWT_BATCH_ATTR<br />
+*&nbsp;&nbsp;FOR&nbsp;ALL&nbsp;ENTRIES&nbsp;IN&nbsp;@GT_LIST[]<br />
+*&nbsp;&nbsp;WHERE&nbsp;WERKS&nbsp;=&nbsp;@GT_LIST-WERKS<br />
+*&nbsp;&nbsp;AND&nbsp;MATNR&nbsp;=&nbsp;@GT_LIST-MATNR<br />
+*&nbsp;&nbsp;AND&nbsp;CHARG&nbsp;=&nbsp;@GT_LIST-CHARG.<br />
+*&nbsp;&nbsp;SORT&nbsp;IT_ZBAWT_BATCH_ATTR&nbsp;BY&nbsp;WERKS&nbsp;MATNR&nbsp;CHARG.<br />
+*ENDIF.<br />
+<br />
+*LOOP&nbsp;AT&nbsp;GT_LIST&nbsp;ASSIGNING&nbsp;FIELD-SYMBOL(&lt;LFS_LIST&gt;)&nbsp;WHERE&nbsp;ZZZXM&nbsp;=&nbsp;ZZZXM.<br />
+*&nbsp;&nbsp;IF&nbsp;&lt;LFS_LIST&gt;-ZSPNO&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;LS_TMP-WERKS&nbsp;=&nbsp;&lt;LFS_LIST&gt;-WERKS.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;LS_TMP-MATNR&nbsp;=&nbsp;&lt;LFS_LIST&gt;-MATNR.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;LS_TMP-CHARG&nbsp;=&nbsp;&lt;LFS_LIST&gt;-CHARG.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;LS_TMP-ZSPNO&nbsp;=&nbsp;&lt;LFS_LIST&gt;-ZSPNO.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;LS_TMP&nbsp;TO&nbsp;LT_TMP.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;&nbsp;LS_TMP.<br />
+*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;IT_ZBAWT_BATCH_ATTR&nbsp;INTO&nbsp;IS_ZBAWT_BATCH_ATTR&nbsp;WITH&nbsp;KEY&nbsp;WERKS&nbsp;=&nbsp;&lt;LFS_LIST&gt;-WERKS<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;MATNR&nbsp;=&nbsp;&lt;LFS_LIST&gt;-MATNR<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;CHARG&nbsp;=&nbsp;&lt;LFS_LIST&gt;-CHARG<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;BINARY&nbsp;SEARCH.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;SY-SUBRC&nbsp;&lt;&gt;&nbsp;0.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IS_ZBAWT_BATCH_ATTR-WERKS&nbsp;=&nbsp;&lt;LFS_LIST&gt;-WERKS.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IS_ZBAWT_BATCH_ATTR-MATNR&nbsp;=&nbsp;&lt;LFS_LIST&gt;-MATNR.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IS_ZBAWT_BATCH_ATTR-CHARG&nbsp;=&nbsp;&lt;LFS_LIST&gt;-CHARG.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IS_ZBAWT_BATCH_ATTR-Z_BATCH_ZHYNO&nbsp;=&nbsp;&lt;LFS_LIST&gt;-ZSPNO.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;IS_ZBAWT_BATCH_ATTR&nbsp;TO&nbsp;IT_ZBAWT_BATCH_ATTR.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;ELSE.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IS_ZBAWT_BATCH_ATTR-Z_BATCH_ZHYNO&nbsp;=&nbsp;&lt;LFS_LIST&gt;-ZSPNO.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;IS_ZBAWT_BATCH_ATTR&nbsp;TO&nbsp;IT_ZBAWT_BATCH_ATTR.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;&nbsp;IS_ZBAWT_BATCH_ATTR.<br />
+*&nbsp;&nbsp;ENDIF.<br />
+*ENDLOOP.<br />
+<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;IF&nbsp;lt_tmp&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;werks,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;matnr,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;charg,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;cuobj_bm<br />
+&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;CORRESPONDING&nbsp;FIELDS&nbsp;OF&nbsp;TABLE&nbsp;@lt_trans<br />
+&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;mcha<br />
+&nbsp;&nbsp;&nbsp;&nbsp;FOR&nbsp;ALL&nbsp;ENTRIES&nbsp;IN&nbsp;@lt_tmp<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;werks&nbsp;=&nbsp;@lt_tmp-werks<br />
+&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;&nbsp;&nbsp;matnr&nbsp;=&nbsp;@lt_tmp-matnr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;&nbsp;&nbsp;charg&nbsp;=&nbsp;@lt_tmp-charg.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;DELETE&nbsp;lt_trans&nbsp;WHERE&nbsp;cuobj_bm&nbsp;IS&nbsp;INITIAL.<br />
+<br />
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;lt_tmp&nbsp;INTO&nbsp;ls_tmp.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;l_object(40)&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_tmp-matnr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;l_object+40(4)&nbsp;&nbsp;=&nbsp;ls_tmp-werks.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;l_object+44(10)&nbsp;=&nbsp;ls_tmp-charg.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'BAPI_OBJCL_GETCLASSES'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;objectkey_imp_long&nbsp;=&nbsp;l_object<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;objecttable_imp&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'MCHA'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;classtype_imp&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'022'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;READ_VALUATIONS&nbsp;&nbsp;&nbsp;&nbsp;=<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;keydate&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;sy-datum<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;language&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;sy-langu<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TABLES<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;alloclist&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lt_list<br />
+   </div>
+   <div class="codeComment">
+**&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ALLOCVALUESCHAR&nbsp;&nbsp;&nbsp;&nbsp;=<br />
+**&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ALLOCVALUESCURR&nbsp;&nbsp;&nbsp;&nbsp;=<br />
+**&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ALLOCVALUESNUM&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;gt_return.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;lt_list[]&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RETURN.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;lt_list&nbsp;INDEX&nbsp;1.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;:lt_snum[],lt_snum,lt_schar[],lt_schar,lt_scurr[],lt_scurr,gt_return[],gt_return.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;&nbsp;l_object_guid.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;it_schar-charact&nbsp;=&nbsp;'Z_BATCH_ZHYNO'.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;IT_SCHAR-VALUE_CHAR&nbsp;=&nbsp;LS_TMP-ZSPNO.<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;it_schar&nbsp;TO&nbsp;lt_schar[].<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;&nbsp;it_schar.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;lt_trans&nbsp;INTO&nbsp;DATA(is_trans)&nbsp;WITH&nbsp;KEY&nbsp;werks&nbsp;=&nbsp;ls_tmp-werks&nbsp;matnr&nbsp;=&nbsp;ls_tmp-matnr&nbsp;charg&nbsp;=&nbsp;ls_tmp-charg.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;l_object_guid&nbsp;=&nbsp;is_trans-cuobj_bm&nbsp;."对象<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;is_trans.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ELSE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'BAPI_OBJCL_GET_KEY_OF_OBJECT'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;objectname_long&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;l_object<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;objecttable&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'MCHA'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;classtype&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'022'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;create_missing_key&nbsp;=&nbsp;'X'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;clobjectkeyout&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;l_object_guid<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TABLES<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;gt_return.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;l_flag.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;gt_return&nbsp;WHERE&nbsp;type&nbsp;CA&nbsp;'AEX'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;l_flag&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXIT.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDLOOP.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;l_flag&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;e888(sabapdocu)&nbsp;WITH&nbsp;'批次不存在'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'BAPI_OBJCL_CREATE_KEY'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;clobjectkey_new&nbsp;=&nbsp;l_object_guid<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;classnum_new&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lt_list-classnum<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;STATUS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'1'<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;standardclass&nbsp;&nbsp;&nbsp;=&nbsp;'X'<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CHANGENUMBER&nbsp;&nbsp;&nbsp;&nbsp;=<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;KEYDATE&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;SY-DATUM<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;NO_DEFAULT_VALUES&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'&nbsp;'<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CLASSIF_STATUS&nbsp;&nbsp;=<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TABLES<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;allocvaluesnum&nbsp;&nbsp;=&nbsp;lt_snum<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;allocvalueschar&nbsp;=&nbsp;lt_schar[]<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;allocvaluescurr&nbsp;=&nbsp;lt_scurr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;gt_return.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;gt_return&nbsp;WHERE&nbsp;type&nbsp;CA&nbsp;'AEX'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;l_flag&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;l_flag&nbsp;=&nbsp;''.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'BAPI_TRANSACTION_COMMIT'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wait&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ELSE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;:&nbsp;gt_return,gt_return[].<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'BAPI_OBJCL_CHANGE_KEY'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;clobjectkey&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;l_object_guid<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;classnum&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lt_list-classnum<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;STATUS_NEW&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'1'<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;STANDARDCLASS_NEW&nbsp;&nbsp;&nbsp;=<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CHANGENUMBER&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;KEYDATE&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;SY-DATUM<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;NO_DEFAULT_VALUES&nbsp;&nbsp;&nbsp;=<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CLASSIF_STATUS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TABLES<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;allocvaluesnum_new&nbsp;&nbsp;=&nbsp;lt_snum<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;allocvalueschar_new&nbsp;=&nbsp;lt_schar[]<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;allocvaluescurr_new&nbsp;=&nbsp;lt_scurr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;gt_return.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;l_flag.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;gt_return&nbsp;WHERE&nbsp;type&nbsp;CA&nbsp;'AEX'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;l_flag&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;l_flag&nbsp;=&nbsp;''.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'BAPI_TRANSACTION_COMMIT'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wait&nbsp;=&nbsp;'X'.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;MODIFY&nbsp;ZBAWT_BATCH_ATTR&nbsp;FROM&nbsp;TABLE&nbsp;IT_ZBAWT_BATCH_ATTR.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;&nbsp;IT_ZBAWT_BATCH_ATTR.<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;ELSE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'BAPI_TRANSACTION_ROLLBACK'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;e888(sabapdocu)&nbsp;WITH&nbsp;gt_return-message.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;ls_tmp.<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+ENDFORM.<br />
+            </div>
+          </td>
+        </tr>
+      </table>
+      </td>
+      </tr>
+   <tr>
+<td class="footer">Extracted by Mass Download version 1.5.2 - E.G.Mellodew. 1998-2022. Sap Release 755</td>
+   </tr>
+</table>
+</body>
+</html>

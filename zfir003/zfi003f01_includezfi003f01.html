@@ -1,0 +1,845 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=GB2312" />
+<title>ZFI003F01</title>
+<style type="text/css">
+.code{ font-family:"Courier New", Courier, monospace; color:#000; font-size:14px; background-color:#F2F4F7 }
+  .codeComment {font-family:"Courier New", Courier, monospace; color:#0000F0; font-size:14px; background-color:#F2F4F7 }
+  .normalBold{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; font-weight:800 }
+  .normalBoldLarge{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+</style>
+<style type="text/css">
+  .normal{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px }
+  .footer{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; text-align: center }
+  h2{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+  h3{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:14px; font-weight:800 }
+  .outerTable{
+   background-color:#E0E7ED;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-right-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+  .innerTable{
+   background-color:#F2F4F7;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-bottom-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+</style>
+</head>
+<body>
+<table class="outerTable">
+  <tr class="normalBoldLarge">
+     <td><h2>Code listing for: ZFI003F01</h2>
+<h3> Description: Include ZFI003F01</h3></td>
+   </tr>
+  <tr>
+     <td>
+     <table class="innerTable">
+       <tr>
+          <td>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;包含&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ZFI003F01<br />
+*&---------------------------------------------------------------------*<br />
+<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Form&nbsp;FRM_INIT<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;text<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;--&gt;&nbsp;&nbsp;p1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*&&nbsp;&lt;--&nbsp;&nbsp;p2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM frm_init.<br />
+<br />
+&nbsp;&nbsp;SELECT&nbsp;mandt,&nbsp;line_no,&nbsp;item,&nbsp;rstgr,&nbsp;month_dmbtr,&nbsp;year_dmbtr_add,<br />
+&nbsp;&nbsp;lastmonth_dmbtr,&nbsp;lastyear_dmbtr_add,&nbsp;lastyear_dmbtr,&nbsp;rstgr_desc<br />
+&nbsp;&nbsp;FROM&nbsp;zfit001<br />
+&nbsp;&nbsp;ORDER&nbsp;BY&nbsp;line_no<br />
+&nbsp;&nbsp;INTO&nbsp;TABLE&nbsp;@gt_standard.<br />
+<br />
+ENDFORM.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Form&nbsp;frm_check_data<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM frm_check_data.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;p_bukrs&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;'公司代码不能为空'&nbsp;TYPE&nbsp;'S'&nbsp;DISPLAY&nbsp;LIKE&nbsp;'E'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;STOP.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;SELECT&nbsp;*<br />
+&nbsp;&nbsp;INTO&nbsp;TABLE&nbsp;@DATA(gt_bukrs)<br />
+&nbsp;&nbsp;FROM&nbsp;t001<br />
+&nbsp;&nbsp;WHERE&nbsp;bukrs&nbsp;=&nbsp;@p_bukrs.<br />
+<br />
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;gt_bukrs&nbsp;INTO&nbsp;DATA(gs_bukrs).<br />
+&nbsp;&nbsp;&nbsp;&nbsp;AUTHORITY-CHECK&nbsp;OBJECT&nbsp;'F_BKPF_BUK'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ID&nbsp;'ACTVT'&nbsp;FIELD&nbsp;'03'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ID&nbsp;'BUKRS'&nbsp;FIELD&nbsp;&nbsp;gs_bukrs-bukrs.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;&lt;&gt;&nbsp;0.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;'你没有公司'&nbsp;&&&nbsp;gs_bukrs-bukrs&nbsp;&&&nbsp;'的权限!'&nbsp;TYPE&nbsp;'S'&nbsp;DISPLAY&nbsp;LIKE&nbsp;'E'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LEAVE&nbsp;LIST-PROCESSING.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;gt_standard&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;'现金流量基础数据表为空'&nbsp;TYPE&nbsp;'S'&nbsp;DISPLAY&nbsp;LIKE&nbsp;'E'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;STOP.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+ENDFORM.<br />
+<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Form&nbsp;frm_get_data_00<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;汇率变动对现金及现金等价物的影响<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM frm_get_data_00.<br />
+<br />
+&nbsp;&nbsp;DATA:&nbsp;ls_tab&nbsp;LIKE&nbsp;ls_out,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lt_tab&nbsp;LIKE&nbsp;TABLE&nbsp;OF&nbsp;ls_out.<br />
+<br />
+&nbsp;&nbsp;RANGES&nbsp;s_month&nbsp;FOR&nbsp;bseg-h_monat&nbsp;.<br />
+&nbsp;&nbsp;s_month-sign&nbsp;=&nbsp;'I'.<br />
+&nbsp;&nbsp;s_month-option&nbsp;=&nbsp;'BT'.<br />
+&nbsp;&nbsp;s_month-low&nbsp;=&nbsp;'1'.<br />
+&nbsp;&nbsp;s_month-high&nbsp;=&nbsp;p_monat.<br />
+&nbsp;&nbsp;APPEND&nbsp;s_month.<br />
+<br />
+&nbsp;&nbsp;SELECT&nbsp;rbukrs&nbsp;AS&nbsp;bukrs,gjahr,poper&nbsp;AS&nbsp;h_monat,belnr,hsl&nbsp;AS&nbsp;dmbtr<br />
+&nbsp;&nbsp;FROM&nbsp;acdoca<br />
+&nbsp;&nbsp;WHERE&nbsp;rbukrs&nbsp;=&nbsp;@p_bukrs<br />
+&nbsp;&nbsp;AND&nbsp;gjahr&nbsp;=&nbsp;@p_gjahr<br />
+&nbsp;&nbsp;AND&nbsp;poper&nbsp;IN&nbsp;@s_month<br />
+&nbsp;&nbsp;AND&nbsp;blart&nbsp;=&nbsp;'ZA'<br />
+&nbsp;&nbsp;AND&nbsp;(&nbsp;left(&nbsp;racct,&nbsp;4&nbsp;)&nbsp;=&nbsp;'1001'&nbsp;OR&nbsp;left(&nbsp;racct,&nbsp;4&nbsp;)&nbsp;=&nbsp;'1002'&nbsp;OR&nbsp;left(&nbsp;racct,&nbsp;4&nbsp;)&nbsp;=&nbsp;'1012'&nbsp;)<br />
+&nbsp;&nbsp;INTO&nbsp;CORRESPONDING&nbsp;FIELDS&nbsp;OF&nbsp;TABLE&nbsp;@lt_out.<br />
+<br />
+&nbsp;&nbsp;SORT&nbsp;lt_out&nbsp;BY&nbsp;h_monat.<br />
+&nbsp;&nbsp;lt_tab[]&nbsp;=&nbsp;lt_out[].<br />
+&nbsp;&nbsp;DELETE&nbsp;lt_out[]&nbsp;WHERE&nbsp;h_monat&nbsp;&lt;&gt;&nbsp;p_monat.<br />
+<br />
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;lt_out&nbsp;INTO&nbsp;ls_out&nbsp;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;lv_month&nbsp;=&nbsp;ls_out-dmbtr&nbsp;+&nbsp;lv_month.<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;lt_tab&nbsp;INTO&nbsp;ls_tab.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;lv_year&nbsp;=&nbsp;ls_tab-dmbtr&nbsp;+&nbsp;lv_year.<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;gt_standard&nbsp;INTO&nbsp;gs_standard&nbsp;WHERE&nbsp;line_no&nbsp;=&nbsp;'33'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;gs_standard-month_dmbtr&nbsp;=&nbsp;lv_month.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;gs_standard-year_dmbtr_add&nbsp;=&nbsp;lv_year.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MODIFY&nbsp;gt_standard&nbsp;FROM&nbsp;gs_standard.<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;DATA:&nbsp;ls_temp&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;ts_standard,<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lt_temp&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;TABLE&nbsp;OF&nbsp;ts_standard,<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_year_dmbtr_add&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;ts_year_dmbtr_add,<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_lastyear_dmbtr_add&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;ts_year_dmbtr_add,<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lt_year_dmbtr_add&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;TABLE&nbsp;OF&nbsp;ts_year_dmbtr_add,<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lt_year_dmbtr_add_res&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;TABLE&nbsp;OF&nbsp;ts_year_dmbtr_add,<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lt_lastyear_dmbtr_add&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;TABLE&nbsp;OF&nbsp;ts_year_dmbtr_add,<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lt_lastyear_dmbtr_add_res&nbsp;TYPE&nbsp;TABLE&nbsp;OF&nbsp;ts_year_dmbtr_add.<br />
+*<br />
+*&nbsp;&nbsp;DATA:&nbsp;ls_standard_11&nbsp;TYPE&nbsp;zfit001,<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_standard_22&nbsp;TYPE&nbsp;zfit001,<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_standard_32&nbsp;TYPE&nbsp;zfit001,<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_standard_33&nbsp;TYPE&nbsp;zfit001,<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_standard_36&nbsp;TYPE&nbsp;zfit001,<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_standard&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;zfit001.<br />
+*<br />
+*&nbsp;&nbsp;SELECT&nbsp;SUM(&nbsp;hsl&nbsp;)&nbsp;AS&nbsp;month_dmbtr,&nbsp;gjahr,&nbsp;poper&nbsp;AS&nbsp;h_monat<br />
+*&nbsp;&nbsp;FROM&nbsp;acdoca<br />
+*&nbsp;&nbsp;WHERE&nbsp;rbukrs&nbsp;=&nbsp;@p_bukrs<br />
+*&nbsp;&nbsp;AND&nbsp;blart&nbsp;=&nbsp;'ZA'<br />
+*&nbsp;&nbsp;AND&nbsp;poper&nbsp;=&nbsp;@p_monat<br />
+*&nbsp;&nbsp;AND&nbsp;(&nbsp;gjahr&nbsp;=&nbsp;@p_gjahr&nbsp;)<br />
+*&nbsp;&nbsp;AND&nbsp;(&nbsp;left(&nbsp;racct,&nbsp;4&nbsp;)&nbsp;=&nbsp;'1001'&nbsp;OR&nbsp;left(&nbsp;racct,&nbsp;4&nbsp;)&nbsp;=&nbsp;'1002'&nbsp;OR&nbsp;left(&nbsp;racct,&nbsp;4&nbsp;)&nbsp;=&nbsp;'1012'&nbsp;)<br />
+*&nbsp;&nbsp;GROUP&nbsp;BY&nbsp;gjahr,&nbsp;poper<br />
+*&nbsp;&nbsp;INTO&nbsp;CORRESPONDING&nbsp;FIELDS&nbsp;OF&nbsp;TABLE&nbsp;@lt_temp.<br />
+*<br />
+*&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;gt_standard&nbsp;INTO&nbsp;gs_standard&nbsp;INDEX&nbsp;TEXT-033.<br />
+*<br />
+*&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;lt_temp&nbsp;INTO&nbsp;ls_temp.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;ls_temp-rstgr&nbsp;=&nbsp;'E00'.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;MODIFY&nbsp;lt_temp&nbsp;FROM&nbsp;ls_temp&nbsp;TRANSPORTING&nbsp;rstgr.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;frm_prepare_year_dmbtr&nbsp;USING&nbsp;lt_year_dmbtr_add&nbsp;ls_year_dmbtr_add&nbsp;lt_lastyear_dmbtr_add&nbsp;ls_lastyear_dmbtr_add&nbsp;ls_temp.<br />
+*&nbsp;&nbsp;ENDLOOP.<br />
+*<br />
+*&nbsp;&nbsp;PERFORM&nbsp;frm_calculate_year_dmbtr&nbsp;USING&nbsp;lt_year_dmbtr_add&nbsp;ls_year_dmbtr_add&nbsp;lt_year_dmbtr_add_res&nbsp;p_gjahr.&nbsp;"本年累计<br />
+*<br />
+*&nbsp;&nbsp;"&nbsp;PERFORM&nbsp;frm_calculate_year_dmbtr&nbsp;USING&nbsp;lt_lastyear_dmbtr_add&nbsp;ls_lastyear_dmbtr_add&nbsp;lt_lastyear_dmbtr_add_res&nbsp;gv_lastyear.&nbsp;"上年累计<br />
+*&nbsp;&nbsp;PERFORM&nbsp;frm_calculate_dmbtr_34&nbsp;USING&nbsp;ls_standard_11&nbsp;ls_standard_22&nbsp;ls_standard_32&nbsp;ls_standard_33&nbsp;ls_standard_36.&nbsp;"第37行数据<br />
+*&nbsp;&nbsp;"&nbsp;PERFORM&nbsp;frm_subtotal_dmbtr&nbsp;USING&nbsp;TEXT-037&nbsp;TEXT-038&nbsp;ls_standard.&nbsp;"Line37+Line38之和<br />
+<br />
+   </div>
+   <div class="code">
+ENDFORM.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Form&nbsp;frm_get_last_month<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;获取输入日期前、后的年、月、日<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM frm_get_last_month USING VALUE(lv_num) lv_date.<br />
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'RP_CALC_DATE_IN_INTERVAL'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;date&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lv_date<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;days&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;months&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lv_num<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;signum&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'-'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;years&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;calc_date&nbsp;=&nbsp;lv_date.<br />
+ENDFORM.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Form&nbsp;frm_get_data_01<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;期初现金及现金等价物余额，从表ACDOCT取值上月余额<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM frm_get_data_01.<br />
+<br />
+&nbsp;&nbsp;DATA:&nbsp;ls_acdoct&nbsp;TYPE&nbsp;ts_acdoct,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lt_acdoct&nbsp;TYPE&nbsp;TABLE&nbsp;OF&nbsp;ts_acdoct.<br />
+&nbsp;&nbsp;DATA:&nbsp;lv_no(2)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;n,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_year_dmbtr_add_no(2)&nbsp;&nbsp;&nbsp;TYPE&nbsp;n,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_field(5),<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_month_acc&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;hslxx12,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_lastmonth_acc&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;hslxx12,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_lastyear_dmbtr_acc&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;hslxx12,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_year_dmbtr_add_acc&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;hslxx12,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_lastyear_dmbtr_add_acc&nbsp;TYPE&nbsp;hslxx12.<br />
+&nbsp;&nbsp;DATA:&nbsp;lv_year&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;bseg-gjahr,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_lastyear&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;bseg-gjahr,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_year_dmbtr_add_year&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;bseg-gjahr,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_lastyear_dmbtr_add_year&nbsp;TYPE&nbsp;bseg-gjahr,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_month&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;bseg-h_monat,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_lastmonth&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;bseg-h_monat,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_date&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;sy-datum.<br />
+&nbsp;&nbsp;FIELD-SYMBOLS&nbsp;&lt;fs&gt;.<br />
+<br />
+&nbsp;&nbsp;lv_date&nbsp;=&nbsp;|{&nbsp;p_gjahr&nbsp;}{&nbsp;p_monat&nbsp;}{&nbsp;'01'&nbsp;}|.<br />
+&nbsp;&nbsp;PERFORM&nbsp;frm_get_last_month&nbsp;USING&nbsp;1&nbsp;lv_date.<br />
+&nbsp;&nbsp;lv_year&nbsp;=&nbsp;lv_date+0(4).<br />
+&nbsp;&nbsp;lv_month&nbsp;=&nbsp;lv_date+4(2).<br />
+&nbsp;&nbsp;PERFORM&nbsp;frm_get_last_month&nbsp;USING&nbsp;1&nbsp;lv_date.<br />
+&nbsp;&nbsp;lv_lastyear&nbsp;=&nbsp;lv_year&nbsp;-&nbsp;1.<br />
+&nbsp;&nbsp;lv_lastmonth&nbsp;=&nbsp;lv_date+4(2).<br />
+&nbsp;&nbsp;lv_year_dmbtr_add_year&nbsp;=&nbsp;p_gjahr&nbsp;-&nbsp;1.<br />
+&nbsp;&nbsp;lv_lastyear_dmbtr_add_year&nbsp;=&nbsp;lv_year_dmbtr_add_year&nbsp;-&nbsp;1.<br />
+<br />
+&nbsp;&nbsp;SELECT&nbsp;SUM(&nbsp;hsl01&nbsp;)&nbsp;AS&nbsp;hsl01,&nbsp;SUM(&nbsp;hsl02&nbsp;)&nbsp;AS&nbsp;hsl02,&nbsp;SUM(&nbsp;hsl03&nbsp;)&nbsp;AS&nbsp;hsl03,&nbsp;SUM(&nbsp;hsl04&nbsp;)&nbsp;AS&nbsp;hsl04,<br />
+&nbsp;&nbsp;SUM(&nbsp;hsl05&nbsp;)&nbsp;AS&nbsp;hsl05,&nbsp;SUM(&nbsp;hsl06&nbsp;)&nbsp;AS&nbsp;hsl06,&nbsp;SUM(&nbsp;hsl07&nbsp;)&nbsp;AS&nbsp;hsl07,&nbsp;SUM(&nbsp;hsl08&nbsp;)&nbsp;AS&nbsp;hsl08,<br />
+&nbsp;&nbsp;SUM(&nbsp;hsl09&nbsp;)&nbsp;AS&nbsp;hsl09,&nbsp;SUM(&nbsp;hsl10&nbsp;)&nbsp;AS&nbsp;hsl10,&nbsp;SUM(&nbsp;hsl11&nbsp;)&nbsp;AS&nbsp;hsl11,&nbsp;SUM(&nbsp;hsl12&nbsp;)&nbsp;AS&nbsp;hsl12,<br />
+&nbsp;&nbsp;SUM(&nbsp;hslvt&nbsp;)&nbsp;AS&nbsp;hslvt,&nbsp;ryear<br />
+&nbsp;&nbsp;FROM&nbsp;v_acdoct_view<br />
+&nbsp;&nbsp;WHERE&nbsp;rbukrs&nbsp;=&nbsp;@p_bukrs<br />
+&nbsp;&nbsp;AND&nbsp;(&nbsp;ryear&nbsp;=&nbsp;@lv_year&nbsp;OR&nbsp;ryear&nbsp;=&nbsp;@lv_lastyear&nbsp;OR&nbsp;ryear&nbsp;=&nbsp;@lv_lastyear_dmbtr_add_year&nbsp;)<br />
+&nbsp;&nbsp;AND&nbsp;(&nbsp;left(&nbsp;racct,&nbsp;4&nbsp;)&nbsp;=&nbsp;'1001'&nbsp;OR&nbsp;left(&nbsp;racct,&nbsp;4&nbsp;)&nbsp;=&nbsp;'1002'&nbsp;OR&nbsp;left(&nbsp;racct,&nbsp;4&nbsp;)&nbsp;=&nbsp;'1012'&nbsp;)<br />
+&nbsp;&nbsp;GROUP&nbsp;BY&nbsp;ryear<br />
+&nbsp;&nbsp;ORDER&nbsp;BY&nbsp;ryear<br />
+&nbsp;&nbsp;INTO&nbsp;CORRESPONDING&nbsp;FIELDS&nbsp;OF&nbsp;TABLE&nbsp;@lt_acdoct.<br />
+<br />
+&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;gt_standard&nbsp;INTO&nbsp;gs_standard&nbsp;INDEX&nbsp;TEXT-038.<br />
+<br />
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;lt_acdoct&nbsp;INTO&nbsp;ls_acdoct.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;ls_acdoct-ryear&nbsp;=&nbsp;lv_year.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"计算本月数和上月数"<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_no&nbsp;=&nbsp;'00'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DO&nbsp;lv_month&nbsp;TIMES.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_no&nbsp;=&nbsp;lv_no&nbsp;+&nbsp;1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CONCATENATE&nbsp;'hsl'&nbsp;lv_no&nbsp;INTO&nbsp;lv_field.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CONDENSE&nbsp;lv_field.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ASSIGN&nbsp;COMPONENT&nbsp;lv_field&nbsp;OF&nbsp;STRUCTURE&nbsp;ls_acdoct&nbsp;TO&nbsp;&lt;fs&gt;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_month_acc&nbsp;=&nbsp;lv_month_acc&nbsp;+&nbsp;&lt;fs&gt;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-index&nbsp;&lt;&gt;&nbsp;lv_month.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_lastmonth_acc&nbsp;=&nbsp;lv_lastmonth_acc&nbsp;+&nbsp;&lt;fs&gt;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDDO.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_month_acc&nbsp;=&nbsp;lv_month_acc&nbsp;+&nbsp;ls_acdoct-hslvt.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_lastmonth_acc&nbsp;=&nbsp;lv_lastmonth_acc&nbsp;+&nbsp;ls_acdoct-hslvt.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;ls_acdoct-ryear&nbsp;=&nbsp;lv_lastyear.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"计算上年同期数<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_no&nbsp;=&nbsp;'00'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DO&nbsp;lv_month&nbsp;TIMES.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_no&nbsp;=&nbsp;lv_no&nbsp;+&nbsp;1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CONCATENATE&nbsp;'hsl'&nbsp;lv_no&nbsp;INTO&nbsp;lv_field.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CONDENSE&nbsp;lv_field.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ASSIGN&nbsp;COMPONENT&nbsp;lv_field&nbsp;OF&nbsp;STRUCTURE&nbsp;ls_acdoct&nbsp;TO&nbsp;&lt;fs&gt;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_lastyear_dmbtr_acc&nbsp;=&nbsp;lv_lastyear_dmbtr_acc&nbsp;+&nbsp;&lt;fs&gt;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDDO.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_lastyear_dmbtr_acc&nbsp;=&nbsp;lv_lastyear_dmbtr_acc&nbsp;+&nbsp;ls_acdoct-hslvt.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;ls_acdoct-ryear&nbsp;=&nbsp;lv_year_dmbtr_add_year.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"计算本年累计<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_year_dmbtr_add_no&nbsp;=&nbsp;'00'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DO&nbsp;12&nbsp;TIMES.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_year_dmbtr_add_no&nbsp;=&nbsp;lv_year_dmbtr_add_no&nbsp;+&nbsp;1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CONCATENATE&nbsp;'hsl'&nbsp;lv_year_dmbtr_add_no&nbsp;INTO&nbsp;lv_field.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CONDENSE&nbsp;lv_field.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ASSIGN&nbsp;COMPONENT&nbsp;lv_field&nbsp;OF&nbsp;STRUCTURE&nbsp;ls_acdoct&nbsp;TO&nbsp;&lt;fs&gt;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_year_dmbtr_add_acc&nbsp;=&nbsp;lv_year_dmbtr_add_acc&nbsp;+&nbsp;&lt;fs&gt;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDDO.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_year_dmbtr_add_acc&nbsp;=&nbsp;lv_year_dmbtr_add_acc&nbsp;+&nbsp;ls_acdoct-hslvt.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;ls_acdoct-ryear&nbsp;=&nbsp;lv_lastyear_dmbtr_add_year.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"计算去年累计<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_year_dmbtr_add_no&nbsp;=&nbsp;'00'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DO&nbsp;12&nbsp;TIMES.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_year_dmbtr_add_no&nbsp;=&nbsp;lv_year_dmbtr_add_no&nbsp;+&nbsp;1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CONCATENATE&nbsp;'hsl'&nbsp;lv_year_dmbtr_add_no&nbsp;INTO&nbsp;lv_field.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CONDENSE&nbsp;lv_field.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ASSIGN&nbsp;COMPONENT&nbsp;lv_field&nbsp;OF&nbsp;STRUCTURE&nbsp;ls_acdoct&nbsp;TO&nbsp;&lt;fs&gt;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_lastyear_dmbtr_add_acc&nbsp;=&nbsp;lv_lastyear_dmbtr_add_acc&nbsp;+&nbsp;&lt;fs&gt;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDDO.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_lastyear_dmbtr_add_acc&nbsp;=&nbsp;lv_lastyear_dmbtr_add_acc&nbsp;+&nbsp;ls_acdoct-hslvt.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+&nbsp;&nbsp;gs_standard-month_dmbtr&nbsp;=&nbsp;lv_month_acc.<br />
+&nbsp;&nbsp;gs_standard-lastmonth_dmbtr&nbsp;=&nbsp;lv_lastmonth_acc.<br />
+&nbsp;&nbsp;gs_standard-lastyear_dmbtr&nbsp;=&nbsp;lv_lastyear_dmbtr_acc.<br />
+&nbsp;&nbsp;gs_standard-year_dmbtr_add&nbsp;=&nbsp;lv_year_dmbtr_add_acc.<br />
+&nbsp;&nbsp;gs_standard-lastyear_dmbtr_add&nbsp;=&nbsp;lv_lastyear_dmbtr_add_acc.<br />
+&nbsp;&nbsp;MODIFY&nbsp;gt_standard&nbsp;FROM&nbsp;gs_standard&nbsp;TRANSPORTING&nbsp;month_dmbtr&nbsp;lastmonth_dmbtr&nbsp;lastyear_dmbtr&nbsp;year_dmbtr_add&nbsp;lastyear_dmbtr_add<br />
+&nbsp;&nbsp;WHERE&nbsp;line_no&nbsp;=&nbsp;gs_standard-line_no.<br />
+ENDFORM.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Form&nbsp;frm_get_data_02<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;计算并获取最终结果<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM frm_get_data_02.<br />
+<br />
+&nbsp;&nbsp;DATA:&nbsp;ls_temp&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;ts_standard,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lt_temp&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;TABLE&nbsp;OF&nbsp;ts_standard,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_bseg&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;ts_standard,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lt_bseg&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;TABLE&nbsp;OF&nbsp;ts_standard,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_year_dmbtr_add&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;ts_year_dmbtr_add,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_lastyear_dmbtr_add&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;ts_year_dmbtr_add,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lt_year_dmbtr_add&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;TABLE&nbsp;OF&nbsp;ts_year_dmbtr_add,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lt_year_dmbtr_add_res&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;TABLE&nbsp;OF&nbsp;ts_year_dmbtr_add,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lt_lastyear_dmbtr_add&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;TABLE&nbsp;OF&nbsp;ts_year_dmbtr_add,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lt_lastyear_dmbtr_add_res&nbsp;TYPE&nbsp;TABLE&nbsp;OF&nbsp;ts_year_dmbtr_add.<br />
+<br />
+&nbsp;&nbsp;SELECT&nbsp;0&nbsp;AS&nbsp;month_dmbtr,&nbsp;rstgr,&nbsp;gjahr,&nbsp;h_monat,&nbsp;MAX(&nbsp;belnr&nbsp;)&nbsp;AS&nbsp;belnr,&nbsp;MAX(&nbsp;h_blart&nbsp;)&nbsp;AS&nbsp;h_blart<br />
+&nbsp;&nbsp;FROM&nbsp;bseg<br />
+&nbsp;&nbsp;WHERE&nbsp;bukrs&nbsp;=&nbsp;@p_bukrs<br />
+&nbsp;&nbsp;AND&nbsp;(&nbsp;gjahr&nbsp;=&nbsp;@p_gjahr&nbsp;OR&nbsp;gjahr&nbsp;=&nbsp;@gv_lastyear&nbsp;)<br />
+&nbsp;&nbsp;AND&nbsp;(&nbsp;left(&nbsp;hkont,&nbsp;4&nbsp;)&nbsp;=&nbsp;'1001'&nbsp;OR&nbsp;left(&nbsp;hkont,&nbsp;4&nbsp;)&nbsp;=&nbsp;'1002'&nbsp;OR&nbsp;left(&nbsp;hkont,&nbsp;4&nbsp;)&nbsp;=&nbsp;'1012'&nbsp;)<br />
+&nbsp;&nbsp;GROUP&nbsp;BY&nbsp;gjahr,&nbsp;h_monat,&nbsp;rstgr<br />
+&nbsp;&nbsp;INTO&nbsp;CORRESPONDING&nbsp;FIELDS&nbsp;OF&nbsp;TABLE&nbsp;@lt_temp.<br />
+<br />
+&nbsp;&nbsp;SELECT&nbsp;SUM(&nbsp;dmbtr&nbsp;)&nbsp;AS&nbsp;month_dmbtr,&nbsp;rstgr,&nbsp;gjahr,&nbsp;h_monat,&nbsp;shkzg<br />
+&nbsp;&nbsp;FROM&nbsp;bseg<br />
+&nbsp;&nbsp;WHERE&nbsp;bukrs&nbsp;=&nbsp;@p_bukrs<br />
+&nbsp;&nbsp;AND&nbsp;(&nbsp;gjahr&nbsp;=&nbsp;@p_gjahr&nbsp;OR&nbsp;gjahr&nbsp;=&nbsp;@gv_lastyear&nbsp;)<br />
+&nbsp;&nbsp;AND&nbsp;(&nbsp;left(&nbsp;hkont,&nbsp;4&nbsp;)&nbsp;=&nbsp;'1001'&nbsp;OR&nbsp;left(&nbsp;hkont,&nbsp;4&nbsp;)&nbsp;=&nbsp;'1002'&nbsp;OR&nbsp;left(&nbsp;hkont,&nbsp;4&nbsp;)&nbsp;=&nbsp;'1012'&nbsp;)<br />
+&nbsp;&nbsp;GROUP&nbsp;BY&nbsp;gjahr,&nbsp;h_monat,&nbsp;rstgr,&nbsp;shkzg<br />
+&nbsp;&nbsp;INTO&nbsp;CORRESPONDING&nbsp;FIELDS&nbsp;OF&nbsp;TABLE&nbsp;@lt_bseg.<br />
+<br />
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;lt_temp&nbsp;INTO&nbsp;ls_temp&nbsp;WHERE&nbsp;rstgr&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;lt_bseg&nbsp;INTO&nbsp;ls_bseg&nbsp;WHERE&nbsp;rstgr&nbsp;IS&nbsp;NOT&nbsp;INITIAL&nbsp;AND&nbsp;shkzg&nbsp;=&nbsp;'S'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;ls_temp-rstgr&nbsp;=&nbsp;ls_bseg-rstgr&nbsp;AND&nbsp;ls_temp-gjahr&nbsp;=&nbsp;ls_bseg-gjahr&nbsp;AND&nbsp;ls_temp-h_monat&nbsp;=&nbsp;ls_bseg-h_monat.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_temp-month_dmbtr&nbsp;=&nbsp;ls_bseg-month_dmbtr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MODIFY&nbsp;lt_temp&nbsp;FROM&nbsp;ls_temp&nbsp;TRANSPORTING&nbsp;month_dmbtr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDLOOP.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;lt_bseg&nbsp;INTO&nbsp;ls_bseg&nbsp;WHERE&nbsp;rstgr&nbsp;IS&nbsp;NOT&nbsp;INITIAL&nbsp;AND&nbsp;shkzg&nbsp;=&nbsp;'H'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;ls_temp-rstgr&nbsp;=&nbsp;ls_bseg-rstgr&nbsp;AND&nbsp;ls_temp-gjahr&nbsp;=&nbsp;ls_bseg-gjahr&nbsp;AND&nbsp;ls_temp-h_monat&nbsp;=&nbsp;ls_bseg-h_monat.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_temp-month_dmbtr&nbsp;=&nbsp;ls_temp-month_dmbtr&nbsp;-&nbsp;ls_bseg-month_dmbtr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MODIFY&nbsp;lt_temp&nbsp;FROM&nbsp;ls_temp&nbsp;TRANSPORTING&nbsp;month_dmbtr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDLOOP.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;ls_temp-rstgr&nbsp;=&nbsp;'A04'&nbsp;OR&nbsp;ls_temp-rstgr&nbsp;=&nbsp;'A05'&nbsp;OR&nbsp;ls_temp-rstgr&nbsp;=&nbsp;'A06'&nbsp;OR&nbsp;ls_temp-rstgr&nbsp;=&nbsp;'A07'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;OR&nbsp;ls_temp-rstgr&nbsp;=&nbsp;'B05'&nbsp;OR&nbsp;ls_temp-rstgr&nbsp;=&nbsp;'B06'&nbsp;OR&nbsp;ls_temp-rstgr&nbsp;=&nbsp;'B07'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;OR&nbsp;ls_temp-rstgr&nbsp;=&nbsp;'C04'&nbsp;OR&nbsp;ls_temp-rstgr&nbsp;=&nbsp;'C05'&nbsp;OR&nbsp;ls_temp-rstgr&nbsp;=&nbsp;'C06'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_temp-month_dmbtr&nbsp;=&nbsp;ls_temp-month_dmbtr&nbsp;*&nbsp;-1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MODIFY&nbsp;lt_temp&nbsp;FROM&nbsp;ls_temp&nbsp;TRANSPORTING&nbsp;month_dmbtr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*-------------------------------计算本月数、上月数、上年同期数---------------------------------------*<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;lt_temp&nbsp;INTO&nbsp;ls_temp&nbsp;WHERE&nbsp;rstgr&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;frm_prepare_year_dmbtr&nbsp;USING&nbsp;lt_year_dmbtr_add&nbsp;ls_year_dmbtr_add&nbsp;lt_lastyear_dmbtr_add&nbsp;ls_lastyear_dmbtr_add&nbsp;ls_temp.<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+&nbsp;&nbsp;PERFORM&nbsp;frm_verify_data&nbsp;USING&nbsp;lt_temp&nbsp;ls_temp.<br />
+   </div>
+   <div class="codeComment">
+*-------------------------------计算本年累计、上年累计-------------------------------------------------*<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;PERFORM&nbsp;frm_calculate_year_dmbtr&nbsp;USING&nbsp;lt_year_dmbtr_add&nbsp;ls_year_dmbtr_add&nbsp;lt_year_dmbtr_add_res&nbsp;p_gjahr.&nbsp;"计算本年累计<br />
+&nbsp;&nbsp;PERFORM&nbsp;frm_calculate_year_dmbtr&nbsp;USING&nbsp;lt_lastyear_dmbtr_add&nbsp;ls_lastyear_dmbtr_add&nbsp;lt_lastyear_dmbtr_add_res&nbsp;gv_lastyear.&nbsp;"计算上年累计<br />
+<br />
+&nbsp;&nbsp;DATA:&nbsp;ls_standard_5&nbsp;&nbsp;TYPE&nbsp;zfit001,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_standard_10&nbsp;TYPE&nbsp;zfit001,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_standard_17&nbsp;TYPE&nbsp;zfit001,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_standard_21&nbsp;TYPE&nbsp;zfit001,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_standard_27&nbsp;TYPE&nbsp;zfit001,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_standard_31&nbsp;TYPE&nbsp;zfit001.<br />
+<br />
+&nbsp;&nbsp;DATA:&nbsp;ls_standard_11&nbsp;TYPE&nbsp;zfit001,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_standard_22&nbsp;TYPE&nbsp;zfit001,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_standard_32&nbsp;TYPE&nbsp;zfit001,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_standard_33&nbsp;TYPE&nbsp;zfit001,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_standard_36&nbsp;TYPE&nbsp;zfit001.<br />
+<br />
+&nbsp;&nbsp;PERFORM&nbsp;frm_subtotal_dmbtr&nbsp;USING&nbsp;TEXT-002&nbsp;TEXT-004&nbsp;ls_standard_5.<br />
+&nbsp;&nbsp;PERFORM&nbsp;frm_subtotal_dmbtr&nbsp;USING&nbsp;TEXT-006&nbsp;TEXT-009&nbsp;ls_standard_10.<br />
+&nbsp;&nbsp;PERFORM&nbsp;frm_subtotal_dmbtr&nbsp;USING&nbsp;TEXT-013&nbsp;TEXT-016&nbsp;ls_standard_17.<br />
+&nbsp;&nbsp;PERFORM&nbsp;frm_subtotal_dmbtr&nbsp;USING&nbsp;TEXT-018&nbsp;TEXT-020&nbsp;ls_standard_21.<br />
+&nbsp;&nbsp;PERFORM&nbsp;frm_subtotal_dmbtr&nbsp;USING&nbsp;TEXT-024&nbsp;TEXT-026&nbsp;ls_standard_27.<br />
+&nbsp;&nbsp;PERFORM&nbsp;frm_subtotal_dmbtr&nbsp;USING&nbsp;TEXT-028&nbsp;TEXT-030&nbsp;ls_standard_31.<br />
+&nbsp;&nbsp;PERFORM&nbsp;frm_subtract_dmbtr&nbsp;USING&nbsp;ls_standard_10&nbsp;ls_standard_5&nbsp;TEXT-111.&nbsp;"所有A开头原因代码之和<br />
+&nbsp;&nbsp;PERFORM&nbsp;frm_subtract_dmbtr&nbsp;USING&nbsp;ls_standard_21&nbsp;ls_standard_17&nbsp;TEXT-122.&nbsp;"所有B开头原因代码之和<br />
+&nbsp;&nbsp;PERFORM&nbsp;frm_subtract_dmbtr&nbsp;USING&nbsp;ls_standard_31&nbsp;ls_standard_27&nbsp;TEXT-132.&nbsp;"所有C开头原因代码之和<br />
+&nbsp;&nbsp;PERFORM&nbsp;frm_calculate_dmbtr_34&nbsp;USING&nbsp;ls_standard_11&nbsp;ls_standard_22&nbsp;ls_standard_32&nbsp;ls_standard_33&nbsp;ls_standard_36.&nbsp;"第37行数据<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;PERFORM&nbsp;frm_subtotal_dmbtr&nbsp;USING&nbsp;TEXT-002&nbsp;TEXT-036&nbsp;ls_standard.<br />
+*&nbsp;&nbsp;PERFORM&nbsp;frm_subtotal_dmbtr&nbsp;USING&nbsp;TEXT-037&nbsp;TEXT-038&nbsp;ls_standard.&nbsp;"Line37+Line38之和<br />
+<br />
+*--------------------------------根据前台输入的公司代码取得公司的名称---------------------------------------*<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;SELECT&nbsp;SINGLE&nbsp;butxt&nbsp;INTO&nbsp;gv_butxt<br />
+&nbsp;&nbsp;FROM&nbsp;t001<br />
+&nbsp;&nbsp;WHERE&nbsp;bukrs&nbsp;=&nbsp;p_bukrs.<br />
+&nbsp;&nbsp;gv_zdate&nbsp;=&nbsp;p_gjahr&nbsp;&&&nbsp;p_monat&nbsp;&&&nbsp;'01'.<br />
+&nbsp;&nbsp;PERFORM&nbsp;frm_last_day_of_months&nbsp;USING&nbsp;gv_zdate&nbsp;CHANGING&nbsp;gv_zdate.<br />
+&nbsp;&nbsp;gv_danwei&nbsp;=&nbsp;'元'.<br />
+<br />
+ENDFORM.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Form&nbsp;frm_calculate_month_dmbtr<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;text&nbsp;计算本月数、上月数、上年同期数<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM frm_calculate_month_dmbtr USING ls_temp TYPE ts_standard VALUE(monat) VALUE(gjahr) ls_month_flag.<br />
+&nbsp;&nbsp;IF&nbsp;monat&nbsp;=&nbsp;ls_temp-h_monat&nbsp;AND&nbsp;gjahr&nbsp;=&nbsp;ls_temp-gjahr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;gs_standard.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;gt_standard&nbsp;INTO&nbsp;gs_standard&nbsp;WITH&nbsp;KEY&nbsp;rstgr&nbsp;=&nbsp;ls_temp-rstgr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CASE&nbsp;ls_month_flag.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'month_dmbtr'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_standard-month_dmbtr&nbsp;=&nbsp;ls_temp-month_dmbtr&nbsp;+&nbsp;gs_standard-month_dmbtr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MODIFY&nbsp;gt_standard&nbsp;FROM&nbsp;gs_standard&nbsp;TRANSPORTING&nbsp;month_dmbtr&nbsp;WHERE&nbsp;line_no&nbsp;=&nbsp;gs_standard-line_no.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'lastmonth_dmbtr'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_standard-lastmonth_dmbtr&nbsp;=&nbsp;ls_temp-month_dmbtr&nbsp;+&nbsp;gs_standard-lastmonth_dmbtr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MODIFY&nbsp;gt_standard&nbsp;FROM&nbsp;gs_standard&nbsp;TRANSPORTING&nbsp;lastmonth_dmbtr&nbsp;WHERE&nbsp;line_no&nbsp;=&nbsp;gs_standard-line_no.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'lastyear_dmbtr'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_standard-lastyear_dmbtr&nbsp;=&nbsp;ls_temp-month_dmbtr&nbsp;+&nbsp;gs_standard-lastyear_dmbtr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MODIFY&nbsp;gt_standard&nbsp;FROM&nbsp;gs_standard&nbsp;TRANSPORTING&nbsp;lastyear_dmbtr&nbsp;WHERE&nbsp;line_no&nbsp;=&nbsp;gs_standard-line_no.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDCASE.<br />
+&nbsp;&nbsp;ENDIF.<br />
+ENDFORM.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Form&nbsp;frm_prepare_year_dmbtr<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;text&nbsp;准备好计算本年累计、上年累计的数据<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM frm_prepare_year_dmbtr USING lt_year_dmbtr_add TYPE tt_year_dmbtr_add ls_year_dmbtr_add TYPE ts_year_dmbtr_add<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lt_lastyear_dmbtr_add&nbsp;TYPE&nbsp;tt_year_dmbtr_add&nbsp;ls_lastyear_dmbtr_add&nbsp;TYPE&nbsp;ts_year_dmbtr_add&nbsp;ls_temp&nbsp;TYPE&nbsp;ts_standard.<br />
+<br />
+&nbsp;&nbsp;PERFORM&nbsp;frm_calculate_month_dmbtr&nbsp;USING&nbsp;ls_temp&nbsp;p_monat&nbsp;p_gjahr&nbsp;'month_dmbtr'.&nbsp;"计算本月数<br />
+&nbsp;&nbsp;PERFORM&nbsp;frm_calculate_month_dmbtr&nbsp;USING&nbsp;ls_temp&nbsp;gv_lastmonth&nbsp;gv_lastmonthyear&nbsp;'lastmonth_dmbtr'.&nbsp;"计算上月数<br />
+&nbsp;&nbsp;PERFORM&nbsp;frm_calculate_month_dmbtr&nbsp;USING&nbsp;ls_temp&nbsp;p_monat&nbsp;gv_lastyear&nbsp;'lastyear_dmbtr'.&nbsp;"上年同期数<br />
+&nbsp;&nbsp;IF&nbsp;p_gjahr&nbsp;=&nbsp;ls_temp-gjahr&nbsp;AND&nbsp;ls_temp-h_monat&nbsp;&lt;=&nbsp;p_monat.&nbsp;"本年累计<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MOVE-CORRESPONDING&nbsp;ls_temp&nbsp;TO&nbsp;ls_year_dmbtr_add.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;ls_year_dmbtr_add&nbsp;TO&nbsp;lt_year_dmbtr_add.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;ls_year_dmbtr_add.<br />
+&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;IF&nbsp;gv_lastyear&nbsp;=&nbsp;ls_temp-gjahr&nbsp;AND&nbsp;ls_temp-h_monat&nbsp;&lt;=&nbsp;p_monat.&nbsp;"上年累计<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MOVE-CORRESPONDING&nbsp;ls_temp&nbsp;TO&nbsp;ls_lastyear_dmbtr_add.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;ls_lastyear_dmbtr_add&nbsp;TO&nbsp;lt_lastyear_dmbtr_add.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;ls_lastyear_dmbtr_add.<br />
+&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;CLEAR&nbsp;ls_temp.<br />
+<br />
+ENDFORM.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Form&nbsp;frm_calculate_year_dmbtr<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;text&nbsp;计算本年累计、上年累计<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM frm_calculate_year_dmbtr USING lt_year_dmbtr_add TYPE tt_year_dmbtr_add ls_year_dmbtr_add TYPE ts_year_dmbtr_add<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lt_year_dmbtr_add_res&nbsp;TYPE&nbsp;tt_year_dmbtr_add&nbsp;VALUE(gjahr).<br />
+<br />
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;lt_year_dmbtr_add&nbsp;INTO&nbsp;ls_year_dmbtr_add.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;COLLECT&nbsp;ls_year_dmbtr_add&nbsp;INTO&nbsp;lt_year_dmbtr_add_res.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;ls_year_dmbtr_add.<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;gt_standard&nbsp;INTO&nbsp;gs_standard&nbsp;WHERE&nbsp;rstgr&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;lt_year_dmbtr_add_res&nbsp;INTO&nbsp;ls_year_dmbtr_add.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;gs_standard-rstgr&nbsp;=&nbsp;ls_year_dmbtr_add-rstgr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;gjahr&nbsp;=&nbsp;p_gjahr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_standard-year_dmbtr_add&nbsp;=&nbsp;ls_year_dmbtr_add-month_dmbtr&nbsp;+&nbsp;gs_standard-year_dmbtr_add.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MODIFY&nbsp;gt_standard&nbsp;FROM&nbsp;gs_standard&nbsp;TRANSPORTING&nbsp;year_dmbtr_add.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;gjahr&nbsp;=&nbsp;gv_lastyear.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_standard-lastyear_dmbtr_add&nbsp;=&nbsp;ls_year_dmbtr_add-month_dmbtr&nbsp;+&nbsp;gs_standard-lastyear_dmbtr_add.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MODIFY&nbsp;gt_standard&nbsp;FROM&nbsp;gs_standard&nbsp;TRANSPORTING&nbsp;lastyear_dmbtr_add.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;ls_year_dmbtr_add.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDLOOP.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;gs_standard.<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+ENDFORM.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Form&nbsp;frm_subtotal_dmbtr<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;text&nbsp;同类原因代码小计<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM frm_subtotal_dmbtr USING VALUE(begin) VALUE(end) CHANGING ls_standard.<br />
+&nbsp;&nbsp;DATA:&nbsp;l_index&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;i,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;l_subtotal_month_dmbtr&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;bseg-dmbtr,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;l_subtotal_year_dmbtr_add&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;bseg-dmbtr,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;l_subtotal_lastmonth_dmbtr&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;bseg-dmbtr,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;l_subtotal_lastyear_dmbtr_add&nbsp;TYPE&nbsp;bseg-dmbtr,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;l_subtotal_lastyear_dmbtr&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;bseg-dmbtr.<br />
+&nbsp;&nbsp;FIELD-SYMBOLS:&nbsp;&lt;fs_standard&gt;&nbsp;TYPE&nbsp;zfit001.<br />
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;gt_standard&nbsp;INTO&nbsp;gs_standard&nbsp;FROM&nbsp;begin&nbsp;TO&nbsp;end.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-tabix&nbsp;=&nbsp;TEXT-105&nbsp;OR&nbsp;sy-tabix&nbsp;=&nbsp;TEXT-110&nbsp;OR&nbsp;sy-tabix&nbsp;=&nbsp;TEXT-111&nbsp;OR&nbsp;sy-tabix&nbsp;=&nbsp;TEXT-117<br />
+&nbsp;&nbsp;&nbsp;&nbsp;OR&nbsp;sy-tabix&nbsp;=&nbsp;TEXT-121&nbsp;OR&nbsp;sy-tabix&nbsp;=&nbsp;TEXT-122&nbsp;OR&nbsp;sy-tabix&nbsp;=&nbsp;TEXT-127&nbsp;OR&nbsp;sy-tabix&nbsp;=&nbsp;TEXT-131."&nbsp;OR&nbsp;sy-tabix&nbsp;=&nbsp;TEXT-134.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CONTINUE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;l_subtotal_month_dmbtr&nbsp;=&nbsp;l_subtotal_month_dmbtr&nbsp;+&nbsp;gs_standard-month_dmbtr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;l_subtotal_year_dmbtr_add&nbsp;=&nbsp;l_subtotal_year_dmbtr_add&nbsp;+&nbsp;gs_standard-year_dmbtr_add.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;l_subtotal_lastmonth_dmbtr&nbsp;=&nbsp;l_subtotal_lastmonth_dmbtr&nbsp;+&nbsp;gs_standard-lastmonth_dmbtr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;l_subtotal_lastyear_dmbtr_add&nbsp;=&nbsp;l_subtotal_lastyear_dmbtr_add&nbsp;+&nbsp;gs_standard-lastyear_dmbtr_add.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;l_subtotal_lastyear_dmbtr&nbsp;=&nbsp;l_subtotal_lastyear_dmbtr&nbsp;+&nbsp;gs_standard-lastyear_dmbtr.<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+&nbsp;&nbsp;l_index&nbsp;=&nbsp;end&nbsp;+&nbsp;1.<br />
+&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;gt_standard&nbsp;INDEX&nbsp;l_index&nbsp;ASSIGNING&nbsp;&lt;fs_standard&gt;.<br />
+&nbsp;&nbsp;&lt;fs_standard&gt;-month_dmbtr&nbsp;=&nbsp;l_subtotal_month_dmbtr.<br />
+&nbsp;&nbsp;&lt;fs_standard&gt;-year_dmbtr_add&nbsp;=&nbsp;l_subtotal_year_dmbtr_add.<br />
+&nbsp;&nbsp;&lt;fs_standard&gt;-lastmonth_dmbtr&nbsp;=&nbsp;l_subtotal_lastmonth_dmbtr.<br />
+&nbsp;&nbsp;&lt;fs_standard&gt;-lastyear_dmbtr_add&nbsp;=&nbsp;l_subtotal_lastyear_dmbtr_add.<br />
+&nbsp;&nbsp;&lt;fs_standard&gt;-lastyear_dmbtr&nbsp;=&nbsp;l_subtotal_lastyear_dmbtr.<br />
+&nbsp;&nbsp;ls_standard&nbsp;=&nbsp;&lt;fs_standard&gt;.<br />
+ENDFORM.<br />
+<br />
+FORM frm_subtract_dmbtr USING ls_standard_1 TYPE zfit001 ls_standard_2 TYPE zfit001 l_index.<br />
+&nbsp;&nbsp;FIELD-SYMBOLS:&nbsp;&lt;fs_standard&gt;&nbsp;TYPE&nbsp;zfit001.<br />
+&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;gt_standard&nbsp;INDEX&nbsp;l_index&nbsp;ASSIGNING&nbsp;&lt;fs_standard&gt;.<br />
+&nbsp;&nbsp;&lt;fs_standard&gt;-month_dmbtr&nbsp;=&nbsp;ls_standard_2-month_dmbtr&nbsp;-&nbsp;ls_standard_1-month_dmbtr.<br />
+&nbsp;&nbsp;&lt;fs_standard&gt;-year_dmbtr_add&nbsp;=&nbsp;ls_standard_2-year_dmbtr_add&nbsp;-&nbsp;ls_standard_1-year_dmbtr_add.<br />
+&nbsp;&nbsp;&lt;fs_standard&gt;-lastmonth_dmbtr&nbsp;=&nbsp;ls_standard_2-lastmonth_dmbtr&nbsp;-&nbsp;ls_standard_1-lastmonth_dmbtr.<br />
+&nbsp;&nbsp;&lt;fs_standard&gt;-lastyear_dmbtr_add&nbsp;=&nbsp;ls_standard_2-lastyear_dmbtr_add&nbsp;-&nbsp;ls_standard_1-lastyear_dmbtr_add.<br />
+&nbsp;&nbsp;&lt;fs_standard&gt;-lastyear_dmbtr&nbsp;=&nbsp;ls_standard_2-lastyear_dmbtr&nbsp;-&nbsp;ls_standard_1-lastyear_dmbtr.<br />
+ENDFORM.<br />
+<br />
+<br />
+FORM frm_calculate_dmbtr_34 USING ls_standard_11 TYPE zfit001 ls_standard_22 TYPE zfit001 ls_standard_32 TYPE zfit001<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_standard_33&nbsp;TYPE&nbsp;zfit001&nbsp;ls_standard_36&nbsp;TYPE&nbsp;zfit001.<br />
+&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;gt_standard&nbsp;INDEX&nbsp;TEXT-111&nbsp;INTO&nbsp;ls_standard_11.<br />
+&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;gt_standard&nbsp;INDEX&nbsp;TEXT-122&nbsp;INTO&nbsp;ls_standard_22.<br />
+&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;gt_standard&nbsp;INDEX&nbsp;TEXT-132&nbsp;INTO&nbsp;ls_standard_32.<br />
+&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;gt_standard&nbsp;INDEX&nbsp;TEXT-033&nbsp;INTO&nbsp;ls_standard_33.<br />
+&nbsp;&nbsp;"&nbsp;READ&nbsp;TABLE&nbsp;gt_standard&nbsp;INDEX&nbsp;TEXT-036&nbsp;INTO&nbsp;ls_standard_36.<br />
+&nbsp;&nbsp;FIELD-SYMBOLS:&nbsp;&lt;fs_standard&gt;&nbsp;TYPE&nbsp;zfit001.<br />
+&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;gt_standard&nbsp;INDEX&nbsp;TEXT-034&nbsp;ASSIGNING&nbsp;&lt;fs_standard&gt;.<br />
+&nbsp;&nbsp;&lt;fs_standard&gt;-month_dmbtr&nbsp;=&nbsp;ls_standard_11-month_dmbtr&nbsp;+&nbsp;ls_standard_22-month_dmbtr&nbsp;+&nbsp;ls_standard_32-month_dmbtr&nbsp;+&nbsp;+&nbsp;ls_standard_33-month_dmbtr."&nbsp;+&nbsp;+&nbsp;ls_standard_36-month_dmbtr.<br />
+&nbsp;&nbsp;&lt;fs_standard&gt;-year_dmbtr_add&nbsp;=&nbsp;ls_standard_11-year_dmbtr_add&nbsp;+&nbsp;ls_standard_22-year_dmbtr_add&nbsp;+&nbsp;ls_standard_32-year_dmbtr_add&nbsp;+&nbsp;+&nbsp;ls_standard_33-year_dmbtr_add."&nbsp;+&nbsp;+&nbsp;ls_standard_36-year_dmbtr_add.<br />
+&nbsp;&nbsp;&lt;fs_standard&gt;-lastmonth_dmbtr&nbsp;=&nbsp;ls_standard_11-lastmonth_dmbtr&nbsp;+&nbsp;ls_standard_22-lastmonth_dmbtr&nbsp;+&nbsp;ls_standard_32-lastmonth_dmbtr&nbsp;+&nbsp;+&nbsp;ls_standard_33-lastmonth_dmbtr."&nbsp;+&nbsp;+&nbsp;ls_standard_36-lastmonth_dmbtr.<br />
+&nbsp;&nbsp;&lt;fs_standard&gt;-lastyear_dmbtr_add&nbsp;=&nbsp;ls_standard_11-lastyear_dmbtr_add&nbsp;+&nbsp;ls_standard_22-lastyear_dmbtr_add&nbsp;+&nbsp;ls_standard_32-lastyear_dmbtr_add&nbsp;+&nbsp;+&nbsp;ls_standard_33-lastyear_dmbtr_add."&nbsp;+&nbsp;+&nbsp;ls_standard_36-lastyear_dmbtr_add.<br />
+&nbsp;&nbsp;&lt;fs_standard&gt;-lastyear_dmbtr&nbsp;=&nbsp;ls_standard_11-lastyear_dmbtr&nbsp;+&nbsp;ls_standard_22-lastyear_dmbtr&nbsp;+&nbsp;ls_standard_32-lastyear_dmbtr&nbsp;+&nbsp;+&nbsp;ls_standard_33-lastyear_dmbtr."&nbsp;+&nbsp;+&nbsp;ls_standard_36-lastyear_dmbtr.<br />
+ENDFORM.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Form&nbsp;frm_verify_data<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;凭证原因代码不为空验证<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM frm_verify_data USING lt_temp TYPE tt_standard ls_temp TYPE ts_standard.<br />
+<br />
+&nbsp;&nbsp;DATA&nbsp;lv_missing&nbsp;TYPE&nbsp;string&nbsp;VALUE&nbsp;'如下的凭证不存在原因代码，凭证编码如下：'.<br />
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;lt_temp&nbsp;INTO&nbsp;ls_temp.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;ls_temp-rstgr&nbsp;=&nbsp;''&nbsp;AND&nbsp;ls_temp-h_blart&nbsp;&lt;&gt;&nbsp;'ZA'&nbsp;AND&nbsp;ls_temp-h_monat&nbsp;=&nbsp;p_monat.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CONCATENATE&nbsp;lv_missing&nbsp;'&nbsp;'&nbsp;ls_temp-belnr&nbsp;INTO&nbsp;lv_missing&nbsp;RESPECTING&nbsp;BLANKS.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;lv_missing&nbsp;&lt;&gt;&nbsp;'如下的凭证不存在原因代码，凭证编码如下：'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;lv_missing&nbsp;TYPE&nbsp;'I'&nbsp;DISPLAY&nbsp;LIKE&nbsp;'W'.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+ENDFORM.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Form&nbsp;FRM_LAST_DAY_OF_MONTHS<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;text<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&gt;&nbsp;GV_DATE2<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;--&nbsp;GV_DATE3<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM frm_last_day_of_months USING p_date_in TYPE sy-datum CHANGING p_date_out TYPE sy-datum.<br />
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'LAST_DAY_OF_MONTHS'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;day_in&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;p_date_in<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;last_day_of_month&nbsp;=&nbsp;p_date_out<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;day_in_no_date&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTHERS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;2.<br />
+&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;&lt;&gt;&nbsp;0.<br />
+&nbsp;&nbsp;ENDIF.<br />
+ENDFORM.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Form&nbsp;FRM_DISPLAY_DATA<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;text<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;--&gt;&nbsp;&nbsp;p1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*&&nbsp;&lt;--&nbsp;&nbsp;p2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM frm_display_data.<br />
+&nbsp;&nbsp;CLEAR:&nbsp;gs_fieldcat,&nbsp;gs_fieldcat[].<br />
+<br />
+&nbsp;&nbsp;PERFORM&nbsp;frm_field&nbsp;&nbsp;&nbsp;USING&nbsp;&nbsp;&nbsp;'ITEM'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'项目'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;&nbsp;&nbsp;'L'.<br />
+&nbsp;&nbsp;PERFORM&nbsp;frm_field&nbsp;&nbsp;&nbsp;USING&nbsp;&nbsp;&nbsp;'LINE_NO'&nbsp;&nbsp;'行次'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'X'&nbsp;&nbsp;'C'.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;PERFORM&nbsp;frm_field&nbsp;&nbsp;&nbsp;USING&nbsp;&nbsp;&nbsp;'LASTYEAR_DMBTR'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'上年同期数'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'X'&nbsp;&nbsp;'R'.<br />
+*&nbsp;&nbsp;IF&nbsp;r_rad2&nbsp;=&nbsp;'X'.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;frm_field&nbsp;&nbsp;&nbsp;USING&nbsp;&nbsp;&nbsp;'LASTYEAR_DMBTR'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'上年同期数'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'X'&nbsp;&nbsp;'R'.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;frm_field&nbsp;&nbsp;&nbsp;USING&nbsp;&nbsp;&nbsp;'LASTYEAR_DMBTR_ADD'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'上年同期累计'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'X'&nbsp;&nbsp;'R'.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;frm_field&nbsp;&nbsp;&nbsp;USING&nbsp;&nbsp;&nbsp;'LASTMONTH_DMBTR'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'上月数'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'X'&nbsp;&nbsp;'R'.<br />
+*&nbsp;&nbsp;ENDIF.<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;PERFORM&nbsp;frm_field&nbsp;&nbsp;&nbsp;USING&nbsp;&nbsp;&nbsp;'MONTH_DMBTR'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'本月数'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'X'&nbsp;&nbsp;'R'.<br />
+&nbsp;&nbsp;PERFORM&nbsp;frm_field&nbsp;&nbsp;&nbsp;USING&nbsp;&nbsp;&nbsp;'YEAR_DMBTR_ADD'&nbsp;&nbsp;'本年累计'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'X'&nbsp;&nbsp;'R'.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;PERFORM&nbsp;frm_field&nbsp;&nbsp;&nbsp;USING&nbsp;&nbsp;&nbsp;'RSTGR_DESC'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'原因代码'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;&nbsp;&nbsp;'L'.<br />
+<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;PERFORM&nbsp;frm_layout&nbsp;&nbsp;TABLES&nbsp;gt_standard.<br />
+ENDFORM.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;FRM_FIELD<br />
+*&---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+*----------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM frm_field  USING p_fieldname p_coltext p_no_zero p_just.<br />
+&nbsp;&nbsp;DATA:as_fieldcat&nbsp;&nbsp;&nbsp;TYPE&nbsp;lvc_s_fcat.<br />
+<br />
+&nbsp;&nbsp;as_fieldcat-fieldname&nbsp;&nbsp;&nbsp;=&nbsp;p_fieldname.<br />
+&nbsp;&nbsp;as_fieldcat-coltext&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;p_coltext.<br />
+&nbsp;&nbsp;as_fieldcat-no_zero&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;p_no_zero.<br />
+&nbsp;&nbsp;as_fieldcat-just&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;p_just.<br />
+<br />
+&nbsp;&nbsp;APPEND&nbsp;as_fieldcat&nbsp;TO&nbsp;gs_fieldcat.<br />
+&nbsp;&nbsp;CLEAR&nbsp;as_fieldcat.<br />
+ENDFORM.                    " FRM_FIELD<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;FRM_LAYOUT<br />
+*&---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+*----------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM frm_layout TABLES p_data.<br />
+&nbsp;&nbsp;gs_repid&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;sy-repid.<br />
+&nbsp;&nbsp;gs_layout-zebra&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;gs_layout-cwidth_opt&nbsp;&nbsp;=&nbsp;'X'.<br />
+<br />
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'REUSE_ALV_GRID_DISPLAY_LVC'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_callback_program&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;gs_repid<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_save&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'A'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it_fieldcat_lvc&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;gs_fieldcat[]<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it_sort_lvc&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;gs_sortinfo[]<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;is_layout_lvc&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;gs_layout<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_callback_pf_status_set&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;p_status<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_callback_user_command&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;p_command<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_callback_html_top_of_page&nbsp;=&nbsp;'FRM_TOP_OF_PAGE'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_html_height_top&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;11&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"HTML框的高度<br />
+&nbsp;&nbsp;&nbsp;&nbsp;TABLES<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;t_outtab&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;p_data<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;program_error&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTHERS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;2.<br />
+&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;&lt;&gt;&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;ID&nbsp;sy-msgid&nbsp;TYPE&nbsp;sy-msgty&nbsp;NUMBER&nbsp;sy-msgno<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WITH&nbsp;sy-msgv1&nbsp;sy-msgv2&nbsp;sy-msgv3&nbsp;sy-msgv4.<br />
+&nbsp;&nbsp;ENDIF.<br />
+ENDFORM.                    "frm_layout<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FORM&nbsp;&nbsp;TOP_OF_PAGE<br />
+*&---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TEXT<br />
+*----------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM frm_top_of_page USING document TYPE REF TO cl_dd_document.<br />
+<br />
+&nbsp;&nbsp;DATA:lv_str1&nbsp;TYPE&nbsp;string,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_str2&nbsp;TYPE&nbsp;string,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_str3&nbsp;TYPE&nbsp;string.<br />
+&nbsp;&nbsp;DATA:lv_idx0&nbsp;TYPE&nbsp;i&nbsp;VALUE&nbsp;60,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_idx1&nbsp;TYPE&nbsp;i&nbsp;VALUE&nbsp;0,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_idx2&nbsp;TYPE&nbsp;i&nbsp;VALUE&nbsp;20,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_idx3&nbsp;TYPE&nbsp;i&nbsp;VALUE&nbsp;40.<br />
+<br />
+&nbsp;&nbsp;PERFORM&nbsp;frm_create_page&nbsp;USING&nbsp;document&nbsp;lv_idx0&nbsp;'现金流量表'&nbsp;''.<br />
+&nbsp;&nbsp;CALL&nbsp;METHOD&nbsp;document-&gt;new_line.<br />
+&nbsp;&nbsp;CALL&nbsp;METHOD&nbsp;document-&gt;new_line.<br />
+<br />
+&nbsp;&nbsp;lv_str1&nbsp;=&nbsp;'单位：'&nbsp;&&&nbsp;gv_butxt.<br />
+&nbsp;&nbsp;PERFORM&nbsp;frm_create_page&nbsp;USING&nbsp;document&nbsp;lv_idx1&nbsp;lv_str1&nbsp;&nbsp;''.<br />
+<br />
+&nbsp;&nbsp;lv_str2&nbsp;=&nbsp;'日期：'&nbsp;&&&nbsp;gv_zdate+0(4)&nbsp;&&&nbsp;'-'&nbsp;&&&nbsp;gv_zdate+4(2)&nbsp;&&&nbsp;'-'&nbsp;&&&nbsp;gv_zdate+6(2).<br />
+&nbsp;&nbsp;PERFORM&nbsp;frm_create_page&nbsp;USING&nbsp;document&nbsp;lv_idx2&nbsp;lv_str2&nbsp;&nbsp;''.<br />
+<br />
+&nbsp;&nbsp;lv_str3&nbsp;=&nbsp;'单位：'&nbsp;&&&nbsp;gv_danwei.<br />
+&nbsp;&nbsp;PERFORM&nbsp;frm_create_page&nbsp;USING&nbsp;document&nbsp;lv_idx3&nbsp;lv_str3&nbsp;&nbsp;''.<br />
+ENDFORM.                    "TOP_OF_PAGE<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FORM&nbsp;&nbsp;FRM_CREATE_PAGE<br />
+*&---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TEXT<br />
+*----------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&gt;P_100&nbsp;&nbsp;&nbsp;&nbsp;TEXT<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&gt;P_TEXT&nbsp;&nbsp;TEXT<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&gt;P_1062&nbsp;&nbsp;&nbsp;TEXT<br />
+*----------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM frm_create_page USING document TYPE REF TO cl_dd_document p_width p_text p_style.<br />
+&nbsp;&nbsp;DATA:&nbsp;s_text&nbsp;TYPE&nbsp;sdydo_text_element.<br />
+<br />
+&nbsp;&nbsp;s_text&nbsp;=&nbsp;p_text.<br />
+&nbsp;&nbsp;CALL&nbsp;METHOD&nbsp;document-&gt;add_gap<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;width&nbsp;=&nbsp;p_width.<br />
+&nbsp;&nbsp;CALL&nbsp;METHOD&nbsp;document-&gt;add_text<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;s_text<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sap_style&nbsp;=&nbsp;p_style.<br />
+ENDFORM.                    " FRM_CREATE_PAGE<br />
+            </div>
+          </td>
+        </tr>
+      </table>
+      </td>
+      </tr>
+   <tr>
+<td class="footer">Extracted by Mass Download version 1.5.2 - E.G.Mellodew. 1998-2022. Sap Release 755</td>
+   </tr>
+</table>
+</body>
+</html>

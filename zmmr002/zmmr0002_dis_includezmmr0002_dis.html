@@ -1,0 +1,513 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=GB2312" />
+<title>ZMMR0002_DIS</title>
+<style type="text/css">
+.code{ font-family:"Courier New", Courier, monospace; color:#000; font-size:14px; background-color:#F2F4F7 }
+  .codeComment {font-family:"Courier New", Courier, monospace; color:#0000F0; font-size:14px; background-color:#F2F4F7 }
+  .normalBold{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; font-weight:800 }
+  .normalBoldLarge{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+</style>
+<style type="text/css">
+  .normal{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px }
+  .footer{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; text-align: center }
+  h2{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+  h3{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:14px; font-weight:800 }
+  .outerTable{
+   background-color:#E0E7ED;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-right-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+  .innerTable{
+   background-color:#F2F4F7;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-bottom-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+</style>
+</head>
+<body>
+<table class="outerTable">
+  <tr class="normalBoldLarge">
+     <td><h2>Code listing for: ZMMR0002_DIS</h2>
+<h3> Description: Include ZMMR0002_DIS</h3></td>
+   </tr>
+  <tr>
+     <td>
+     <table class="innerTable">
+       <tr>
+          <td>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;包含&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ZMMR0002_DIS<br />
+*&---------------------------------------------------------------------*<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;包含&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ZMDGR_MATERIAL_BATCH_DIS<br />
+*&---------------------------------------------------------------------*<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Form&nbsp;FRM_DISPLAY_DATA<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;text<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;--&gt;&nbsp;&nbsp;p1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*&&nbsp;&lt;--&nbsp;&nbsp;p2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM frm_display_data .<br />
+<br />
+&nbsp;&nbsp;PERFORM&nbsp;frm_field.<br />
+&nbsp;&nbsp;PERFORM&nbsp;frm_layout&nbsp;&nbsp;TABLES&nbsp;gt_list&nbsp;USING&nbsp;'PF_STATUS'&nbsp;'USER_COMMAND'.<br />
+<br />
+ENDFORM.<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;FRM_FIELD<br />
+*&---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+*----------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM frm_field .<br />
+<br />
+&nbsp;&nbsp;REFRESH&nbsp;gt_fieldcat_lvc.<br />
+&nbsp;&nbsp;CLEAR:&nbsp;lv_position,gs_fieldcat_lvc.<br />
+&nbsp;&nbsp;lv_position&nbsp;=&nbsp;lv_position&nbsp;+&nbsp;1.<br />
+<br />
+&nbsp;&nbsp;DEFINE&nbsp;df_fieldcat.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;gs_fieldcat_lvc.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;gs_fieldcat_lvc-col_pos&nbsp;&nbsp;&nbsp;=&nbsp;lv_position."ALV&nbsp;控制:&nbsp;输出列<br />
+&nbsp;&nbsp;&nbsp;&nbsp;gs_fieldcat_lvc-scrtext_m&nbsp;=&nbsp;&1."中字段标签<br />
+&nbsp;&nbsp;&nbsp;&nbsp;gs_fieldcat_lvc-fieldname&nbsp;=&nbsp;&2."ALV&nbsp;控制:&nbsp;内部表字段的字段名称<br />
+&nbsp;&nbsp;&nbsp;&nbsp;gs_fieldcat_lvc-no_zero&nbsp;&nbsp;&nbsp;=&nbsp;&3."ALV&nbsp;控制:&nbsp;为输出隐藏零<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;gs_fieldcat_lvc-checkbox&nbsp;&nbsp;=&nbsp;&4."ALV&nbsp;控制:&nbsp;作为复选框输出<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;gs_fieldcat_lvc-edit&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&5."设置可编辑模式<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;gs_fieldcat_lvc-hotspot&nbsp;&nbsp;&nbsp;=&nbsp;&6."ALV&nbsp;控制:&nbsp;单击敏感<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;gs_fieldcat_lvc-outputlen&nbsp;=&nbsp;&7."输出长度<br />
+<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;gs_fieldcat_lvc-fieldname&nbsp;=&nbsp;'SCM_GRPRT'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_fieldcat_lvc-ref_table&nbsp;=&nbsp;'MARC'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_fieldcat_lvc-ref_field&nbsp;=&nbsp;'SCM_GRPRT'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;gs_fieldcat_lvc-fieldname&nbsp;=&nbsp;'SCM_GIPRT'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_fieldcat_lvc-ref_table&nbsp;=&nbsp;'MARC'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_fieldcat_lvc-ref_field&nbsp;=&nbsp;'SCM_GIPRT'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;gs_fieldcat_lvc&nbsp;TO&nbsp;gt_fieldcat_lvc.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ADD&nbsp;1&nbsp;TO&nbsp;lv_position.<br />
+&nbsp;&nbsp;END-OF-DEFINITION.<br />
+<br />
+&nbsp;&nbsp;df_fieldcat:<br />
+&nbsp;&nbsp;'状态'&nbsp;'ICON'&nbsp;'X'&nbsp;,<br />
+&nbsp;&nbsp;'消息'&nbsp;'ZZMSG'&nbsp;'X'&nbsp;,<br />
+&nbsp;&nbsp;"*&nbsp;初始屏幕<br />
+&nbsp;&nbsp;'物料编码'&nbsp;'MATNR'&nbsp;'X'&nbsp;,<br />
+&nbsp;&nbsp;'物料类型'&nbsp;'MTART'&nbsp;'X'&nbsp;,<br />
+&nbsp;&nbsp;'行业类别'&nbsp;'MBRSH'&nbsp;'X'&nbsp;,<br />
+"* 基本视图<br />
+&nbsp;&nbsp;'工厂'&nbsp;'WERKS'&nbsp;'X'&nbsp;,<br />
+&nbsp;&nbsp;'物料中文描述'&nbsp;'MAKTX'&nbsp;'X'&nbsp;,<br />
+&nbsp;&nbsp;'基本计量单位'&nbsp;'MEINS'&nbsp;'X'&nbsp;,<br />
+&nbsp;&nbsp;'旧物料号'&nbsp;'BISMT'&nbsp;'X'&nbsp;,<br />
+&nbsp;&nbsp;'物料组'&nbsp;'MATKL'&nbsp;'X'&nbsp;,<br />
+&nbsp;&nbsp;'外部物料组'&nbsp;'EXTWG'&nbsp;'X'&nbsp;,<br />
+<br />
+&nbsp;&nbsp;'版本号'&nbsp;&nbsp;'ZEIVR'&nbsp;&nbsp;'X'&nbsp;,<br />
+<br />
+&nbsp;&nbsp;'大小量纲'&nbsp;'GROES'&nbsp;'X'&nbsp;,<br />
+&nbsp;&nbsp;'毛重'&nbsp;'BRGEW'&nbsp;'X'&nbsp;,<br />
+<br />
+&nbsp;&nbsp;'净重'&nbsp;'NTGEW'&nbsp;'X'&nbsp;,<br />
+&nbsp;&nbsp;'重量单位'&nbsp;'GEWEI'&nbsp;'X'&nbsp;,<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;'是否3C件'&nbsp;'ZWLSX4'&nbsp;'X'&nbsp;,<br />
+*&nbsp;&nbsp;'是否自愿性认证件'&nbsp;'ZWLSX5'&nbsp;'X'&nbsp;,<br />
+*&nbsp;&nbsp;'集采属性'&nbsp;'ZWLSX6'&nbsp;'X'&nbsp;,<br />
+*&nbsp;&nbsp;'重要度'&nbsp;'ZWLSX7'&nbsp;'X'&nbsp;,<br />
+*&nbsp;&nbsp;'配套标识'&nbsp;'ZWLSX3'&nbsp;'X'&nbsp;,<br />
+   </div>
+   <div class="code">
+"* 采购视图<br />
+&nbsp;&nbsp;'采购组'&nbsp;'EKGRP'&nbsp;''&nbsp;,<br />
+&nbsp;&nbsp;'订单单位'&nbsp;'BSTME'&nbsp;'X'&nbsp;,<br />
+&nbsp;&nbsp;'转换分母'&nbsp;'UMREN'&nbsp;'X'&nbsp;,<br />
+&nbsp;&nbsp;'转换分子'&nbsp;'UMREZ'&nbsp;'X'&nbsp;,<br />
+&nbsp;&nbsp;'自动采购订单'&nbsp;'KAUTB'&nbsp;'X'&nbsp;,<br />
+"* 类视图<br />
+&nbsp;&nbsp;'类别种类'&nbsp;'KLART'&nbsp;''&nbsp;,<br />
+&nbsp;&nbsp;'类别'&nbsp;'CLASS'&nbsp;'X'&nbsp;,<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;'特征名称'&nbsp;'ATNAM'&nbsp;'X'&nbsp;,<br />
+*&nbsp;&nbsp;'特性值'&nbsp;'ATWRT'&nbsp;'X'&nbsp;,<br />
+   </div>
+   <div class="code">
+"* 存储视图<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;'工厂_存储视图'&nbsp;'CC_WERKS'&nbsp;'X'&nbsp;,<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;'批次管理（工厂）'&nbsp;'XCHPF'&nbsp;'X'&nbsp;,<br />
+&nbsp;&nbsp;'最小货架寿命'&nbsp;'MHDRZ'&nbsp;'X'&nbsp;,<br />
+&nbsp;&nbsp;'总货架寿命'&nbsp;'MHDHB'&nbsp;'X'&nbsp;,<br />
+&nbsp;&nbsp;'货架寿命周期标识'&nbsp;'IPRKZ'&nbsp;'X'&nbsp;,<br />
+&nbsp;&nbsp;'发货单位'&nbsp;'AUSME'&nbsp;'X'&nbsp;,<br />
+&nbsp;&nbsp;'基本计量单位转换分子'&nbsp;'CC_UMREZ'&nbsp;'X'&nbsp;,<br />
+&nbsp;&nbsp;'转换为基本计量单位的分母'&nbsp;'CC_UMREN'&nbsp;'X'&nbsp;,<br />
+"* MRP视图-1<br />
+&nbsp;&nbsp;'MRP类型'&nbsp;'DISMM'&nbsp;'X'&nbsp;,<br />
+&nbsp;&nbsp;'MRP组'&nbsp;'DISGR'&nbsp;''&nbsp;,<br />
+&nbsp;&nbsp;'再订货点数量'&nbsp;'MINBE'&nbsp;'X'&nbsp;,<br />
+&nbsp;&nbsp;'ABC标识'&nbsp;'MAABC'&nbsp;'X'&nbsp;,<br />
+&nbsp;&nbsp;'计划的时界'&nbsp;'FXHOR'&nbsp;'X'&nbsp;,<br />
+&nbsp;&nbsp;'MRP控制者'&nbsp;'DISPO'&nbsp;''&nbsp;,<br />
+&nbsp;&nbsp;'批量'&nbsp;'DISLS'&nbsp;'X'&nbsp;,<br />
+&nbsp;&nbsp;'最小批量'&nbsp;'BSTMI'&nbsp;'X'&nbsp;,<br />
+&nbsp;&nbsp;'固定批量大小'&nbsp;'BSTMA'&nbsp;'X'&nbsp;,<br />
+&nbsp;&nbsp;'装配报废'&nbsp;'AUSSS'&nbsp;'X'&nbsp;,<br />
+&nbsp;&nbsp;'最大库存水平'&nbsp;'MABST'&nbsp;'X'&nbsp;,<br />
+&nbsp;&nbsp;'舍入值'&nbsp;'BSTRF'&nbsp;'X'&nbsp;,<br />
+&nbsp;&nbsp;'工厂特定的物料状态'&nbsp;'MMSTA'&nbsp;'X'&nbsp;,<br />
+"* MRP视图-2<br />
+&nbsp;&nbsp;'采购类型'&nbsp;'BESKZ'&nbsp;'X'&nbsp;,<br />
+&nbsp;&nbsp;'特殊采购类'&nbsp;'SOBSL'&nbsp;'X'&nbsp;,<br />
+&nbsp;&nbsp;'计划边际码'&nbsp;'FHORI'&nbsp;''&nbsp;,<br />
+&nbsp;&nbsp;'生产仓储地点'&nbsp;'LGPRO'&nbsp;'X'&nbsp;,<br />
+&nbsp;&nbsp;'外部采购仓储地点'&nbsp;'LGFSB'&nbsp;'X'&nbsp;,<br />
+&nbsp;&nbsp;'自制生产时间'&nbsp;'DZEIT'&nbsp;'X'&nbsp;,<br />
+&nbsp;&nbsp;'收货处理时间'&nbsp;'WEBAZ'&nbsp;'X'&nbsp;,<br />
+&nbsp;&nbsp;'计划交货时间'&nbsp;'PLIFZ'&nbsp;'X'&nbsp;,<br />
+&nbsp;&nbsp;'反冲'&nbsp;'RGEKZ'&nbsp;'X'&nbsp;,<br />
+&nbsp;&nbsp;'散装物料'&nbsp;'SCHGT'&nbsp;'X'&nbsp;,<br />
+&nbsp;&nbsp;'安全库存'&nbsp;'EISBE'&nbsp;'X'&nbsp;,<br />
+&nbsp;"*&nbsp;MRP视图-3<br />
+&nbsp;&nbsp;'可用性检查'&nbsp;'MTVFP'&nbsp;''&nbsp;,<br />
+&nbsp;&nbsp;'策略组'&nbsp;'STRGR'&nbsp;'X'&nbsp;,<br />
+&nbsp;&nbsp;'消耗模式'&nbsp;'VRMOD'&nbsp;'X'&nbsp;,<br />
+&nbsp;&nbsp;'逆向消耗期间'&nbsp;'VINT1'&nbsp;'X'&nbsp;,<br />
+&nbsp;&nbsp;'向前消耗期间'&nbsp;'VINT2'&nbsp;'X'&nbsp;,<br />
+&nbsp;&nbsp;'综合MRP'&nbsp;'MISKZ'&nbsp;'X'&nbsp;,<br />
+"* MRP视图-4<br />
+&nbsp;&nbsp;'独立/集中'&nbsp;'SBDKZ'&nbsp;'X'&nbsp;,<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;'旧物料号'&nbsp;'ZMATNR'&nbsp;'X'&nbsp;,<br />
+*&nbsp;&nbsp;'研发项目'&nbsp;'ZPOSID'&nbsp;'X'&nbsp;,<br />
+*&nbsp;&nbsp;'资源开发员'&nbsp;'ZZYKF'&nbsp;'X'&nbsp;,<br />
+*"*&nbsp;生产视图-提前计划<br />
+*&nbsp;&nbsp;'提前计划'&nbsp;'PPSKZ'&nbsp;'X'&nbsp;,<br />
+*&nbsp;&nbsp;'计划扩展'&nbsp;'SCM_WHATBOM'&nbsp;'X'&nbsp;,<br />
+*&nbsp;&nbsp;'PP&nbsp;计划程序'&nbsp;'SCM_RRP_TYPE'&nbsp;'X'&nbsp;,<br />
+*&nbsp;&nbsp;'产品启发式'&nbsp;'SCM_HEUR_ID'&nbsp;'X'&nbsp;,<br />
+*&nbsp;&nbsp;'追溯策略'&nbsp;'SCM_PEG_STRATEGY'&nbsp;''&nbsp;,<br />
+*&nbsp;&nbsp;'固定追溯'&nbsp;'SCM_FIXPEG_PROD_SET'&nbsp;''&nbsp;,<br />
+*&nbsp;&nbsp;'建议的策略'&nbsp;'SCM_STRA1'&nbsp;''&nbsp;,<br />
+*&nbsp;&nbsp;'收货处理时间'&nbsp;'SCM_GRPRT'&nbsp;''&nbsp;,<br />
+*&nbsp;&nbsp;'发货处理时间'&nbsp;'SCM_GIPRT'&nbsp;''&nbsp;,<br />
+   </div>
+   <div class="code">
+"* 生产视图-工作计划<br />
+&nbsp;&nbsp;'生产管理员'&nbsp;'FEVOR'&nbsp;''&nbsp;,<br />
+&nbsp;&nbsp;'生产计划参数文件'&nbsp;'SFCPF'&nbsp;'X'&nbsp;,<br />
+&nbsp;&nbsp;'序列号参数文件'&nbsp;'SERNP'&nbsp;''&nbsp;,<br />
+&nbsp;&nbsp;'序列号的清晰的级别'&nbsp;'SERLV'&nbsp;'X'&nbsp;,<br />
+&nbsp;&nbsp;'不足交货允差'&nbsp;'UNETO'&nbsp;'X'&nbsp;,<br />
+&nbsp;&nbsp;'过度交货允差'&nbsp;'UEETO'&nbsp;'X'&nbsp;,<br />
+&nbsp;&nbsp;'未限制交货'&nbsp;'UEETK'&nbsp;'X'&nbsp;,<br />
+"* 销售视图<br />
+&nbsp;&nbsp;'销售组织'&nbsp;'VKORG'&nbsp;'X'&nbsp;,<br />
+&nbsp;&nbsp;'分销渠道'&nbsp;'VTWEG'&nbsp;''&nbsp;,<br />
+&nbsp;&nbsp;'销售单位'&nbsp;'VRKME'&nbsp;'X'&nbsp;,<br />
+&nbsp;&nbsp;'转换分母'&nbsp;'SS_UMREN'&nbsp;'X'&nbsp;,<br />
+&nbsp;&nbsp;'转换分子'&nbsp;'SS_UMREZ'&nbsp;'X'&nbsp;,<br />
+&nbsp;&nbsp;'交货工厂'&nbsp;'DWERK'&nbsp;'X'&nbsp;,<br />
+&nbsp;&nbsp;'产品组'&nbsp;'SPART'&nbsp;''&nbsp;,<br />
+&nbsp;&nbsp;'税分类MWST'&nbsp;'TAXKM'&nbsp;'X'&nbsp;,<br />
+&nbsp;&nbsp;'最小订购量'&nbsp;'AUMNG'&nbsp;'X'&nbsp;,<br />
+&nbsp;&nbsp;'最小交货数量'&nbsp;'LFMNG'&nbsp;'X'&nbsp;,<br />
+&nbsp;&nbsp;'交货单位'&nbsp;'SCMNG'&nbsp;'X'&nbsp;,<br />
+&nbsp;&nbsp;'转换分母'&nbsp;'SS_UMREN2'&nbsp;'X'&nbsp;,<br />
+&nbsp;&nbsp;'转换分子'&nbsp;'SS_UMREZ2'&nbsp;'X'&nbsp;,<br />
+&nbsp;&nbsp;'普通项目类别组'&nbsp;'MTPOS_MARA'&nbsp;'X'&nbsp;,<br />
+&nbsp;&nbsp;'项目类别组'&nbsp;'MTPOS'&nbsp;'X'&nbsp;,<br />
+&nbsp;&nbsp;'物料的科目分配组'&nbsp;'KTGRM'&nbsp;'X'&nbsp;,<br />
+&nbsp;&nbsp;'物料统计组'&nbsp;'VERSG'&nbsp;'X'&nbsp;,<br />
+&nbsp;&nbsp;'物料价格组'&nbsp;'KONDM'&nbsp;''&nbsp;,<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;'替换部件'&nbsp;'ATPKZ'&nbsp;'X'&nbsp;,<br />
+*&nbsp;&nbsp;'可用性检查'&nbsp;'SS_MTVFP'&nbsp;''&nbsp;,<br />
+*&nbsp;&nbsp;'免税货物折扣资格'&nbsp;'NRFHG'&nbsp;'X'&nbsp;,<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;'运输组'&nbsp;'TRAGR'&nbsp;'X'&nbsp;,<br />
+&nbsp;&nbsp;'装载组'&nbsp;'LADGR'&nbsp;'X'&nbsp;,<br />
+"* 会计视图<br />
+&nbsp;&nbsp;'物料价格确定:&nbsp;控制'&nbsp;'MLAST'&nbsp;'X'&nbsp;,<br />
+&nbsp;&nbsp;'评估类'&nbsp;'BKLAS'&nbsp;'X'&nbsp;,<br />
+&nbsp;&nbsp;'价格控制'&nbsp;'VPRSV'&nbsp;'X'&nbsp;,<br />
+&nbsp;&nbsp;'价格单位'&nbsp;'PEINH'&nbsp;'X'&nbsp;,<br />
+&nbsp;&nbsp;'标准价格'&nbsp;'STPRS'&nbsp;'X'&nbsp;,<br />
+&nbsp;&nbsp;'移动平均价格'&nbsp;'VERPR'&nbsp;'X'&nbsp;,<br />
+&nbsp;&nbsp;'不计成本'&nbsp;'NCOST'&nbsp;'X'&nbsp;,<br />
+&nbsp;&nbsp;'用QS的成本估算'&nbsp;'EKALR'&nbsp;'X'&nbsp;,<br />
+&nbsp;&nbsp;'物料来源'&nbsp;'HKMAT'&nbsp;'X'&nbsp;,<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;'原始组'&nbsp;'HRKFT'&nbsp;'X'&nbsp;,<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;'利润中心'&nbsp;'PRCTR'&nbsp;'X'&nbsp;,<br />
+&nbsp;&nbsp;'成本核算批量'&nbsp;'LOSGR'&nbsp;''&nbsp;,<br />
+"* 质量视图<br />
+&nbsp;&nbsp;'检验类型'&nbsp;'ART'&nbsp;''&nbsp;,<br />
+&nbsp;&nbsp;'活动的'&nbsp;'APA'&nbsp;'X'&nbsp;,<br />
+"* 仓储视图<br />
+&nbsp;&nbsp;'仓库号'&nbsp;'LGNUM'&nbsp;''&nbsp;,<br />
+&nbsp;&nbsp;'仓储类型'&nbsp;'LGTYP'&nbsp;''&nbsp;.<br />
+<br />
+ENDFORM.<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Form&nbsp;FRM_DISPLAY_DATA<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;text<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;--&gt;&nbsp;&nbsp;p1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*&&nbsp;&lt;--&nbsp;&nbsp;p2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*&---------------------------------------------------------------------*<br />
+*FORM&nbsp;frm_display_data&nbsp;.<br />
+*&nbsp;&nbsp;CLEAR:gs_fieldcat,gs_fieldcat[].<br />
+*<br />
+*&nbsp;&nbsp;PERFORM&nbsp;frm_field&nbsp;&nbsp;&nbsp;USING&nbsp;&nbsp;&nbsp;'ICON'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'状态'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'X'&nbsp;''.<br />
+*&nbsp;&nbsp;PERFORM&nbsp;frm_field&nbsp;&nbsp;&nbsp;USING&nbsp;&nbsp;&nbsp;'ZZMSG'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'消息'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'X'&nbsp;''.<br />
+*&nbsp;&nbsp;PERFORM&nbsp;frm_field&nbsp;&nbsp;&nbsp;USING&nbsp;&nbsp;&nbsp;'MATNR'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'物料编码'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'MARA'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'MATNR'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'X'&nbsp;''.<br />
+*&nbsp;&nbsp;PERFORM&nbsp;frm_field&nbsp;&nbsp;&nbsp;USING&nbsp;&nbsp;&nbsp;'MATKL'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'物料组'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'MARA'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'MATKL'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;&nbsp;''.<br />
+*&nbsp;&nbsp;PERFORM&nbsp;frm_field&nbsp;&nbsp;&nbsp;USING&nbsp;&nbsp;&nbsp;'MTART'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'物料类型'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'MARA'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'MTART'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;&nbsp;''.<br />
+*&nbsp;&nbsp;PERFORM&nbsp;frm_field&nbsp;&nbsp;&nbsp;USING&nbsp;&nbsp;&nbsp;'MBRSH'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'行业类别'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'MARA'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'MBRSH'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;&nbsp;''.<br />
+*&nbsp;&nbsp;PERFORM&nbsp;frm_field&nbsp;&nbsp;&nbsp;USING&nbsp;&nbsp;&nbsp;'WERKS'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'工厂'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;&nbsp;''.&nbsp;&nbsp;"'MARD'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'WERKS'<br />
+*&nbsp;&nbsp;PERFORM&nbsp;frm_field&nbsp;&nbsp;&nbsp;USING&nbsp;&nbsp;&nbsp;'MAKTZ'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'物料中文描述'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'MAKT'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'MAKTX'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;&nbsp;''.<br />
+*&nbsp;&nbsp;PERFORM&nbsp;frm_field&nbsp;&nbsp;&nbsp;USING&nbsp;&nbsp;&nbsp;'MAKTE'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'物料英文描述'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'MAKT'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'MAKTX'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;&nbsp;''.<br />
+*&nbsp;&nbsp;PERFORM&nbsp;frm_field&nbsp;&nbsp;&nbsp;USING&nbsp;&nbsp;&nbsp;'MEINS'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'基本计量单位'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'MARA'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'MEINS'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;&nbsp;''.<br />
+*&nbsp;&nbsp;PERFORM&nbsp;frm_field&nbsp;&nbsp;&nbsp;USING&nbsp;&nbsp;&nbsp;'ZWLSX1'&nbsp;&nbsp;&nbsp;&nbsp;'品名(属性1)'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'MARA'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'ZWLSX1'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;&nbsp;''.<br />
+*&nbsp;&nbsp;PERFORM&nbsp;frm_field&nbsp;&nbsp;&nbsp;USING&nbsp;&nbsp;&nbsp;'ZWLSX2'&nbsp;&nbsp;&nbsp;&nbsp;'规格(属性2)'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'MARA'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'ZWLSX2'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;&nbsp;''.<br />
+*&nbsp;&nbsp;PERFORM&nbsp;frm_field&nbsp;&nbsp;&nbsp;USING&nbsp;&nbsp;&nbsp;'ZWLSX3'&nbsp;&nbsp;&nbsp;&nbsp;'型号(属性3)'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'MARA'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'ZWLSX3'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;&nbsp;''.<br />
+*&nbsp;&nbsp;PERFORM&nbsp;frm_field&nbsp;&nbsp;&nbsp;USING&nbsp;&nbsp;&nbsp;'ZWLSX4'&nbsp;&nbsp;&nbsp;&nbsp;'属性4'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'MARA'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'ZWLSX4'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;&nbsp;''.<br />
+*&nbsp;&nbsp;PERFORM&nbsp;frm_field&nbsp;&nbsp;&nbsp;USING&nbsp;&nbsp;&nbsp;'ZWLSX5'&nbsp;&nbsp;&nbsp;&nbsp;'属性5'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'MARA'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'ZWLSX5'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;&nbsp;''.<br />
+*&nbsp;&nbsp;PERFORM&nbsp;frm_field&nbsp;&nbsp;&nbsp;USING&nbsp;&nbsp;&nbsp;'ZWLSX6'&nbsp;&nbsp;&nbsp;&nbsp;'属性6'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'MARA'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'ZWLSX6'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;&nbsp;''.<br />
+*&nbsp;&nbsp;PERFORM&nbsp;frm_field&nbsp;&nbsp;&nbsp;USING&nbsp;&nbsp;&nbsp;'ZWLSX7'&nbsp;&nbsp;&nbsp;&nbsp;'属性7'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'MARA'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'ZWLSX7'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;&nbsp;''.<br />
+*&nbsp;&nbsp;PERFORM&nbsp;frm_field&nbsp;&nbsp;&nbsp;USING&nbsp;&nbsp;&nbsp;'ZWLSX8'&nbsp;&nbsp;&nbsp;&nbsp;'属性8'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'MARA'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'ZWLSX8'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;&nbsp;''.<br />
+*&nbsp;&nbsp;PERFORM&nbsp;frm_field&nbsp;&nbsp;&nbsp;USING&nbsp;&nbsp;&nbsp;'ZWLSX9'&nbsp;&nbsp;&nbsp;&nbsp;'属性9'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'MARA'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'ZWLSX9'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;&nbsp;''.<br />
+*&nbsp;&nbsp;PERFORM&nbsp;frm_field&nbsp;&nbsp;&nbsp;USING&nbsp;&nbsp;&nbsp;'ZPOSID'&nbsp;&nbsp;&nbsp;&nbsp;'项目WBS元素'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'MARA'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'ZPOSID'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;&nbsp;''.<br />
+*<br />
+*&nbsp;&nbsp;PERFORM&nbsp;frm_field&nbsp;&nbsp;&nbsp;USING&nbsp;&nbsp;&nbsp;'EXTWG'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'销售品类'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'MARA'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'EXTWG'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;&nbsp;''.<br />
+*&nbsp;&nbsp;PERFORM&nbsp;frm_field&nbsp;&nbsp;&nbsp;USING&nbsp;&nbsp;&nbsp;'LABOR'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'化学体系'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'MARA'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'LABOR'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;&nbsp;''.<br />
+**insert&nbsp;by&nbsp;lijc&nbsp;on&nbsp;20190327<br />
+*&nbsp;&nbsp;PERFORM&nbsp;frm_field&nbsp;&nbsp;&nbsp;USING&nbsp;&nbsp;&nbsp;'ZPLP1'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'计划价格'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'MBEW'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'ZPLP1'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;&nbsp;''.<br />
+**insert&nbsp;by&nbsp;lijc&nbsp;on&nbsp;20190327<br />
+*&nbsp;&nbsp;PERFORM&nbsp;frm_field&nbsp;&nbsp;&nbsp;USING&nbsp;&nbsp;&nbsp;'BRGEW'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'毛重'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'MARA'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'BRGEW'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;&nbsp;'X'.<br />
+*&nbsp;&nbsp;PERFORM&nbsp;frm_field&nbsp;&nbsp;&nbsp;USING&nbsp;&nbsp;&nbsp;'GEWEI'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'重量单位'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'MARA'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'GEWEI'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;&nbsp;''.<br />
+*&nbsp;&nbsp;PERFORM&nbsp;frm_field&nbsp;&nbsp;&nbsp;USING&nbsp;&nbsp;&nbsp;'GROES'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'电芯型号'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'MARA'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'GROES'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;&nbsp;''.<br />
+*&nbsp;&nbsp;PERFORM&nbsp;frm_field&nbsp;&nbsp;&nbsp;USING&nbsp;&nbsp;&nbsp;'WRKST'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'基本物料'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'MARA'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'WRKST'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;&nbsp;''.<br />
+*&nbsp;&nbsp;PERFORM&nbsp;frm_field&nbsp;&nbsp;&nbsp;USING&nbsp;&nbsp;&nbsp;'EKGRP'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'采购组'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;&nbsp;''.&nbsp;&nbsp;&nbsp;"'MARC'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'EKGRP'<br />
+*&nbsp;&nbsp;PERFORM&nbsp;frm_field&nbsp;&nbsp;&nbsp;USING&nbsp;&nbsp;&nbsp;'MFRGR'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'物料运输组'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;&nbsp;''.&nbsp;&nbsp;&nbsp;"'MARC'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'MFRGR'<br />
+*&nbsp;&nbsp;PERFORM&nbsp;frm_field&nbsp;&nbsp;&nbsp;USING&nbsp;&nbsp;&nbsp;'BSTME'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'订单单位'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'MARA'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'BSTME'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;&nbsp;''.<br />
+*&nbsp;&nbsp;PERFORM&nbsp;frm_field&nbsp;&nbsp;&nbsp;USING&nbsp;&nbsp;&nbsp;'UMREN'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'转换分母'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'MARM'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'UMREN'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;&nbsp;'X'.<br />
+*&nbsp;&nbsp;PERFORM&nbsp;frm_field&nbsp;&nbsp;&nbsp;USING&nbsp;&nbsp;&nbsp;'UMREZ'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'转换分子'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'MARM'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'UMREZ'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;&nbsp;'X'.<br />
+*&nbsp;&nbsp;PERFORM&nbsp;frm_field&nbsp;&nbsp;&nbsp;USING&nbsp;&nbsp;&nbsp;'EKWSL'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'采购值'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'MARA'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'EKWSL'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;&nbsp;''.<br />
+*&nbsp;&nbsp;PERFORM&nbsp;frm_field&nbsp;&nbsp;&nbsp;USING&nbsp;&nbsp;&nbsp;'NRFHG'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'免费货物折扣资格'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'MARA'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'NRFHG'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;&nbsp;''.<br />
+*&nbsp;&nbsp;PERFORM&nbsp;frm_field&nbsp;&nbsp;&nbsp;USING&nbsp;&nbsp;&nbsp;'KLART'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'类别种类'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'KLAH'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'KLART'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;&nbsp;''.<br />
+*&nbsp;&nbsp;PERFORM&nbsp;frm_field&nbsp;&nbsp;&nbsp;USING&nbsp;&nbsp;&nbsp;'CLASS'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'类别'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'KLAH'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'CLASS'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;&nbsp;''.<br />
+*&nbsp;&nbsp;PERFORM&nbsp;frm_field&nbsp;&nbsp;&nbsp;USING&nbsp;&nbsp;&nbsp;'XCHPF'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'批次管理'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'MARA'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'XCHPF'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;&nbsp;''.<br />
+*&nbsp;&nbsp;PERFORM&nbsp;frm_field&nbsp;&nbsp;&nbsp;USING&nbsp;&nbsp;&nbsp;'MHDRZ'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'最小货架寿命'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'MARA'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'MHDRZ'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;&nbsp;'X'.<br />
+*&nbsp;&nbsp;PERFORM&nbsp;frm_field&nbsp;&nbsp;&nbsp;USING&nbsp;&nbsp;&nbsp;'MHDHB'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'总货架寿命'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'MARA'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'MHDHB'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;&nbsp;'X'.<br />
+*&nbsp;&nbsp;PERFORM&nbsp;frm_field&nbsp;&nbsp;&nbsp;USING&nbsp;&nbsp;&nbsp;'IPRKZ'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'货架寿命周期标识'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'MARA'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'IPRKZ'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;&nbsp;''.<br />
+*&nbsp;&nbsp;PERFORM&nbsp;frm_field&nbsp;&nbsp;&nbsp;USING&nbsp;&nbsp;&nbsp;'AUSME'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'发货单位'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'MARC'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'AUSME'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;&nbsp;''.<br />
+*&nbsp;&nbsp;PERFORM&nbsp;frm_field&nbsp;&nbsp;&nbsp;USING&nbsp;&nbsp;&nbsp;'UMREN1'&nbsp;&nbsp;&nbsp;&nbsp;'转换比例中订单单位数量'&nbsp;&nbsp;&nbsp;&nbsp;'MARM'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'UMREN'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;&nbsp;'X'.<br />
+*&nbsp;&nbsp;PERFORM&nbsp;frm_field&nbsp;&nbsp;&nbsp;USING&nbsp;&nbsp;&nbsp;'UMREZ1'&nbsp;&nbsp;&nbsp;&nbsp;'基本单位值'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'MARM'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'UMREZ'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;&nbsp;'X'.<br />
+*&nbsp;&nbsp;PERFORM&nbsp;frm_field&nbsp;&nbsp;&nbsp;USING&nbsp;&nbsp;&nbsp;'DISMM'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'MRP类型'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'MARC'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'DISMM'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;&nbsp;''.<br />
+*&nbsp;&nbsp;PERFORM&nbsp;frm_field&nbsp;&nbsp;&nbsp;USING&nbsp;&nbsp;&nbsp;'DISGR'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'MRP组'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'MARC'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'DISGR'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;&nbsp;''.<br />
+*&nbsp;&nbsp;PERFORM&nbsp;frm_field&nbsp;&nbsp;&nbsp;USING&nbsp;&nbsp;&nbsp;'MINBE'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'再订货点数量'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'MARC'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'MINBE'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;&nbsp;'X'.<br />
+*&nbsp;&nbsp;PERFORM&nbsp;frm_field&nbsp;&nbsp;&nbsp;USING&nbsp;&nbsp;&nbsp;'MAABC'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'ABC标识'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'MARC'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'MAABC'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;&nbsp;''.<br />
+*&nbsp;&nbsp;PERFORM&nbsp;frm_field&nbsp;&nbsp;&nbsp;USING&nbsp;&nbsp;&nbsp;'DISPO'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'MRP控制者'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;&nbsp;''.&nbsp;&nbsp;&nbsp;"'MARC'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'DISPO'<br />
+*&nbsp;&nbsp;PERFORM&nbsp;frm_field&nbsp;&nbsp;&nbsp;USING&nbsp;&nbsp;&nbsp;'DISLS'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'批量'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;&nbsp;''.&nbsp;&nbsp;&nbsp;"'MARC'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'DISLS'<br />
+*&nbsp;&nbsp;PERFORM&nbsp;frm_field&nbsp;&nbsp;&nbsp;USING&nbsp;&nbsp;&nbsp;'BSTMI'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'最小批量'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'MARC'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'BSTMI'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;&nbsp;'X'.<br />
+*&nbsp;&nbsp;PERFORM&nbsp;frm_field&nbsp;&nbsp;&nbsp;USING&nbsp;&nbsp;&nbsp;'BSTFE'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'固定批量大小'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'MARC'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'BSTFE'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;&nbsp;'X'.<br />
+*&nbsp;&nbsp;PERFORM&nbsp;frm_field&nbsp;&nbsp;&nbsp;USING&nbsp;&nbsp;&nbsp;'AUSSS'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'装配报废'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'MARC'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'AUSSS'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;&nbsp;'X'.<br />
+*&nbsp;&nbsp;PERFORM&nbsp;frm_field&nbsp;&nbsp;&nbsp;USING&nbsp;&nbsp;&nbsp;'MABST'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'最大库存水平'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'MARC'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'MABST'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;&nbsp;'X'.<br />
+*&nbsp;&nbsp;PERFORM&nbsp;frm_field&nbsp;&nbsp;&nbsp;USING&nbsp;&nbsp;&nbsp;'BSTRF'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'舍入值'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'MARC'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'BSTRF'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;&nbsp;'X'.<br />
+*&nbsp;&nbsp;PERFORM&nbsp;frm_field&nbsp;&nbsp;&nbsp;USING&nbsp;&nbsp;&nbsp;'BESKZ'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'采购类型'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'MARC'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'BESKZ'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;&nbsp;''.<br />
+*&nbsp;&nbsp;PERFORM&nbsp;frm_field&nbsp;&nbsp;&nbsp;USING&nbsp;&nbsp;&nbsp;'SOBSL'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'特殊采购类'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'MARC'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'SOBSL'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;&nbsp;''.<br />
+*&nbsp;&nbsp;PERFORM&nbsp;frm_field&nbsp;&nbsp;&nbsp;USING&nbsp;&nbsp;&nbsp;'FHORI'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'计划边际码'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'MARC'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'FHORI'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;&nbsp;''.<br />
+*&nbsp;&nbsp;PERFORM&nbsp;frm_field&nbsp;&nbsp;&nbsp;USING&nbsp;&nbsp;&nbsp;'LGPRO'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'生产仓储地点'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;&nbsp;''.&nbsp;&nbsp;&nbsp;"'MARC'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'LGPRO'<br />
+*&nbsp;&nbsp;PERFORM&nbsp;frm_field&nbsp;&nbsp;&nbsp;USING&nbsp;&nbsp;&nbsp;'LGFSB'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'外部采购仓储地点'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;&nbsp;''.&nbsp;&nbsp;&nbsp;"'MARC'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'LGFSB'<br />
+*&nbsp;&nbsp;PERFORM&nbsp;frm_field&nbsp;&nbsp;&nbsp;USING&nbsp;&nbsp;&nbsp;'DZEIT'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'自制生产时间'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'MARC'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'DZEIT'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;&nbsp;'X'.<br />
+*&nbsp;&nbsp;PERFORM&nbsp;frm_field&nbsp;&nbsp;&nbsp;USING&nbsp;&nbsp;&nbsp;'WEBAZ'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'收货处理时间'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'MARC'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'WEBAZ'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;&nbsp;'X'.<br />
+*&nbsp;&nbsp;PERFORM&nbsp;frm_field&nbsp;&nbsp;&nbsp;USING&nbsp;&nbsp;&nbsp;'PLIFZ'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'计划交货时间'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'MARC'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'PLIFZ'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;&nbsp;'X'.<br />
+*&nbsp;&nbsp;PERFORM&nbsp;frm_field&nbsp;&nbsp;&nbsp;USING&nbsp;&nbsp;&nbsp;'RGEKZ'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'反冲'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'MARC'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'RGEKZ'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;&nbsp;''.<br />
+*&nbsp;&nbsp;PERFORM&nbsp;frm_field&nbsp;&nbsp;&nbsp;USING&nbsp;&nbsp;&nbsp;'EISBE'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'安全库存'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'MARC'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'EISBE'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;&nbsp;'X'.<br />
+*&nbsp;&nbsp;PERFORM&nbsp;frm_field&nbsp;&nbsp;&nbsp;USING&nbsp;&nbsp;&nbsp;'MTVFP'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'可用性检查'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;&nbsp;''.&nbsp;&nbsp;&nbsp;"'MARC'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'MTVFP'<br />
+*&nbsp;&nbsp;PERFORM&nbsp;frm_field&nbsp;&nbsp;&nbsp;USING&nbsp;&nbsp;&nbsp;'STRGR'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'策略组'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'MARC'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'STRGR'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;&nbsp;''.<br />
+*&nbsp;&nbsp;PERFORM&nbsp;frm_field&nbsp;&nbsp;&nbsp;USING&nbsp;&nbsp;&nbsp;'VRMOD'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'消耗模式'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'MARC'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'VRMOD'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;&nbsp;''.<br />
+*&nbsp;&nbsp;PERFORM&nbsp;frm_field&nbsp;&nbsp;&nbsp;USING&nbsp;&nbsp;&nbsp;'VINT1'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'消耗期间'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'MARC'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'VINT1'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;&nbsp;''.<br />
+*&nbsp;&nbsp;PERFORM&nbsp;frm_field&nbsp;&nbsp;&nbsp;USING&nbsp;&nbsp;&nbsp;'VINT2'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'向前消耗期间'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'MARC'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'VINT2'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;&nbsp;''.<br />
+*&nbsp;&nbsp;PERFORM&nbsp;frm_field&nbsp;&nbsp;&nbsp;USING&nbsp;&nbsp;&nbsp;'ALTSL'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'综合MRP'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'MARC'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'ALTSL'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;&nbsp;''.<br />
+*&nbsp;&nbsp;PERFORM&nbsp;frm_field&nbsp;&nbsp;&nbsp;USING&nbsp;&nbsp;&nbsp;'SBDKZ'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'独立/集中'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'MARC'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'SBDKZ'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;&nbsp;''.<br />
+*&nbsp;&nbsp;PERFORM&nbsp;frm_field&nbsp;&nbsp;&nbsp;USING&nbsp;&nbsp;&nbsp;'KAUSF'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'组件报废&nbsp;(%)'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'MARC'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'KAUSF'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;&nbsp;'X'.<br />
+*&nbsp;&nbsp;PERFORM&nbsp;frm_field&nbsp;&nbsp;&nbsp;USING&nbsp;&nbsp;&nbsp;'FEVOR'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'生产管理员'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'MARC'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'FEVOR'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;&nbsp;''.<br />
+*&nbsp;&nbsp;PERFORM&nbsp;frm_field&nbsp;&nbsp;&nbsp;USING&nbsp;&nbsp;&nbsp;'ZMATNR'&nbsp;&nbsp;&nbsp;&nbsp;'旧物料号'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'MARC'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'ZMATNR'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;&nbsp;''.<br />
+*&nbsp;&nbsp;PERFORM&nbsp;frm_field&nbsp;&nbsp;&nbsp;USING&nbsp;&nbsp;&nbsp;'ZPCDM'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'排产代码'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'MARC'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'ZPCDM'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;&nbsp;''.<br />
+*&nbsp;&nbsp;PERFORM&nbsp;frm_field&nbsp;&nbsp;&nbsp;USING&nbsp;&nbsp;&nbsp;'SFCPF'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'生产计划参数文件'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'MARC'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'SFCPF'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;&nbsp;''.<br />
+*&nbsp;&nbsp;PERFORM&nbsp;frm_field&nbsp;&nbsp;&nbsp;USING&nbsp;&nbsp;&nbsp;'UNETO'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'不足交货允差'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'MARC'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'UNETO'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;&nbsp;'X'.<br />
+*&nbsp;&nbsp;PERFORM&nbsp;frm_field&nbsp;&nbsp;&nbsp;USING&nbsp;&nbsp;&nbsp;'UEETO'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'过度交货允差'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'MARC'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'UEETO'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;&nbsp;'X'.<br />
+*&nbsp;&nbsp;PERFORM&nbsp;frm_field&nbsp;&nbsp;&nbsp;USING&nbsp;&nbsp;&nbsp;'UEETK'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'未限制交货'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'MARC'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'UEETK'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;&nbsp;''.<br />
+*&nbsp;&nbsp;PERFORM&nbsp;frm_field&nbsp;&nbsp;&nbsp;USING&nbsp;&nbsp;&nbsp;'VKORG'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'销售组织'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;&nbsp;''.&nbsp;&nbsp;&nbsp;"'MVKE'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'VKORG'<br />
+*&nbsp;&nbsp;PERFORM&nbsp;frm_field&nbsp;&nbsp;&nbsp;USING&nbsp;&nbsp;&nbsp;'VTWEG'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'分销渠道'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;&nbsp;''.&nbsp;&nbsp;&nbsp;"'MVKE'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'VTWEG'<br />
+*&nbsp;&nbsp;PERFORM&nbsp;frm_field&nbsp;&nbsp;&nbsp;USING&nbsp;&nbsp;&nbsp;'DWERK'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'交货工厂'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;&nbsp;''.&nbsp;&nbsp;&nbsp;"'MVKE'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'DWERK'<br />
+*&nbsp;&nbsp;PERFORM&nbsp;frm_field&nbsp;&nbsp;&nbsp;USING&nbsp;&nbsp;&nbsp;'SPART'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'产品组'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'MARA'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'SPART'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;&nbsp;''.<br />
+*&nbsp;&nbsp;PERFORM&nbsp;frm_field&nbsp;&nbsp;&nbsp;USING&nbsp;&nbsp;&nbsp;'TAXM1'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'税分类MWST'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'MLAN'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'TAXM1'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;&nbsp;''.<br />
+*&nbsp;&nbsp;PERFORM&nbsp;frm_field&nbsp;&nbsp;&nbsp;USING&nbsp;&nbsp;&nbsp;'MTPOS'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'项目类别组'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'MVKE'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'MTPOS'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;&nbsp;''.<br />
+*&nbsp;&nbsp;PERFORM&nbsp;frm_field&nbsp;&nbsp;&nbsp;USING&nbsp;&nbsp;&nbsp;'KTGRM'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'科目设置组'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'MVKE'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'KTGRM'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;&nbsp;''.<br />
+*&nbsp;&nbsp;PERFORM&nbsp;frm_field&nbsp;&nbsp;&nbsp;USING&nbsp;&nbsp;&nbsp;'VERSG'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'物料统计组'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'MVKE'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'VERSG'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;&nbsp;''.<br />
+*&nbsp;&nbsp;PERFORM&nbsp;frm_field&nbsp;&nbsp;&nbsp;USING&nbsp;&nbsp;&nbsp;'MLAST'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'物料价格确定:&nbsp;控制'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'MBEW'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'MLAST'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;&nbsp;''.<br />
+*&nbsp;&nbsp;PERFORM&nbsp;frm_field&nbsp;&nbsp;&nbsp;USING&nbsp;&nbsp;&nbsp;'BKLAS'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'评估类'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'MBEW'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'BKLAS'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;&nbsp;''.<br />
+*&nbsp;&nbsp;PERFORM&nbsp;frm_field&nbsp;&nbsp;&nbsp;USING&nbsp;&nbsp;&nbsp;'EKLAS'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'VC:销售订单库存'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'MBEW'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'EKLAS'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;&nbsp;''.<br />
+*&nbsp;&nbsp;PERFORM&nbsp;frm_field&nbsp;&nbsp;&nbsp;USING&nbsp;&nbsp;&nbsp;'VPRSV'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'价格控制'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'MBEW'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'VPRSV'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;&nbsp;''.<br />
+*&nbsp;&nbsp;PERFORM&nbsp;frm_field&nbsp;&nbsp;&nbsp;USING&nbsp;&nbsp;&nbsp;'PEINH'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'价格单位'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'MBEW'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'PEINH'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;&nbsp;'X'.<br />
+*&nbsp;&nbsp;PERFORM&nbsp;frm_field&nbsp;&nbsp;&nbsp;USING&nbsp;&nbsp;&nbsp;'STPRS'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'标准价格'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'MBEW'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'STPRS'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;&nbsp;'X'.<br />
+*&nbsp;&nbsp;PERFORM&nbsp;frm_field&nbsp;&nbsp;&nbsp;USING&nbsp;&nbsp;&nbsp;'VERPR'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'移动平均价'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'MBEW'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'VERPR'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;&nbsp;'X'.<br />
+*&nbsp;&nbsp;PERFORM&nbsp;frm_field&nbsp;&nbsp;&nbsp;USING&nbsp;&nbsp;&nbsp;'MLMAA'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'ML作业'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'MBEW'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'MLMAA'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;&nbsp;''.<br />
+*&nbsp;&nbsp;PERFORM&nbsp;frm_field&nbsp;&nbsp;&nbsp;USING&nbsp;&nbsp;&nbsp;'EKALR'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'用QS的成本估算'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'MBEW'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'EKALR'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;&nbsp;''.<br />
+*&nbsp;&nbsp;PERFORM&nbsp;frm_field&nbsp;&nbsp;&nbsp;USING&nbsp;&nbsp;&nbsp;'HKMAT'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'物料来源'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'MBEW'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'HKMAT'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;&nbsp;''.<br />
+*&nbsp;&nbsp;PERFORM&nbsp;frm_field&nbsp;&nbsp;&nbsp;USING&nbsp;&nbsp;&nbsp;'HRKFT'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'原始组'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'MBEW'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'HRKFT'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;&nbsp;''.<br />
+*&nbsp;&nbsp;PERFORM&nbsp;frm_field&nbsp;&nbsp;&nbsp;USING&nbsp;&nbsp;&nbsp;'AWSLS'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'差异码'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'MARC'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'AWSLS'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;&nbsp;''.<br />
+*&nbsp;&nbsp;PERFORM&nbsp;frm_field&nbsp;&nbsp;&nbsp;USING&nbsp;&nbsp;&nbsp;'PRCTR'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'利润中心'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'MARC'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'PRCTR'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;&nbsp;''.<br />
+*&nbsp;&nbsp;PERFORM&nbsp;frm_field&nbsp;&nbsp;&nbsp;USING&nbsp;&nbsp;&nbsp;'MMSTA'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'特定工厂的物料状态'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'MARC'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'MMSTA'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;&nbsp;''.<br />
+*&nbsp;&nbsp;PERFORM&nbsp;frm_field&nbsp;&nbsp;&nbsp;USING&nbsp;&nbsp;&nbsp;'LOSGR'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'成本核算批量'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'MARC'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'LOSGR'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;&nbsp;'X'.<br />
+*&nbsp;&nbsp;PERFORM&nbsp;frm_field&nbsp;&nbsp;&nbsp;USING&nbsp;&nbsp;&nbsp;'BERID1'&nbsp;&nbsp;&nbsp;&nbsp;'MRP范围'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'MDMA'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'BERID'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;&nbsp;''.<br />
+*&nbsp;&nbsp;PERFORM&nbsp;frm_field&nbsp;&nbsp;&nbsp;USING&nbsp;&nbsp;&nbsp;'DISMM1'&nbsp;&nbsp;&nbsp;&nbsp;'MRP类型'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'MDMA'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'DISMM'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;&nbsp;''.<br />
+*&nbsp;&nbsp;PERFORM&nbsp;frm_field&nbsp;&nbsp;&nbsp;USING&nbsp;&nbsp;&nbsp;'DISGR1'&nbsp;&nbsp;&nbsp;&nbsp;'MRP组'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'MDMA'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'DISGR'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;&nbsp;''.<br />
+*&nbsp;&nbsp;PERFORM&nbsp;frm_field&nbsp;&nbsp;&nbsp;USING&nbsp;&nbsp;&nbsp;'MINBE1'&nbsp;&nbsp;&nbsp;&nbsp;'再订货点数量'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'MDMA'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'MINBE'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;&nbsp;'X'.<br />
+*&nbsp;&nbsp;PERFORM&nbsp;frm_field&nbsp;&nbsp;&nbsp;USING&nbsp;&nbsp;&nbsp;'DISPO1'&nbsp;&nbsp;&nbsp;&nbsp;'MRP控制者'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'MDMA'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'DISPO'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;&nbsp;''.<br />
+*&nbsp;&nbsp;PERFORM&nbsp;frm_field&nbsp;&nbsp;&nbsp;USING&nbsp;&nbsp;&nbsp;'DISLS1'&nbsp;&nbsp;&nbsp;&nbsp;'批量'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'MDMA'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'DISLS'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;&nbsp;''.<br />
+*&nbsp;&nbsp;PERFORM&nbsp;frm_field&nbsp;&nbsp;&nbsp;USING&nbsp;&nbsp;&nbsp;'BSTMI1'&nbsp;&nbsp;&nbsp;&nbsp;'最小批量'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'MDMA'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'BSTMI'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;&nbsp;'X'.<br />
+*&nbsp;&nbsp;PERFORM&nbsp;frm_field&nbsp;&nbsp;&nbsp;USING&nbsp;&nbsp;&nbsp;'BSTFE1'&nbsp;&nbsp;&nbsp;&nbsp;'固定批量大小'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'MDMA'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'BSTFE'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;&nbsp;'X'.<br />
+*&nbsp;&nbsp;PERFORM&nbsp;frm_field&nbsp;&nbsp;&nbsp;USING&nbsp;&nbsp;&nbsp;'LGPRO1'&nbsp;&nbsp;&nbsp;&nbsp;'生产仓储地点'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'MDMA'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'LGPRO'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;&nbsp;''.<br />
+*&nbsp;&nbsp;PERFORM&nbsp;frm_field&nbsp;&nbsp;&nbsp;USING&nbsp;&nbsp;&nbsp;'LGFSB1'&nbsp;&nbsp;&nbsp;&nbsp;'外部采购仓储地点'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'MDMA'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'LGFSB'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;&nbsp;''.<br />
+*&nbsp;&nbsp;PERFORM&nbsp;frm_field&nbsp;&nbsp;&nbsp;USING&nbsp;&nbsp;&nbsp;'PLIFZ1'&nbsp;&nbsp;&nbsp;&nbsp;'计划交货时间'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'MDMA'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'PLIFZ'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;&nbsp;'X'.<br />
+*&nbsp;&nbsp;PERFORM&nbsp;frm_field&nbsp;&nbsp;&nbsp;USING&nbsp;&nbsp;&nbsp;'EISBE1'&nbsp;&nbsp;&nbsp;&nbsp;'安全库存'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'MDMA'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'EISBE'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;&nbsp;'X'.<br />
+*&nbsp;&nbsp;PERFORM&nbsp;frm_field&nbsp;&nbsp;&nbsp;USING&nbsp;&nbsp;&nbsp;'SOBSL1'&nbsp;&nbsp;&nbsp;&nbsp;'特殊采购类'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'MDMA'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'SOBSL'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;&nbsp;''.<br />
+*&nbsp;&nbsp;PERFORM&nbsp;frm_field&nbsp;&nbsp;&nbsp;USING&nbsp;&nbsp;&nbsp;'LGNUM'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'仓库号'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;&nbsp;''.&nbsp;&nbsp;&nbsp;"'MLGT'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'LGNUM'<br />
+*&nbsp;&nbsp;PERFORM&nbsp;frm_field&nbsp;&nbsp;&nbsp;USING&nbsp;&nbsp;&nbsp;'LGTYP'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'仓储类型'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'MLGT'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'LGTYP'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;&nbsp;''.<br />
+*<br />
+*&nbsp;&nbsp;PERFORM&nbsp;frm_layout&nbsp;&nbsp;TABLES&nbsp;gt_list&nbsp;USING&nbsp;'PF_STATUS'&nbsp;'USER_COMMAND'.<br />
+*ENDFORM.<br />
+<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;FRM_FIELD<br />
+*&---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+*----------------------------------------------------------------------*<br />
+*FORM&nbsp;frm_field&nbsp;&nbsp;USING&nbsp;p_fieldname&nbsp;p_coltext&nbsp;p_ref_table&nbsp;p_ref_field&nbsp;&nbsp;p_fix_column&nbsp;p_no_zero.<br />
+*&nbsp;&nbsp;DATA:as_fieldcat&nbsp;&nbsp;&nbsp;TYPE&nbsp;lvc_s_fcat.<br />
+*<br />
+*&nbsp;&nbsp;as_fieldcat-fieldname&nbsp;&nbsp;&nbsp;=&nbsp;p_fieldname.<br />
+*&nbsp;&nbsp;as_fieldcat-coltext&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;p_coltext.<br />
+*&nbsp;&nbsp;as_fieldcat-ref_table&nbsp;&nbsp;&nbsp;=&nbsp;p_ref_table.<br />
+*&nbsp;&nbsp;as_fieldcat-ref_field&nbsp;&nbsp;&nbsp;=&nbsp;p_ref_field.<br />
+*&nbsp;&nbsp;as_fieldcat-fix_column&nbsp;&nbsp;=&nbsp;p_fix_column.<br />
+*&nbsp;&nbsp;as_fieldcat-no_zero&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;p_no_zero.<br />
+*<br />
+*&nbsp;&nbsp;APPEND&nbsp;as_fieldcat&nbsp;TO&nbsp;gs_fieldcat.<br />
+*&nbsp;&nbsp;CLEAR&nbsp;as_fieldcat.<br />
+*ENDFORM.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;FRM_FIELD<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;FRM_LAYOUT<br />
+*&---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+*----------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM frm_layout TABLES p_data STRUCTURE gs_list<br />
+&nbsp;&nbsp;USING&nbsp;p_status&nbsp;p_command.<br />
+&nbsp;&nbsp;gs_repid&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;sy-repid.<br />
+&nbsp;&nbsp;gs_layout-zebra&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;gs_layout-cwidth_opt&nbsp;&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;gs_layout-box_fname&nbsp;&nbsp;&nbsp;=&nbsp;'CHECKBOX'.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;gs_layout-edit&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'X'&nbsp;.<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'REUSE_ALV_GRID_DISPLAY_LVC'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_callback_program&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;gs_repid<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_save&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'A'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it_fieldcat_lvc&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;gt_fieldcat_lvc<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it_sort_lvc&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;gs_sortinfo[]<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;is_layout_lvc&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;gs_layout<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_callback_pf_status_set&nbsp;=&nbsp;p_status<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_callback_user_command&nbsp;&nbsp;=&nbsp;p_command<br />
+&nbsp;&nbsp;&nbsp;&nbsp;TABLES<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;t_outtab&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;p_data<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;program_error&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTHERS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;2.<br />
+&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;&lt;&gt;&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;ID&nbsp;sy-msgid&nbsp;TYPE&nbsp;sy-msgty&nbsp;NUMBER&nbsp;sy-msgno<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WITH&nbsp;sy-msgv1&nbsp;sy-msgv2&nbsp;sy-msgv3&nbsp;sy-msgv4.<br />
+&nbsp;&nbsp;ENDIF.<br />
+ENDFORM.                    "frm_layout<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FORM&nbsp;&nbsp;PF_STATUS<br />
+*&---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TEXT<br />
+*----------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&gt;RT_EXTAB&nbsp;&nbsp;&nbsp;TEXT<br />
+*----------------------------------------------------------------------*<br />
+<br />
+   </div>
+   <div class="code">
+FORM pf_status USING rt_extab TYPE slis_t_extab.<br />
+&nbsp;&nbsp;SET&nbsp;PF-STATUS&nbsp;'MYBUTTON'.<br />
+ENDFORM.                    "PF_STATUS<br />
+            </div>
+          </td>
+        </tr>
+      </table>
+      </td>
+      </tr>
+   <tr>
+<td class="footer">Extracted by Mass Download version 1.5.2 - E.G.Mellodew. 1998-2022. Sap Release 755</td>
+   </tr>
+</table>
+</body>
+</html>

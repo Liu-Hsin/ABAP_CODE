@@ -1,0 +1,939 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=GB2312" />
+<title>ZFI001F01</title>
+<style type="text/css">
+.code{ font-family:"Courier New", Courier, monospace; color:#000; font-size:14px; background-color:#F2F4F7 }
+  .codeComment {font-family:"Courier New", Courier, monospace; color:#0000F0; font-size:14px; background-color:#F2F4F7 }
+  .normalBold{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; font-weight:800 }
+  .normalBoldLarge{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+</style>
+<style type="text/css">
+  .normal{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px }
+  .footer{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; text-align: center }
+  h2{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+  h3{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:14px; font-weight:800 }
+  .outerTable{
+   background-color:#E0E7ED;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-right-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+  .innerTable{
+   background-color:#F2F4F7;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-bottom-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+</style>
+</head>
+<body>
+<table class="outerTable">
+  <tr class="normalBoldLarge">
+     <td><h2>Code listing for: ZFI001F01</h2>
+<h3> Description: Include ZFI001F01</h3></td>
+   </tr>
+  <tr>
+     <td>
+     <table class="innerTable">
+       <tr>
+          <td>
+   <div class="code">
+FORM frm_init .<br />
+&nbsp;&nbsp;p_gjahr&nbsp;=&nbsp;sy-datum+0(4).<br />
+&nbsp;&nbsp;p_monat&nbsp;=&nbsp;sy-datum+4(2)&nbsp;-&nbsp;1.<br />
+&nbsp;&nbsp;p_versn&nbsp;=&nbsp;'HXCN'.<br />
+ENDFORM.<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Form&nbsp;FRM_CHECK_INPUT<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;text<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;--&gt;&nbsp;&nbsp;p1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*&&nbsp;&lt;--&nbsp;&nbsp;p2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM frm_check_input .<br />
+&nbsp;&nbsp;DATA:&nbsp;lv_str&nbsp;TYPE&nbsp;string.<br />
+<br />
+   </div>
+   <div class="codeComment">
+***********add&nbsp;by&nbsp;xx-yangyu&nbsp;begin&nbsp;21.01.2021&nbsp;19:23:30&nbsp;****************<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;IF&nbsp;s_bukrs&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;'公司代码必填'&nbsp;TYPE&nbsp;'S'&nbsp;DISPLAY&nbsp;LIKE&nbsp;'E'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;LEAVE&nbsp;LIST-PROCESSING.<br />
+&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;IF&nbsp;p_gjahr&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;'会计年度必填'&nbsp;TYPE&nbsp;'S'&nbsp;DISPLAY&nbsp;LIKE&nbsp;'E'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;LEAVE&nbsp;LIST-PROCESSING.<br />
+&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;IF&nbsp;p_monat&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;'期间必填'&nbsp;TYPE&nbsp;'S'&nbsp;DISPLAY&nbsp;LIKE&nbsp;'E'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;LEAVE&nbsp;LIST-PROCESSING.<br />
+&nbsp;&nbsp;ELSE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;p_monat&nbsp;NOT&nbsp;BETWEEN&nbsp;'01'&nbsp;AND&nbsp;'16'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;'允许输入的期间01~16'&nbsp;TYPE&nbsp;'S'&nbsp;DISPLAY&nbsp;LIKE&nbsp;'E'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LEAVE&nbsp;LIST-PROCESSING.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;IF&nbsp;p_versn&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;'报表版本必填'&nbsp;TYPE&nbsp;'S'&nbsp;DISPLAY&nbsp;LIKE&nbsp;'E'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;LEAVE&nbsp;LIST-PROCESSING.<br />
+&nbsp;&nbsp;ENDIF.<br />
+   </div>
+   <div class="codeComment">
+***********add&nbsp;end&nbsp;&nbsp;21.01.2021&nbsp;19:23:30*******************************<br />
+<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;CLEAR&nbsp;gt_bukrs.<br />
+&nbsp;&nbsp;SELECT&nbsp;*<br />
+&nbsp;&nbsp;INTO&nbsp;TABLE&nbsp;gt_bukrs<br />
+&nbsp;&nbsp;FROM&nbsp;t001<br />
+&nbsp;&nbsp;WHERE&nbsp;bukrs&nbsp;IN&nbsp;s_bukrs.<br />
+<br />
+<br />
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;gt_bukrs&nbsp;INTO&nbsp;gs_bukrs.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;AUTHORITY-CHECK&nbsp;OBJECT&nbsp;'F_BKPF_BUK'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ID&nbsp;'ACTVT'&nbsp;FIELD&nbsp;'03'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ID&nbsp;'BUKRS'&nbsp;FIELD&nbsp;&nbsp;gs_bukrs-bukrs.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;&lt;&gt;&nbsp;0.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;'你没有公司'&nbsp;&&&nbsp;gs_bukrs-bukrs&nbsp;&&&nbsp;'的权限!'&nbsp;TYPE&nbsp;'S'&nbsp;DISPLAY&nbsp;LIKE&nbsp;'E'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LEAVE&nbsp;LIST-PROCESSING.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+ENDFORM.<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Form&nbsp;FRM_GET_DATA_00<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;text<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;--&gt;&nbsp;&nbsp;p1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*&&nbsp;&lt;--&nbsp;&nbsp;p2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM frm_get_data_00 .<br />
+&nbsp;&nbsp;CLEAR:gv_up_year.<br />
+&nbsp;&nbsp;IF&nbsp;p_rb_02&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;gv_up_year&nbsp;=&nbsp;p_gjahr&nbsp;-&nbsp;1.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;CLEAR:gv_butxt.<br />
+&nbsp;&nbsp;IF&nbsp;lines(&nbsp;gt_bukrs[]&nbsp;)&nbsp;GT&nbsp;1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;gv_butxt&nbsp;=&nbsp;'*'.<br />
+&nbsp;&nbsp;ELSE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;gt_bukrs&nbsp;INTO&nbsp;gs_bukrs&nbsp;INDEX&nbsp;1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;EQ&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gv_butxt&nbsp;=&nbsp;gs_bukrs-butxt.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;p_monat&nbsp;GE&nbsp;'12'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;gv_zdate&nbsp;=&nbsp;p_gjahr&nbsp;&&&nbsp;'1201'.<br />
+&nbsp;&nbsp;ELSE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;gv_zdate&nbsp;=&nbsp;p_gjahr&nbsp;&&&nbsp;p_monat&nbsp;&&&nbsp;'01'.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;PERFORM&nbsp;frm_last_day_of_months&nbsp;USING&nbsp;gv_zdate&nbsp;CHANGING&nbsp;gv_zdate.<br />
+&nbsp;&nbsp;gv_danwei&nbsp;=&nbsp;'元'.<br />
+ENDFORM.<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Form&nbsp;FRM_GET_DATA_01<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;text<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;--&gt;&nbsp;&nbsp;p1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*&&nbsp;&lt;--&nbsp;&nbsp;p2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM frm_get_data_01.<br />
+&nbsp;&nbsp;DATA:lv_dspra&nbsp;TYPE&nbsp;t011-dspra.<br />
+<br />
+&nbsp;&nbsp;SELECT&nbsp;SINGLE&nbsp;dspra&nbsp;INTO&nbsp;lv_dspra&nbsp;FROM&nbsp;t011&nbsp;WHERE&nbsp;versn&nbsp;=&nbsp;p_versn.<br />
+<br />
+&nbsp;&nbsp;REFRESH:gt_x011q.<br />
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'FI_IMPORT_BALANCE_SHEET_TEXT'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sprache&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lv_dspra<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;version&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;p_versn<br />
+&nbsp;&nbsp;&nbsp;&nbsp;TABLES<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;x011q&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;gt_x011q<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text_not_found&nbsp;=&nbsp;1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTHERS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;2.<br />
+&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;&lt;&gt;&nbsp;0.<br />
+&nbsp;&nbsp;ENDIF.<br />
+ENDFORM.<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Form&nbsp;FRM_GET_DATA_02<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;text<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;--&gt;&nbsp;&nbsp;p1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*&&nbsp;&lt;--&nbsp;&nbsp;p2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM frm_get_data_02.<br />
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'FI_IMPORT_BALANCE_SHEET_POS'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;version&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;p_versn<br />
+&nbsp;&nbsp;&nbsp;&nbsp;TABLES<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i011z&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;gt_i011z<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;x011p&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;gt_x011p<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;x011s&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;gt_x011s<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;new_balance_sheet&nbsp;=&nbsp;1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTHERS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;2.<br />
+&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;&lt;&gt;&nbsp;0.<br />
+&nbsp;&nbsp;ENDIF.<br />
+ENDFORM.<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Form&nbsp;FRM_GET_DATA_03<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;text<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;--&gt;&nbsp;&nbsp;p1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*&&nbsp;&lt;--&nbsp;&nbsp;p2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM frm_get_data_03 .<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;PERFORM&nbsp;frm_add_i011z&nbsp;USING&nbsp;'90-2'&nbsp;'5000000000'&nbsp;'5999999999'.<br />
+*&nbsp;&nbsp;PERFORM&nbsp;frm_add_i011z&nbsp;USING&nbsp;'90-2'&nbsp;'6000000000'&nbsp;'6999999999'.<br />
+*&nbsp;&nbsp;PERFORM&nbsp;frm_add_i011z&nbsp;USING&nbsp;'90-2'&nbsp;'8000000000'&nbsp;'8999999999'.<br />
+   </div>
+   <div class="code">
+ENDFORM.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Form&nbsp;frm_get_data_52<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;text<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;--&gt;&nbsp;&nbsp;p1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*&&nbsp;&lt;--&nbsp;&nbsp;p2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM frm_get_data_50.<br />
+&nbsp;&nbsp;FIELD-SYMBOLS:&lt;lfs_x011p&gt;&nbsp;TYPE&nbsp;rf011p,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;lfs_x011s&gt;&nbsp;TYPE&nbsp;rf011s,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;lfs_x011q&gt;&nbsp;TYPE&nbsp;rf011q.<br />
+&nbsp;&nbsp;DATA:lv_top_ergsl&nbsp;TYPE&nbsp;rf011p-ergsl.<br />
+<br />
+&nbsp;&nbsp;REFRESH:gt_data.<br />
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;gt_x011p&nbsp;ASSIGNING&nbsp;&lt;lfs_x011p&gt;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MOVE-CORRESPONDING&nbsp;&lt;lfs_x011p&gt;&nbsp;TO&nbsp;gt_data.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;gt_x011s&nbsp;ASSIGNING&nbsp;&lt;lfs_x011s&gt;&nbsp;WITH&nbsp;KEY&nbsp;ergsl&nbsp;=&nbsp;&lt;lfs_x011p&gt;-ergsl.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MOVE-CORRESPONDING&nbsp;&lt;lfs_x011s&gt;&nbsp;TO&nbsp;gt_data.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;gt_x011q&nbsp;&nbsp;ASSIGNING&nbsp;&lt;lfs_x011q&gt;&nbsp;WITH&nbsp;KEY&nbsp;ergsl&nbsp;=&nbsp;&lt;lfs_x011p&gt;-ergsl.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MOVE-CORRESPONDING&nbsp;&lt;lfs_x011q&gt;&nbsp;TO&nbsp;gt_data.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;gt_data-zzzxc&nbsp;=&nbsp;gt_data-ergsl.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;frm_alpha_input&nbsp;CHANGING&nbsp;gt_data-zzzxc.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;gt_data-stufe&nbsp;=&nbsp;'1'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_top_ergsl&nbsp;&nbsp;=&nbsp;gt_data-ergsl.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;gt_data-zztop&nbsp;=&nbsp;lv_top_ergsl.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;frm_get_text&nbsp;USING&nbsp;gt_data-stufe&nbsp;gt_data-zztop&nbsp;CHANGING&nbsp;gt_data-txt45.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;gt_data-zztop&nbsp;&lt;&gt;&nbsp;gc_ergsl_left&nbsp;AND&nbsp;gt_data-zztop&nbsp;&lt;&gt;&nbsp;gc_ergsl_right&nbsp;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CONTINUE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SEARCH&nbsp;gt_data-ergsl&nbsp;FOR&nbsp;'-'.&nbsp;"&nbsp;含有横杠的子项目不需要<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gt_data-zzdel&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;gt_data.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;&nbsp;gt_data.<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+ENDFORM.<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Form&nbsp;FRM_GET_DATA_51<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;text<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;--&gt;&nbsp;&nbsp;p1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*&&nbsp;&lt;--&nbsp;&nbsp;p2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM frm_get_data_51.<br />
+&nbsp;&nbsp;DATA:lt_data&nbsp;&nbsp;TYPE&nbsp;gty_data&nbsp;&nbsp;OCCURS&nbsp;0&nbsp;WITH&nbsp;HEADER&nbsp;LINE,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_stufe&nbsp;TYPE&nbsp;rf011p-stufe.<br />
+&nbsp;&nbsp;FIELD-SYMBOLS:&lt;lfs_data&gt;&nbsp;TYPE&nbsp;gty_data.<br />
+<br />
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;gt_data&nbsp;ASSIGNING&nbsp;&lt;lfs_data&gt;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;lt_data[]&nbsp;=&nbsp;gt_data[].<br />
+&nbsp;&nbsp;&nbsp;&nbsp;DELETE&nbsp;lt_data&nbsp;WHERE&nbsp;setnr&nbsp;&gt;=&nbsp;&lt;lfs_data&gt;-setnr.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;lv_stufe&nbsp;=&nbsp;&lt;lfs_data&gt;-stufe&nbsp;-&nbsp;1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SORT&nbsp;lt_data&nbsp;BY&nbsp;setnr&nbsp;DESCENDING.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;lt_data&nbsp;WITH&nbsp;KEY&nbsp;stufe&nbsp;=&nbsp;lv_stufe.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;lfs_data&gt;-zzzup&nbsp;=&nbsp;lt_data-ergsl.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+ENDFORM.<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Form&nbsp;frm_get_data_52<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;text<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;--&gt;&nbsp;&nbsp;p1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*&&nbsp;&lt;--&nbsp;&nbsp;p2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM frm_get_data_52.<br />
+&nbsp;&nbsp;DATA:lt_fagl&nbsp;&nbsp;TYPE&nbsp;gty_faglflext&nbsp;&nbsp;OCCURS&nbsp;0&nbsp;WITH&nbsp;HEADER&nbsp;LINE,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_monat&nbsp;TYPE&nbsp;bkpf-monat,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_fname&nbsp;TYPE&nbsp;char50,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_index&nbsp;TYPE&nbsp;sy-tabix.<br />
+&nbsp;&nbsp;FIELD-SYMBOLS:&lt;lfs_fagl&gt;&nbsp;&nbsp;TYPE&nbsp;gty_faglflext,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;lfs_i011z&gt;&nbsp;TYPE&nbsp;rf011z,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;lfs_value&gt;.<br />
+<br />
+&nbsp;&nbsp;SELECT&nbsp;*<br />
+&nbsp;&nbsp;INTO&nbsp;CORRESPONDING&nbsp;FIELDS&nbsp;OF&nbsp;TABLE&nbsp;lt_fagl<br />
+&nbsp;&nbsp;FROM&nbsp;faglflext<br />
+&nbsp;&nbsp;WHERE&nbsp;(&nbsp;ryear&nbsp;=&nbsp;p_gjahr&nbsp;OR&nbsp;ryear&nbsp;=&nbsp;gv_up_year&nbsp;)<br />
+&nbsp;&nbsp;AND&nbsp;rbukrs&nbsp;IN&nbsp;s_bukrs.<br />
+&nbsp;&nbsp;REFRESH:gt_racct.<br />
+<br />
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;lt_fagl&nbsp;ASSIGNING&nbsp;&lt;lfs_fagl&gt;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;lv_monat&nbsp;=&nbsp;'01'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;lfs_fagl&gt;-cost1&nbsp;=&nbsp;&lt;lfs_fagl&gt;-hslvt.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;lfs_fagl&gt;-cost2&nbsp;=&nbsp;&lt;lfs_fagl&gt;-hslvt.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;lfs_fagl&gt;-cost3&nbsp;=&nbsp;&lt;lfs_fagl&gt;-hslvt.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;lfs_fagl&gt;-cost4&nbsp;=&nbsp;&lt;lfs_fagl&gt;-hslvt.<br />
+<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHILE&nbsp;lv_monat&nbsp;&lt;=&nbsp;'12'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_fname&nbsp;=&nbsp;'&lt;lfs_fagl&gt;-hsl'&nbsp;&&&nbsp;lv_monat.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ASSIGN&nbsp;(lv_fname)&nbsp;TO&nbsp;&lt;lfs_value&gt;.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;lv_monat&nbsp;&lt;&nbsp;p_monat."上月期末数<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;lfs_fagl&gt;-cost2&nbsp;=&nbsp;&lt;lfs_fagl&gt;-cost2&nbsp;+&nbsp;&lt;lfs_value&gt;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;lv_monat&nbsp;=&nbsp;'01'."年初数<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;lfs_fagl&gt;-cost3&nbsp;=&nbsp;&lt;lfs_fagl&gt;-cost3&nbsp;+&nbsp;&lt;lfs_value&gt;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;lv_monat&nbsp;&lt;=&nbsp;p_monat."期末数<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;lfs_fagl&gt;-cost4&nbsp;=&nbsp;&lt;lfs_fagl&gt;-cost4&nbsp;+&nbsp;&lt;lfs_value&gt;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_monat&nbsp;=&nbsp;lv_monat&nbsp;+&nbsp;1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDWHILE.<br />
+<br />
+<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;gt_i011z&nbsp;ASSIGNING&nbsp;&lt;lfs_i011z&gt;&nbsp;WHERE&nbsp;vonkt&nbsp;&lt;=&nbsp;&lt;lfs_fagl&gt;-racct&nbsp;AND&nbsp;bilkt&nbsp;&gt;=&nbsp;&lt;lfs_fagl&gt;-racct.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;gt_data&nbsp;WITH&nbsp;KEY&nbsp;ergsl&nbsp;=&nbsp;&lt;lfs_i011z&gt;-ergso&nbsp;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_index&nbsp;=&nbsp;sy-tabix.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;&lt;lfs_fagl&gt;-ryear&nbsp;=&nbsp;gv_up_year.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"上年同期数(上年期末数)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gt_data-cost1&nbsp;=&nbsp;gt_data-cost1&nbsp;+&nbsp;&lt;lfs_fagl&gt;-cost4.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"上年年初数(年初数)<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gt_data-cost9&nbsp;=&nbsp;gt_data-cost9&nbsp;+&nbsp;&lt;lfs_fagl&gt;-cost1.<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ELSE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"上月期末数(期初数)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gt_data-cost2&nbsp;=&nbsp;gt_data-cost2&nbsp;+&nbsp;&lt;lfs_fagl&gt;-cost2.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"年初数(年初数)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gt_data-cost3&nbsp;=&nbsp;gt_data-cost3&nbsp;+&nbsp;&lt;lfs_fagl&gt;-cost1.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"期末数<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gt_data-cost4&nbsp;=&nbsp;gt_data-cost4&nbsp;+&nbsp;&lt;lfs_fagl&gt;-cost4.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MODIFY&nbsp;gt_data&nbsp;INDEX&nbsp;lv_index.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;&nbsp;gt_data.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDLOOP.<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+ENDFORM.<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Form&nbsp;FRM_GET_DATA_53<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;text<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;--&gt;&nbsp;&nbsp;p1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*&&nbsp;&lt;--&nbsp;&nbsp;p2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM frm_get_data_53.<br />
+<br />
+&nbsp;&nbsp;DATA:&nbsp;BEGIN&nbsp;OF&nbsp;ls_list,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;prkey&nbsp;&nbsp;&nbsp;TYPE&nbsp;rf011p-prkey,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ergsl&nbsp;&nbsp;&nbsp;TYPE&nbsp;rf011p-ergsl,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;summe&nbsp;&nbsp;&nbsp;TYPE&nbsp;rf011p-summe,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stufe&nbsp;&nbsp;&nbsp;TYPE&nbsp;rf011p-stufe,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;setnr&nbsp;&nbsp;&nbsp;TYPE&nbsp;rf011s-setnr,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;txt45&nbsp;&nbsp;&nbsp;TYPE&nbsp;rf011q-txt45,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;zztop&nbsp;&nbsp;&nbsp;TYPE&nbsp;rf011p-ergsl,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;zzzup&nbsp;&nbsp;&nbsp;TYPE&nbsp;rf011p-ergsl,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;zzzxc&nbsp;&nbsp;&nbsp;TYPE&nbsp;rf011p-ergsl,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;zzdel&nbsp;&nbsp;&nbsp;TYPE&nbsp;char1,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cost1&nbsp;&nbsp;&nbsp;TYPE&nbsp;fins_vtcur12,&nbsp;",上年同期数<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cost2&nbsp;&nbsp;&nbsp;TYPE&nbsp;fins_vtcur12,&nbsp;",上年同期累计<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cost3&nbsp;&nbsp;&nbsp;TYPE&nbsp;fins_vtcur12,&nbsp;",上月发生<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cost4&nbsp;&nbsp;&nbsp;TYPE&nbsp;fins_vtcur12,&nbsp;",本月发生<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cost5&nbsp;&nbsp;&nbsp;TYPE&nbsp;fins_vtcur12,&nbsp;",本年累计<br />
+   </div>
+   <div class="codeComment">
+***********add&nbsp;by&nbsp;xx-yangyu&nbsp;begin&nbsp;10.03.2021&nbsp;13:50:43&nbsp;****************<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cost6&nbsp;&nbsp;&nbsp;TYPE&nbsp;fins_vtcur12,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cost7&nbsp;&nbsp;&nbsp;TYPE&nbsp;fins_vtcur12,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cost8&nbsp;&nbsp;&nbsp;TYPE&nbsp;fins_vtcur12,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cost9&nbsp;&nbsp;&nbsp;TYPE&nbsp;fins_vtcur12,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"按利润中心细分<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cost01a&nbsp;TYPE&nbsp;fins_vtcur12,&nbsp;"本月数<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cost01b&nbsp;TYPE&nbsp;fins_vtcur12,&nbsp;"本年累计数<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cost02a&nbsp;TYPE&nbsp;fins_vtcur12,&nbsp;"本月数<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cost02b&nbsp;TYPE&nbsp;fins_vtcur12,&nbsp;"本年累计数<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cost03a&nbsp;TYPE&nbsp;fins_vtcur12,&nbsp;"本月数<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cost03b&nbsp;TYPE&nbsp;fins_vtcur12,&nbsp;"本年累计数<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cost04a&nbsp;TYPE&nbsp;fins_vtcur12,&nbsp;"本月数<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cost04b&nbsp;TYPE&nbsp;fins_vtcur12,&nbsp;"本年累计数<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cost05a&nbsp;TYPE&nbsp;fins_vtcur12,&nbsp;"本月数<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cost05b&nbsp;TYPE&nbsp;fins_vtcur12,&nbsp;"本年累计数<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cost06a&nbsp;TYPE&nbsp;fins_vtcur12,&nbsp;"本月数<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cost06b&nbsp;TYPE&nbsp;fins_vtcur12,&nbsp;"本年累计数<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cost07a&nbsp;TYPE&nbsp;fins_vtcur12,&nbsp;"本月数<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cost07b&nbsp;TYPE&nbsp;fins_vtcur12,&nbsp;"本年累计数<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cost08a&nbsp;TYPE&nbsp;fins_vtcur12,&nbsp;"本月数<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cost08b&nbsp;TYPE&nbsp;fins_vtcur12,&nbsp;"本年累计数<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cost09a&nbsp;TYPE&nbsp;fins_vtcur12,&nbsp;"本月数<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cost09b&nbsp;TYPE&nbsp;fins_vtcur12,&nbsp;"本年累计数<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cost10a&nbsp;TYPE&nbsp;fins_vtcur12,&nbsp;"本月数<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cost10b&nbsp;TYPE&nbsp;fins_vtcur12,&nbsp;"本年累计数<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cost11a&nbsp;TYPE&nbsp;fins_vtcur12,&nbsp;"本月数<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cost11b&nbsp;TYPE&nbsp;fins_vtcur12,&nbsp;"本年累计数<br />
+   </div>
+   <div class="codeComment">
+***********add&nbsp;end&nbsp;&nbsp;10.03.2021&nbsp;13:50:43*******************************<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;END&nbsp;OF&nbsp;ls_list.<br />
+&nbsp;&nbsp;DATA:&nbsp;lt_list&nbsp;LIKE&nbsp;TABLE&nbsp;OF&nbsp;ls_list.<br />
+&nbsp;&nbsp;DATA:&nbsp;lv_index&nbsp;TYPE&nbsp;i.<br />
+&nbsp;&nbsp;SUBMIT&nbsp;zfir002<br />
+&nbsp;&nbsp;WITH&nbsp;s_bukrs&nbsp;IN&nbsp;s_bukrs<br />
+&nbsp;&nbsp;WITH&nbsp;p_gjahr&nbsp;=&nbsp;p_gjahr<br />
+&nbsp;&nbsp;WITH&nbsp;p_monat&nbsp;=&nbsp;p_monat<br />
+&nbsp;&nbsp;WITH&nbsp;p_versn&nbsp;=&nbsp;p_versn<br />
+&nbsp;&nbsp;AND&nbsp;RETURN.<br />
+&nbsp;&nbsp;IMPORT&nbsp;p1&nbsp;=&nbsp;lt_list&nbsp;FROM&nbsp;MEMORY&nbsp;ID&nbsp;'ZFIR002'.<br />
+&nbsp;&nbsp;FREE&nbsp;MEMORY&nbsp;ID&nbsp;'ZFIR002'.<br />
+<br />
+&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;lt_list&nbsp;INTO&nbsp;ls_list&nbsp;WITH&nbsp;KEY&nbsp;&nbsp;ergsl&nbsp;=&nbsp;'P30'.<br />
+&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;gt_data&nbsp;&nbsp;&nbsp;WITH&nbsp;KEY&nbsp;ergsl&nbsp;=&nbsp;'121'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;lv_index.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_index&nbsp;=&nbsp;sy-tabix.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gt_data-cost4&nbsp;=&nbsp;gt_data-cost4&nbsp;+&nbsp;ls_list-cost5.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MODIFY&nbsp;gt_data&nbsp;INDEX&nbsp;lv_index&nbsp;TRANSPORTING&nbsp;cost4&nbsp;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+<br />
+ENDFORM.<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Form&nbsp;frm_get_data_54<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;text<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;--&gt;&nbsp;&nbsp;p1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*&&nbsp;&lt;--&nbsp;&nbsp;p2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM frm_get_data_54.<br />
+&nbsp;&nbsp;FIELD-SYMBOLS:&lt;lfs_data&gt;&nbsp;TYPE&nbsp;gty_data.<br />
+&nbsp;&nbsp;DATA:lt_data&nbsp;TYPE&nbsp;gty_data&nbsp;&nbsp;OCCURS&nbsp;0&nbsp;WITH&nbsp;HEADER&nbsp;LINE.<br />
+<br />
+&nbsp;&nbsp;SORT&nbsp;gt_data&nbsp;BY&nbsp;stufe&nbsp;DESCENDING.<br />
+<br />
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;gt_data&nbsp;ASSIGNING&nbsp;&lt;lfs_data&gt;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;lt_data[]&nbsp;=&nbsp;gt_data[].<br />
+&nbsp;&nbsp;&nbsp;&nbsp;DELETE&nbsp;lt_data&nbsp;WHERE&nbsp;zzzup&nbsp;&lt;&gt;&nbsp;&lt;lfs_data&gt;-ergsl.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;lt_data.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;lfs_data&gt;-cost1&nbsp;=&nbsp;&lt;lfs_data&gt;-cost1&nbsp;+&nbsp;lt_data-cost1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;lfs_data&gt;-cost2&nbsp;=&nbsp;&lt;lfs_data&gt;-cost2&nbsp;+&nbsp;lt_data-cost2.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;lfs_data&gt;-cost3&nbsp;=&nbsp;&lt;lfs_data&gt;-cost3&nbsp;+&nbsp;lt_data-cost3.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;lfs_data&gt;-cost4&nbsp;=&nbsp;&lt;lfs_data&gt;-cost4&nbsp;+&nbsp;lt_data-cost4.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;lfs_data&gt;-cost5&nbsp;=&nbsp;&lt;lfs_data&gt;-cost5&nbsp;+&nbsp;lt_data-cost5.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;lfs_data&gt;-cost6&nbsp;=&nbsp;&lt;lfs_data&gt;-cost6&nbsp;+&nbsp;lt_data-cost6.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;lfs_data&gt;-cost7&nbsp;=&nbsp;&lt;lfs_data&gt;-cost7&nbsp;+&nbsp;lt_data-cost7.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;lfs_data&gt;-cost8&nbsp;=&nbsp;&lt;lfs_data&gt;-cost8&nbsp;+&nbsp;lt_data-cost8.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDLOOP.<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+ENDFORM.<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Form&nbsp;FRM_GET_DATA_90<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;text<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;--&gt;&nbsp;&nbsp;p1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*&&nbsp;&lt;--&nbsp;&nbsp;p2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM frm_get_data_90 .<br />
+&nbsp;&nbsp;DATA:lt_data1&nbsp;TYPE&nbsp;gty_data&nbsp;&nbsp;OCCURS&nbsp;0&nbsp;WITH&nbsp;HEADER&nbsp;LINE,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lt_data2&nbsp;TYPE&nbsp;gty_data&nbsp;&nbsp;OCCURS&nbsp;0&nbsp;WITH&nbsp;HEADER&nbsp;LINE,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_index&nbsp;TYPE&nbsp;sy-tabix.<br />
+&nbsp;&nbsp;FIELD-SYMBOLS:&lt;lfs_data&gt;&nbsp;TYPE&nbsp;gty_data.<br />
+<br />
+&nbsp;&nbsp;DELETE&nbsp;gt_data&nbsp;WHERE&nbsp;zzdel&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;SORT:gt_data&nbsp;BY&nbsp;zzzxc.<br />
+<br />
+&nbsp;&nbsp;lt_data1[]&nbsp;=&nbsp;gt_data[].<br />
+&nbsp;&nbsp;lt_data2[]&nbsp;=&nbsp;gt_data[].<br />
+&nbsp;&nbsp;DELETE&nbsp;lt_data1&nbsp;WHERE&nbsp;zztop&nbsp;&lt;&gt;&nbsp;gc_ergsl_left.<br />
+&nbsp;&nbsp;DELETE&nbsp;lt_data2&nbsp;WHERE&nbsp;zztop&nbsp;&lt;&gt;&nbsp;gc_ergsl_right.<br />
+<br />
+&nbsp;&nbsp;REFRESH:gt_list.<br />
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;lt_data1&nbsp;ASSIGNING&nbsp;&lt;lfs_data&gt;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;gt_list-zzzxca&nbsp;=&nbsp;&lt;lfs_data&gt;-zzzxc.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;gt_list-txt45a&nbsp;=&nbsp;&lt;lfs_data&gt;-txt45.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;gt_list-cost1a&nbsp;=&nbsp;&lt;lfs_data&gt;-cost1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;gt_list-cost2a&nbsp;=&nbsp;&lt;lfs_data&gt;-cost2.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;gt_list-cost3a&nbsp;=&nbsp;&lt;lfs_data&gt;-cost3.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;gt_list-cost4a&nbsp;=&nbsp;&lt;lfs_data&gt;-cost4.<br />
+   </div>
+   <div class="codeComment">
+***********add&nbsp;by&nbsp;xx-yangyu&nbsp;begin&nbsp;27.03.2021&nbsp;11:15:24&nbsp;****************<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;gt_list-cost5a&nbsp;=&nbsp;&lt;lfs_data&gt;-cost5.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;gt_list-cost6a&nbsp;=&nbsp;&lt;lfs_data&gt;-cost6.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;gt_list-cost7a&nbsp;=&nbsp;&lt;lfs_data&gt;-cost7.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;gt_list-cost8a&nbsp;=&nbsp;&lt;lfs_data&gt;-cost8.<br />
+   </div>
+   <div class="codeComment">
+***********add&nbsp;end&nbsp;&nbsp;27.03.2021&nbsp;11:15:24*******************************<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;gt_list.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;&nbsp;gt_list.<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+&nbsp;&nbsp;"&nbsp;添加空行<br />
+&nbsp;&nbsp;DO&nbsp;3&nbsp;TIMES.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;INSERT&nbsp;INITIAL&nbsp;LINE&nbsp;INTO&nbsp;lt_data2&nbsp;INDEX&nbsp;23.<br />
+&nbsp;&nbsp;ENDDO.<br />
+<br />
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;lt_data2&nbsp;ASSIGNING&nbsp;&lt;lfs_data&gt;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;lv_index&nbsp;=&nbsp;sy-tabix.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;gt_list&nbsp;INDEX&nbsp;lv_index.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gt_list-zzzxcb&nbsp;=&nbsp;&lt;lfs_data&gt;-zzzxc.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gt_list-txt45b&nbsp;=&nbsp;&lt;lfs_data&gt;-txt45.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gt_list-cost1b&nbsp;=&nbsp;&nbsp;&lt;lfs_data&gt;-cost1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gt_list-cost2b&nbsp;=&nbsp;&nbsp;&lt;lfs_data&gt;-cost2.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gt_list-cost3b&nbsp;=&nbsp;&nbsp;&lt;lfs_data&gt;-cost3.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gt_list-cost4b&nbsp;=&nbsp;&nbsp;&lt;lfs_data&gt;-cost4.<br />
+   </div>
+   <div class="codeComment">
+***********add&nbsp;by&nbsp;xx-yangyu&nbsp;begin&nbsp;27.03.2021&nbsp;11:15:53&nbsp;****************<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gt_list-cost5b&nbsp;=&nbsp;&nbsp;&lt;lfs_data&gt;-cost5.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gt_list-cost6b&nbsp;=&nbsp;&nbsp;&lt;lfs_data&gt;-cost6.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gt_list-cost7b&nbsp;=&nbsp;&nbsp;&lt;lfs_data&gt;-cost7.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gt_list-cost8b&nbsp;=&nbsp;&nbsp;&lt;lfs_data&gt;-cost8.<br />
+   </div>
+   <div class="codeComment">
+***********add&nbsp;end&nbsp;&nbsp;27.03.2021&nbsp;11:15:53*******************************<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MODIFY&nbsp;gt_list&nbsp;INDEX&nbsp;lv_index.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;&nbsp;gt_list.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ELSE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gt_list-zzzxcb&nbsp;=&nbsp;&lt;lfs_data&gt;-zzzxc.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gt_list-txt45b&nbsp;=&nbsp;&lt;lfs_data&gt;-txt45.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gt_list-cost1b&nbsp;=&nbsp;&nbsp;&lt;lfs_data&gt;-cost1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gt_list-cost2b&nbsp;=&nbsp;&nbsp;&lt;lfs_data&gt;-cost2.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gt_list-cost3b&nbsp;=&nbsp;&nbsp;&lt;lfs_data&gt;-cost3.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gt_list-cost4b&nbsp;=&nbsp;&nbsp;&lt;lfs_data&gt;-cost4.<br />
+   </div>
+   <div class="codeComment">
+***********add&nbsp;by&nbsp;xx-yangyu&nbsp;begin&nbsp;27.03.2021&nbsp;11:15:53&nbsp;****************<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gt_list-cost5b&nbsp;=&nbsp;&nbsp;&lt;lfs_data&gt;-cost5.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gt_list-cost6b&nbsp;=&nbsp;&nbsp;&lt;lfs_data&gt;-cost6.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gt_list-cost7b&nbsp;=&nbsp;&nbsp;&lt;lfs_data&gt;-cost7.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gt_list-cost8b&nbsp;=&nbsp;&nbsp;&lt;lfs_data&gt;-cost8.<br />
+   </div>
+   <div class="codeComment">
+***********add&nbsp;end&nbsp;&nbsp;27.03.2021&nbsp;11:15:53*******************************<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;gt_list.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;&nbsp;gt_list.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+ENDFORM.<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Form&nbsp;frm_adjust_data<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;text<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;--&gt;&nbsp;&nbsp;p1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*&&nbsp;&lt;--&nbsp;&nbsp;p2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM frm_adjust_data .<br />
+<br />
+ENDFORM.<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Form&nbsp;FRM_GET_TEXT<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;text<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&gt;&nbsp;GT_DATA_STUFE<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;--&nbsp;GT_DATA_TXT45<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM frm_get_text  USING p_stufe TYPE rf011p-stufe  p_top TYPE rf011p-ergsl CHANGING p_txt45 TYPE rf011q-txt45.<br />
+&nbsp;&nbsp;DATA:lv_stufe&nbsp;TYPE&nbsp;i,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_text&nbsp;&nbsp;TYPE&nbsp;rf011q-txt45.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;p_txt45&nbsp;=&nbsp;'空行'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;p_txt45&nbsp;=&nbsp;''.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXIT.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;lv_stufe&nbsp;=&nbsp;p_stufe.<br />
+&nbsp;&nbsp;lv_stufe&nbsp;=&nbsp;lv_stufe&nbsp;-&nbsp;1.<br />
+&nbsp;&nbsp;CLEAR:lv_text.<br />
+<br />
+&nbsp;&nbsp;DO&nbsp;lv_stufe&nbsp;TIMES.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;lv_text&nbsp;=&nbsp;gc_blank&nbsp;&&&nbsp;lv_text.<br />
+&nbsp;&nbsp;ENDDO.<br />
+<br />
+&nbsp;&nbsp;p_txt45&nbsp;=&nbsp;lv_text&nbsp;&&&nbsp;&nbsp;p_txt45.<br />
+ENDFORM.<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Form&nbsp;FRM_ADD_I011Z<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;text<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&gt;&nbsp;P_<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&gt;&nbsp;P_<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&gt;&nbsp;P_<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM frm_add_i011z  USING  p_ergso TYPE rf011z-ergso<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;p_vonkt&nbsp;TYPE&nbsp;rf011z-vonkt<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;p_bilkt&nbsp;TYPE&nbsp;rf011z-bilkt.<br />
+&nbsp;&nbsp;gt_i011z-ergso&nbsp;=&nbsp;p_ergso.<br />
+&nbsp;&nbsp;gt_i011z-vonkt&nbsp;=&nbsp;p_vonkt.<br />
+&nbsp;&nbsp;gt_i011z-bilkt&nbsp;=&nbsp;p_bilkt.<br />
+&nbsp;&nbsp;APPEND&nbsp;gt_i011z.<br />
+&nbsp;&nbsp;CLEAR&nbsp;&nbsp;gt_i011z.<br />
+ENDFORM.<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Form&nbsp;FRM_DISPLAY_DATA<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;text<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;--&gt;&nbsp;&nbsp;p1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*&&nbsp;&lt;--&nbsp;&nbsp;p2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM frm_display_data.<br />
+&nbsp;&nbsp;CLEAR:gs_fieldcat,gs_fieldcat[].<br />
+<br />
+&nbsp;&nbsp;PERFORM&nbsp;frm_field&nbsp;&nbsp;&nbsp;USING&nbsp;&nbsp;&nbsp;'TXT45A'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'资产'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;&nbsp;&nbsp;'L'.<br />
+&nbsp;&nbsp;PERFORM&nbsp;frm_field&nbsp;&nbsp;&nbsp;USING&nbsp;&nbsp;&nbsp;'ZZZXCA'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'行次'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'X'&nbsp;&nbsp;'C'.<br />
+&nbsp;&nbsp;PERFORM&nbsp;frm_field&nbsp;&nbsp;&nbsp;USING&nbsp;&nbsp;&nbsp;'COST3A'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'年初数'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'X'&nbsp;&nbsp;'R'.<br />
+&nbsp;&nbsp;PERFORM&nbsp;frm_field&nbsp;&nbsp;&nbsp;USING&nbsp;&nbsp;&nbsp;'COST4A'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'期末数'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'X'&nbsp;&nbsp;'R'.<br />
+&nbsp;&nbsp;PERFORM&nbsp;frm_field&nbsp;&nbsp;&nbsp;USING&nbsp;&nbsp;&nbsp;'TXT45B'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'负债及所有者权益'&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;&nbsp;&nbsp;'L'.<br />
+&nbsp;&nbsp;PERFORM&nbsp;frm_field&nbsp;&nbsp;&nbsp;USING&nbsp;&nbsp;&nbsp;'ZZZXCB'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'行次'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'X'&nbsp;&nbsp;'C'.<br />
+&nbsp;&nbsp;PERFORM&nbsp;frm_field&nbsp;&nbsp;&nbsp;USING&nbsp;&nbsp;&nbsp;'COST3B'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'年初数'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'X'&nbsp;&nbsp;'R'.<br />
+&nbsp;&nbsp;PERFORM&nbsp;frm_field&nbsp;&nbsp;&nbsp;USING&nbsp;&nbsp;&nbsp;'COST4B'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'期末数'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'X'&nbsp;&nbsp;'R'.<br />
+<br />
+&nbsp;&nbsp;PERFORM&nbsp;frm_layout&nbsp;&nbsp;TABLES&nbsp;gt_list&nbsp;USING&nbsp;'PF_STATUS'&nbsp;'USER_COMMAND'.<br />
+ENDFORM.<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;FRM_FIELD<br />
+*&---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+*----------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM frm_field  USING p_fieldname p_coltext p_no_zero p_just.<br />
+&nbsp;&nbsp;DATA:as_fieldcat&nbsp;&nbsp;&nbsp;TYPE&nbsp;lvc_s_fcat.<br />
+<br />
+&nbsp;&nbsp;as_fieldcat-fieldname&nbsp;&nbsp;&nbsp;=&nbsp;p_fieldname.<br />
+&nbsp;&nbsp;as_fieldcat-coltext&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;p_coltext.<br />
+&nbsp;&nbsp;as_fieldcat-no_zero&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;p_no_zero.<br />
+&nbsp;&nbsp;as_fieldcat-just&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;p_just.<br />
+<br />
+&nbsp;&nbsp;APPEND&nbsp;as_fieldcat&nbsp;TO&nbsp;gs_fieldcat.<br />
+&nbsp;&nbsp;CLEAR&nbsp;as_fieldcat.<br />
+ENDFORM.                    " FRM_FIELD<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;FRM_LAYOUT<br />
+*&---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+*----------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM frm_layout TABLES p_data USING p_status p_command.<br />
+&nbsp;&nbsp;gs_repid&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;sy-repid.<br />
+&nbsp;&nbsp;gs_layout-zebra&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;gs_layout-cwidth_opt&nbsp;&nbsp;=&nbsp;'X'.<br />
+<br />
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'REUSE_ALV_GRID_DISPLAY_LVC'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_callback_program&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;gs_repid<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_save&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'A'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it_fieldcat_lvc&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;gs_fieldcat[]<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it_sort_lvc&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;gs_sortinfo[]<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;is_layout_lvc&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;gs_layout<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_callback_pf_status_set&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;p_status<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_callback_html_top_of_page&nbsp;=&nbsp;'FRM_TOP_OF_PAGE'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_html_height_top&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;15&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"HTML框的高度<br />
+&nbsp;&nbsp;&nbsp;&nbsp;TABLES<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;t_outtab&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;p_data<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;program_error&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTHERS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;2.<br />
+&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;&lt;&gt;&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;ID&nbsp;sy-msgid&nbsp;TYPE&nbsp;sy-msgty&nbsp;NUMBER&nbsp;sy-msgno<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WITH&nbsp;sy-msgv1&nbsp;sy-msgv2&nbsp;sy-msgv3&nbsp;sy-msgv4.<br />
+&nbsp;&nbsp;ENDIF.<br />
+ENDFORM.                    "frm_layout<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FORM&nbsp;&nbsp;PF_STATUS<br />
+*&---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TEXT<br />
+*----------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&gt;RT_EXTAB&nbsp;&nbsp;&nbsp;TEXT<br />
+*----------------------------------------------------------------------*<br />
+<br />
+   </div>
+   <div class="code">
+FORM pf_status USING rt_extab TYPE slis_t_extab.<br />
+&nbsp;&nbsp;DATA:lt_cmd&nbsp;&nbsp;&nbsp;TYPE&nbsp;STANDARD&nbsp;TABLE&nbsp;OF&nbsp;sy-ucomm.<br />
+<br />
+ENDFORM.                    "PF_STATUS<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FORM&nbsp;&nbsp;TOP_OF_PAGE<br />
+*&---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TEXT<br />
+*----------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM frm_top_of_page USING document TYPE REF TO cl_dd_document.<br />
+&nbsp;&nbsp;DATA:lv_str1&nbsp;TYPE&nbsp;string,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_str2&nbsp;TYPE&nbsp;string,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_str3&nbsp;TYPE&nbsp;string.<br />
+&nbsp;&nbsp;DATA:lv_idx0&nbsp;TYPE&nbsp;i,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_idx1&nbsp;TYPE&nbsp;i,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_idx2&nbsp;TYPE&nbsp;i,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_idx3&nbsp;TYPE&nbsp;i.<br />
+<br />
+&nbsp;&nbsp;CASE&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;p_rb_01.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_idx0&nbsp;=&nbsp;'60'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_idx1&nbsp;=&nbsp;'0'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_idx2&nbsp;=&nbsp;'20'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_idx3&nbsp;=&nbsp;'40'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;p_rb_02.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_idx0&nbsp;=&nbsp;'110'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_idx1&nbsp;=&nbsp;'0'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_idx2&nbsp;=&nbsp;'70'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_idx3&nbsp;=&nbsp;'80'.<br />
+&nbsp;&nbsp;ENDCASE.<br />
+<br />
+&nbsp;&nbsp;PERFORM&nbsp;frm_create_page&nbsp;USING&nbsp;document&nbsp;lv_idx0&nbsp;&nbsp;'资产负债表'&nbsp;''.<br />
+&nbsp;&nbsp;CALL&nbsp;METHOD&nbsp;document-&gt;new_line.<br />
+&nbsp;&nbsp;CALL&nbsp;METHOD&nbsp;document-&gt;new_line.<br />
+<br />
+&nbsp;&nbsp;lv_str1&nbsp;=&nbsp;'单位：'&nbsp;&&&nbsp;gv_butxt.<br />
+&nbsp;&nbsp;PERFORM&nbsp;frm_create_page&nbsp;USING&nbsp;document&nbsp;lv_idx1&nbsp;&nbsp;&nbsp;lv_str1&nbsp;&nbsp;''.<br />
+<br />
+&nbsp;&nbsp;lv_str2&nbsp;=&nbsp;'日期：'&nbsp;&&&nbsp;gv_zdate+0(4)&nbsp;&&&nbsp;'-'&nbsp;&&&nbsp;gv_zdate+4(2)&nbsp;&&&nbsp;'-'&nbsp;&&&nbsp;gv_zdate+6(2).<br />
+&nbsp;&nbsp;PERFORM&nbsp;frm_create_page&nbsp;USING&nbsp;document&nbsp;lv_idx2&nbsp;&nbsp;&nbsp;lv_str2&nbsp;&nbsp;''.<br />
+<br />
+&nbsp;&nbsp;lv_str3&nbsp;=&nbsp;'单位：'&nbsp;&&&nbsp;gv_danwei.<br />
+&nbsp;&nbsp;PERFORM&nbsp;frm_create_page&nbsp;USING&nbsp;document&nbsp;lv_idx3&nbsp;&nbsp;&nbsp;lv_str3&nbsp;&nbsp;''.<br />
+ENDFORM.                    "TOP_OF_PAGE<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FORM&nbsp;&nbsp;FRM_CREATE_PAGE<br />
+*&---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TEXT<br />
+*----------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&gt;P_100&nbsp;&nbsp;&nbsp;&nbsp;TEXT<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&gt;P_TEXT&nbsp;&nbsp;TEXT<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&gt;P_1062&nbsp;&nbsp;&nbsp;TEXT<br />
+*----------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM frm_create_page  USING   document TYPE REF TO cl_dd_document p_width p_text p_style.<br />
+&nbsp;&nbsp;DATA:&nbsp;s_text&nbsp;TYPE&nbsp;sdydo_text_element.<br />
+<br />
+&nbsp;&nbsp;s_text&nbsp;=&nbsp;p_text.<br />
+&nbsp;&nbsp;CALL&nbsp;METHOD&nbsp;document-&gt;add_gap<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;width&nbsp;=&nbsp;p_width.<br />
+&nbsp;&nbsp;CALL&nbsp;METHOD&nbsp;document-&gt;add_text<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;s_text<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sap_style&nbsp;=&nbsp;p_style.<br />
+ENDFORM.                    " FRM_CREATE_PAGE<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;FRM_ALPHA_INPUT<br />
+*&---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&gt;P_P_ALPHA&nbsp;&nbsp;text<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;--P_P_ALPHA&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM frm_alpha_input CHANGING p_str.<br />
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'CONVERSION_EXIT_ALPHA_INPUT'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;input&nbsp;&nbsp;=&nbsp;p_str<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;output&nbsp;=&nbsp;p_str.<br />
+ENDFORM.                    " FRM_ALPHA_INPUT<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Form&nbsp;FRM_LAST_DAY_OF_MONTHS<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;text<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&gt;&nbsp;GV_DATE2<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;--&nbsp;GV_DATE3<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM frm_last_day_of_months  USING    p_date_in TYPE sy-datum CHANGING p_date_out TYPE sy-datum.<br />
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'LAST_DAY_OF_MONTHS'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;day_in&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;p_date_in<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;last_day_of_month&nbsp;=&nbsp;p_date_out<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;day_in_no_date&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTHERS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;2.<br />
+&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;&lt;&gt;&nbsp;0.<br />
+&nbsp;&nbsp;ENDIF.<br />
+ENDFORM.<br />
+            </div>
+          </td>
+        </tr>
+      </table>
+      </td>
+      </tr>
+   <tr>
+<td class="footer">Extracted by Mass Download version 1.5.2 - E.G.Mellodew. 1998-2022. Sap Release 755</td>
+   </tr>
+</table>
+</body>
+</html>

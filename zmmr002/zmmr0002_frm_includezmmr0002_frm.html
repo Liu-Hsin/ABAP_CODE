@@ -1,0 +1,1713 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=GB2312" />
+<title>ZMMR0002_FRM</title>
+<style type="text/css">
+.code{ font-family:"Courier New", Courier, monospace; color:#000; font-size:14px; background-color:#F2F4F7 }
+  .codeComment {font-family:"Courier New", Courier, monospace; color:#0000F0; font-size:14px; background-color:#F2F4F7 }
+  .normalBold{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; font-weight:800 }
+  .normalBoldLarge{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+</style>
+<style type="text/css">
+  .normal{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px }
+  .footer{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; text-align: center }
+  h2{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+  h3{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:14px; font-weight:800 }
+  .outerTable{
+   background-color:#E0E7ED;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-right-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+  .innerTable{
+   background-color:#F2F4F7;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-bottom-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+</style>
+</head>
+<body>
+<table class="outerTable">
+  <tr class="normalBoldLarge">
+     <td><h2>Code listing for: ZMMR0002_FRM</h2>
+<h3> Description: Include ZMMR0002_FRM</h3></td>
+   </tr>
+  <tr>
+     <td>
+     <table class="innerTable">
+       <tr>
+          <td>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;包含&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ZMMR0002_FRM<br />
+*&---------------------------------------------------------------------*<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;包含&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ZMDGR_MATERIAL_BATCH_FRM<br />
+*&---------------------------------------------------------------------*<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Form&nbsp;FRM_INIT<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;text<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;--&gt;&nbsp;&nbsp;p1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*&&nbsp;&lt;--&nbsp;&nbsp;p2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM frm_init .<br />
+&nbsp;&nbsp;TABLES&nbsp;icon&nbsp;.<br />
+&nbsp;&nbsp;sscrfields-functxt_01&nbsp;=&nbsp;'@49@模板导出'.<br />
+&nbsp;&nbsp;sscrfields-functxt_02&nbsp;=&nbsp;icon_select_all.<br />
+&nbsp;&nbsp;sscrfields-functxt_03&nbsp;=&nbsp;icon_deselect_all.<br />
+&nbsp;&nbsp;text_01&nbsp;=&nbsp;|注意：限制上传{&nbsp;g_limit&nbsp;}条数据|.<br />
+ENDFORM.<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Form&nbsp;FRM_CHECK_INPUT<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;text<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;--&gt;&nbsp;&nbsp;p1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*&&nbsp;&lt;--&nbsp;&nbsp;p2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM frm_check_input .<br />
+&nbsp;&nbsp;IF&nbsp;&nbsp;&nbsp;&nbsp;p_ck01&nbsp;IS&nbsp;INITIAL<br />
+&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;p_ck02&nbsp;IS&nbsp;INITIAL<br />
+&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;p_ck03&nbsp;IS&nbsp;INITIAL<br />
+&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;p_ck04&nbsp;IS&nbsp;INITIAL<br />
+&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;p_ck05&nbsp;IS&nbsp;INITIAL<br />
+&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;p_ck06&nbsp;IS&nbsp;INITIAL<br />
+&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;p_ck07&nbsp;IS&nbsp;INITIAL<br />
+&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;p_ck08&nbsp;IS&nbsp;INITIAL<br />
+&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;p_ck09&nbsp;IS&nbsp;INITIAL<br />
+&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;p_ck10&nbsp;IS&nbsp;INITIAL<br />
+&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;p_ck11&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;e001(00)&nbsp;WITH&nbsp;'至少要选择一个视图'&nbsp;.<br />
+&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;IF&nbsp;p_file&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;e001(00)&nbsp;WITH&nbsp;'请输入文件'&nbsp;.<br />
+&nbsp;&nbsp;ENDIF.<br />
+ENDFORM.<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Form&nbsp;FRM_CONVERT_DATA<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;text<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;--&gt;&nbsp;&nbsp;p1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*&&nbsp;&lt;--&nbsp;&nbsp;p2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM frm_convert_data .<br />
+<br />
+&nbsp;&nbsp;FIELD-SYMBOLS:&nbsp;&lt;lfs_list&gt;&nbsp;&nbsp;TYPE&nbsp;gty_list,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;lfs_field&gt;.<br />
+<br />
+   </div>
+   <div class="codeComment">
+***&nbsp;权限检查<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;gt_string.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MOVE-CORRESPONDING&nbsp;gt_string&nbsp;TO&nbsp;gt_list.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;gt_list.<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+&nbsp;&nbsp;DATA(copytab)&nbsp;=&nbsp;gt_list[].<br />
+&nbsp;&nbsp;SORT&nbsp;copytab&nbsp;BY&nbsp;werks.<br />
+&nbsp;&nbsp;DELETE&nbsp;ADJACENT&nbsp;DUPLICATES&nbsp;FROM&nbsp;copytab&nbsp;COMPARING&nbsp;werks.<br />
+&nbsp;&nbsp;DELETE&nbsp;copytab&nbsp;WHERE&nbsp;werks&nbsp;IS&nbsp;INITIAL.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;copytab&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;werks<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;t001w<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;TABLE&nbsp;@DATA(lt_werks)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FOR&nbsp;ALL&nbsp;ENTRIES&nbsp;IN&nbsp;@copytab<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;werks&nbsp;=&nbsp;@copytab-werks.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;copytab&nbsp;ASSIGNING&nbsp;FIELD-SYMBOL(&lt;fs_auth&gt;).<br />
+&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;lt_werks&nbsp;TRANSPORTING&nbsp;NO&nbsp;FIELDS&nbsp;WITH&nbsp;KEY&nbsp;werks&nbsp;=&nbsp;&lt;fs_auth&gt;-werks.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AUTHORITY-CHECK&nbsp;OBJECT&nbsp;'C_AFKO_AWA'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ID&nbsp;'ACTVT'&nbsp;DUMMY<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ID&nbsp;'AUTYP'&nbsp;DUMMY<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ID&nbsp;'AUFART'&nbsp;DUMMY<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ID&nbsp;'WERKS'&nbsp;FIELD&nbsp;&lt;fs_auth&gt;-werks.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;&lt;&gt;&nbsp;0.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;FS_AUTH&gt;-ZZMSG&nbsp;=&nbsp;|[您没有工厂{&nbsp;&lt;FS_AUTH&gt;-WERKS&nbsp;}的权限]|.<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;fs_auth&gt;-icon&nbsp;&nbsp;=&nbsp;gc_red.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ELSE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;fs_auth&gt;-zzmsg&nbsp;=&nbsp;|[工厂{&nbsp;&lt;fs_auth&gt;-werks&nbsp;}不存在]|.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;fs_auth&gt;-icon&nbsp;&nbsp;=&nbsp;gc_red.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;&lt;fs_auth&gt;-icon&nbsp;&nbsp;=&nbsp;gc_red&nbsp;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MODIFY&nbsp;gt_list&nbsp;FROM&nbsp;&lt;fs_auth&gt;&nbsp;TRANSPORTING&nbsp;icon&nbsp;zzmsg&nbsp;WHERE&nbsp;werks&nbsp;=&nbsp;&lt;fs_auth&gt;-werks.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+<br />
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;gt_list[]&nbsp;ASSIGNING&nbsp;&lt;lfs_list&gt;.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;frm_matn1_input&nbsp;&nbsp;CHANGING&nbsp;&lt;lfs_list&gt;-matnr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;frm_alpha_input&nbsp;&nbsp;CHANGING&nbsp;&lt;lfs_list&gt;-prctr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;frm_cunit_input&nbsp;&nbsp;CHANGING&nbsp;&lt;lfs_list&gt;-meins.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;frm_cunit_input&nbsp;&nbsp;CHANGING&nbsp;&lt;lfs_list&gt;-gewei.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;frm_cunit_input&nbsp;&nbsp;CHANGING&nbsp;&lt;lfs_list&gt;-bstme.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;frm_cunit_input&nbsp;&nbsp;CHANGING&nbsp;&lt;lfs_list&gt;-ausme.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;frm_perkz_input&nbsp;&nbsp;CHANGING&nbsp;&lt;lfs_list&gt;-iprkz.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;frm_abpsn_input&nbsp;&nbsp;CHANGING&nbsp;&lt;lfs_list&gt;-zposid.<br />
+<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;lfs_list&gt;-bismt&nbsp;&nbsp;=&nbsp;to_upper(&nbsp;&lt;lfs_list&gt;-bismt&nbsp;).<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;&lt;LFS_LIST&gt;-ZMATNR&nbsp;=&nbsp;TO_UPPER(&nbsp;&lt;LFS_LIST&gt;-ZMATNR&nbsp;).<br />
+<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;&lt;lfs_list&gt;-error1&nbsp;=&nbsp;&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;lfs_list&gt;-zzmsg&nbsp;&nbsp;&nbsp;=&nbsp;'数据类型错误！'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;lfs_list&gt;-icon&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;gc_red.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gv_error1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+&nbsp;&nbsp;MESSAGE&nbsp;s001(00)&nbsp;WITH&nbsp;|取得{&nbsp;lines(&nbsp;gt_list[]&nbsp;)&nbsp;}条数据|&nbsp;.<br />
+&nbsp;&nbsp;RETURN.<br />
+<br />
+ENDFORM.<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Form&nbsp;FRM_SAVE<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;text<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;--&gt;&nbsp;&nbsp;p1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*&&nbsp;&lt;--&nbsp;&nbsp;p2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM frm_save.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;修改&nbsp;*&<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;SELECT&nbsp;matnr&nbsp;INTO&nbsp;TABLE&nbsp;@DATA(gt_matnr)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;mara.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;FIELD-SYMBOLS:&lt;lfs_list&gt;&nbsp;TYPE&nbsp;gty_list.<br />
+&nbsp;&nbsp;DATA:lv_line&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;i,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_percentage&nbsp;TYPE&nbsp;i,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_index&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;i,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_cindex&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;char10,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_cline&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;char10,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_str&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;char50,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_mhdrz&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;mara-mhdrz,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_mhdhb&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;mara-mhdhb.<br />
+<br />
+&nbsp;&nbsp;CLEAR:gv_error2.<br />
+<br />
+&nbsp;&nbsp;DESCRIBE&nbsp;TABLE&nbsp;gt_list&nbsp;LINES&nbsp;lv_line.<br />
+&nbsp;&nbsp;lv_cline&nbsp;=&nbsp;lv_line.<br />
+&nbsp;&nbsp;CLEAR:lv_index.<br />
+<br />
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;gt_list&nbsp;ASSIGNING&nbsp;&lt;lfs_list&gt;&nbsp;WHERE&nbsp;checkbox&nbsp;=&nbsp;'X'&nbsp;AND&nbsp;icon&nbsp;&lt;&gt;&nbsp;gc_red.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;修改&nbsp;*&<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;gt_matnr&nbsp;INTO&nbsp;DATA(gs_matnr)&nbsp;WITH&nbsp;KEY&nbsp;matnr&nbsp;=&nbsp;&lt;lfs_list&gt;-matnr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-ucomm&nbsp;=&nbsp;'CMD_SAVE'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;lfs_list&gt;-zzmsg&nbsp;&nbsp;=&nbsp;'物料主数据已存在'&nbsp;&&&nbsp;&nbsp;&lt;lfs_list&gt;-zzmsg.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;lfs_list&gt;-icon&nbsp;=&nbsp;gc_red.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;lfs_list&gt;-error1&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ELSE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-ucomm&nbsp;=&nbsp;'CMD_MATA'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;lfs_list&gt;-zzmsg&nbsp;&nbsp;=&nbsp;'物料主数据尚未创建'&nbsp;&&&nbsp;&nbsp;&lt;lfs_list&gt;-zzmsg.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;lfs_list&gt;-icon&nbsp;=&nbsp;gc_red.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;lfs_list&gt;-error1&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;lv_index&nbsp;&nbsp;=&nbsp;lv_index&nbsp;+&nbsp;1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;lv_cindex&nbsp;=&nbsp;lv_index.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;&lt;lfs_list&gt;-error1&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CONTINUE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;frm_progress_indicate&nbsp;USING&nbsp;'进度：'&nbsp;lv_index&nbsp;lv_line.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;frm_clear_data&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;&lt;lfs_list&gt;.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;gs_marc-plant&nbsp;&nbsp;=&nbsp;&lt;lfs_list&gt;-werks.&nbsp;&nbsp;&nbsp;"工厂<br />
+&nbsp;&nbsp;&nbsp;&nbsp;gs_marcx-plant&nbsp;=&nbsp;&lt;lfs_list&gt;-werks.&nbsp;&nbsp;&nbsp;"工厂<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;frm_fill_header&nbsp;&nbsp;&nbsp;USING&nbsp;&lt;lfs_list&gt;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;frm_fill_view01&nbsp;&nbsp;&nbsp;USING&nbsp;&lt;lfs_list&gt;."填充基本视图数据<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;frm_fill_view02&nbsp;&nbsp;&nbsp;USING&nbsp;&lt;lfs_list&gt;."填充采购视图数据<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;frm_fill_view03&nbsp;&nbsp;&nbsp;USING&nbsp;&lt;lfs_list&gt;."填充销售视图数据<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;frm_fill_view04&nbsp;&nbsp;&nbsp;USING&nbsp;&lt;lfs_list&gt;."填充MRP视图数据<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;frm_fill_view05&nbsp;&nbsp;&nbsp;USING&nbsp;&lt;lfs_list&gt;."填充会计视图&成本视图数据<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;frm_fill_view06&nbsp;&nbsp;&nbsp;USING&nbsp;&lt;lfs_list&gt;."填充生产视图数据<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;frm_fill_view07&nbsp;&nbsp;&nbsp;USING&nbsp;&lt;lfs_list&gt;."填充存储视图数据<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;frm_fill_view10&nbsp;&nbsp;&nbsp;USING&nbsp;&lt;lfs_list&gt;."填充仓库管理视图数据<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;frm_fill_view11&nbsp;&nbsp;&nbsp;USING&nbsp;&lt;lfs_list&gt;."创建质量视图<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;frm_fill_ext&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;&lt;lfs_list&gt;."填充增强字段<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;frm_call_bapi&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CHANGING&nbsp;&lt;lfs_list&gt;."调用BAPI<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;frm_ext_bdc&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;&lt;lfs_list&gt;."填充增强字段(BDC方式)<br />
+<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;frm_mrp_area&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CHANGING&nbsp;&lt;lfs_list&gt;."创建MRP范围<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;frm_create_class&nbsp;&nbsp;CHANGING&nbsp;&lt;lfs_list&gt;."创建分类视图<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;frm_create_qmat&nbsp;&nbsp;&nbsp;CHANGING&nbsp;&lt;lfs_list&gt;."填充质量视图的检验设置<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;&lt;lfs_list&gt;-error2&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gv_error2&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;lfs_list&gt;-icon&nbsp;=&nbsp;gc_red.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ELSE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;lfs_list&gt;-icon&nbsp;=&nbsp;gc_green.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;lfs_list&gt;-finish&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;gv_error1&nbsp;=&nbsp;'X'&nbsp;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;s001(00)&nbsp;WITH&nbsp;'存在数据转换错误'&nbsp;DISPLAY&nbsp;LIKE'E'.<br />
+&nbsp;&nbsp;ELSEIF&nbsp;gv_error2&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;s001(00)&nbsp;WITH&nbsp;'存在BAPI调用错误'&nbsp;DISPLAY&nbsp;LIKE'E'.<br />
+&nbsp;&nbsp;ELSE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;s001(00)&nbsp;WITH&nbsp;'创建物料主数据成功'&nbsp;DISPLAY&nbsp;LIKE'S'.<br />
+&nbsp;&nbsp;ENDIF.<br />
+ENDFORM.<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Form&nbsp;FRM_CLICK<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;text<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&gt;&nbsp;RS_SELFIELD<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM frm_click  USING  rs_selfield TYPE slis_selfield.<br />
+&nbsp;&nbsp;DATA:ls_list&nbsp;TYPE&nbsp;gty_list.<br />
+<br />
+&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;gt_list&nbsp;INTO&nbsp;ls_list&nbsp;INDEX&nbsp;rs_selfield-tabindex.<br />
+&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;&nbsp;ls_list-finish&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SET&nbsp;PARAMETER&nbsp;ID&nbsp;'MAT'&nbsp;FIELD&nbsp;ls_list-matnr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;TRANSACTION&nbsp;'MM03'&nbsp;AND&nbsp;SKIP&nbsp;FIRST&nbsp;SCREEN.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;ENDIF.<br />
+ENDFORM.<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Form&nbsp;FRM_CLEAR_DATA<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;text<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;--&gt;&nbsp;&nbsp;p1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*&&nbsp;&lt;--&nbsp;&nbsp;p2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM frm_clear_data USING ls_list TYPE gty_list.<br />
+&nbsp;&nbsp;CLEAR:ls_list-error2,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_list-icon,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_list-zzmsg.<br />
+<br />
+&nbsp;&nbsp;CLEAR:gs_header,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_mara,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_marax,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_marc,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_marcx,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_mbew,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_mbewx,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_mvke,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_mvkex,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_mlgn,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_mlgnx,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_mlgt,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_mlgtx.<br />
+<br />
+&nbsp;&nbsp;CLEAR:gt_makt,gt_makt[],<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gt_marm,gt_marm[],<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gt_marmx,gt_marmx[],<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gt_mlan,gt_mlan[],<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gt_ext,gt_ext[],<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gt_extx,gt_extx[].<br />
+ENDFORM.<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Form&nbsp;FRM_FILL_HEADER<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;text<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&gt;&nbsp;&lt;LFS_LIST&gt;<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM frm_fill_header  USING ls_list TYPE gty_list.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;gs_header-material&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_list-matnr.&nbsp;"物料号<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;gs_header-material_long&nbsp;=&nbsp;ls_list-matnr.&nbsp;"物料号<br />
+&nbsp;&nbsp;gs_header-ind_sector&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_list-mbrsh.&nbsp;"行业领域<br />
+&nbsp;&nbsp;gs_header-matl_type&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_list-mtart.&nbsp;"物料类型<br />
+ENDFORM.<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Form&nbsp;FRM_FILL_VIEW01<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;基本视图<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&gt;&nbsp;&lt;LFS_LIST&gt;<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM frm_fill_view01 USING ls_list TYPE gty_list.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;p_ck01&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXIT.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;gs_header-basic_view&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'X'.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"基本视图<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;ls_list-maktx&nbsp;IS&nbsp;NOT&nbsp;INITIAL."&nbsp;中文物料描述<br />
+&nbsp;&nbsp;&nbsp;&nbsp;gt_makt-langu&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'1'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;gt_makt-matl_desc&nbsp;=&nbsp;ls_list-maktx.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;gt_makt-del_flag&nbsp;&nbsp;=&nbsp;''.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;gt_makt.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;&nbsp;gt_makt.<br />
+&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;gs_mara-base_uom&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_list-meins.&nbsp;&nbsp;"基本计量单位<br />
+&nbsp;&nbsp;gs_marax-base_uom&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;gs_mara-old_mat_no_long&nbsp;&nbsp;=&nbsp;ls_list-bismt.&nbsp;&nbsp;"旧物料号<br />
+&nbsp;&nbsp;gs_marax-old_mat_no_long&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;gs_mara-matl_group&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_list-matkl.&nbsp;&nbsp;"物料组<br />
+&nbsp;&nbsp;gs_marax-matl_group&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;gs_mara-extmatlgrp&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_list-extwg.&nbsp;&nbsp;"外部物料组<br />
+&nbsp;&nbsp;gs_marax-extmatlgrp&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;gs_mara-size_dim&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_list-groes.&nbsp;&nbsp;"大小量纲<br />
+&nbsp;&nbsp;gs_marax-size_dim&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;gs_mara-division&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_list-spart.&nbsp;"产品组<br />
+&nbsp;&nbsp;gs_marax-division&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'X'.<br />
+<br />
+&nbsp;&nbsp;gs_mara-doc_vers&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_list-zeivr.&nbsp;"&nbsp;版本号<br />
+&nbsp;&nbsp;gs_marax-doc_vers&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'X'.&nbsp;"&nbsp;版本号<br />
+<br />
+<br />
+<br />
+&nbsp;&nbsp;gt_marm-alt_unit_iso&nbsp;&nbsp;=&nbsp;ls_list-meins.<br />
+&nbsp;&nbsp;gt_marmx-alt_unit_iso&nbsp;=&nbsp;ls_list-meins.<br />
+&nbsp;&nbsp;gt_marm-alt_unit&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_list-meins.<br />
+&nbsp;&nbsp;gt_marmx-alt_unit&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_list-meins.<br />
+&nbsp;&nbsp;IF&nbsp;ls_list-brgew&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;gt_marm-gross_wt&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_list-brgew."&nbsp;毛重<br />
+&nbsp;&nbsp;&nbsp;&nbsp;gt_marmx-gross_wt&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'X'.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;gs_mara-net_weight&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_list-ntgew.&nbsp;&nbsp;"净重<br />
+&nbsp;&nbsp;&nbsp;&nbsp;gs_marax-net_weight&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'X'.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;gt_marm-unit_of_wt&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_list-gewei."&nbsp;重量单位<br />
+&nbsp;&nbsp;&nbsp;&nbsp;gt_marmx-unit_of_wt&nbsp;&nbsp;&nbsp;=&nbsp;'X'.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;gs_mara-unit_of_wt&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_list-gewei.&nbsp;&nbsp;"重量单位<br />
+&nbsp;&nbsp;&nbsp;&nbsp;gs_marax-unit_of_wt&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;APPEND&nbsp;gt_marm.&nbsp;&nbsp;CLEAR&nbsp;&nbsp;gt_marm.<br />
+&nbsp;&nbsp;APPEND&nbsp;gt_marmx.&nbsp;CLEAR&nbsp;&nbsp;gt_marmx.<br />
+<br />
+ENDFORM.<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Form&nbsp;FRM_FILL_VIEW02<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;采购视图<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&gt;&nbsp;&lt;LFS_LIST&gt;<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM frm_fill_view02 USING ls_list TYPE gty_list.<br />
+&nbsp;&nbsp;IF&nbsp;p_ck02&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXIT.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;gs_header-purchase_view&nbsp;&nbsp;=&nbsp;'X'.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"采购视图<br />
+<br />
+&nbsp;&nbsp;gs_mara-po_unit&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;ls_list-bstme."&nbsp;订单单位<br />
+&nbsp;&nbsp;gs_marax-po_unit&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;'X'.<br />
+<br />
+&nbsp;&nbsp;gs_marc-pur_group&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;ls_list-ekgrp.&nbsp;&nbsp;&nbsp;"采购组<br />
+&nbsp;&nbsp;gs_marcx-pur_group&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'X'.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;gs_marc-matfrgtgrp&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;ls_list-tragr.&nbsp;&nbsp;&nbsp;"物料运输组<br />
+*&nbsp;&nbsp;gs_marcx-matfrgtgrp&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'X'.<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;gs_marc-auto_p_ord&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;ls_list-kautb.&nbsp;&nbsp;&nbsp;"标识:&nbsp;"允许自动采购订单"<br />
+&nbsp;&nbsp;gs_marcx-auto_p_ord&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'X'.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;gs_marc-proc_type&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;ls_list-beskz.&nbsp;&nbsp;&nbsp;"采购类型<br />
+*&nbsp;&nbsp;gs_marcx-proc_type&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'X'.<br />
+<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;gt_marm-alt_unit_iso&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_list-bstme."<br />
+&nbsp;&nbsp;gt_marmx-alt_unit_iso&nbsp;&nbsp;&nbsp;=&nbsp;ls_list-bstme.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;gt_marm-alt_unit&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_list-bstme."&nbsp;订单单位<br />
+*&nbsp;&nbsp;gt_marmx-alt_unit&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_list-bstme.<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;gt_marm-alt_unit&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_list-meins.<br />
+&nbsp;&nbsp;gt_marmx-alt_unit&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_list-meins.<br />
+&nbsp;&nbsp;gt_marm-denominatr&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_list-umren."&nbsp;转换分母<br />
+&nbsp;&nbsp;gt_marmx-denominatr&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;gt_marm-numerator&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_list-umrez."&nbsp;转换分子<br />
+&nbsp;&nbsp;gt_marmx-numerator&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;APPEND&nbsp;gt_marm.&nbsp;&nbsp;CLEAR&nbsp;gt_marm.<br />
+&nbsp;&nbsp;APPEND&nbsp;gt_marmx.&nbsp;CLEAR&nbsp;gt_marmx.<br />
+<br />
+ENDFORM.<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Form&nbsp;FRM_FILL_VIEW03<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;销售视图<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&gt;&nbsp;&lt;LFS_LIST&gt;<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM frm_fill_view03  USING ls_list TYPE gty_list.<br />
+&nbsp;&nbsp;IF&nbsp;p_ck03&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXIT.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;gs_header-sales_view&nbsp;&nbsp;=&nbsp;'X'.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"销售视图<br />
+<br />
+&nbsp;&nbsp;gs_mvke-sales_org&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_list-vkorg.&nbsp;"销售组织<br />
+&nbsp;&nbsp;gs_mvkex-sales_org&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_list-vkorg&nbsp;.<br />
+&nbsp;&nbsp;gs_mvke-matl_grp_1&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_list-mvgr1.<br />
+&nbsp;&nbsp;gs_mvkex-matl_grp_1&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;gs_mvke-matl_grp_2&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_list-mvgr2.<br />
+&nbsp;&nbsp;gs_mvkex-matl_grp_2&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;gs_mvke-matl_grp_3&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_list-mvgr3.<br />
+&nbsp;&nbsp;gs_mvkex-matl_grp_3&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;gs_mvke-matl_grp_4&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_list-mvgr4.<br />
+&nbsp;&nbsp;gs_mvkex-matl_grp_4&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;gs_mvke-matl_grp_5&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_list-mvgr5.<br />
+&nbsp;&nbsp;gs_mvkex-matl_grp_5&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;gs_mvke-distr_chan&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_list-vtweg.&nbsp;"分销渠道<br />
+&nbsp;&nbsp;gs_mvkex-distr_chan&nbsp;&nbsp;&nbsp;=&nbsp;ls_list-vtweg&nbsp;.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;GS_MVKE-SALES_UNIT&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;LS_LIST-VRKME.&nbsp;"销售单位<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;gs_mvkex-sales_unit&nbsp;&nbsp;&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;gs_mvke-delyg_plnt&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_list-dwerk.&nbsp;"交货工厂<br />
+&nbsp;&nbsp;gs_mvkex-delyg_plnt&nbsp;&nbsp;&nbsp;=&nbsp;'X'.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;GS_MVKE-MIN_ORDER&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;LS_LIST-AUMNG."&nbsp;最小订购量<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;gs_mvkex-min_order&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'X'.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;GS_MVKE-MIN_DELY&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;LS_LIST-LFMNG."&nbsp;最小交货数量<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;gs_mvkex-min_dely&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'X'.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;GS_MVKE-DELY_UNIT&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;LS_LIST-SCMNG."&nbsp;交货单位<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;gs_mvkex-dely_unit&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'X'.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;GS_MVKE-DELY_UOM&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;LS_LIST-SCHME."&nbsp;交货单位的计量单位<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;gs_mvkex-dely_uom&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;gs_mvke-item_cat&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_list-mtpos."&nbsp;项目类别组<br />
+&nbsp;&nbsp;gs_mvkex-item_cat&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;gs_mvke-acct_assgt&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_list-ktgrm.&nbsp;"科目设置组<br />
+&nbsp;&nbsp;gs_mvkex-acct_assgt&nbsp;&nbsp;&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;gs_mvke-matl_stats&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_list-versg.&nbsp;"物料统计组<br />
+&nbsp;&nbsp;gs_mvkex-matl_stats&nbsp;&nbsp;&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;gs_mvke-mat_pr_grp&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_list-kondm.&nbsp;"物料价格组<br />
+&nbsp;&nbsp;gs_mvkex-mat_pr_grp&nbsp;&nbsp;&nbsp;=&nbsp;'X'.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;GS_MARC-REPLACE_PT&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;LS_LIST-ATPKZ.&nbsp;"替换部件<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;gs_marcx-replace_pt&nbsp;&nbsp;=&nbsp;&nbsp;'X'.<br />
+&nbsp;&nbsp;gs_marc-availcheck&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;ls_list-mtvfp.&nbsp;"可用性检查<br />
+&nbsp;&nbsp;gs_marcx-availcheck&nbsp;&nbsp;=&nbsp;&nbsp;'X'.<br />
+&nbsp;&nbsp;gs_marc-loadinggrp&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;ls_list-ladgr.&nbsp;"装载组<br />
+&nbsp;&nbsp;gs_marcx-loadinggrp&nbsp;&nbsp;=&nbsp;&nbsp;'X'.<br />
+&nbsp;&nbsp;gs_marc-proc_type&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;ls_list-beskz.&nbsp;"采购类型<br />
+&nbsp;&nbsp;gs_marcx-proc_type&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;'X'.<br />
+<br />
+&nbsp;&nbsp;gs_mara-division&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_list-spart.&nbsp;"产品组<br />
+&nbsp;&nbsp;gs_marax-division&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'X'.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;GS_MARA-QUAL_DIK&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;LS_LIST-NRFHG.&nbsp;"免税货物折扣资格<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;gs_marax-qual_dik&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;gs_mara-trans_grp&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_list-tragr.&nbsp;"运输组<br />
+&nbsp;&nbsp;gs_marax-trans_grp&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;gs_mara-item_cat&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_list-mtpos_mara.&nbsp;"普通项目类别组<br />
+&nbsp;&nbsp;gs_marax-item_cat&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'X'.<br />
+<br />
+&nbsp;&nbsp;gt_mlan-depcountry&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'CN'.<br />
+&nbsp;&nbsp;gt_mlan-tax_type_1&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'MWST'.<br />
+&nbsp;&nbsp;gt_mlan-taxclass_1&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_list-taxkm.&nbsp;"税分类<br />
+&nbsp;&nbsp;APPEND&nbsp;gt_mlan.&nbsp;CLEAR&nbsp;&nbsp;gt_mlan.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;GT_MARM-ALT_UNIT_ISO&nbsp;&nbsp;=&nbsp;LS_LIST-VRKME.<br />
+*&nbsp;&nbsp;GT_MARMX-ALT_UNIT_ISO&nbsp;=&nbsp;LS_LIST-VRKME.<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;gt_marm-alt_unit&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_list-meins.<br />
+&nbsp;&nbsp;gt_marmx-alt_unit&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_list-meins.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;GT_MARM-NUMERATOR&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;LS_LIST-SS_UMREZ."&nbsp;分子<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;gt_marmx-numerator&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'X'.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;GT_MARM-DENOMINATR&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;LS_LIST-SS_UMREN."&nbsp;分母<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;gt_marmx-denominatr&nbsp;&nbsp;&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;APPEND&nbsp;gt_marm.&nbsp;&nbsp;CLEAR&nbsp;gt_marm.<br />
+&nbsp;&nbsp;APPEND&nbsp;gt_marmx.&nbsp;CLEAR&nbsp;gt_marmx.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;GT_MARM-ALT_UNIT_ISO&nbsp;&nbsp;=&nbsp;LS_LIST-SCHME.<br />
+*&nbsp;&nbsp;GT_MARMX-ALT_UNIT_ISO&nbsp;=&nbsp;LS_LIST-SCHME.<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;gt_marm-alt_unit&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_list-meins.<br />
+&nbsp;&nbsp;gt_marmx-alt_unit&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_list-meins.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;GT_MARM-NUMERATOR&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;LS_LIST-SS_UMREZ2."&nbsp;分子<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;gt_marmx-numerator&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'X'.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;GT_MARM-DENOMINATR&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;LS_LIST-SS_UMREN2."&nbsp;分母<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;gt_marmx-denominatr&nbsp;&nbsp;&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;APPEND&nbsp;gt_marm.&nbsp;&nbsp;CLEAR&nbsp;gt_marm.<br />
+&nbsp;&nbsp;APPEND&nbsp;gt_marmx.&nbsp;CLEAR&nbsp;gt_marmx.<br />
+<br />
+ENDFORM.<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Form&nbsp;FRM_FILL_VIEW04<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;MRP视图<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&gt;&nbsp;&lt;LFS_LIST&gt;<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM frm_fill_view04 USING ls_list TYPE gty_list.<br />
+&nbsp;&nbsp;IF&nbsp;p_ck04&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXIT.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;gs_header-mrp_view&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'X'.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"MRP视图<br />
+<br />
+&nbsp;&nbsp;gs_marc-plant&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;ls_list-werks.&nbsp;"&nbsp;工厂<br />
+&nbsp;&nbsp;gs_marcx-plant&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;ls_list-werks.&nbsp;"工厂<br />
+&nbsp;&nbsp;gs_marc-mrp_type&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;ls_list-dismm.&nbsp;"&nbsp;MRP类型<br />
+&nbsp;&nbsp;gs_marcx-mrp_type&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;'X'.<br />
+&nbsp;&nbsp;gs_marc-mrp_group&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;ls_list-disgr.&nbsp;"&nbsp;MRP组<br />
+&nbsp;&nbsp;gs_marcx-mrp_group&nbsp;&nbsp;=&nbsp;&nbsp;'X'.<br />
+&nbsp;&nbsp;gs_marc-reorder_pt&nbsp;&nbsp;=&nbsp;&nbsp;ls_list-minbe.&nbsp;"&nbsp;再订货点<br />
+&nbsp;&nbsp;gs_marcx-reorder_pt&nbsp;=&nbsp;&nbsp;'X'.<br />
+&nbsp;&nbsp;gs_marc-abc_id&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;ls_list-maabc.&nbsp;"&nbsp;ABC标识<br />
+&nbsp;&nbsp;gs_marcx-abc_id&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;'X'.<br />
+&nbsp;&nbsp;gs_marc-pl_ti_fnce&nbsp;&nbsp;=&nbsp;&nbsp;ls_list-fxhor.&nbsp;"&nbsp;计划的时界<br />
+&nbsp;&nbsp;gs_marcx-pl_ti_fnce&nbsp;=&nbsp;&nbsp;'X'.<br />
+&nbsp;&nbsp;gs_marc-mrp_ctrler&nbsp;&nbsp;=&nbsp;&nbsp;ls_list-dispo.&nbsp;"&nbsp;MRP控制者<br />
+&nbsp;&nbsp;gs_marcx-mrp_ctrler&nbsp;=&nbsp;&nbsp;'X'.<br />
+&nbsp;&nbsp;gs_marc-lotsizekey&nbsp;&nbsp;=&nbsp;&nbsp;ls_list-disls.&nbsp;"&nbsp;批量<br />
+&nbsp;&nbsp;gs_marcx-lotsizekey&nbsp;=&nbsp;&nbsp;'X'.<br />
+&nbsp;&nbsp;gs_marc-minlotsize&nbsp;&nbsp;=&nbsp;&nbsp;ls_list-bstmi.&nbsp;"&nbsp;最小批量大小<br />
+&nbsp;&nbsp;gs_marcx-minlotsize&nbsp;=&nbsp;&nbsp;'X'.<br />
+&nbsp;&nbsp;gs_marc-fixed_lot&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;ls_list-bstma.&nbsp;"&nbsp;固定批量大小<br />
+&nbsp;&nbsp;gs_marcx-fixed_lot&nbsp;&nbsp;=&nbsp;&nbsp;'X'.<br />
+&nbsp;&nbsp;gs_marc-assy_scrap&nbsp;&nbsp;=&nbsp;&nbsp;ls_list-ausss.&nbsp;"&nbsp;装配报废率&nbsp;(%)<br />
+&nbsp;&nbsp;gs_marcx-assy_scrap&nbsp;=&nbsp;&nbsp;'X'.<br />
+&nbsp;&nbsp;gs_marc-max_stock&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;ls_list-mabst.&nbsp;"&nbsp;最大库存水平<br />
+&nbsp;&nbsp;gs_marcx-max_stock&nbsp;&nbsp;=&nbsp;&nbsp;'X'.<br />
+&nbsp;&nbsp;gs_marc-round_val&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;ls_list-bstrf.&nbsp;"&nbsp;舍入值<br />
+&nbsp;&nbsp;gs_marcx-round_val&nbsp;&nbsp;=&nbsp;&nbsp;'X'.<br />
+&nbsp;&nbsp;gs_marc-pur_status&nbsp;&nbsp;=&nbsp;&nbsp;ls_list-mmsta.&nbsp;"&nbsp;工厂特定的物料状态<br />
+&nbsp;&nbsp;gs_marcx-pur_status&nbsp;=&nbsp;&nbsp;'X'.<br />
+&nbsp;&nbsp;gs_marc-proc_type&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;ls_list-beskz.&nbsp;"采购类型<br />
+&nbsp;&nbsp;gs_marcx-proc_type&nbsp;&nbsp;=&nbsp;&nbsp;'X'.<br />
+&nbsp;&nbsp;gs_marc-spproctype&nbsp;&nbsp;=&nbsp;&nbsp;ls_list-sobsl.&nbsp;"特殊采购类<br />
+&nbsp;&nbsp;gs_marcx-spproctype&nbsp;=&nbsp;&nbsp;'X'.<br />
+&nbsp;&nbsp;gs_marc-sm_key&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;ls_list-fhori.&nbsp;"计划边际码<br />
+&nbsp;&nbsp;gs_marcx-sm_key&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;'X'.<br />
+&nbsp;&nbsp;gs_marc-iss_st_loc&nbsp;&nbsp;=&nbsp;&nbsp;ls_list-lgpro.&nbsp;"发货仓储地点<br />
+&nbsp;&nbsp;gs_marcx-iss_st_loc&nbsp;=&nbsp;&nbsp;'X'.<br />
+&nbsp;&nbsp;gs_marc-sloc_exprc&nbsp;&nbsp;=&nbsp;&nbsp;ls_list-lgfsb.&nbsp;"外部采购仓储地点<br />
+&nbsp;&nbsp;gs_marcx-sloc_exprc&nbsp;=&nbsp;&nbsp;'X'.<br />
+&nbsp;&nbsp;gs_marc-inhseprodt&nbsp;&nbsp;=&nbsp;&nbsp;ls_list-dzeit.&nbsp;"自制生产<br />
+&nbsp;&nbsp;gs_marcx-inhseprodt&nbsp;=&nbsp;&nbsp;'X'.<br />
+&nbsp;&nbsp;gs_marc-gr_pr_time&nbsp;&nbsp;=&nbsp;&nbsp;ls_list-webaz.&nbsp;"收货处理时间<br />
+&nbsp;&nbsp;gs_marcx-gr_pr_time&nbsp;=&nbsp;&nbsp;'X'.<br />
+&nbsp;&nbsp;gs_marc-plnd_delry&nbsp;&nbsp;=&nbsp;&nbsp;ls_list-plifz.&nbsp;"计划交货时间<br />
+&nbsp;&nbsp;gs_marcx-plnd_delry&nbsp;=&nbsp;&nbsp;'X'.<br />
+&nbsp;&nbsp;gs_marc-backflush&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;ls_list-rgekz.&nbsp;"反冲<br />
+&nbsp;&nbsp;gs_marcx-backflush&nbsp;&nbsp;=&nbsp;&nbsp;'X'.<br />
+&nbsp;&nbsp;gs_marc-bulk_mat&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;ls_list-schgt.&nbsp;"散装物料<br />
+&nbsp;&nbsp;gs_marcx-bulk_mat&nbsp;&nbsp;=&nbsp;&nbsp;'X'.<br />
+&nbsp;&nbsp;gs_marc-safety_stk&nbsp;&nbsp;=&nbsp;&nbsp;ls_list-eisbe.&nbsp;"安全库存<br />
+&nbsp;&nbsp;gs_marcx-safety_stk&nbsp;=&nbsp;&nbsp;'X'.<br />
+&nbsp;&nbsp;gs_marc-availcheck&nbsp;&nbsp;=&nbsp;&nbsp;ls_list-mtvfp.&nbsp;"可用性检查<br />
+&nbsp;&nbsp;gs_marcx-availcheck&nbsp;=&nbsp;&nbsp;'X'.<br />
+&nbsp;&nbsp;gs_marc-plan_strgp&nbsp;&nbsp;=&nbsp;&nbsp;ls_list-strgr.&nbsp;"策略<br />
+&nbsp;&nbsp;gs_marcx-plan_strgp&nbsp;=&nbsp;&nbsp;'X'.<br />
+&nbsp;&nbsp;gs_marc-consummode&nbsp;&nbsp;=&nbsp;&nbsp;ls_list-vrmod.&nbsp;"消耗模式<br />
+&nbsp;&nbsp;gs_marcx-consummode&nbsp;=&nbsp;&nbsp;'X'.<br />
+&nbsp;&nbsp;gs_marc-bwd_cons&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;ls_list-vint1.&nbsp;"逆向消耗期间<br />
+&nbsp;&nbsp;gs_marcx-bwd_cons&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;'X'.<br />
+&nbsp;&nbsp;gs_marc-fwd_cons&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;ls_list-vint2.&nbsp;"正向消耗期间<br />
+&nbsp;&nbsp;gs_marcx-fwd_cons&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;'X'.<br />
+&nbsp;&nbsp;gs_marc-mixed_mrp&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;ls_list-miskz.&nbsp;"综合MRP<br />
+&nbsp;&nbsp;gs_marcx-mixed_mrp&nbsp;&nbsp;=&nbsp;&nbsp;'X'.<br />
+&nbsp;&nbsp;gs_marc-dep_req_id&nbsp;&nbsp;=&nbsp;&nbsp;ls_list-sbdkz.&nbsp;"独立/集中<br />
+&nbsp;&nbsp;gs_marcx-dep_req_id&nbsp;=&nbsp;&nbsp;'X'.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;"*&nbsp;提前计划<br />
+*&nbsp;&nbsp;GS_MARC-ADV_PLNG_IND&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;LS_LIST-PPSKZ.&nbsp;&nbsp;&nbsp;"提前计划<br />
+*&nbsp;&nbsp;GS_MARCX-ADV_PLNG_IND&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;'X'.<br />
+*&nbsp;&nbsp;GS_MARC-WHERE_BOM_FLG&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;LS_LIST-SCM_WHATBOM.&nbsp;&nbsp;&nbsp;"计划扩展<br />
+*&nbsp;&nbsp;GS_MARCX-WHERE_BOM_FLG&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;'X'.<br />
+*&nbsp;&nbsp;GS_MARC-RRP_PLANNING_TYPE&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;LS_LIST-SCM_RRP_TYPE.&nbsp;&nbsp;&nbsp;"PP&nbsp;计划程序<br />
+*&nbsp;&nbsp;GS_MARCX-RRP_PLANNING_TYPE&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;'X'.<br />
+*&nbsp;&nbsp;GS_MARC-HEURISTIC_ID&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;LS_LIST-SCM_HEUR_ID.&nbsp;&nbsp;&nbsp;"&nbsp;PPC&nbsp;启发式<br />
+*&nbsp;&nbsp;GS_MARCX-HEURISTIC_ID&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;'X'.<br />
+*&nbsp;&nbsp;GS_MARC-PEGGING_STRATEGY&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;LS_LIST-SCM_PEG_STRATEGY.&nbsp;&nbsp;&nbsp;"动态追溯的追溯策略<br />
+*&nbsp;&nbsp;GS_MARCX-PEGGING_STRATEGY&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;'X'.<br />
+*&nbsp;&nbsp;GS_MARC-FIXED_PEGGING_INDICATOR&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;LS_LIST-SCM_FIXPEG_PROD_SET."保留凭证更改时的固定追溯<br />
+*&nbsp;&nbsp;GS_MARCX-FIXED_PEGGING_INDICATOR&nbsp;&nbsp;=&nbsp;&nbsp;'X'.<br />
+*&nbsp;&nbsp;GS_MARC-PLANNING_STRATEGY&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;LS_LIST-SCM_STRA1.&nbsp;&nbsp;&nbsp;"建议的策略<br />
+*&nbsp;&nbsp;GS_MARCX-PLANNING_STRATEGY&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;'X'.<br />
+*&nbsp;&nbsp;GS_MARC-GR_PROC_TIME&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;LS_LIST-SCM_GRPRT.&nbsp;&nbsp;&nbsp;"收货处理时间<br />
+*&nbsp;&nbsp;GS_MARCX-GR_PROC_TIME&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;'X'.<br />
+*&nbsp;&nbsp;GS_MARC-GI_PROC_TIME&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;LS_LIST-SCM_GIPRT.&nbsp;&nbsp;&nbsp;"发货处理时间<br />
+*&nbsp;&nbsp;GS_MARCX-GI_PROC_TIME&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;'X'.<br />
+<br />
+   </div>
+   <div class="code">
+ENDFORM.<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Form&nbsp;FRM_FILL_VIEW05<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;会计视图&nbsp;成本视图<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&gt;&nbsp;&lt;LFS_LIST&gt;<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM frm_fill_view05 USING ls_list TYPE gty_list.<br />
+&nbsp;&nbsp;IF&nbsp;p_ck05&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXIT.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;gs_header-account_view&nbsp;&nbsp;&nbsp;=&nbsp;'X'.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"会计视图<br />
+&nbsp;&nbsp;gs_header-cost_view&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'X'.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"成本视图<br />
+<br />
+&nbsp;&nbsp;gs_mbew-plndprice1&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_list-zjhjg.&nbsp;"价格1<br />
+&nbsp;&nbsp;gs_mbewx-plndprice1&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'X'.<br />
+<br />
+&nbsp;&nbsp;gs_mbew-plndprdate1&nbsp;=&nbsp;ls_list-zpld1.<br />
+&nbsp;&nbsp;gs_mbewx-plndprdate1&nbsp;=&nbsp;&nbsp;'X'.<br />
+<br />
+&nbsp;&nbsp;gs_mbew-val_area&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_list-werks.&nbsp;"评估范围<br />
+&nbsp;&nbsp;gs_mbewx-val_area&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_list-werks.<br />
+&nbsp;&nbsp;gs_mbew-ml_settle&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_list-mlast.&nbsp;"物料价格确定:&nbsp;控制<br />
+&nbsp;&nbsp;gs_mbewx-ml_settle&nbsp;&nbsp;&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;gs_mbew-val_class&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_list-bklas.&nbsp;"评估类<br />
+&nbsp;&nbsp;gs_mbewx-val_class&nbsp;&nbsp;&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;gs_mbew-price_ctrl&nbsp;&nbsp;&nbsp;=&nbsp;ls_list-vprsv.&nbsp;"C控制<br />
+&nbsp;&nbsp;gs_mbewx-price_ctrl&nbsp;&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;gs_mbew-std_price&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_list-stprs.&nbsp;"标准价<br />
+&nbsp;&nbsp;gs_mbewx-std_price&nbsp;&nbsp;&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;gs_mbew-qty_struct&nbsp;&nbsp;&nbsp;=&nbsp;ls_list-ekalr.&nbsp;"用QS的成本估算<br />
+&nbsp;&nbsp;gs_mbewx-qty_struct&nbsp;&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;gs_mbew-orig_mat&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_list-hkmat.&nbsp;&nbsp;"物料来源<br />
+&nbsp;&nbsp;gs_mbewx-orig_mat&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'X'.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;GS_MBEW-ORIG_GROUP&nbsp;&nbsp;&nbsp;=&nbsp;LS_LIST-HRKFT.&nbsp;"原始组<br />
+*&nbsp;&nbsp;GS_MBEWX-ORIG_GROUP&nbsp;&nbsp;=&nbsp;'X'.<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;gs_mbew-price_unit&nbsp;&nbsp;&nbsp;=&nbsp;ls_list-peinh.&nbsp;"价格单位<br />
+&nbsp;&nbsp;gs_mbewx-price_unit&nbsp;&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;gs_mbew-moving_pr&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_list-verpr.&nbsp;"移动平均价<br />
+&nbsp;&nbsp;gs_mbewx-moving_pr&nbsp;&nbsp;=&nbsp;'X'.<br />
+<br />
+&nbsp;&nbsp;gs_marc-variance_key&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_list-awsls.<br />
+&nbsp;&nbsp;gs_marcx-variance_key&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;'X'.<br />
+&nbsp;&nbsp;gs_marc-plant&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_list-werks.<br />
+&nbsp;&nbsp;gs_marcx-plant&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_list-werks.<br />
+&nbsp;&nbsp;gs_marc-profit_ctr&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_list-prctr.&nbsp;"利润中心<br />
+&nbsp;&nbsp;gs_marcx-profit_ctr&nbsp;&nbsp;&nbsp;=&nbsp;'X'.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;ls_list-losgr&nbsp;IS&nbsp;INITIAL."&nbsp;成本核算批量(大于等于价格单位)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;gs_marc-lot_size&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_list-peinh&nbsp;.<br />
+&nbsp;&nbsp;ELSE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;gs_marc-lot_size&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_list-losgr.&nbsp;"<br />
+&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;gs_marcx-lot_size&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'X'.<br />
+<br />
+&nbsp;&nbsp;gs_marc-no_costing&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_list-ncost.&nbsp;"无成本核算/不计成本<br />
+&nbsp;&nbsp;gs_marcx-no_costing&nbsp;&nbsp;&nbsp;=&nbsp;'X'.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;gs_marc-specprocty&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_list-sobsk.<br />
+*&nbsp;&nbsp;gs_marcx-specprocty&nbsp;&nbsp;&nbsp;=&nbsp;'X'.<br />
+*&nbsp;&nbsp;gs_marc-proc_type&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;ls_list-beskz.&nbsp;"采购类型<br />
+*&nbsp;&nbsp;gs_marcx-proc_type&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;'X'.<br />
+<br />
+   </div>
+   <div class="code">
+ENDFORM.<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Form&nbsp;FRM_FILL_VIEW06<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;生产视图<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&gt;&nbsp;&lt;LFS_LIST&gt;<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM frm_fill_view06 USING ls_list TYPE gty_list.<br />
+&nbsp;&nbsp;IF&nbsp;p_ck06&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXIT.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;gs_header-work_sched_view&nbsp;&nbsp;&nbsp;=&nbsp;'X'.&nbsp;&nbsp;&nbsp;"生产视图<br />
+<br />
+&nbsp;&nbsp;gs_marc-plant&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;ls_list-werks.&nbsp;&nbsp;&nbsp;"工厂<br />
+&nbsp;&nbsp;gs_marcx-plant&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;ls_list-werks.&nbsp;&nbsp;&nbsp;"工厂<br />
+<br />
+&nbsp;&nbsp;"*&nbsp;工作计划<br />
+&nbsp;&nbsp;gs_marc-production_scheduler&nbsp;&nbsp;=&nbsp;&nbsp;ls_list-fevor.&nbsp;&nbsp;&nbsp;"生产管理员<br />
+&nbsp;&nbsp;gs_marcx-production_scheduler&nbsp;=&nbsp;&nbsp;'X'.<br />
+&nbsp;&nbsp;gs_marc-prodprof&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;ls_list-sfcpf.&nbsp;&nbsp;&nbsp;"生产计划参数文件<br />
+&nbsp;&nbsp;gs_marcx-prodprof&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;'X'.<br />
+&nbsp;&nbsp;gs_marc-serno_prof&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;ls_list-sernp.&nbsp;&nbsp;&nbsp;"序列号参数文件<br />
+&nbsp;&nbsp;gs_marcx-serno_prof&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;'X'.<br />
+&nbsp;&nbsp;gs_mara-serialization_level&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;ls_list-serlv.&nbsp;&nbsp;&nbsp;"序列号的清晰的级别<br />
+&nbsp;&nbsp;gs_marax-serialization_level&nbsp;&nbsp;=&nbsp;&nbsp;'X'.<br />
+&nbsp;&nbsp;gs_marc-under_tol&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;ls_list-uneto.&nbsp;&nbsp;&nbsp;"不足交货允差<br />
+&nbsp;&nbsp;gs_marcx-under_tol&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;'X'.<br />
+&nbsp;&nbsp;gs_marc-over_tol&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;ls_list-ueeto.&nbsp;&nbsp;&nbsp;"过度交货允差<br />
+&nbsp;&nbsp;gs_marcx-over_tol&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;'X'.<br />
+&nbsp;&nbsp;gs_marc-unlimited&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;ls_list-ueetk.&nbsp;&nbsp;&nbsp;"未限制交货<br />
+&nbsp;&nbsp;gs_marcx-unlimited&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;'X'.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;gs_marc-proc_type&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;ls_list-beskz.&nbsp;"采购类型<br />
+*&nbsp;&nbsp;gs_marcx-proc_type&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;'X'.<br />
+<br />
+   </div>
+   <div class="code">
+ENDFORM.<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Form&nbsp;FRM_FILL_VIEW07<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;存储视图<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&gt;&nbsp;&lt;LFS_LIST&gt;<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM frm_fill_view07 USING ls_list TYPE gty_list.<br />
+&nbsp;&nbsp;IF&nbsp;p_ck07&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXIT.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;gs_header-storage_view&nbsp;&nbsp;&nbsp;=&nbsp;'X'.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;存储视图<br />
+<br />
+&nbsp;&nbsp;gs_marc-plant&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_list-werks.&nbsp;"&nbsp;工厂<br />
+&nbsp;&nbsp;gs_marcx-plant&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_list-werks.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;GS_MARC-BATCH_MGMT&nbsp;&nbsp;&nbsp;=&nbsp;LS_LIST-XCHPF.&nbsp;"&nbsp;批次管理<br />
+*&nbsp;&nbsp;GS_MARCX-BATCH_MGMT&nbsp;&nbsp;=&nbsp;'X'.<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;gs_marc-issue_unit&nbsp;&nbsp;&nbsp;=&nbsp;ls_list-ausme.&nbsp;"&nbsp;发货单位<br />
+&nbsp;&nbsp;gs_marcx-issue_unit&nbsp;&nbsp;=&nbsp;'X'.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;gs_marc-proc_type&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_list-beskz.&nbsp;"&nbsp;采购类型<br />
+*&nbsp;&nbsp;gs_marcx-proc_type&nbsp;&nbsp;&nbsp;=&nbsp;'X'.<br />
+<br />
+*&nbsp;&nbsp;"&nbsp;MARC-EPRIO,默认值为&nbsp;DY01<br />
+*&nbsp;&nbsp;IF&nbsp;&nbsp;&nbsp;&nbsp;LS_LIST-MTART&nbsp;BETWEEN&nbsp;'Z001'&nbsp;AND&nbsp;'Z005'<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;LS_LIST-WERKS&nbsp;&lt;&gt;&nbsp;'1029'<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;LS_LIST-WERKS&nbsp;&lt;&gt;&nbsp;'1039'<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;LS_LIST-WERKS&nbsp;&lt;&gt;&nbsp;'1049'&nbsp;&nbsp;."&lt;-&nbsp;by&nbsp;xx-dushun&nbsp;on&nbsp;20201230<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;GS_MARC-DETERM_GRP&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;'DY01'.&nbsp;"库存确定组<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;GS_MARCX-DETERM_GRP&nbsp;&nbsp;=&nbsp;&nbsp;'X'.<br />
+*&nbsp;&nbsp;ENDIF.<br />
+<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;gs_mara-batch_mgmt&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_list-xchpf.&nbsp;"&nbsp;批次管理<br />
+&nbsp;&nbsp;gs_marax-batch_mgmt&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;gs_mara-minremlife&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_list-mhdrz.&nbsp;"&nbsp;最小货架寿命<br />
+&nbsp;&nbsp;gs_marax-minremlife&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;gs_mara-shelf_life&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_list-mhdhb.&nbsp;"&nbsp;总货架寿命<br />
+&nbsp;&nbsp;gs_marax-shelf_life&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;gs_mara-period_ind_expiration_date&nbsp;&nbsp;=&nbsp;ls_list-iprkz.&nbsp;"货架存放期过期日期的期间标识<br />
+&nbsp;&nbsp;gs_marax-period_ind_expiration_date&nbsp;=&nbsp;'X'.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;gt_marm-alt_unit_iso&nbsp;&nbsp;=&nbsp;ls_list-meins.<br />
+*&nbsp;&nbsp;gt_marmx-alt_unit_iso&nbsp;=&nbsp;ls_list-meins.<br />
+*&nbsp;&nbsp;gt_marm-alt_unit&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_list-ausme.<br />
+*&nbsp;&nbsp;gt_marmx-alt_unit&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_list-ausme.<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;gt_marm-alt_unit_iso&nbsp;&nbsp;=&nbsp;ls_list-ausme.<br />
+&nbsp;&nbsp;gt_marmx-alt_unit_iso&nbsp;=&nbsp;ls_list-ausme.<br />
+&nbsp;&nbsp;gt_marm-alt_unit&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_list-meins.<br />
+&nbsp;&nbsp;gt_marmx-alt_unit&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_list-meins.<br />
+<br />
+&nbsp;&nbsp;gt_marm-numerator&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_list-cc_umrez."&nbsp;基本计量单位转换分子<br />
+&nbsp;&nbsp;gt_marmx-numerator&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;gt_marm-denominatr&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_list-cc_umren."&nbsp;转换为基本计量单位的分母<br />
+&nbsp;&nbsp;gt_marmx-denominatr&nbsp;&nbsp;&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;APPEND&nbsp;gt_marm.&nbsp;&nbsp;CLEAR&nbsp;gt_marm.<br />
+&nbsp;&nbsp;APPEND&nbsp;gt_marmx.&nbsp;CLEAR&nbsp;gt_marmx.<br />
+ENDFORM.<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Form&nbsp;FRM_FILL_VIEW10<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;仓库管理视图<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&gt;&nbsp;&lt;LFS_LIST&gt;<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM frm_fill_view10  USING ls_list TYPE gty_list.<br />
+&nbsp;&nbsp;IF&nbsp;p_ck10&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXIT.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;GS_HEADER-WAREHOUSE_VIEW&nbsp;=&nbsp;'X'.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"仓库管理视图<br />
+*<br />
+**&nbsp;&nbsp;GS_MLGN-WHSE_NO&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;LS_LIST-LGNUM.&nbsp;"仓库号<br />
+**&nbsp;&nbsp;GS_MLGNX-WHSE_NO&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;LS_LIST-LGNUM.&nbsp;"仓库号<br />
+*<br />
+*&nbsp;&nbsp;IF&nbsp;LS_LIST-LGTYP&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;GS_MLGT-WHSE_NO&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;LS_LIST-LGNUM.&nbsp;"仓库号<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;GS_MLGT-STGE_TYPE&nbsp;&nbsp;=&nbsp;&nbsp;LS_LIST-LGTYP.&nbsp;"仓储类型<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;GS_MLGTX-WHSE_NO&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;LS_LIST-LGNUM.&nbsp;"仓库号<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;GS_MLGTX-STGE_TYPE&nbsp;&nbsp;=&nbsp;LS_LIST-LGTYP.&nbsp;"仓储类型<br />
+*&nbsp;&nbsp;ENDIF.<br />
+   </div>
+   <div class="code">
+ENDFORM.<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Form&nbsp;frm_fill_view11<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;质量管理视图<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&gt;&nbsp;&lt;LFS_LIST&gt;<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM frm_fill_view11  USING ls_list TYPE gty_list.<br />
+&nbsp;&nbsp;IF&nbsp;p_ck11&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXIT.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;gs_header-quality_view&nbsp;=&nbsp;'X'.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"质量管理视图<br />
+<br />
+ENDFORM.<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Form&nbsp;FRM_FILL_EXT<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;text<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&gt;&nbsp;&lt;LFS_LIST&gt;<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM frm_fill_ext USING ls_list TYPE gty_list.<br />
+&nbsp;&nbsp;DATA:<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_te_mara&nbsp;&nbsp;TYPE&nbsp;bapi_te_mara2,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_te_marax&nbsp;TYPE&nbsp;bapi_te_mara2x,<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;ls_te_mara&nbsp;&nbsp;TYPE&nbsp;bapi_te_mara,<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;ls_te_marax&nbsp;TYPE&nbsp;bapi_te_marax,<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;ls_te_marc&nbsp;&nbsp;TYPE&nbsp;bapi_te_marc,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_te_marcx&nbsp;TYPE&nbsp;bapi_te_marcx.<br />
+&nbsp;&nbsp;IF&nbsp;p_ck01&nbsp;=&nbsp;'X'.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;LS_TE_MARA-MATERIAL&nbsp;&nbsp;=&nbsp;LS_LIST-MATNR.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;LS_TE_MARA-ZWLSX3&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;LS_LIST-ZWLSX3.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;LS_TE_MARA-ZWLSX6&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;LS_LIST-ZWLSX6.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;LS_LIST-ZWLSX4&nbsp;CA&nbsp;'Xx1Yy是'.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LS_TE_MARA-ZWLSX4&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'X'.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;ELSE.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LS_TE_MARA-ZWLSX4&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;''.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;LS_LIST-ZWLSX5&nbsp;CA&nbsp;'Xx1Yy是'.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LS_TE_MARA-ZWLSX5&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'X'.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;ELSE.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LS_TE_MARA-ZWLSX5&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;''.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;LS_LIST-ZWLSX7&nbsp;=&nbsp;'A'&nbsp;OR&nbsp;LS_LIST-ZWLSX7&nbsp;=&nbsp;'B'.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LS_TE_MARA-ZWLSX7&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;LS_LIST-ZWLSX7.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;ELSE.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LS_TE_MARA-ZWLSX7&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;''.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;GT_EXT-STRUCTURE&nbsp;&nbsp;=&nbsp;'BAPI_TE_MARA2'."&nbsp;40位物料长度<br />
+**&nbsp;&nbsp;&nbsp;&nbsp;gt_ext-structure&nbsp;&nbsp;=&nbsp;'BAPI_TE_MARA'."&nbsp;18位物料长度<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;GT_EXT-VALUEPART1&nbsp;=&nbsp;LS_TE_MARA.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;GT_EXT.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;CLEAR:GT_EXT,LS_TE_MARA.<br />
+<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;LS_TE_MARAX-MATERIAL&nbsp;&nbsp;=&nbsp;LS_LIST-MATNR.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;LS_TE_MARAX-ZWLSX3&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'X'.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;LS_TE_MARAX-ZWLSX4&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'X'.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;LS_TE_MARAX-ZWLSX5&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'X'.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;LS_TE_MARAX-ZWLSX6&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'X'.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;LS_TE_MARAX-ZWLSX7&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'X'.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;GT_EXTX-STRUCTURE&nbsp;&nbsp;=&nbsp;'BAPI_TE_MARA2X'.<br />
+**&nbsp;&nbsp;&nbsp;&nbsp;gt_extx-structure&nbsp;&nbsp;=&nbsp;'BAPI_TE_MARAX'.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;GT_EXTX-VALUEPART1&nbsp;=&nbsp;LS_TE_MARAX.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;GT_EXTX.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;CLEAR:GT_EXTX,LS_TE_MARAX.<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;p_ck04&nbsp;=&nbsp;'X'.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;LS_TE_MARC-PLANT&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;LS_LIST-WERKS.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;LS_TE_MARC-ZMATNR&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;LS_LIST-ZMATNR.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;LS_TE_MARC-ZPOSID&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;LS_LIST-ZPOSID.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;LS_TE_MARC-ZZYKF&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;LS_LIST-ZZYKF&nbsp;.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;GT_EXT-STRUCTURE&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'BAPI_TE_MARC'.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;GT_EXT-VALUEPART1&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;LS_TE_MARC.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;GT_EXT.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;CLEAR:GT_EXT,LS_TE_MARC.<br />
+<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;LS_TE_MARCX-PLANT&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;LS_LIST-WERKS.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;LS_TE_MARCX-ZMATNR&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'X'.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;LS_TE_MARCX-ZPOSID&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'X'.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;LS_TE_MARCX-ZZYKF&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'X'.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;GT_EXTX-STRUCTURE&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'BAPI_TE_MARCX'.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;GT_EXTX-VALUEPART1&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;LS_TE_MARCX.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;GT_EXTX.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;CLEAR:GT_EXTX,LS_TE_MARCX.<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;ENDIF.<br />
+ENDFORM.<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Form&nbsp;FRM_CALL_BAPI<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;text<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;--&gt;&nbsp;&nbsp;p1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*&&nbsp;&lt;--&nbsp;&nbsp;p2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM frm_call_bapi CHANGING ls_list TYPE gty_list.<br />
+&nbsp;&nbsp;DATA:ls_return&nbsp;&nbsp;TYPE&nbsp;bapiret2.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;ls_list-error2&nbsp;&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXIT.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'BAPI_MATERIAL_SAVEDATA'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;headdata&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;gs_header<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;clientdata&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;gs_mara<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;clientdatax&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;gs_marax<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;plantdata&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;gs_marc<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;plantdatax&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;gs_marcx<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;valuationdata&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;gs_mbew<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;valuationdatax&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;gs_mbewx<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;salesdata&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;gs_mvke<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;salesdatax&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;gs_mvkex<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;warehousenumberdata&nbsp;&nbsp;=&nbsp;gs_mlgn<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;warehousenumberdatax&nbsp;=&nbsp;gs_mlgnx<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;storagetypedata&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;gs_mlgt<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;storagetypedatax&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;gs_mlgtx<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_return<br />
+&nbsp;&nbsp;&nbsp;&nbsp;TABLES<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;materialdescription&nbsp;&nbsp;=&nbsp;gt_makt<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;unitsofmeasure&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;gt_marm<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;unitsofmeasurex&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;gt_marmx<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;taxclassifications&nbsp;&nbsp;&nbsp;=&nbsp;gt_mlan<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;extensionin&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;gt_ext<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;extensioninx&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;gt_extx.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;ls_return-type&nbsp;=&nbsp;'E'&nbsp;OR&nbsp;ls_return-type&nbsp;=&nbsp;'A'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'BAPI_TRANSACTION_ROLLBACK'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_list-error2&nbsp;&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-ucomm&nbsp;=&nbsp;'CMD_SAVE'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_list-zzmsg&nbsp;&nbsp;=&nbsp;'物料主数据创建失败'&nbsp;&&&nbsp;ls_return-message.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ELSEIF&nbsp;sy-ucomm&nbsp;=&nbsp;'CMD_MATA'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_list-zzmsg&nbsp;&nbsp;=&nbsp;'物料主数据维护失败'&nbsp;&&&nbsp;ls_return-message.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;ELSE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-ucomm&nbsp;=&nbsp;'CMD_SAVE'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_list-zzmsg&nbsp;&nbsp;=&nbsp;'物料主数据创建成功'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ELSEIF&nbsp;sy-ucomm&nbsp;=&nbsp;'CMD_MATA'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_list-zzmsg&nbsp;&nbsp;=&nbsp;'物料主数据维护成功'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'BAPI_TRANSACTION_COMMIT'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wait&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;ENDIF.<br />
+ENDFORM.<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Form&nbsp;FRM_MRP_AREA<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;text<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&gt;&nbsp;&lt;LFS_LIST&gt;<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM frm_mrp_area  CHANGING ls_list TYPE gty_list.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;DATA:lv_matnr&nbsp;&nbsp;TYPE&nbsp;mdma-matnr,<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_mdma&nbsp;&nbsp;&nbsp;TYPE&nbsp;mdma,<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_sel&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;sdibe_massfields,<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_dpop&nbsp;&nbsp;&nbsp;TYPE&nbsp;dpop,<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_return&nbsp;TYPE&nbsp;bapireturn1.<br />
+*<br />
+*&nbsp;&nbsp;IF&nbsp;ls_list-error2&nbsp;&nbsp;=&nbsp;'X'.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;EXIT.<br />
+*&nbsp;&nbsp;ENDIF.<br />
+*<br />
+*&nbsp;&nbsp;IF&nbsp;p_ck08&nbsp;IS&nbsp;INITIAL.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;EXIT.<br />
+*&nbsp;&nbsp;ENDIF.<br />
+*<br />
+*&nbsp;&nbsp;CLEAR:ls_mdma,lv_matnr,ls_sel,ls_dpop,ls_return.<br />
+*<br />
+*&nbsp;&nbsp;ls_mdma-matnr&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;ls_list-matnr.<br />
+*&nbsp;&nbsp;ls_mdma-werks&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;ls_list-werks.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"工厂<br />
+*&nbsp;&nbsp;ls_mdma-berid&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;ls_list-berid1&nbsp;.&nbsp;&nbsp;&nbsp;"MRP范围<br />
+*<br />
+*&nbsp;&nbsp;ls_mdma-dismm&nbsp;=&nbsp;ls_list-dismm1.<br />
+*&nbsp;&nbsp;ls_mdma-disgr&nbsp;=&nbsp;ls_list-disgr1.<br />
+*&nbsp;&nbsp;ls_mdma-minbe&nbsp;=&nbsp;ls_list-minbe1.<br />
+*&nbsp;&nbsp;ls_mdma-dispo&nbsp;=&nbsp;ls_list-dispo1.<br />
+*&nbsp;&nbsp;ls_mdma-disls&nbsp;=&nbsp;ls_list-disls1.<br />
+*&nbsp;&nbsp;ls_mdma-bstmi&nbsp;=&nbsp;ls_list-bstmi1.<br />
+*&nbsp;&nbsp;ls_mdma-bstfe&nbsp;=&nbsp;ls_list-bstfe1.<br />
+*&nbsp;&nbsp;ls_mdma-lgpro&nbsp;=&nbsp;ls_list-lgpro1.<br />
+*&nbsp;&nbsp;ls_mdma-lgfsb&nbsp;=&nbsp;ls_list-lgfsb1.<br />
+*&nbsp;&nbsp;ls_mdma-plifz&nbsp;=&nbsp;ls_list-plifz1.<br />
+*&nbsp;&nbsp;ls_mdma-eisbe&nbsp;=&nbsp;ls_list-eisbe1.<br />
+*&nbsp;&nbsp;ls_mdma-sobsl&nbsp;=&nbsp;ls_list-sobsl1.<br />
+*<br />
+*&nbsp;&nbsp;ls_sel-xdismm&nbsp;=&nbsp;'X'.<br />
+*&nbsp;&nbsp;ls_sel-xdisgr&nbsp;=&nbsp;'X'.<br />
+*&nbsp;&nbsp;ls_sel-xminbe&nbsp;=&nbsp;'X'.<br />
+*&nbsp;&nbsp;ls_sel-xdispo&nbsp;=&nbsp;'X'.<br />
+*&nbsp;&nbsp;ls_sel-xdisls&nbsp;=&nbsp;'X'.<br />
+*&nbsp;&nbsp;ls_sel-xbstmi&nbsp;=&nbsp;'X'.<br />
+*&nbsp;&nbsp;ls_sel-xbstfe&nbsp;=&nbsp;'X'.<br />
+*&nbsp;&nbsp;ls_sel-xlgpro&nbsp;=&nbsp;'X'.<br />
+*&nbsp;&nbsp;ls_sel-xlgfsb&nbsp;=&nbsp;'X'.<br />
+*&nbsp;&nbsp;ls_sel-xplifz&nbsp;=&nbsp;'X'.<br />
+*&nbsp;&nbsp;ls_sel-xeisbe&nbsp;=&nbsp;'X'.<br />
+*&nbsp;&nbsp;ls_sel-xsobsl&nbsp;=&nbsp;'X'.<br />
+*<br />
+*&nbsp;&nbsp;SELECT&nbsp;SINGLE&nbsp;matnr&nbsp;INTO&nbsp;lv_matnr&nbsp;FROM&nbsp;mdma&nbsp;WHERE&nbsp;matnr&nbsp;=&nbsp;ls_mdma-matnr&nbsp;AND&nbsp;berid&nbsp;=&nbsp;ls_mdma-berid.<br />
+*&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;=&nbsp;0.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'MD_MRP_LEVEL_CHANGE_DATA'<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_matnr&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_mdma-matnr<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_werk&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_mdma-werks<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_mrp_area&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_mdma-berid<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_berty&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'01'<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_selfields&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_sel<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_mdma&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_mdma<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_dpop&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_dpop<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_external_commit&nbsp;=&nbsp;'X'<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;e_error_return&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_return.<br />
+*&nbsp;&nbsp;ELSE.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'MD_MRP_LEVEL_CREATE_DATA'<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_matnr&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_mdma-matnr<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_werk&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_mdma-werks<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_mrp_area&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_mdma-berid<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_selfields&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_sel<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_mdma&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_mdma<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_dpop&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_dpop<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_external_commit&nbsp;=&nbsp;'X'<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;e_error_return&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_return.<br />
+*&nbsp;&nbsp;ENDIF.<br />
+*<br />
+*&nbsp;&nbsp;IF&nbsp;ls_return-type&nbsp;&nbsp;=&nbsp;'E'&nbsp;OR&nbsp;ls_return-type&nbsp;&nbsp;=&nbsp;'A'.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'BAPI_TRANSACTION_ROLLBACK'.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;ls_list-error2&nbsp;&nbsp;=&nbsp;'X'.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;ls_list-zzmsg&nbsp;&nbsp;=&nbsp;ls_list-zzmsg&nbsp;&&&nbsp;';MPR范围维护失败：'&nbsp;&&&nbsp;ls_return-message.<br />
+*&nbsp;&nbsp;ELSE.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'BAPI_TRANSACTION_COMMIT'<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wait&nbsp;=&nbsp;'X'.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;ls_list-zzmsg&nbsp;&nbsp;=&nbsp;ls_list-zzmsg&nbsp;&&&nbsp;';MPR范围维护成功'.<br />
+*&nbsp;&nbsp;ENDIF.<br />
+   </div>
+   <div class="code">
+ENDFORM.<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Form&nbsp;FRM_CREATE_CLASS<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;分类视图<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&gt;&nbsp;&lt;LFS_LIST&gt;<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM frm_create_class CHANGING ls_list TYPE gty_list.<br />
+&nbsp;&nbsp;DATA:lt_return&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;bapiret2&nbsp;&nbsp;OCCURS&nbsp;0&nbsp;WITH&nbsp;HEADER&nbsp;LINE,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lt_allocvalueschar&nbsp;TYPE&nbsp;bapi1003_alloc_values_char&nbsp;OCCURS&nbsp;0&nbsp;WITH&nbsp;HEADER&nbsp;LINE,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_zzmsg&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;string,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_object&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;bapi1003_key-object,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_object_long&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;bapi1003_key-object_long,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_objecttable&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;bapi1003_key-objecttable,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_classnum&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;bapi1003_key-classnum,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_classtype&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;bapi1003_key-classtype.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;ls_list-error2&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXIT.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;p_ck09&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXIT.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;CLEAR:lv_object,&nbsp;lv_objecttable,&nbsp;lv_classnum,&nbsp;lv_classtype,lv_zzmsg.<br />
+&nbsp;&nbsp;lv_object&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_list-matnr.<br />
+&nbsp;&nbsp;lv_object_long&nbsp;&nbsp;=&nbsp;ls_list-matnr.<br />
+&nbsp;&nbsp;lv_objecttable&nbsp;&nbsp;=&nbsp;'MARA'.<br />
+&nbsp;&nbsp;lv_classnum&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_list-class.<br />
+&nbsp;&nbsp;lv_classtype&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_list-klart.<br />
+<br />
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'BAPI_OBJCL_EXISTENCECHECK'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;objectkey&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lv_object<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;objectkey_long&nbsp;=&nbsp;lv_object_long<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;objecttable&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lv_objecttable<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;classnum&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lv_classnum<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;classtype&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lv_classtype<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;keydate&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;sy-datum<br />
+&nbsp;&nbsp;&nbsp;&nbsp;TABLES<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lt_return.<br />
+&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;lt_return&nbsp;WITH&nbsp;KEY&nbsp;type&nbsp;=&nbsp;'S'.<br />
+&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;ELSE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;REFRESH:lt_return,lt_allocvalueschar.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;lt_allocvalueschar-charact&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_list-atnam&nbsp;."&nbsp;特征名称<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;lt_allocvalueschar-value_char&nbsp;=&nbsp;ls_list-atwrt&nbsp;."&nbsp;特性值<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;lt_allocvalueschar.<br />
+<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'BAPI_OBJCL_CREATE'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;objectkeynew&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lv_object&nbsp;"&nbsp;18位物料<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;objectkeynew_long&nbsp;=&nbsp;lv_object_long&nbsp;"&nbsp;40位物料<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;objecttablenew&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lv_objecttable<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;classnumnew&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lv_classnum<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;classtypenew&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lv_classtype<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TABLES<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;allocvalueschar&nbsp;&nbsp;&nbsp;=&nbsp;lt_allocvalueschar<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lt_return.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;lt_return&nbsp;WHERE&nbsp;type&nbsp;=&nbsp;'E'&nbsp;OR&nbsp;type&nbsp;=&nbsp;'A'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_list-error2&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;frm_out_msg&nbsp;USING&nbsp;lv_zzmsg&nbsp;lt_return-message&nbsp;'；'CHANGING&nbsp;lv_zzmsg.<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;ls_list-error2&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_list-zzmsg&nbsp;&nbsp;=&nbsp;ls_list-zzmsg&nbsp;&&&nbsp;';分类视图维护失败：'&nbsp;&&&nbsp;lv_zzmsg.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'BAPI_TRANSACTION_ROLLBACK'.<br />
+&nbsp;&nbsp;ELSE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'BAPI_TRANSACTION_COMMIT'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wait&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_list-zzmsg&nbsp;&nbsp;=&nbsp;ls_list-zzmsg&nbsp;&&&nbsp;';分类视图维护成功'.<br />
+&nbsp;&nbsp;ENDIF.<br />
+ENDFORM.<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Form&nbsp;frm_create_qmat<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;质量视图<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&gt;&nbsp;&lt;LFS_LIST&gt;<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM frm_create_qmat  CHANGING ls_list TYPE gty_list.<br />
+&nbsp;&nbsp;DATA:lt_return&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;bapiret2&nbsp;&nbsp;OCCURS&nbsp;0&nbsp;WITH&nbsp;HEADER&nbsp;LINE,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lt_inspectionctrl&nbsp;TYPE&nbsp;bapi1001004_qmat&nbsp;OCCURS&nbsp;0&nbsp;WITH&nbsp;HEADER&nbsp;LINE,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_zzmsg&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;string.<br />
+&nbsp;&nbsp;DATA:&nbsp;ls_tq34&nbsp;TYPE&nbsp;tq34&nbsp;.<br />
+<br />
+&nbsp;&nbsp;TYPES:BEGIN&nbsp;OF&nbsp;tt_art,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;art&nbsp;TYPE&nbsp;tq30-art,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;END&nbsp;OF&nbsp;&nbsp;tt_art.<br />
+&nbsp;&nbsp;DATA:&nbsp;lt_art&nbsp;TYPE&nbsp;TABLE&nbsp;OF&nbsp;tt_art,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_art&nbsp;TYPE&nbsp;tt_art.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;ls_list-error2&nbsp;=&nbsp;'X'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;OR&nbsp;p_ck11&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXIT.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;SPLIT&nbsp;ls_list-art&nbsp;AT&nbsp;'/'&nbsp;INTO&nbsp;TABLE&nbsp;lt_art.<br />
+&nbsp;&nbsp;DELETE&nbsp;lt_art&nbsp;WHERE&nbsp;art&nbsp;IS&nbsp;INITIAL.<br />
+<br />
+&nbsp;&nbsp;REFRESH:lt_return,lt_inspectionctrl.<br />
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;lt_art&nbsp;INTO&nbsp;ls_art.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;lt_inspectionctrl.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;lt_inspectionctrl-function&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'004'&nbsp;."&nbsp;功能<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;lt_inspectionctrl-insptype&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_art-art&nbsp;."&nbsp;检验类型<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;lt_inspectionctrl-material&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_list-matnr&nbsp;."&nbsp;物料编号<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;lt_inspectionctrl-material_long&nbsp;=&nbsp;ls_list-matnr&nbsp;."&nbsp;物料编号（40&nbsp;字符，出于技术原因需要）<br />
+&nbsp;&nbsp;&nbsp;&nbsp;lt_inspectionctrl-plant&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_list-werks&nbsp;."&nbsp;工厂<br />
+&nbsp;&nbsp;&nbsp;&nbsp;lt_inspectionctrl-ind_insptype_mat_active&nbsp;=&nbsp;ls_list-apa&nbsp;."&nbsp;活动的<br />
+&nbsp;&nbsp;&nbsp;&nbsp;lt_inspectionctrl-preferred_insptype&nbsp;=&nbsp;ls_list-apa&nbsp;."&nbsp;活动的<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;SINGLE&nbsp;*<br />
+&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;CORRESPONDING&nbsp;FIELDS&nbsp;OF&nbsp;ls_tq34<br />
+&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;tq34<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;art&nbsp;=&nbsp;lt_inspectionctrl-insptype.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;lt_inspectionctrl-ind_insp_with_tsk_list&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_tq34-ppl.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;lt_inspectionctrl-ind_spec_matspec&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_tq34-spezueber.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;lt_inspectionctrl-ind_spec_config&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_tq34-conf.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;lt_inspectionctrl-ind_spec_batch&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_tq34-tls.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;lt_inspectionctrl-ind_auto_assign&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_tq34-app.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;lt_inspectionctrl-ind_insp_by_charac&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_tq34-mer.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;lt_inspectionctrl-ind_post_to_insp_stock&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_tq34-insmk.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;lt_inspectionctrl-ind_automatic_ud&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_tq34-ave.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;lt_inspectionctrl-sampling_procedure&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_tq34-stichprver.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;lt_inspectionctrl-dyn_modif_rule&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_tq34-dynregel.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;lt_inspectionctrl-insp_percentage&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_tq34-sproz.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;lt_inspectionctrl-ind_100_percent_inspection&nbsp;=&nbsp;ls_tq34-hpz.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;lt_inspectionctrl-ind_skips_allowed&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_tq34-dyn.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;lt_inspectionctrl-ind_manual_sample&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_tq34-mpb.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;lt_inspectionctrl-ind_manual_sample_calc&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_tq34-mst.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;lt_inspectionctrl-ind_single_units_possible&nbsp;&nbsp;=&nbsp;ls_tq34-ein.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;lt_inspectionctrl-ave_insp_duration&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_tq34-mpdau.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;lt_inspectionctrl-contr_insp_lot_create&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_tq34-chg.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;lt_inspectionctrl-qual_score_procedure&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_tq34-qkzverf.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;lt_inspectionctrl-allowed_scrap_share&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_tq34-qpmat.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;lt_inspectionctrl-ind_insptype_mat_active&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;lt_inspectionctrl-preferred_insptype&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'X'."首选的检验类型<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;lt_inspectionctrl.<br />
+<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'BAPI_MATINSPCTRL_SAVEREPLICA'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;is_save&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;abap_true<br />
+&nbsp;&nbsp;&nbsp;&nbsp;TABLES<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lt_return<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;inspectionctrl&nbsp;=&nbsp;lt_inspectionctrl.<br />
+<br />
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;lt_return&nbsp;WHERE&nbsp;type&nbsp;=&nbsp;'E'&nbsp;OR&nbsp;type&nbsp;=&nbsp;'A'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_list-error2&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;frm_out_msg&nbsp;USING&nbsp;lv_zzmsg&nbsp;lt_return-message&nbsp;'；'CHANGING&nbsp;lv_zzmsg.<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;ls_list-error2&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_list-zzmsg&nbsp;&nbsp;=&nbsp;ls_list-zzmsg&nbsp;&&&nbsp;';质量视图维护失败：'&nbsp;&&&nbsp;lv_zzmsg.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'BAPI_TRANSACTION_ROLLBACK'.<br />
+&nbsp;&nbsp;ELSE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'BAPI_TRANSACTION_COMMIT'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wait&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_list-zzmsg&nbsp;&nbsp;=&nbsp;ls_list-zzmsg&nbsp;&&&nbsp;';质量视图维护成功'.<br />
+&nbsp;&nbsp;ENDIF.<br />
+ENDFORM.<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Form&nbsp;frm_ext_bdc<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;text<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&gt;&nbsp;&lt;LFS_LIST&gt;<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM frm_ext_bdc  USING ls_list TYPE gty_list.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;p_ck01&nbsp;&lt;&gt;&nbsp;'X'&nbsp;AND&nbsp;p_ck04&nbsp;&lt;&gt;&nbsp;'X'&nbsp;AND&nbsp;p_ck06&nbsp;&lt;&gt;&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;RETURN.<br />
+&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;CHECK&nbsp;ls_list-error2&nbsp;&lt;&gt;&nbsp;'X'.<br />
+<br />
+&nbsp;&nbsp;"&nbsp;BDC所需定义<br />
+&nbsp;&nbsp;DATA:&nbsp;messtab&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;TABLE&nbsp;OF&nbsp;bdcmsgcoll&nbsp;WITH&nbsp;HEADER&nbsp;LINE,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gv_mode&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;c1&nbsp;VALUE&nbsp;'N',&nbsp;"&nbsp;N&nbsp;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gv_updata&nbsp;&nbsp;TYPE&nbsp;c1&nbsp;VALUE&nbsp;'S',<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gv_tcode&nbsp;&nbsp;&nbsp;TYPE&nbsp;char10&nbsp;VALUE&nbsp;'MM02',<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_flag(1).<br />
+&nbsp;&nbsp;DATA:&nbsp;ex_messtab&nbsp;TYPE&nbsp;TABLE&nbsp;OF&nbsp;bapiret2&nbsp;WITH&nbsp;HEADER&nbsp;LINE.<br />
+&nbsp;&nbsp;DATA:&nbsp;msg&nbsp;TYPE&nbsp;bapi_msg.<br />
+<br />
+&nbsp;&nbsp;"&nbsp;需要从基本视图进去在切换页签(子屏幕编号时固定的)<br />
+&nbsp;&nbsp;"&nbsp;不能在初始屏幕上直接选择需要的视图(顺序不固定)<br />
+<br />
+&nbsp;&nbsp;REFRESH:&nbsp;bdcdata,&nbsp;messtab&nbsp;.<br />
+&nbsp;&nbsp;CLEAR:&nbsp;lv_flag.<br />
+<br />
+&nbsp;&nbsp;PERFORM&nbsp;bdc_dynpro&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'SAPLMGMM'&nbsp;'0060'."<br />
+&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'BDC_OKCODE'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'=AUSW'."&nbsp;选择视图<br />
+&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'RMMG1-MATNR'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_list-matnr."&nbsp;物料号<br />
+<br />
+&nbsp;&nbsp;PERFORM&nbsp;bdc_dynpro&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'SAPLMGMM'&nbsp;'0070'."<br />
+&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'BDC_OKCODE'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'=ENTR'.<br />
+&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'MSICHTAUSW-KZSEL(01)'"&nbsp;从基本视图进去<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'X'.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;p_ck04&nbsp;=&nbsp;'X'.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&&nbsp;MRP4<br />
+<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;bdc_dynpro&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'SAPLMGMM'&nbsp;'4004'."<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'BDC_OKCODE'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'=SP16'.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;bdc_dynpro&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'SAPLMGMM'&nbsp;'0081'."<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'BDC_OKCODE'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'=ENTR'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'RMMG1-WERKS'"<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_list-werks.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;bdc_dynpro&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'SAPLMGMM'&nbsp;'4000'."<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'BDC_OKCODE'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'=SP17'.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;BDC_FIELD&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'MARC-ZMATNR'<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LS_LIST-ZMATNR.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;BDC_FIELD&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'MARC-ZPOSID'<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LS_LIST-ZPOSID.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;BDC_FIELD&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'MARC-ZZYKF'<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LS_LIST-ZZYKF.<br />
+<br />
+**&&nbsp;提前计划<br />
+*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;BDC_DYNPRO&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'SAPLMGMM'&nbsp;'4004'."<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;BDC_FIELD&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'BDC_OKCODE'<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'=SP01'.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;BDC_FIELD2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'MARC-SCM_GRPRT'<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LS_LIST-SCM_GRPRT.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;BDC_FIELD2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'MARC-SCM_GIPRT'<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LS_LIST-SCM_GIPRT.<br />
+<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;PERFORM&nbsp;bdc_dynpro&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'SAPLMGMM'&nbsp;'4004'."<br />
+&nbsp;&nbsp;PERFORM&nbsp;bdc_field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'BDC_OKCODE'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'=BU'.<br />
+   </div>
+   <div class="codeComment">
+*&&nbsp;基本视图1<br />
+<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;IF&nbsp;p_ck01&nbsp;=&nbsp;'X'.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;BDC_FIELD&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'MARA-ZWLSX3'<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LS_LIST-ZWLSX3.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;LS_LIST-ZWLSX4&nbsp;CA&nbsp;'Xx是1Yy'.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;BDC_FIELD&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'MARA-ZWLSX4'&nbsp;'X'.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;ELSE.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;BDC_FIELD&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'MARA-ZWLSX4'&nbsp;''.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;LS_LIST-ZWLSX5&nbsp;CA&nbsp;'Xx是1Yy'.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;BDC_FIELD&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'MARA-ZWLSX5'&nbsp;'X'.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;ELSE.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;BDC_FIELD&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'MARA-ZWLSX5'&nbsp;''.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;LS_LIST-ZWLSX6&nbsp;CA&nbsp;'Xx是1Yy'.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;BDC_FIELD&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'MARA-ZWLSX6'&nbsp;'X'.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;ELSE.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;BDC_FIELD&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'MARA-ZWLSX6'&nbsp;''.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;BDC_FIELD&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'MARA-ZWLSX7'<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LS_LIST-ZWLSX7.<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;REFRESH&nbsp;messtab.<br />
+&nbsp;&nbsp;CALL&nbsp;TRANSACTION&nbsp;gv_tcode&nbsp;USING&nbsp;bdcdata<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MODE&nbsp;&nbsp;&nbsp;gv_mode&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"<br />
+&nbsp;&nbsp;&nbsp;&nbsp;UPDATE&nbsp;gv_updata<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MESSAGES&nbsp;&nbsp;INTO&nbsp;&nbsp;messtab&nbsp;.<br />
+&nbsp;&nbsp;REFRESH&nbsp;ex_messtab.<br />
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'CONVERT_BDCMSGCOLL_TO_BAPIRET2'&nbsp;"&nbsp;将&nbsp;messtab&nbsp;转换为消息文本<br />
+&nbsp;&nbsp;&nbsp;&nbsp;TABLES<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;imt_bdcmsgcoll&nbsp;=&nbsp;messtab<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ext_return&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ex_messtab.<br />
+&nbsp;&nbsp;CLEAR&nbsp;msg.<br />
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;ex_messtab&nbsp;WHERE&nbsp;type&nbsp;CA&nbsp;'AE'&nbsp;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;msg&nbsp;=&nbsp;|&nbsp;{&nbsp;msg&nbsp;}[{&nbsp;ex_messtab-message&nbsp;}]|.<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_list-error2&nbsp;&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_list-zzmsg&nbsp;&nbsp;=&nbsp;|{&nbsp;ls_list-zzmsg&nbsp;}{&nbsp;msg&nbsp;}|.<br />
+&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;RETURN.<br />
+<br />
+ENDFORM.<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;添加Program/DynPro操作到BatchInput序列的内部表BDCDATA&nbsp;&nbsp;&nbsp;&nbsp;*<br />
+*&&nbsp;PROGRAM&nbsp;-&nbsp;程序名（长度为8的字符串）<br />
+*&&nbsp;DYNPRO&nbsp;&nbsp;-&nbsp;画面号&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM bdc_dynpro USING program<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dynpro.<br />
+&nbsp;&nbsp;CLEAR&nbsp;bdcdata.<br />
+&nbsp;&nbsp;bdcdata-program&nbsp;=&nbsp;program.<br />
+&nbsp;&nbsp;bdcdata-dynpro&nbsp;&nbsp;=&nbsp;dynpro.<br />
+&nbsp;&nbsp;bdcdata-dynbegin&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;APPEND&nbsp;bdcdata.<br />
+ENDFORM.                    "bdc_dynpro<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;添加屏幕数据操作到BatchInput序列的内部表BDCDATA&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*<br />
+*&&nbsp;FNAM&nbsp;-&nbsp;屏幕项目名&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*<br />
+*&&nbsp;FVAL&nbsp;-&nbsp;填写项目值&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM bdc_field USING fnam fval.<br />
+&nbsp;&nbsp;CLEAR&nbsp;bdcdata.<br />
+&nbsp;&nbsp;bdcdata-fnam&nbsp;=&nbsp;fnam.<br />
+&nbsp;&nbsp;bdcdata-fval&nbsp;=&nbsp;fval.<br />
+&nbsp;&nbsp;APPEND&nbsp;bdcdata.<br />
+ENDFORM.                    "bdc_field<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;bdc_field2<br />
+*&---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;金额,数量字段&nbsp;需要删除字符空格<br />
+*----------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM bdc_field2 USING fnam fval.<br />
+&nbsp;&nbsp;CLEAR&nbsp;bdcdata.<br />
+&nbsp;&nbsp;bdcdata-fnam&nbsp;=&nbsp;fnam.<br />
+&nbsp;&nbsp;bdcdata-fval&nbsp;=&nbsp;fval.<br />
+&nbsp;&nbsp;CONDENSE&nbsp;bdcdata-fval."&nbsp;删除字符串中的空格<br />
+&nbsp;&nbsp;APPEND&nbsp;bdcdata.<br />
+ENDFORM.                    "bdc_field<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Form&nbsp;frm_progress_indicate<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;进度条<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM frm_progress_indicate USING pv_txt pv_processed pv_total.<br />
+&nbsp;&nbsp;cl_progress_indicator=&gt;progress_indicate(<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_text&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;|&nbsp;{&nbsp;pv_txt&nbsp;}&nbsp;{&nbsp;pv_processed&nbsp;}&nbsp;/&nbsp;{&nbsp;pv_total&nbsp;}&nbsp;|<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_processed&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;pv_processed&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;Number&nbsp;of&nbsp;Objects&nbsp;Already&nbsp;Processed<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_total&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;pv_total&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;Total&nbsp;Number&nbsp;of&nbsp;Objects&nbsp;to&nbsp;Be&nbsp;Processed<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_output_immediately&nbsp;=&nbsp;abap_true&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;X&nbsp;=&nbsp;Display&nbsp;Progress&nbsp;Immediately/立即显示<br />
+&nbsp;&nbsp;).<br />
+ENDFORM.<br />
+            </div>
+          </td>
+        </tr>
+      </table>
+      </td>
+      </tr>
+   <tr>
+<td class="footer">Extracted by Mass Download version 1.5.2 - E.G.Mellodew. 1998-2022. Sap Release 755</td>
+   </tr>
+</table>
+</body>
+</html>

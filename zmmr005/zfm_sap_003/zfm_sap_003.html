@@ -1,0 +1,132 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=GB2312" />
+<title>ZFM_SAP_003</title>
+<style type="text/css">
+.code{ font-family:"Courier New", Courier, monospace; color:#000; font-size:14px; background-color:#F2F4F7 }
+  .codeComment {font-family:"Courier New", Courier, monospace; color:#0000F0; font-size:14px; background-color:#F2F4F7 }
+  .normalBold{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; font-weight:800 }
+  .normalBoldLarge{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+</style>
+<style type="text/css">
+  .normal{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px }
+  .footer{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; text-align: center }
+  h2{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+  h3{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:14px; font-weight:800 }
+  .outerTable{
+   background-color:#E0E7ED;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-right-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+  .innerTable{
+   background-color:#F2F4F7;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-bottom-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+</style>
+</head>
+<body>
+<table class="outerTable">
+  <tr class="normalBoldLarge">
+     <td><h2>Code listing for function ZFM_SAP_003</h2>
+<h3> Description: 创建工作流（创建流程）</h3></td>
+   </tr>
+  <tr>
+     <td>
+     <table class="innerTable">
+       <tr>
+          <td>
+   <div class="code">
+FUNCTION zfm_sap_003.<br />
+   </div>
+   <div class="codeComment">
+*"----------------------------------------------------------------------<br />
+*"*"本地接口：<br />
+*"  IMPORTING<br />
+*"     VALUE(IP_INPUT) TYPE  ZOADO_CREATE_WORKFLOW_REQUEST1 OPTIONAL<br />
+*"  EXPORTING<br />
+*"     VALUE(EP_OUTPUT) TYPE  ZOADO_CREATE_WORKFLOW_REQUEST<br />
+*"     VALUE(EP_RETURN) TYPE  BAPIRET2<br />
+*"----------------------------------------------------------------------<br />
+<br />
+
+<div class="codeComment">*       <a href ="global-zfm_sap_003.html">Global data declarations</a></div><br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;DATA:lo_clientproxy&nbsp;TYPE&nbsp;REF&nbsp;TO&nbsp;&nbsp;zoaco_workflow_service_port_ty.<br />
+&nbsp;&nbsp;DATA:lx_root&nbsp;TYPE&nbsp;REF&nbsp;TO&nbsp;cx_root.<br />
+&nbsp;&nbsp;DATA:lv_result&nbsp;TYPE&nbsp;string.<br />
+&nbsp;&nbsp;DATA&nbsp;lo_sysy_execption&nbsp;TYPE&nbsp;REF&nbsp;TO&nbsp;cx_ai_system_fault.<br />
+<br />
+&nbsp;&nbsp;DATA&nbsp;ls_input&nbsp;&nbsp;TYPE&nbsp;zoaget_user_id_request.<br />
+&nbsp;&nbsp;DATA&nbsp;ls_output&nbsp;TYPE&nbsp;zoaget_user_id_response.<br />
+&nbsp;&nbsp;CLEAR:ls_input,ls_output.<br />
+<br />
+&nbsp;&nbsp;DATA&nbsp;LV_message&nbsp;TYPE&nbsp;c&nbsp;LENGTH&nbsp;200.<br />
+<br />
+<br />
+&nbsp;&nbsp;CREATE&nbsp;OBJECT&nbsp;lo_clientproxy.<br />
+<br />
+&nbsp;&nbsp;TRY.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CREATE&nbsp;OBJECT&nbsp;lo_clientproxy<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;logical_port_name&nbsp;=&nbsp;'ZSAP2OA'.<br />
+<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;METHOD&nbsp;lo_clientproxy-&gt;do_create_workflow_request<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;do_create_workflow_request_req&nbsp;=&nbsp;ip_input<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;do_create_workflow_request_res&nbsp;=&nbsp;ep_output.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CATCH&nbsp;cx_ai_system_fault&nbsp;INTO&nbsp;lo_sysy_execption.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ep_return-message&nbsp;=&nbsp;lo_sysy_execption-&gt;errortext.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ep_return-type&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'E'.<br />
+&nbsp;&nbsp;ENDTRY.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;ep_return-type&nbsp;&lt;&gt;&nbsp;'E'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ep_return-type&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'S'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ep_return-message&nbsp;=&nbsp;'成功'.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+ENDFUNCTION.<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*Messages<br />
+*----------------------------------------------------------<br />
+*<br />
+* Message class: Hard coded<br />
+*   调OA接口获取用户 ID 失败<br />
+*<br />
+* Message class: ZQM001<br />
+*027   发送OA接口成功，流程号：&。<br />
+            </div>
+          </td>
+        </tr>
+      </table>
+      </td>
+      </tr>
+   <tr>
+<td class="footer">Extracted by Mass Download version 1.5.2 - E.G.Mellodew. 1998-2022. Sap Release 755</td>
+   </tr>
+</table>
+</body>
+</html>

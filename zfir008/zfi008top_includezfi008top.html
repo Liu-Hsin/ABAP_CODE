@@ -1,0 +1,150 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=GB2312" />
+<title>ZFI008TOP</title>
+<style type="text/css">
+.code{ font-family:"Courier New", Courier, monospace; color:#000; font-size:14px; background-color:#F2F4F7 }
+  .codeComment {font-family:"Courier New", Courier, monospace; color:#0000F0; font-size:14px; background-color:#F2F4F7 }
+  .normalBold{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; font-weight:800 }
+  .normalBoldLarge{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+</style>
+<style type="text/css">
+  .normal{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px }
+  .footer{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; text-align: center }
+  h2{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+  h3{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:14px; font-weight:800 }
+  .outerTable{
+   background-color:#E0E7ED;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-right-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+  .innerTable{
+   background-color:#F2F4F7;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-bottom-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+</style>
+</head>
+<body>
+<table class="outerTable">
+  <tr class="normalBoldLarge">
+     <td><h2>Code listing for: ZFI008TOP</h2>
+<h3> Description: Include ZFI008TOP</h3></td>
+   </tr>
+  <tr>
+     <td>
+     <table class="innerTable">
+       <tr>
+          <td>
+   <div class="codeComment">
+*&----------------------------------------------------------------------&<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;包含&nbsp;zfi008top<br />
+*&----------------------------------------------------------------------&<br />
+<br />
+   </div>
+   <div class="code">
+TABLES:sscrfields.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------&*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;alv&nbsp;parameter&nbsp;&nbsp;&nbsp;*&<br />
+*&---------------------------------------------------------------------&*<br />
+<br />
+   </div>
+   <div class="code">
+DATA: g_repid     LIKE sy-repid,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it_fieldcat&nbsp;TYPE&nbsp;lvc_t_fcat&nbsp;WITH&nbsp;HEADER&nbsp;LINE,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;is_layout&nbsp;&nbsp;&nbsp;TYPE&nbsp;lvc_s_layo.<br />
+<br />
+DATA: is_functxt TYPE smp_dyntxt.<br />
+DATA: it_raw  TYPE truxs_t_text_data.<br />
+<br />
+DATA: BEGIN OF  gs_record,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;anlkl&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;&nbsp;anla-anlkl,&nbsp;"&nbsp;CONVERSION_EXIT_ALPHA_INPUT<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bukrs&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;&nbsp;anla-bukrs,&nbsp;"&nbsp;公司代码<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;txt50&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;&nbsp;anla-txt50,&nbsp;"&nbsp;资产描述<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;txa50&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;&nbsp;anla-txa50,&nbsp;"&nbsp;附加资产描述<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;anlhtxt&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;&nbsp;anlh-anlhtxt,&nbsp;"&nbsp;资产主号说明<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sernr&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;&nbsp;anla-sernr,&nbsp;"&nbsp;CONVERSION_EXIT_GERNR_INPUT<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;invnr&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;&nbsp;anla-invnr,&nbsp;"&nbsp;库存编号<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;aktiv&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;&nbsp;anla-aktiv,&nbsp;"&nbsp;资产资本化日期<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;kostl&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;&nbsp;anlz-kostl,&nbsp;"&nbsp;成本中心&nbsp;CONVERSION_EXIT_ALPHA_INPUT<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;caufn&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;&nbsp;anlz-caufn,&nbsp;"&nbsp;内部订单&nbsp;CONVERSION_EXIT_ALPHA_INPUT<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ord41&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;&nbsp;anla-ord41,&nbsp;"&nbsp;资产状态<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lifnr&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;&nbsp;anla-lifnr,&nbsp;"&nbsp;供应商科目编号(其他关键字)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;afasl&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;&nbsp;anlb-afasl,&nbsp;"&nbsp;折旧码<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ndjar&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;&nbsp;anlb-ndjar,&nbsp;"&nbsp;计划年使用期<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ndper&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;&nbsp;anlb-ndper,&nbsp;"&nbsp;计划使用期间<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;afabg&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;&nbsp;anlb-afabg,&nbsp;"&nbsp;折旧计算开始日期<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;schrw&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;&nbsp;anlb-schrw,&nbsp;"&nbsp;资产残值<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;schrw_proz&nbsp;LIKE&nbsp;&nbsp;anlb-schrw_proz,&nbsp;"&nbsp;残值作为&nbsp;APC&nbsp;的百分比<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;kansw&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;&nbsp;kansw,&nbsp;"&nbsp;累积购置和生产费用<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;knafa&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;&nbsp;knafa,&nbsp;"&nbsp;累计正常折旧<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;nafag&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;&nbsp;nafag,&nbsp;"&nbsp;记帐在当前年的正常折旧<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;END&nbsp;OF&nbsp;gs_record.<br />
+<br />
+DATA: gt_record LIKE TABLE OF gs_record.<br />
+<br />
+DATA: BEGIN OF gs_out.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INCLUDE&nbsp;STRUCTURE&nbsp;gs_record.<br />
+DATA: sel,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;light(30),<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;message&nbsp;&nbsp;&nbsp;TYPE&nbsp;bapi_msg,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;anln1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;&nbsp;anla-anln1,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;anln2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;&nbsp;anla-anln2,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;END&nbsp;OF&nbsp;gs_out.<br />
+DATA: gt_out LIKE TABLE OF gs_out.<br />
+   </div>
+   <div class="codeComment">
+*-----------------------------------------------------------------------<br />
+*&nbsp;BAPI<br />
+*-----------------------------------------------------------------------<br />
+   </div>
+   <div class="code">
+DATA:ls_key       TYPE bapi1022_key,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_data&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;bapi1022_feglg001,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_datax&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;bapi1022_feglg001x,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_post&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;bapi1022_feglg002,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_postx&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;bapi1022_feglg002x,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_time&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;bapi1022_feglg003,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_timex&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;bapi1022_feglg003x,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_allo&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;bapi1022_feglg004,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_allox&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;bapi1022_feglg004x,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_origin&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;bapi1022_feglg009,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_originx&nbsp;&nbsp;&nbsp;TYPE&nbsp;bapi1022_feglg009x,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_inven&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;bapi1022_feglg011,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_invenx&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;bapi1022_feglg011x,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lt_depareas&nbsp;&nbsp;TYPE&nbsp;bapi1022_dep_areas&nbsp;OCCURS&nbsp;0&nbsp;WITH&nbsp;HEADER&nbsp;LINE,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lt_depareasx&nbsp;TYPE&nbsp;bapi1022_dep_areasx&nbsp;OCCURS&nbsp;0&nbsp;WITH&nbsp;HEADER&nbsp;LINE,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lt_cvalues&nbsp;&nbsp;&nbsp;TYPE&nbsp;bapi1022_cumval&nbsp;OCCURS&nbsp;0&nbsp;WITH&nbsp;HEADER&nbsp;LINE,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lt_pvalues&nbsp;&nbsp;&nbsp;TYPE&nbsp;bapi1022_postval&nbsp;OCCURS&nbsp;0&nbsp;WITH&nbsp;HEADER&nbsp;LINE,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lt_trans&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;bapi1022_trtype&nbsp;OCCURS&nbsp;0&nbsp;WITH&nbsp;HEADER&nbsp;LINE,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lt_return&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;bapiret2&nbsp;OCCURS&nbsp;0&nbsp;WITH&nbsp;HEADER&nbsp;LINE..<br />
+            </div>
+          </td>
+        </tr>
+      </table>
+      </td>
+      </tr>
+   <tr>
+<td class="footer">Extracted by Mass Download version 1.5.2 - E.G.Mellodew. 1998-2022. Sap Release 755</td>
+   </tr>
+</table>
+</body>
+</html>

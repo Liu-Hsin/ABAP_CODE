@@ -1,0 +1,1389 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=GB2312" />
+<title>ZBDC</title>
+<style type="text/css">
+.code{ font-family:"Courier New", Courier, monospace; color:#000; font-size:14px; background-color:#F2F4F7 }
+  .codeComment {font-family:"Courier New", Courier, monospace; color:#0000F0; font-size:14px; background-color:#F2F4F7 }
+  .normalBold{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; font-weight:800 }
+  .normalBoldLarge{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+</style>
+<style type="text/css">
+  .normal{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px }
+  .footer{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; text-align: center }
+  h2{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+  h3{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:14px; font-weight:800 }
+  .outerTable{
+   background-color:#E0E7ED;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-right-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+  .innerTable{
+   background-color:#F2F4F7;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-bottom-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+</style>
+</head>
+<body>
+<table class="outerTable">
+  <tr class="normalBoldLarge">
+     <td><h2>Code listing for: ZBDC</h2>
+<h3> Description: ZBDC</h3></td>
+   </tr>
+  <tr>
+     <td>
+     <table class="innerTable">
+       <tr>
+          <td>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Report&nbsp;ZBDC<br />
+*&---------------------------------------------------------------------*<br />
+*&<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+REPORT zbdc NO STANDARD PAGE HEADING.<br />
+TABLES: sscrfields,t100.<br />
+   </div>
+   <div class="codeComment">
+**====================================================================*<br />
+*<br />
+**&lt;*&gt;&nbsp;NOTES:<br />
+*&gt;&nbsp;Titles&nbsp;and&nbsp;headers:&nbsp;Programmable&nbsp;Logic&nbsp;Data&nbsp;Interface&nbsp;(PLDI)<br />
+*&gt;&nbsp;Selection&nbsp;texts:<br />
+*&nbsp;DISMOD:&nbsp;*&nbsp;Call&nbsp;mode<br />
+*&nbsp;EXT:&nbsp;Extended&nbsp;logic<br />
+*&nbsp;FILE1:&nbsp;Data&nbsp;file&nbsp;&nbsp;(Tab&nbsp;delimited)<br />
+*&nbsp;FILE2:&nbsp;Logic&nbsp;Level&nbsp;1&nbsp;(Tab&nbsp;delimited<br />
+*&nbsp;FILE3:&nbsp;Logic&nbsp;Level&nbsp;2&nbsp;(Tab&nbsp;delimited)<br />
+*&nbsp;FILE_EXT:&nbsp;Extended&nbsp;logic&nbsp;(Tab&nbsp;delimited)<br />
+*&nbsp;SESSION:&nbsp;*&nbsp;Session&nbsp;name<br />
+*&nbsp;START:&nbsp;Data&nbsp;start&nbsp;at&nbsp;row<br />
+*&nbsp;TCODE:&nbsp;Transaction&nbsp;code<br />
+*&nbsp;MASK:&nbsp;Mask<br />
+<br />
+*&gt;&nbsp;Text&nbsp;symbols<br />
+*&nbsp;001:&nbsp;Batch&nbsp;Input&nbsp;(BDC&nbsp;Session)<br />
+*&nbsp;002:&nbsp;PLDI&nbsp;was&nbsp;created&nbsp;on&nbsp;June.27.1997&nbsp;by&nbsp;budi_rachman@yahoo.com<br />
+*&nbsp;003:&nbsp;Release&nbsp;3.2<br />
+*&nbsp;004:&nbsp;Call&nbsp;transaction<br />
+*&nbsp;005:&nbsp;Max.&nbsp;64&nbsp;columns&nbsp;&&nbsp;128&nbsp;characters&nbsp;per&nbsp;cell<br />
+*&nbsp;006:&nbsp;Max.&nbsp;128&nbsp;columns&nbsp;&&nbsp;64&nbsp;characters&nbsp;per&nbsp;cell<br />
+*&nbsp;007:&nbsp;Max.&nbsp;30&nbsp;columns&nbsp;&&nbsp;40&nbsp;characters&nbsp;per&nbsp;cell<br />
+*&nbsp;008:&nbsp;Data&nbsp;Structure<br />
+*&nbsp;009:&nbsp;Max.&nbsp;234&nbsp;columns&nbsp;&&nbsp;35&nbsp;characters&nbsp;per&nbsp;cell<br />
+**====================================================================*<br />
+*<br />
+<br />
+*$*$*******************************************************************<br />
+*$*$*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Data&nbsp;declarations&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*<br />
+*$*$*******************************************************************<br />
+<br />
+*&nbsp;Structure&nbsp;Max.30&nbsp;cols&nbsp;and&nbsp;40&nbsp;chars&nbsp;per&nbsp;cell<br />
+   </div>
+   <div class="code">
+DATA: BEGIN OF  t30x040 OCCURS 100,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;b01(40),&nbsp;u01(40),&nbsp;d01(40),&nbsp;i01(40),&nbsp;r01(40),<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;b02(40),&nbsp;u02(40),&nbsp;d02(40),&nbsp;i02(40),&nbsp;r02(40),<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;b03(40),&nbsp;u03(40),&nbsp;d03(40),&nbsp;i03(40),&nbsp;r03(40),<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;b04(40),&nbsp;u04(40),&nbsp;d04(40),&nbsp;i04(40),&nbsp;r04(40),<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;b05(40),&nbsp;u05(40),&nbsp;d05(40),&nbsp;i05(40),&nbsp;r05(40),<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;b06(40),&nbsp;u06(40),&nbsp;d06(40),&nbsp;i06(40),&nbsp;r06(40),<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;END&nbsp;OF&nbsp;t30x040.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Structure&nbsp;Max.128&nbsp;cols&nbsp;and&nbsp;64&nbsp;chars&nbsp;per&nbsp;cell<br />
+   </div>
+   <div class="code">
+DATA: BEGIN OF t128x64 OCCURS 1024,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;b001(64),&nbsp;r001(64),&nbsp;a001(64),&nbsp;c001(64),<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;b002(64),&nbsp;r002(64),&nbsp;a002(64),&nbsp;c002(64),<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;b003(64),&nbsp;r003(64),&nbsp;a003(64),&nbsp;c003(64),<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;b004(64),&nbsp;r004(64),&nbsp;a004(64),&nbsp;c004(64),<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;b005(64),&nbsp;r005(64),&nbsp;a005(64),&nbsp;c005(64),<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;b006(64),&nbsp;r006(64),&nbsp;a006(64),&nbsp;c006(64),<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;b007(64),&nbsp;r007(64),&nbsp;a007(64),&nbsp;c007(64),<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;b008(64),&nbsp;r008(64),&nbsp;a008(64),&nbsp;c008(64),<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;b009(64),&nbsp;r009(64),&nbsp;a009(64),&nbsp;c009(64),<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;b010(64),&nbsp;r010(64),&nbsp;a010(64),&nbsp;c010(64),<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;b011(64),&nbsp;r011(64),&nbsp;a011(64),&nbsp;c011(64),<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;b012(64),&nbsp;r012(64),&nbsp;a012(64),&nbsp;c012(64),<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;b013(64),&nbsp;r013(64),&nbsp;a013(64),&nbsp;c013(64),<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;b014(64),&nbsp;r014(64),&nbsp;a014(64),&nbsp;c014(64),<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;b015(64),&nbsp;r015(64),&nbsp;a015(64),&nbsp;c015(64),<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;b016(64),&nbsp;r016(64),&nbsp;a016(64),&nbsp;c016(64),<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;b017(64),&nbsp;r017(64),&nbsp;a017(64),&nbsp;c017(64),<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;b018(64),&nbsp;r018(64),&nbsp;a018(64),&nbsp;c018(64),<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;b019(64),&nbsp;r019(64),&nbsp;a019(64),&nbsp;c019(64),<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;b020(64),&nbsp;r020(64),&nbsp;a020(64),&nbsp;c020(64),<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;b021(64),&nbsp;r021(64),&nbsp;a021(64),&nbsp;c021(64),<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;b022(64),&nbsp;r022(64),&nbsp;a022(64),&nbsp;c022(64),<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;b023(64),&nbsp;r023(64),&nbsp;a023(64),&nbsp;c023(64),<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;b024(64),&nbsp;r024(64),&nbsp;a024(64),&nbsp;c024(64),<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;b025(64),&nbsp;r025(64),&nbsp;a025(64),&nbsp;c025(64),<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;b026(64),&nbsp;r026(64),&nbsp;a026(64),&nbsp;c026(64),<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;b027(64),&nbsp;r027(64),&nbsp;a027(64),&nbsp;c027(64),<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;b028(64),&nbsp;r028(64),&nbsp;a028(64),&nbsp;c028(64),<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;b029(64),&nbsp;r029(64),&nbsp;a029(64),&nbsp;c029(64),<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;b030(64),&nbsp;r030(64),&nbsp;a030(64),&nbsp;c030(64),<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;b031(64),&nbsp;r031(64),&nbsp;a031(64),&nbsp;c031(64),<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;b032(64),&nbsp;r032(64),&nbsp;a032(64),&nbsp;c032(64),<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;END&nbsp;OF&nbsp;t128x64.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Structure&nbsp;Max.64&nbsp;cols&nbsp;and&nbsp;128&nbsp;chars&nbsp;per&nbsp;cell<br />
+   </div>
+   <div class="code">
+DATA: BEGIN OF t64x128 OCCURS 1024,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;b001(128),&nbsp;r001(128),&nbsp;a001(128),&nbsp;c001(128),<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;b002(128),&nbsp;r002(128),&nbsp;a002(128),&nbsp;c002(128),<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;b003(128),&nbsp;r003(128),&nbsp;a003(128),&nbsp;c003(128),<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;b004(128),&nbsp;r004(128),&nbsp;a004(128),&nbsp;c004(128),<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;b005(128),&nbsp;r005(128),&nbsp;a005(128),&nbsp;c005(128),<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;b006(128),&nbsp;r006(128),&nbsp;a006(128),&nbsp;c006(128),<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;b007(128),&nbsp;r007(128),&nbsp;a007(128),&nbsp;c007(128),<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;b008(128),&nbsp;r008(128),&nbsp;a008(128),&nbsp;c008(128),<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;b009(128),&nbsp;r009(128),&nbsp;a009(128),&nbsp;c009(128),<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;b010(128),&nbsp;r010(128),&nbsp;a010(128),&nbsp;c010(128),<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;b011(128),&nbsp;r011(128),&nbsp;a011(128),&nbsp;c011(128),<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;b012(128),&nbsp;r012(128),&nbsp;a012(128),&nbsp;c012(128),<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;b013(128),&nbsp;r013(128),&nbsp;a013(128),&nbsp;c013(128),<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;b014(128),&nbsp;r014(128),&nbsp;a014(128),&nbsp;c014(128),<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;b015(128),&nbsp;r015(128),&nbsp;a015(128),&nbsp;c015(128),<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;b016(128),&nbsp;r016(128),&nbsp;a016(128),&nbsp;c016(128),<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;END&nbsp;OF&nbsp;t64x128.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Structure&nbsp;Max.234&nbsp;cols&nbsp;and&nbsp;35&nbsp;chars&nbsp;per&nbsp;cell<br />
+   </div>
+   <div class="code">
+DATA: BEGIN OF t234x35 OCCURS 1024,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;f01(35),&nbsp;a01(35),r01(35),&nbsp;a76(35),&nbsp;b01(35),&nbsp;i01(35),<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;f02(35),&nbsp;a02(35),r02(35),&nbsp;a77(35),&nbsp;b02(35),&nbsp;i02(35),<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;f03(35),&nbsp;a03(35),r03(35),&nbsp;a78(35),&nbsp;b03(35),&nbsp;i03(35),<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;f04(35),&nbsp;a04(35),r04(35),&nbsp;a40(35),&nbsp;b04(35),&nbsp;i04(35),<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;f05(35),&nbsp;a05(35),r05(35),&nbsp;a41(35),&nbsp;b05(35),&nbsp;i05(35),<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;f06(35),&nbsp;a06(35),r06(35),&nbsp;a42(35),&nbsp;b06(35),&nbsp;i06(35),<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;f07(35),&nbsp;a07(35),r07(35),&nbsp;a43(35),&nbsp;b07(35),&nbsp;i07(35),<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;f08(35),&nbsp;a08(35),r08(35),&nbsp;a44(35),&nbsp;b08(35),&nbsp;i08(35),<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;f09(35),&nbsp;a09(35),r09(35),&nbsp;a45(35),&nbsp;b09(35),&nbsp;i09(35),<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;f10(35),&nbsp;a10(35),r10(35),&nbsp;a46(35),&nbsp;b10(35),&nbsp;i10(35),<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;f11(35),&nbsp;a11(35),r11(35),&nbsp;a47(35),&nbsp;b11(35),&nbsp;i11(35),<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;f12(35),&nbsp;a12(35),r12(35),&nbsp;a48(35),&nbsp;b12(35),&nbsp;i12(35),<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;f13(35),&nbsp;a13(35),r13(35),&nbsp;a49(35),&nbsp;b13(35),&nbsp;i13(35),<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;f14(35),&nbsp;a14(35),r14(35),&nbsp;a50(35),&nbsp;b14(35),&nbsp;i14(35),<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;f15(35),&nbsp;a15(35),r15(35),&nbsp;a51(35),&nbsp;b15(35),&nbsp;i15(35),<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;f16(35),&nbsp;a16(35),r16(35),&nbsp;a52(35),&nbsp;b16(35),&nbsp;i16(35),<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;f17(35),&nbsp;a17(35),r17(35),&nbsp;a53(35),&nbsp;b17(35),&nbsp;i17(35),<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;f18(35),&nbsp;a18(35),r18(35),&nbsp;a54(35),&nbsp;b18(35),&nbsp;i18(35),<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;f19(35),&nbsp;a19(35),r19(35),&nbsp;a55(35),&nbsp;b19(35),&nbsp;i19(35),<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;f20(35),&nbsp;a20(35),r20(35),&nbsp;a56(35),&nbsp;b20(35),&nbsp;i20(35),<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;f21(35),&nbsp;a21(35),r21(35),&nbsp;a57(35),&nbsp;b21(35),&nbsp;i21(35),<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;f22(35),&nbsp;a22(35),r22(35),&nbsp;a58(35),&nbsp;b22(35),&nbsp;i22(35),<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;f23(35),&nbsp;a23(35),r23(35),&nbsp;a59(35),&nbsp;b23(35),&nbsp;i23(35),<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;f24(35),&nbsp;a24(35),r24(35),&nbsp;a60(35),&nbsp;b24(35),&nbsp;i24(35),<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;f25(35),&nbsp;a25(35),r25(35),&nbsp;a61(35),&nbsp;b25(35),&nbsp;i25(35),<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;f26(35),&nbsp;a26(35),r26(35),&nbsp;a62(35),&nbsp;b26(35),&nbsp;i26(35),<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;f27(35),&nbsp;a27(35),r27(35),&nbsp;a63(35),&nbsp;b27(35),&nbsp;i27(35),<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;f28(35),&nbsp;a28(35),r28(35),&nbsp;a64(35),&nbsp;b28(35),&nbsp;i28(35),<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;f29(35),&nbsp;a29(35),r29(35),&nbsp;a65(35),&nbsp;b29(35),&nbsp;i29(35),<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;f30(35),&nbsp;a30(35),r30(35),&nbsp;a66(35),&nbsp;b30(35),&nbsp;i30(35),<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;f31(35),&nbsp;a31(35),r31(35),&nbsp;a67(35),&nbsp;b31(35),&nbsp;i31(35),<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;f32(35),&nbsp;a32(35),r32(35),&nbsp;a68(35),&nbsp;b32(35),&nbsp;i32(35),<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;f33(35),&nbsp;a33(35),r33(35),&nbsp;a69(35),&nbsp;b33(35),&nbsp;i33(35),<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;f34(35),&nbsp;a34(35),r34(35),&nbsp;a70(35),&nbsp;b34(35),&nbsp;i34(35),<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;f35(35),&nbsp;a35(35),r35(35),&nbsp;a71(35),&nbsp;b35(35),&nbsp;i35(35),<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;f36(35),&nbsp;a36(35),r36(35),&nbsp;a72(35),&nbsp;b36(35),&nbsp;i36(35),<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;f37(35),&nbsp;a37(35),r37(35),&nbsp;a73(35),&nbsp;b37(35),&nbsp;i37(35),<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;f38(35),&nbsp;a38(35),r38(35),&nbsp;a74(35),&nbsp;b38(35),&nbsp;i38(35),<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;f39(35),&nbsp;a39(35),r39(35),&nbsp;a75(35),&nbsp;b39(35),&nbsp;i39(35),<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;END&nbsp;OF&nbsp;t234x35.<br />
+<br />
+<br />
+FIELD-SYMBOLS &lt;ptr&gt;.<br />
+<br />
+CONSTANTS: eof    VALUE '@',                   "End of file<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dat(3)&nbsp;VALUE&nbsp;'DAT'.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Data&nbsp;format<br />
+<br />
+DATA:<br />
+&nbsp;&nbsp;BEGIN&nbsp;OF&nbsp;i_logic1&nbsp;OCCURS&nbsp;100,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;name&nbsp;&nbsp;LIKE&nbsp;bdcdata-fnam,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;value&nbsp;LIKE&nbsp;bdcdata-fval,<br />
+&nbsp;&nbsp;END&nbsp;OF&nbsp;i_logic1.<br />
+DATA: i_logic2   LIKE i_logic1 OCCURS 100 WITH HEADER LINE,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_logic3&nbsp;&nbsp;&nbsp;LIKE&nbsp;i_logic1&nbsp;OCCURS&nbsp;100&nbsp;WITH&nbsp;HEADER&nbsp;LINE,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_bdctable&nbsp;LIKE&nbsp;bdcdata&nbsp;&nbsp;OCCURS&nbsp;100&nbsp;WITH&nbsp;HEADER&nbsp;LINE,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text(40),&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Text&nbsp;40&nbsp;chars<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cacah&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;i.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Jumlah&nbsp;transaksi<br />
+   </div>
+   <div class="codeComment">
+*DATA&nbsp;IT_MESS&nbsp;LIKE&nbsp;BDCMSGCOLL&nbsp;OCCURS&nbsp;0.<br />
+   </div>
+   <div class="code">
+DATA:   messtab LIKE bdcmsgcoll OCCURS 0 WITH HEADER LINE.<br />
+DATA: BEGIN OF itab_result OCCURS 0,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;messtyp,"消息类型<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;index&nbsp;&nbsp;&nbsp;TYPE&nbsp;sy-tabix,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;message&nbsp;TYPE&nbsp;string,&nbsp;"消息<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;box,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;light&nbsp;&nbsp;&nbsp;LIKE&nbsp;icon-id,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;END&nbsp;OF&nbsp;itab_result.<br />
+TYPE-POOLS : slis.<br />
+DATA : fcat TYPE slis_t_fieldcat_alv WITH HEADER LINE.<br />
+DATA : is_layout TYPE slis_layout_alv.<br />
+<br />
+<br />
+SELECTION-SCREEN BEGIN OF BLOCK b100 WITH FRAME TITLE TEXT-100.<br />
+&nbsp;&nbsp;PARAMETERS:&nbsp;template&nbsp;LIKE&nbsp;rlgrap-filename.&nbsp;&nbsp;&nbsp;&nbsp;"template&nbsp;file&nbsp;from&nbsp;SHDB<br />
+&nbsp;&nbsp;PARAMETERS:&nbsp;textfile&nbsp;LIKE&nbsp;rlgrap-filename.<br />
+&nbsp;&nbsp;SELECTION-SCREEN&nbsp;PUSHBUTTON&nbsp;/33(15)&nbsp;butok&nbsp;USER-COMMAND&nbsp;zget.<br />
+SELECTION-SCREEN END   OF BLOCK b100.<br />
+<br />
+SELECTION-SCREEN BEGIN OF BLOCK b101 WITH FRAME TITLE TEXT-101.<br />
+&nbsp;&nbsp;PARAMETERS:<br />
+&nbsp;&nbsp;&nbsp;&nbsp;tcode&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;tstc-tcode,&nbsp;&nbsp;&nbsp;&nbsp;"Transaction&nbsp;code<br />
+&nbsp;&nbsp;&nbsp;&nbsp;file2&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;rlgrap-filename&nbsp;OBLIGATORY&nbsp;DEFAULT&nbsp;'C:\',&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Logic-1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;file3&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;rlgrap-filename,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Logic-2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;file_ext&nbsp;LIKE&nbsp;rlgrap-filename&nbsp;DEFAULT&nbsp;space,&nbsp;"Extended&nbsp;logic<br />
+&nbsp;&nbsp;&nbsp;&nbsp;file1&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;rlgrap-filename,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Data<br />
+&nbsp;&nbsp;&nbsp;&nbsp;mask&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DEFAULT&nbsp;'&'.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Skip&nbsp;processing<br />
+<br />
+&nbsp;&nbsp;SELECT-OPTIONS:<br />
+&nbsp;&nbsp;&nbsp;&nbsp;start&nbsp;FOR&nbsp;sy-tabix&nbsp;DEFAULT&nbsp;1&nbsp;TO&nbsp;999999.&nbsp;"Rentang&nbsp;data<br />
+<br />
+&nbsp;&nbsp;SELECTION-SCREEN&nbsp;BEGIN&nbsp;OF&nbsp;LINE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PARAMETERS:&nbsp;mode&nbsp;RADIOBUTTON&nbsp;GROUP&nbsp;clbi.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SELECTION-SCREEN&nbsp;COMMENT&nbsp;&nbsp;3(10)&nbsp;TEXT-001&nbsp;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PARAMETERS:&nbsp;keep&nbsp;AS&nbsp;CHECKBOX.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SELECTION-SCREEN&nbsp;COMMENT&nbsp;15(10)&nbsp;TEXT-s03&nbsp;FOR&nbsp;FIELD&nbsp;keep.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SELECTION-SCREEN&nbsp;POSITION&nbsp;52.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PARAMETERS:&nbsp;temp&nbsp;RADIOBUTTON&nbsp;GROUP&nbsp;clbi&nbsp;DEFAULT&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SELECTION-SCREEN&nbsp;COMMENT&nbsp;&nbsp;54(20)&nbsp;TEXT-004&nbsp;.<br />
+&nbsp;&nbsp;SELECTION-SCREEN&nbsp;END&nbsp;&nbsp;&nbsp;OF&nbsp;LINE.<br />
+<br />
+&nbsp;&nbsp;SELECTION-SCREEN&nbsp;BEGIN&nbsp;OF&nbsp;LINE.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SELECTION-SCREEN&nbsp;COMMENT&nbsp;&nbsp;3(29)&nbsp;TEXT-010&nbsp;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PARAMETERS:&nbsp;&nbsp;session&nbsp;LIKE&nbsp;d0100-mapn&nbsp;DEFAULT&nbsp;sy-uname.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SELECTION-SCREEN&nbsp;POSITION&nbsp;52.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SELECTION-SCREEN&nbsp;COMMENT&nbsp;&nbsp;54(13)&nbsp;TEXT-011&nbsp;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PARAMETERS:&nbsp;dismod&nbsp;LIKE&nbsp;ibipparms-callmode&nbsp;DEFAULT&nbsp;'A'.<br />
+&nbsp;&nbsp;SELECTION-SCREEN&nbsp;END&nbsp;&nbsp;&nbsp;OF&nbsp;LINE.<br />
+SELECTION-SCREEN END   OF BLOCK b101.<br />
+<br />
+SELECTION-SCREEN BEGIN OF BLOCK btcx WITH FRAME TITLE TEXT-008.<br />
+&nbsp;&nbsp;SELECTION-SCREEN&nbsp;BEGIN&nbsp;OF&nbsp;LINE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PARAMETERS:&nbsp;s30x40&nbsp;RADIOBUTTON&nbsp;GROUP&nbsp;btcx.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SELECTION-SCREEN&nbsp;COMMENT&nbsp;&nbsp;3(79)&nbsp;TEXT-007.<br />
+&nbsp;&nbsp;SELECTION-SCREEN&nbsp;END&nbsp;&nbsp;&nbsp;OF&nbsp;LINE.<br />
+<br />
+&nbsp;&nbsp;SELECTION-SCREEN&nbsp;BEGIN&nbsp;OF&nbsp;LINE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PARAMETERS:&nbsp;s64x128&nbsp;RADIOBUTTON&nbsp;GROUP&nbsp;btcx.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SELECTION-SCREEN&nbsp;COMMENT&nbsp;&nbsp;3(79)&nbsp;TEXT-005.<br />
+&nbsp;&nbsp;SELECTION-SCREEN&nbsp;END&nbsp;&nbsp;&nbsp;OF&nbsp;LINE.<br />
+<br />
+&nbsp;&nbsp;SELECTION-SCREEN&nbsp;BEGIN&nbsp;OF&nbsp;LINE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PARAMETERS:&nbsp;s128x64&nbsp;RADIOBUTTON&nbsp;GROUP&nbsp;btcx.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SELECTION-SCREEN&nbsp;COMMENT&nbsp;&nbsp;3(79)&nbsp;TEXT-006.<br />
+&nbsp;&nbsp;SELECTION-SCREEN&nbsp;END&nbsp;&nbsp;&nbsp;OF&nbsp;LINE.<br />
+<br />
+&nbsp;&nbsp;SELECTION-SCREEN&nbsp;BEGIN&nbsp;OF&nbsp;LINE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PARAMETERS:&nbsp;s234x35&nbsp;RADIOBUTTON&nbsp;GROUP&nbsp;btcx.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SELECTION-SCREEN&nbsp;COMMENT&nbsp;&nbsp;3(79)&nbsp;TEXT-009.<br />
+&nbsp;&nbsp;SELECTION-SCREEN&nbsp;END&nbsp;&nbsp;&nbsp;OF&nbsp;LINE.<br />
+SELECTION-SCREEN END   OF BLOCK btcx.<br />
+<br />
+SELECTION-SCREEN BEGIN OF BLOCK btci WITH FRAME TITLE TEXT-003.<br />
+&nbsp;&nbsp;SELECTION-SCREEN&nbsp;BEGIN&nbsp;OF&nbsp;LINE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SELECTION-SCREEN&nbsp;COMMENT&nbsp;1(79)&nbsp;TEXT-002.<br />
+&nbsp;&nbsp;SELECTION-SCREEN&nbsp;END&nbsp;OF&nbsp;LINE.<br />
+<br />
+SELECTION-SCREEN END   OF BLOCK btci.<br />
+<br />
+AT SELECTION-SCREEN ON VALUE-REQUEST FOR file1.<br />
+&nbsp;&nbsp;PERFORM&nbsp;call_file&nbsp;USING&nbsp;file1.<br />
+<br />
+AT SELECTION-SCREEN ON VALUE-REQUEST FOR file2.<br />
+&nbsp;&nbsp;PERFORM&nbsp;call_file&nbsp;USING&nbsp;file2.<br />
+<br />
+AT SELECTION-SCREEN ON VALUE-REQUEST FOR file_ext.<br />
+&nbsp;&nbsp;PERFORM&nbsp;call_file&nbsp;USING&nbsp;file_ext.<br />
+<br />
+AT SELECTION-SCREEN ON VALUE-REQUEST FOR file3.<br />
+&nbsp;&nbsp;PERFORM&nbsp;call_file&nbsp;USING&nbsp;file3.<br />
+<br />
+AT SELECTION-SCREEN ON VALUE-REQUEST FOR template.<br />
+&nbsp;&nbsp;PERFORM&nbsp;call_file&nbsp;USING&nbsp;template.<br />
+<br />
+AT SELECTION-SCREEN ON VALUE-REQUEST FOR textfile.<br />
+&nbsp;&nbsp;PERFORM&nbsp;call_file&nbsp;USING&nbsp;textfile.<br />
+<br />
+AT SELECTION-SCREEN.<br />
+&nbsp;&nbsp;IF&nbsp;sscrfields-ucomm&nbsp;=&nbsp;'ZGET'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;generate_format_file&nbsp;USING&nbsp;template.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+INITIALIZATION.<br />
+&nbsp;&nbsp;MOVE&nbsp;'生成BDC格式文件'&nbsp;TO&nbsp;butok.<br />
+&nbsp;&nbsp;%_tcode_%_app_%-text&nbsp;=&nbsp;'事务代码'.<br />
+&nbsp;&nbsp;%_file1_%_app_%-text&nbsp;=&nbsp;'数据文件(Tab&nbsp;delimited)'.<br />
+&nbsp;&nbsp;%_file2_%_app_%-text&nbsp;=&nbsp;'BDC格式文件'.<br />
+&nbsp;&nbsp;%_file3_%_app_%-text&nbsp;=&nbsp;'第二级格式文件'.<br />
+&nbsp;&nbsp;%_file_ext_%_app_%-text&nbsp;=&nbsp;'第三级格式文件'.<br />
+&nbsp;&nbsp;%_mask_%_app_%-text&nbsp;=&nbsp;'数据标示符'.<br />
+&nbsp;&nbsp;%_mode_%_app_%-text&nbsp;=&nbsp;'模式'.<br />
+&nbsp;&nbsp;%_start_%_app_%-text&nbsp;=&nbsp;'记录开始'.<br />
+&nbsp;&nbsp;%_template_%_app_%-text&nbsp;=&nbsp;'SHDB模板'.<br />
+&nbsp;&nbsp;%_textfile_%_app_%-text&nbsp;=&nbsp;'BDC格式文件'.<br />
+&nbsp;&nbsp;%_dismod_%_app_%-text&nbsp;=&nbsp;'*&nbsp;调用模式'.<br />
+&nbsp;&nbsp;%b100000_block_1000&nbsp;=&nbsp;'生成BDC格式文件'.<br />
+&nbsp;&nbsp;%b101005_block_1000&nbsp;=&nbsp;'数据导入'.<br />
+&nbsp;&nbsp;%c001015_1000&nbsp;=&nbsp;'生成会话'.<br />
+&nbsp;&nbsp;%fs03017_1000&nbsp;=&nbsp;'保留会话'.<br />
+&nbsp;&nbsp;%c004020_1000&nbsp;=&nbsp;'调用事务'.<br />
+&nbsp;&nbsp;%c010023_1000&nbsp;=&nbsp;'会话名称'.<br />
+&nbsp;&nbsp;%c011026_1000&nbsp;=&nbsp;'调用模式'.<br />
+&nbsp;&nbsp;%b008030_block_1000&nbsp;=&nbsp;'Data&nbsp;Structure(数据结构)'.<br />
+&nbsp;&nbsp;%c007033_1000&nbsp;=&nbsp;'最大30列，每列最多40个字符'.<br />
+&nbsp;&nbsp;%c005037_1000&nbsp;=&nbsp;'最大64列，每列最多128个字符'.<br />
+&nbsp;&nbsp;%c006041_1000&nbsp;=&nbsp;'最大128列，每列最多64个字符'.<br />
+&nbsp;&nbsp;%c009045_1000&nbsp;=&nbsp;'最大234列，每列最多35个字符'.<br />
+&nbsp;&nbsp;%b003048_block_1000&nbsp;=&nbsp;'使用说明'.<br />
+&nbsp;&nbsp;%c002050_1000&nbsp;=&nbsp;'①SHDB录制②修改字段值,常量加"=",变量设成&1,&2…③下载模板④生成BDC格式文件⑤数据导入'.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*$*$*******************************************************************<br />
+*$*$*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Call&nbsp;main&nbsp;routine&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*<br />
+*$*$*******************************************************************<br />
+<br />
+   </div>
+   <div class="code">
+START-OF-SELECTION.<br />
+<br />
+&nbsp;&nbsp;PERFORM&nbsp;main_program.<br />
+&nbsp;&nbsp;PERFORM&nbsp;call_report.<br />
+<br />
+AT USER-COMMAND.<br />
+&nbsp;&nbsp;CASE&nbsp;sy-ucomm.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'ZGET'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;generate_format_file&nbsp;USING&nbsp;template.<br />
+&nbsp;&nbsp;ENDCASE.<br />
+   </div>
+   <div class="codeComment">
+*---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FORM&nbsp;MAIN_PROGRAM&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*<br />
+*---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;........&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*<br />
+*---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM main_program.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;20090521&nbsp;added&nbsp;by&nbsp;wellszhang<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;IF&nbsp;tcode&nbsp;=&nbsp;''&nbsp;OR&nbsp;tcode&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;'事务代码不能为空，请检查!'&nbsp;TYPE&nbsp;'S'&nbsp;DISPLAY&nbsp;LIKE&nbsp;'E'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;STOP.<br />
+&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;IF&nbsp;file1&nbsp;=&nbsp;''&nbsp;OR&nbsp;file1&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;'数据文件不能为空，请检查!'&nbsp;TYPE&nbsp;'S'&nbsp;DISPLAY&nbsp;LIKE&nbsp;'E'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;STOP.<br />
+&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;IF&nbsp;temp&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;REFRESH:&nbsp;messtab[],itab_result[].<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR:&nbsp;messtab,itab_result.<br />
+&nbsp;&nbsp;ENDIF.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;end&nbsp;of&nbsp;modification<br />
+<br />
+*&nbsp;Logic&nbsp;level-1,&nbsp;level-2&nbsp;and&nbsp;extended&nbsp;logic&nbsp;are&nbsp;being&nbsp;used<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;IF&nbsp;file3&nbsp;NE&nbsp;space&nbsp;AND&nbsp;file2&nbsp;NE&nbsp;space&nbsp;AND&nbsp;file_ext&nbsp;NE&nbsp;space.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;level_pldi&nbsp;USING&nbsp;3.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Only&nbsp;logic&nbsp;level-1&nbsp;is&nbsp;being&nbsp;used<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;ELSEIF&nbsp;file3&nbsp;=&nbsp;space&nbsp;AND&nbsp;file2&nbsp;NE&nbsp;space.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;level_pldi&nbsp;USING&nbsp;1.<br />
+<br />
+   </div>
+   <div class="codeComment">
+**&nbsp;Logic&nbsp;level-1&nbsp;and&nbsp;level-2&nbsp;are&nbsp;being&nbsp;used<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;ELSEIF&nbsp;file3&nbsp;NE&nbsp;space&nbsp;AND&nbsp;file2&nbsp;NE&nbsp;space.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;level_pldi&nbsp;USING&nbsp;2.<br />
+<br />
+&nbsp;&nbsp;ELSE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;tcode&nbsp;=&nbsp;'&lt;?&gt;'.<br />
+<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+ENDFORM.                    "MAIN_PROGRAM<br />
+<br />
+   </div>
+   <div class="codeComment">
+*---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FORM&nbsp;CALL_REPORT&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*<br />
+*---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;........&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*<br />
+*---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM call_report.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;20090521&nbsp;added&nbsp;by&nbsp;wellszhang<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;IF&nbsp;temp&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;show_alv.<br />
+&nbsp;&nbsp;ENDIF.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;end&nbsp;of&nbsp;modification<br />
+*&gt;&nbsp;Report<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;WRITE:/&nbsp;'Transaction&nbsp;code:',&nbsp;tcode.<br />
+&nbsp;&nbsp;IF&nbsp;file1&nbsp;EQ&nbsp;space.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WRITE:/&nbsp;'Logic&nbsp;without&nbsp;data&nbsp;has&nbsp;been&nbsp;executed&nbsp;by',&nbsp;sy-uname.<br />
+&nbsp;&nbsp;ELSEIF&nbsp;mode&nbsp;NE&nbsp;space.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WRITE:/&nbsp;'There&nbsp;are&nbsp;',&nbsp;cacah&nbsp;LEFT-JUSTIFIED.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WRITE:&nbsp;&nbsp;'records&nbsp;have&nbsp;been&nbsp;executed&nbsp;by',&nbsp;sy-uname.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WRITE:/&nbsp;'which&nbsp;used&nbsp;batch&nbsp;input&nbsp;transaction.'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WRITE:/&nbsp;'Batch&nbsp;input&nbsp;name:',&nbsp;session,&nbsp;'.'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WRITE:/&nbsp;'Use&nbsp;SM35&nbsp;for&nbsp;further&nbsp;execution.'.<br />
+&nbsp;&nbsp;ELSE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WRITE:/&nbsp;'There&nbsp;are&nbsp;',&nbsp;cacah&nbsp;LEFT-JUSTIFIED.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WRITE:&nbsp;&nbsp;'records&nbsp;have&nbsp;been&nbsp;executed&nbsp;by',&nbsp;sy-uname.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WRITE:/&nbsp;'which&nbsp;used&nbsp;online&nbsp;transaction&nbsp;type',&nbsp;dismod,&nbsp;'.'.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+ENDFORM.                    "CALL_REPORT<br />
+<br />
+   </div>
+   <div class="codeComment">
+*---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FORM&nbsp;LEVEL_PLDI&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*<br />
+*---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;处理导入文件的数据结构（确定列数和列宽度）&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*<br />
+*---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;--&gt;&nbsp;&nbsp;LOGIC_LEVEL&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*<br />
+*---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM level_pldi USING logic_level.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;s64x128&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;call_pldi&nbsp;TABLES&nbsp;t64x128&nbsp;USING&nbsp;logic_level.<br />
+&nbsp;&nbsp;ELSEIF&nbsp;s128x64&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;call_pldi&nbsp;TABLES&nbsp;t128x64&nbsp;USING&nbsp;logic_level.<br />
+&nbsp;&nbsp;ELSEIF&nbsp;s234x35&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;call_pldi&nbsp;TABLES&nbsp;t234x35&nbsp;USING&nbsp;logic_level.<br />
+&nbsp;&nbsp;ELSE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;call_pldi&nbsp;TABLES&nbsp;t30x040&nbsp;USING&nbsp;logic_level.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+ENDFORM.                    "LEVEL_PLDI<br />
+<br />
+   </div>
+   <div class="codeComment">
+*---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FORM&nbsp;CALL_PLDI&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*<br />
+*---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;........&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*<br />
+*---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;--&gt;&nbsp;&nbsp;DATA_STRUCT&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*<br />
+*&nbsp;&nbsp;--&gt;&nbsp;&nbsp;LOGIC_LEVEL&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*<br />
+*---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM call_pldi TABLES data_struct USING logic_level.<br />
+<br />
+&nbsp;&nbsp;PERFORM&nbsp;zgenerate_data_convertion<br />
+&nbsp;&nbsp;&nbsp;&nbsp;TABLES<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;data_struct<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;start<br />
+&nbsp;&nbsp;&nbsp;&nbsp;USING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tcode<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;file1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;file2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;file3<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;session<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mode<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dismod<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;logic_level<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;start-low<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;file_ext<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cacah.<br />
+<br />
+ENDFORM.                    "CALL_PLDI<br />
+<br />
+   </div>
+   <div class="codeComment">
+*---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FORM&nbsp;ZGENERATE_DATA_CONVERTION&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*<br />
+*---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;上传数据到内表&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*<br />
+*---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;--&gt;&nbsp;&nbsp;ITAB&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*<br />
+*&nbsp;&nbsp;--&gt;&nbsp;&nbsp;START&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*<br />
+*&nbsp;&nbsp;--&gt;&nbsp;&nbsp;TCODE&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*<br />
+*&nbsp;&nbsp;--&gt;&nbsp;&nbsp;FILEDATA&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*<br />
+*&nbsp;&nbsp;--&gt;&nbsp;&nbsp;FILEBDC&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*<br />
+*&nbsp;&nbsp;--&gt;&nbsp;&nbsp;FILECHILD&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*<br />
+*&nbsp;&nbsp;--&gt;&nbsp;&nbsp;SESSION&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*<br />
+*&nbsp;&nbsp;--&gt;&nbsp;&nbsp;MODE&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*<br />
+*&nbsp;&nbsp;--&gt;&nbsp;&nbsp;DISMOD&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*<br />
+*&nbsp;&nbsp;--&gt;&nbsp;&nbsp;LEVEL&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*<br />
+*&nbsp;&nbsp;--&gt;&nbsp;&nbsp;AWAL&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*<br />
+*&nbsp;&nbsp;--&gt;&nbsp;&nbsp;FILEEXTENDED&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*<br />
+*&nbsp;&nbsp;--&gt;&nbsp;&nbsp;CACAH&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*<br />
+*---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM zgenerate_data_convertion<br />
+&nbsp;&nbsp;&nbsp;TABLES<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;itab&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"数据内表<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;start&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"数据转换范围表<br />
+&nbsp;&nbsp;&nbsp;USING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tcode&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"事务码<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;filedata&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"数据文件路径<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;filebdc&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"已转换的BDC文件路径<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;filechild&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"BDC子文件路径？？<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;session&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"会话名称？？用户名<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mode&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Batch&nbsp;Input&nbsp;(BDC&nbsp;Session)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dismod&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"transaction&nbsp;mode<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;level&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"逻辑结构层数<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;awal&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"数据转换开始行数<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fileextended&nbsp;&nbsp;&nbsp;&nbsp;"Extended&nbsp;logic文件路径<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cacah.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"转换结果数<br />
+<br />
+   </div>
+   <div class="codeComment">
+*######################################################################<br />
+*@&nbsp;Rutin&nbsp;ini&nbsp;berfungsi&nbsp;untuk&nbsp;mengubah&nbsp;file&nbsp;logic&nbsp;dan&nbsp;file&nbsp;data&nbsp;menjadi<br />
+*@&nbsp;bentuk&nbsp;yang&nbsp;dimengerti&nbsp;oleh&nbsp;ABAP,&nbsp;yaitu&nbsp;BDC&nbsp;table.<br />
+*######################################################################<br />
+<br />
+*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*<br />
+*&nbsp;Standar&nbsp;WS_Upload&nbsp;yang&nbsp;mesti&nbsp;ada<br />
+*-----------------------------------*<br />
+<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'WS_UPLOAD'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;filename&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;filebdc<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;filetype&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;dat<br />
+&nbsp;&nbsp;&nbsp;&nbsp;TABLES<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;data_tab&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;i_logic1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;conversion_error&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;file_open_error&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;file_read_error&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;3<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;invalid_table_width&nbsp;=&nbsp;4<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;invalid_type&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;5<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;no_batch&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;6<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;unknown_error&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;7<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTHERS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;8.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;filedata&nbsp;&lt;&gt;&nbsp;space.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'WS_UPLOAD'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;filename&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;filedata<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;filetype&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;dat<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TABLES<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;data_tab&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;itab<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;conversion_error&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;file_open_error&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;file_read_error&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;3<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;invalid_table_width&nbsp;=&nbsp;4<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;invalid_type&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;5<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;no_batch&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;6<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;unknown_error&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;7<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTHERS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;8.<br />
+&nbsp;&nbsp;ELSE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ASSIGN&nbsp;COMPONENT&nbsp;1&nbsp;OF&nbsp;STRUCTURE&nbsp;itab&nbsp;TO&nbsp;&lt;ptr&gt;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;ptr&gt;&nbsp;=&nbsp;'/'.&nbsp;APPEND&nbsp;itab.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;START&nbsp;=&nbsp;1&nbsp;.<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;ENDIF.<br />
+   </div>
+   <div class="codeComment">
+*-------------------------------------------------*<br />
+<br />
+*if&nbsp;sy-subrc&nbsp;=&nbsp;0.<br />
+*&nbsp;Tahap&nbsp;inisialisasi&nbsp;*<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;PERFORM&nbsp;open_prog&nbsp;USING&nbsp;mode&nbsp;session.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Pengecekan&nbsp;level&nbsp;logic&nbsp;*<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;IF&nbsp;level&nbsp;=&nbsp;1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;level_1&nbsp;TABLES&nbsp;itab&nbsp;start&nbsp;USING&nbsp;cacah&nbsp;dismod&nbsp;tcode&nbsp;mode.<br />
+<br />
+&nbsp;&nbsp;ELSEIF&nbsp;level&nbsp;=&nbsp;2.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'WS_UPLOAD'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;filename&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;filechild<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;filetype&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;dat<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TABLES<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;data_tab&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;i_logic2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;conversion_error&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;file_open_error&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;file_read_error&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;3<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;invalid_table_width&nbsp;=&nbsp;4<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;invalid_type&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;5<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;no_batch&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;6<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;unknown_error&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;7<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTHERS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;8.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;level_2&nbsp;TABLES&nbsp;itab&nbsp;start&nbsp;USING&nbsp;cacah&nbsp;dismod&nbsp;tcode&nbsp;mode&nbsp;awal<br />
+&nbsp;.<br />
+<br />
+&nbsp;&nbsp;ELSE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'WS_UPLOAD'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;filename&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;filechild<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;filetype&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;dat<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TABLES<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;data_tab&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;i_logic2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;conversion_error&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;file_open_error&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;file_read_error&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;3<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;invalid_table_width&nbsp;=&nbsp;4<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;invalid_type&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;5<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;no_batch&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;6<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;unknown_error&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;7<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTHERS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;8.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;fileextended&nbsp;EQ&nbsp;space.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'UPLOAD'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;filetype&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;dat<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TABLES<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;data_tab&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;i_logic3<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;conversion_error&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;file_open_error&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;file_read_error&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;3<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;invalid_table_width&nbsp;=&nbsp;4<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;invalid_type&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;5<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;no_batch&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;6<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;unknown_error&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;7<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTHERS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;8.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ELSE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'WS_UPLOAD'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;filename&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;fileextended<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;filetype&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;dat<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TABLES<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;data_tab&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;i_logic3<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;conversion_error&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;file_open_error&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;file_read_error&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;3<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;invalid_table_width&nbsp;=&nbsp;4<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;invalid_type&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;5<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;no_batch&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;6<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;unknown_error&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;7<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTHERS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;8.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;level_3&nbsp;TABLES&nbsp;itab&nbsp;start&nbsp;USING&nbsp;cacah&nbsp;dismod&nbsp;tcode&nbsp;mode&nbsp;awal<br />
+&nbsp;.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;PERFORM&nbsp;close_prog&nbsp;USING&nbsp;mode.<br />
+<br />
+ENDFORM.                    "ZGENERATE_DATA_CONVERTION<br />
+<br />
+   </div>
+   <div class="codeComment">
+*---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FORM&nbsp;CALL_FILE&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*<br />
+*---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;调用文件选择窗口，读取文件路径&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*<br />
+*---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;--&gt;&nbsp;&nbsp;FILENAME&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*<br />
+*---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM call_file USING filename.<br />
+<br />
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'F4_FILENAME'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PROGRAM_NAME&nbsp;&nbsp;=&nbsp;SYST-REPID<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dynpro_number&nbsp;=&nbsp;syst-dynnr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;field_name&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'PATH'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;file_name&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;filename.<br />
+<br />
+ENDFORM.                    "CALL_FILE<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+**^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^****<br />
+***&nbsp;PLDI&nbsp;(Programmable&nbsp;Logic&nbsp;Data&nbsp;Interface)<br />
+***&nbsp;Fungsi-fungsi&nbsp;standar&nbsp;untuk&nbsp;PLDI<br />
+*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*<br />
+*&nbsp;Konversi&nbsp;tabel&nbsp;2&nbsp;kolom&nbsp;menjadi&nbsp;tabel&nbsp;BDC&nbsp;*<br />
+*------------------------------------------*<br />
+<br />
+   </div>
+   <div class="code">
+FORM dynpro USING dynbegin name value.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;dynbegin&nbsp;=&nbsp;&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;&nbsp;i_bdctable.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MOVE:&nbsp;name&nbsp;&nbsp;TO&nbsp;i_bdctable-program,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;value&nbsp;TO&nbsp;i_bdctable-dynpro&nbsp;,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'X'&nbsp;&nbsp;&nbsp;TO&nbsp;i_bdctable-dynbegin.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;i_bdctable.<br />
+<br />
+&nbsp;&nbsp;ELSE.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;&nbsp;i_bdctable.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MOVE:&nbsp;name&nbsp;&nbsp;&nbsp;&nbsp;TO&nbsp;i_bdctable-fnam,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;value&nbsp;&nbsp;&nbsp;TO&nbsp;i_bdctable-fval.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;i_bdctable.<br />
+<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+ENDFORM.                    "DYNPRO<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------<br />
+*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;GENERATE_BDC<br />
+*&---------------------------------------------------------------------<br />
+*<br />
+*&nbsp;&nbsp;Pemetaan&nbsp;dari&nbsp;logic&nbsp;file&nbsp;dan&nbsp;data&nbsp;file&nbsp;ke&nbsp;BDC&nbsp;map<br />
+*<br />
+*----------------------------------------------------------------------<br />
+*<br />
+*&nbsp;&nbsp;--&gt;&nbsp;&nbsp;logic&nbsp;file&nbsp;dan&nbsp;data&nbsp;file<br />
+*&nbsp;&nbsp;&lt;--&nbsp;&nbsp;BDC&nbsp;table<br />
+*----------------------------------------------------------------------<br />
+*<br />
+   </div>
+   <div class="code">
+FORM generate_bdc TABLES logic_t STRUCTURE i_logic1 USING data_t.<br />
+<br />
+&nbsp;&nbsp;FIELD-SYMBOLS&nbsp;&lt;ptr&gt;.<br />
+&nbsp;&nbsp;DATA&nbsp;nx&nbsp;TYPE&nbsp;i.<br />
+<br />
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;logic_t&nbsp;FROM&nbsp;'2'.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;logic_t-name&nbsp;=&nbsp;eof&nbsp;OR<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(&nbsp;logic_t-name&nbsp;=&nbsp;space&nbsp;AND&nbsp;logic_t-value&nbsp;=&nbsp;space&nbsp;).<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXIT.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ELSEIF&nbsp;logic_t-name(1)&nbsp;=&nbsp;'&lt;'&nbsp;OR&nbsp;logic_t-value&nbsp;=&nbsp;space.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CONTINUE.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ELSEIF&nbsp;logic_t-value(1)&nbsp;=&nbsp;'&'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;nx&nbsp;=&nbsp;logic_t-value+1(4).<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ASSIGN&nbsp;COMPONENT&nbsp;nx&nbsp;OF&nbsp;STRUCTURE&nbsp;data_t&nbsp;TO&nbsp;&lt;ptr&gt;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;&lt;ptr&gt;&nbsp;NE&nbsp;mask.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;dynpro&nbsp;USING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'&nbsp;'&nbsp;logic_t-name&nbsp;&lt;ptr&gt;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ELSE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CONTINUE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ELSEIF&nbsp;logic_t-value(1)&nbsp;=&nbsp;'='.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;dynpro&nbsp;USING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'&nbsp;'&nbsp;logic_t-name&nbsp;logic_t-value+1(131).<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ELSEIF&nbsp;logic_t-name&nbsp;=&nbsp;'BDC_OKCODE'&nbsp;OR&nbsp;logic_t-name&nbsp;=&nbsp;space.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;dynpro&nbsp;USING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'&nbsp;'&nbsp;'BDC_OKCODE'&nbsp;logic_t-value.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ELSEIF&nbsp;logic_t-name&nbsp;=&nbsp;'BDC_CURSOR'&nbsp;OR&nbsp;logic_t-name&nbsp;=&nbsp;'CURSOR'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;dynpro&nbsp;USING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'&nbsp;'&nbsp;'BDC_CURSOR'&nbsp;logic_t-value.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ELSE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;dynpro&nbsp;USING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'X'&nbsp;logic_t-name&nbsp;logic_t-value.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+ENDFORM.                               " GENERATE_BDC<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*<br />
+*&nbsp;Diproses&nbsp;secara&nbsp;On-Line&nbsp;(Call&nbsp;Transaction)<br />
+*&nbsp;atau&nbsp;menggunakan&nbsp;Batch&nbsp;Session<br />
+*--------------------------------------------*<br />
+<br />
+   </div>
+   <div class="code">
+FORM execute USING mode tcode dismod cacah.<br />
+&nbsp;&nbsp;DATA:&nbsp;exe(100).<br />
+&nbsp;&nbsp;IF&nbsp;mode&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'BDC_INSERT'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tcode&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;tcode<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TABLES<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dynprotab&nbsp;=&nbsp;i_bdctable.<br />
+&nbsp;&nbsp;ELSE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;REFRESH&nbsp;messtab[].<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;messtab.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;TRANSACTION&nbsp;tcode<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;i_bdctable<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MODE&nbsp;dismod<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;UPDATE&nbsp;'S'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MESSAGES&nbsp;INTO&nbsp;messtab.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;&lt;&gt;&nbsp;0&nbsp;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cacah&nbsp;=&nbsp;cacah&nbsp;-&nbsp;1&nbsp;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;DATA:&nbsp;l_mstring(480).<br />
+&nbsp;&nbsp;&nbsp;&nbsp;itab_result-index&nbsp;=&nbsp;sy-tabix.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;messtab&nbsp;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;SINGLE&nbsp;*&nbsp;FROM&nbsp;t100<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sprsl&nbsp;=&nbsp;messtab-msgspra<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;arbgb&nbsp;=&nbsp;messtab-msgid<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;msgnr&nbsp;=&nbsp;messtab-msgnr.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;l_mstring&nbsp;=&nbsp;t100-text.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;l_mstring&nbsp;CS&nbsp;'&1'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;REPLACE&nbsp;'&1'&nbsp;&nbsp;WITH&nbsp;messtab-msgv1(37)&nbsp;INTO&nbsp;l_mstring.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;REPLACE&nbsp;'&2'&nbsp;&nbsp;WITH&nbsp;messtab-msgv2(12)&nbsp;INTO&nbsp;l_mstring.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;REPLACE&nbsp;'&3'&nbsp;&nbsp;WITH&nbsp;messtab-msgv3(12)&nbsp;INTO&nbsp;l_mstring.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;REPLACE&nbsp;'&4'&nbsp;&nbsp;WITH&nbsp;messtab-msgv4(12)&nbsp;INTO&nbsp;l_mstring.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ELSE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;REPLACE&nbsp;'&'&nbsp;&nbsp;WITH&nbsp;messtab-msgv1(12)&nbsp;INTO&nbsp;l_mstring.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;REPLACE&nbsp;'&'&nbsp;&nbsp;WITH&nbsp;messtab-msgv2(12)&nbsp;INTO&nbsp;l_mstring.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;REPLACE&nbsp;'&'&nbsp;&nbsp;WITH&nbsp;messtab-msgv3(12)&nbsp;INTO&nbsp;l_mstring.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;REPLACE&nbsp;'&'&nbsp;&nbsp;WITH&nbsp;messtab-msgv4(12)&nbsp;INTO&nbsp;l_mstring.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CONDENSE&nbsp;l_mstring.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;itab_result-messtyp&nbsp;=&nbsp;messtab-msgtyp.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;itab_result-message&nbsp;=&nbsp;l_mstring.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;itab_result-messtyp&nbsp;=&nbsp;'E'&nbsp;OR&nbsp;itab_result-messtyp&nbsp;=&nbsp;'A'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;itab_result-light&nbsp;=&nbsp;'@5C@'.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXIT.<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ELSEIF&nbsp;itab_result-messtyp&nbsp;=&nbsp;'W'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;itab_result-light&nbsp;=&nbsp;'@5D@'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ELSE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;itab_result-light&nbsp;=&nbsp;'@5B@'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;itab_result.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+<br />
+&nbsp;&nbsp;ENDIF.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;=&nbsp;0&nbsp;AND&nbsp;MODE&nbsp;&lt;&gt;&nbsp;'X'&nbsp;.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXE&nbsp;=&nbsp;'Tcode:&nbsp;'.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;WRITE&nbsp;TCODE&nbsp;TO&nbsp;EXE+7&nbsp;LEFT-JUSTIFIED.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;WRITE&nbsp;'is&nbsp;being&nbsp;executed&nbsp;for&nbsp;record:&nbsp;'&nbsp;TO&nbsp;EXE+12&nbsp;LEFT-JUSTIFIED.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;WRITE&nbsp;CACAH&nbsp;TO&nbsp;EXE+42&nbsp;LEFT-JUSTIFIED.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;PROSES&nbsp;USING&nbsp;EXE.<br />
+*&nbsp;&nbsp;ENDIF.<br />
+   </div>
+   <div class="code">
+ENDFORM.                               " SAVE_IT<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*~~~~~~~~~~~~~~*<br />
+*&nbsp;Inisialisasi&nbsp;*<br />
+*--------------*<br />
+<br />
+   </div>
+   <div class="code">
+FORM open_prog USING mode session.<br />
+&nbsp;&nbsp;DATA:&nbsp;text1(80).<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;mode&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'BDC_OPEN_GROUP'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;client&nbsp;=&nbsp;sy-mandt<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;group&nbsp;&nbsp;=&nbsp;session<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;user&nbsp;&nbsp;&nbsp;=&nbsp;sy-uname<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;keep&nbsp;&nbsp;&nbsp;=&nbsp;keep.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+ENDFORM.                    "OPEN_PROG<br />
+<br />
+   </div>
+   <div class="codeComment">
+*~~~~~~~~~*<br />
+*&nbsp;Closing&nbsp;*<br />
+*---------*<br />
+<br />
+   </div>
+   <div class="code">
+FORM close_prog USING mode.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;mode&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'BDC_CLOSE_GROUP'&nbsp;.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+ENDFORM.                               " CLOSE_PROG<br />
+<br />
+   </div>
+   <div class="codeComment">
+*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*<br />
+*&nbsp;Indikator&nbsp;sedang&nbsp;melakukan&nbsp;proses&nbsp;*<br />
+*-----------------------------------*<br />
+<br />
+   </div>
+   <div class="code">
+FORM proses USING text.<br />
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'SAPGUI_PROGRESS_INDICATOR'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text&nbsp;&nbsp;&nbsp;=&nbsp;text<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTHERS&nbsp;=&nbsp;1.<br />
+ENDFORM.                    "PROSES<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*~~~~~~~~~~~~~~~*<br />
+*&nbsp;Logic&nbsp;level&nbsp;1&nbsp;*<br />
+*---------------*<br />
+   </div>
+   <div class="code">
+FORM level_1 TABLES itab start USING cacah dismod tcode mode.<br />
+<br />
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;itab.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-tabix&nbsp;IN&nbsp;start.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ASSIGN&nbsp;COMPONENT&nbsp;1&nbsp;OF&nbsp;STRUCTURE&nbsp;itab&nbsp;TO&nbsp;&lt;ptr&gt;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;&lt;ptr&gt;&nbsp;=&nbsp;eof.&nbsp;EXIT.&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;REFRESH&nbsp;i_bdctable.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;generate_bdc&nbsp;TABLES&nbsp;i_logic1&nbsp;USING&nbsp;itab.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ADD&nbsp;1&nbsp;TO&nbsp;cacah.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;execute&nbsp;USING&nbsp;mode&nbsp;tcode&nbsp;dismod&nbsp;cacah.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+ENDFORM.                                                    "LEVEL_1<br />
+<br />
+   </div>
+   <div class="codeComment">
+*~~~~~~~~~~~~~~~*<br />
+*&nbsp;Logic&nbsp;level&nbsp;2&nbsp;*<br />
+*---------------*<br />
+   </div>
+   <div class="code">
+FORM level_2 TABLES itab start USING cacah dismod tcode mode awal.<br />
+<br />
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;itab.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"ere&nbsp;sy-tabix&nbsp;in&nbsp;start.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-tabix&nbsp;IN&nbsp;start.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ASSIGN&nbsp;COMPONENT&nbsp;1&nbsp;OF&nbsp;STRUCTURE&nbsp;itab&nbsp;TO&nbsp;&lt;ptr&gt;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;&lt;ptr&gt;&nbsp;=&nbsp;eof.&nbsp;EXIT.&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text&nbsp;=&nbsp;'Processing&nbsp;at&nbsp;row&nbsp;'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WRITE&nbsp;sy-tabix&nbsp;TO&nbsp;text+18&nbsp;LEFT-JUSTIFIED.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;proses&nbsp;USING&nbsp;text.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;&lt;ptr&gt;&nbsp;NE&nbsp;space.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-tabix&nbsp;NE&nbsp;awal.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;dynpro&nbsp;USING&nbsp;'&nbsp;'&nbsp;'BDC_OKCODE'&nbsp;'/11'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;execute&nbsp;USING&nbsp;mode&nbsp;tcode&nbsp;dismod&nbsp;cacah.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;REFRESH&nbsp;i_bdctable.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;generate_bdc&nbsp;TABLES&nbsp;i_logic1&nbsp;USING&nbsp;itab.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ADD&nbsp;1&nbsp;TO&nbsp;cacah.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ELSE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;generate_bdc&nbsp;TABLES&nbsp;i_logic2&nbsp;USING&nbsp;itab.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+&nbsp;&nbsp;PERFORM&nbsp;dynpro&nbsp;USING&nbsp;'&nbsp;'&nbsp;'BDC_OKCODE'&nbsp;'/11'.<br />
+&nbsp;&nbsp;PERFORM&nbsp;execute&nbsp;USING&nbsp;mode&nbsp;tcode&nbsp;dismod&nbsp;cacah.<br />
+ENDFORM.                                                    "LEVEL_2<br />
+<br />
+   </div>
+   <div class="codeComment">
+*~~~~~~~~~~~~~~~~*<br />
+*&nbsp;Extended&nbsp;logic&nbsp;*<br />
+*----------------*<br />
+   </div>
+   <div class="code">
+FORM level_3 TABLES itab start USING cacah dismod tcode mode awal.<br />
+<br />
+&nbsp;&nbsp;DATA:&nbsp;data_ext(8192),&nbsp;temp(8192),<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sub_item&nbsp;VALUE&nbsp;space.<br />
+<br />
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;itab.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-tabix&nbsp;IN&nbsp;start.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ASSIGN&nbsp;COMPONENT&nbsp;1&nbsp;OF&nbsp;STRUCTURE&nbsp;itab&nbsp;TO&nbsp;&lt;ptr&gt;.<br />
+   </div>
+   <div class="codeComment">
+**&nbsp;Check&nbsp;End-Of-File<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;&lt;ptr&gt;&nbsp;=&nbsp;eof.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXIT.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text&nbsp;=&nbsp;'Processing&nbsp;at&nbsp;row&nbsp;'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WRITE&nbsp;sy-tabix&nbsp;TO&nbsp;text+18&nbsp;LEFT-JUSTIFIED.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;proses&nbsp;USING&nbsp;text.<br />
+<br />
+   </div>
+   <div class="codeComment">
+**&nbsp;Check&nbsp;if&nbsp;any&nbsp;sub-item&nbsp;data&nbsp;or&nbsp;extended&nbsp;data&nbsp;uses&nbsp;'#'&nbsp;symbol<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;&lt;ptr&gt;&nbsp;=&nbsp;'#'.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"-&gt;Sub-item&nbsp;or&nbsp;extended-data<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;generate_bdc&nbsp;TABLES&nbsp;i_logic3&nbsp;USING&nbsp;itab.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sub_item&nbsp;=&nbsp;'X'.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"-&gt;Sub-item&nbsp;data&nbsp;flag&nbsp;is&nbsp;activated<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CONTINUE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+   </div>
+   <div class="codeComment">
+**&nbsp;Process&nbsp;BDC&nbsp;for&nbsp;header&nbsp;data<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;&lt;ptr&gt;&nbsp;NE&nbsp;space.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-tabix&nbsp;NE&nbsp;awal.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;i_logic3&nbsp;INDEX&nbsp;2.<br />
+   </div>
+   <div class="codeComment">
+**&nbsp;There&nbsp;is&nbsp;no&nbsp;sub_item&nbsp;data&nbsp;or&nbsp;no&nbsp;extended&nbsp;data&nbsp;with&nbsp;'#'&nbsp;symbol<br />
+**&nbsp;or&nbsp;no&nbsp;extended&nbsp;logic<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;i_logic3&nbsp;NE&nbsp;space&nbsp;AND&nbsp;sub_item&nbsp;EQ&nbsp;space.<br />
+   </div>
+   <div class="codeComment">
+**&nbsp;Read&nbsp;extended&nbsp;data&nbsp;in&nbsp;the&nbsp;last&nbsp;item<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MOVE:&nbsp;itab&nbsp;TO&nbsp;temp,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;data_ext&nbsp;TO&nbsp;itab.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;generate_bdc&nbsp;TABLES&nbsp;i_logic3&nbsp;USING&nbsp;itab.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MOVE&nbsp;temp&nbsp;TO&nbsp;itab.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ELSE.<br />
+   </div>
+   <div class="codeComment">
+**&nbsp;There&nbsp;is&nbsp;sub_item&nbsp;data&nbsp;or&nbsp;extended&nbsp;data&nbsp;with&nbsp;'#'&nbsp;symbol<br />
+**&nbsp;or&nbsp;no&nbsp;extended&nbsp;logic<br />
+**&nbsp;If&nbsp;sub-items&nbsp;are&nbsp;processed,&nbsp;it&nbsp;is&nbsp;saved&nbsp;automatically.<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;dynpro&nbsp;USING&nbsp;'&nbsp;'&nbsp;'BDC_OKCODE'&nbsp;'/11'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;execute&nbsp;USING&nbsp;mode&nbsp;tcode&nbsp;dismod&nbsp;cacah.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;sub_item.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"-&gt;Reset&nbsp;flag&nbsp;sub-item<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;REFRESH&nbsp;i_bdctable.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;generate_bdc&nbsp;TABLES&nbsp;i_logic1&nbsp;USING&nbsp;itab.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ADD&nbsp;1&nbsp;TO&nbsp;cacah.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ELSE.<br />
+   </div>
+   <div class="codeComment">
+**&nbsp;Check&nbsp;whether&nbsp;data&nbsp;contains&nbsp;sub_item&nbsp;data<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sub_item&nbsp;=&nbsp;'X'.<br />
+   </div>
+   <div class="codeComment">
+**&nbsp;After&nbsp;all&nbsp;sub-items&nbsp;are&nbsp;processed,&nbsp;back&nbsp;to&nbsp;item.<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;dynpro&nbsp;USING&nbsp;'&nbsp;'&nbsp;'BDC_OKCODE'&nbsp;'/3'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;generate_bdc&nbsp;TABLES&nbsp;i_logic2&nbsp;USING&nbsp;itab.<br />
+   </div>
+   <div class="codeComment">
+**&nbsp;Store&nbsp;last&nbsp;data&nbsp;into&nbsp;temporary&nbsp;field<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MOVE&nbsp;itab&nbsp;TO&nbsp;data_ext.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;i_logic3&nbsp;INDEX&nbsp;2.<br />
+&nbsp;&nbsp;IF&nbsp;i_logic3&nbsp;NE&nbsp;space&nbsp;AND&nbsp;sub_item&nbsp;EQ&nbsp;space.<br />
+   </div>
+   <div class="codeComment">
+**&nbsp;No&nbsp;sub-item&nbsp;data&nbsp;or&nbsp;extended&nbsp;data&nbsp;with&nbsp;'#'&nbsp;symbol<br />
+**&nbsp;and&nbsp;there&nbsp;is&nbsp;extended&nbsp;logic<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;MOVE:&nbsp;data_ext&nbsp;TO&nbsp;itab.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;generate_bdc&nbsp;TABLES&nbsp;i_logic3&nbsp;USING&nbsp;itab.<br />
+&nbsp;&nbsp;ELSE.<br />
+   </div>
+   <div class="codeComment">
+**&nbsp;There&nbsp;is&nbsp;sub-item&nbsp;or&nbsp;extended&nbsp;data,&nbsp;last&nbsp;extended&nbsp;data&nbsp;has&nbsp;'#'<br />
+**&nbsp;If&nbsp;sub-items&nbsp;are&nbsp;processed,&nbsp;it&nbsp;is&nbsp;saved&nbsp;automatically.<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;dynpro&nbsp;USING&nbsp;'&nbsp;'&nbsp;'BDC_OKCODE'&nbsp;'/11'.<br />
+&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;PERFORM&nbsp;execute&nbsp;USING&nbsp;mode&nbsp;tcode&nbsp;dismod&nbsp;cacah.<br />
+ENDFORM.                                                    "LEVEL_3<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------<br />
+*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;GENERATE_FORMAT_FILE<br />
+*&---------------------------------------------------------------------<br />
+*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------<br />
+*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&gt;P_TEMPLATE&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------<br />
+*<br />
+   </div>
+   <div class="code">
+FORM generate_format_file USING  template.<br />
+&nbsp;&nbsp;DATA:&nbsp;bdctab&nbsp;TYPE&nbsp;bdcdata&nbsp;OCCURS&nbsp;0&nbsp;WITH&nbsp;HEADER&nbsp;LINE.<br />
+&nbsp;&nbsp;DATA:&nbsp;BEGIN&nbsp;OF&nbsp;outtext&nbsp;OCCURS&nbsp;0,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fnam&nbsp;LIKE&nbsp;bdcdata-fnam,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fval&nbsp;LIKE&nbsp;bdcdata-fval,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;END&nbsp;OF&nbsp;outtext.<br />
+<br />
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'WS_UPLOAD'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;filename&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;template<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;filetype&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;dat<br />
+&nbsp;&nbsp;&nbsp;&nbsp;TABLES<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;data_tab&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;bdctab<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;conversion_error&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;file_open_error&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;file_read_error&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;3<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;invalid_table_width&nbsp;=&nbsp;4<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;invalid_type&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;5<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;no_batch&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;6<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;unknown_error&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;7<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTHERS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;8.<br />
+&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;NE&nbsp;0&nbsp;OR&nbsp;bdctab[]&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WRITE:&nbsp;'ERROR&nbsp;OPEN&nbsp;TEMPLATE&nbsp;FILE,&nbsp;PLEASE&nbsp;CHECK&nbsp;AGAIN!'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXIT.<br />
+&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;MOVE&nbsp;'NAME'&nbsp;TO&nbsp;outtext-fnam.<br />
+&nbsp;&nbsp;MOVE&nbsp;'VALUE'&nbsp;TO&nbsp;outtext-fval.<br />
+&nbsp;&nbsp;INSERT&nbsp;outtext&nbsp;INDEX&nbsp;1.<br />
+&nbsp;&nbsp;DELETE&nbsp;bdctab&nbsp;INDEX&nbsp;1.<br />
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;bdctab.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;NOT&nbsp;(&nbsp;bdctab-program&nbsp;IS&nbsp;INITIAL&nbsp;).<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;outtext-fnam&nbsp;=&nbsp;bdctab-program.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;outtext-fval&nbsp;=&nbsp;bdctab-dynpro.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;outtext.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CONTINUE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ELSEIF&nbsp;(&nbsp;bdctab-fnam&nbsp;NE&nbsp;'BDC_CURSOR'&nbsp;AND&nbsp;bdctab-fnam&nbsp;NE&nbsp;'BDC_SUBSCR'&nbsp;).<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;outtext-fnam&nbsp;=&nbsp;bdctab-fnam.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;outtext-fval&nbsp;=&nbsp;bdctab-fval.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;outtext.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+&nbsp;&nbsp;CLEAR&nbsp;outtext.<br />
+&nbsp;&nbsp;MOVE&nbsp;'@'&nbsp;TO&nbsp;outtext-fnam.<br />
+&nbsp;&nbsp;APPEND&nbsp;outtext.<br />
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'WS_DOWNLOAD'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;BIN_FILESIZE&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'&nbsp;'<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CODEPAGE&nbsp;=&nbsp;'&nbsp;'<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;filename&nbsp;=&nbsp;textfile<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;filetype&nbsp;=&nbsp;'DAT'<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MODE&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'&nbsp;'<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WK1_N_FORMAT&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'&nbsp;'<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WK1_N_SIZE&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'&nbsp;'<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WK1_T_FORMAT&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'&nbsp;'<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WK1_T_SIZE&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'&nbsp;'<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;COL_SELECT&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'&nbsp;'<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;COL_SELECTMASK&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'&nbsp;'<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;NO_AUTH_CHECK&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'&nbsp;'<br />
+*&nbsp;IMPORTING<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FILELENGTH&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;TABLES<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;data_tab&nbsp;=&nbsp;outtext<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FIELDNAMES&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=<br />
+*&nbsp;EXCEPTIONS<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FILE_OPEN_ERROR&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;1<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FILE_WRITE_ERROR&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;2<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INVALID_FILESIZE&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;3<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INVALID_TYPE&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;4<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;NO_BATCH&nbsp;=&nbsp;5<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;UNKNOWN_ERROR&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;6<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INVALID_TABLE_WIDTH&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;7<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;GUI_REFUSE_FILETRANSFER&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;8<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CUSTOMER_ERROR&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;9<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTHERS&nbsp;&nbsp;&nbsp;=&nbsp;10<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;.<br />
+&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;&lt;&gt;&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;ID&nbsp;sy-msgid&nbsp;TYPE&nbsp;sy-msgty&nbsp;NUMBER&nbsp;sy-msgno<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WITH&nbsp;sy-msgv1&nbsp;sy-msgv2&nbsp;sy-msgv3&nbsp;sy-msgv4.<br />
+&nbsp;&nbsp;ELSE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;'生成成功'&nbsp;TYPE&nbsp;'S'.<br />
+&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;outtext.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WRITE:&nbsp;/(20)&nbsp;outtext-fnam,&nbsp;(20)&nbsp;outtext-fval.<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+ENDFORM.                    " GENERATE_FORMAT_FILE<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;SHOW_ALV<br />
+*&---------------------------------------------------------------------*<br />
+*20090521&nbsp;added&nbsp;by&nbsp;WellsZhang<br />
+   </div>
+   <div class="code">
+FORM show_alv .<br />
+&nbsp;&nbsp;is_layout-colwidth_optimize&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;CLEAR&nbsp;fcat.<br />
+&nbsp;&nbsp;REFRESH&nbsp;fcat.<br />
+&nbsp;&nbsp;PERFORM&nbsp;fcat_built&nbsp;USING&nbsp;'LIGHT'&nbsp;'结果'.<br />
+&nbsp;&nbsp;PERFORM&nbsp;fcat_built&nbsp;USING&nbsp;'MESSTYP'&nbsp;'类型'.<br />
+&nbsp;&nbsp;PERFORM&nbsp;fcat_built&nbsp;USING&nbsp;'INDEX'&nbsp;'索引'.<br />
+&nbsp;&nbsp;PERFORM&nbsp;fcat_built&nbsp;USING&nbsp;'MESSAGE'&nbsp;'信息'.<br />
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'REUSE_ALV_GRID_DISPLAY'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_callback_program&nbsp;=&nbsp;sy-repid<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;I_CALLBACK_PF_STATUS_SET&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'PF_STATUS_SET'<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;I_CALLBACK_HTML_TOP_OF_PAGE&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'TOP_OF_PAGE'<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;I_CALLBACK_USER_COMMAND&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'USER_COMMAND-ALV'<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;is_layout&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;is_layout<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it_fieldcat&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;fcat[]<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_save&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'A'<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;I_HTML_HEIGHT_TOP&nbsp;&nbsp;=&nbsp;12<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;TABLES<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;t_outtab&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;itab_result<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;EXCEPTIONS<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PROGRAM_ERROR&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;1<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTHERS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;2<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;.<br />
+&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;&lt;&gt;&nbsp;0.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;MESSAGE&nbsp;ID&nbsp;SY-MSGID&nbsp;TYPE&nbsp;SY-MSGTY&nbsp;NUMBER&nbsp;SY-MSGNO<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WITH&nbsp;SY-MSGV1&nbsp;SY-MSGV2&nbsp;SY-MSGV3&nbsp;SY-MSGV4.<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;ENDIF.<br />
+ENDFORM.                    " SHOW_ALV<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;fcat_built<br />
+*&---------------------------------------------------------------------*<br />
+<br />
+   </div>
+   <div class="code">
+FORM fcat_built  USING    p_fieldname p_seltext .<br />
+&nbsp;&nbsp;fcat-fieldname&nbsp;&nbsp;=&nbsp;p_fieldname.<br />
+&nbsp;&nbsp;fcat-seltext_m&nbsp;&nbsp;=&nbsp;p_seltext.<br />
+&nbsp;&nbsp;APPEND&nbsp;fcat.<br />
+&nbsp;&nbsp;CLEAR&nbsp;fcat.<br />
+ENDFORM.                    " fcat_built<br />
+   </div>
+   <div class="codeComment">
+*end&nbsp;of&nbsp;modification<br />
+<br />
+<br />
+*Messages<br />
+*----------------------------------------------------------<br />
+*<br />
+*&nbsp;Message&nbsp;class:&nbsp;Hard&nbsp;coded<br />
+*&nbsp;&nbsp;&nbsp;事务代码不能为空，请检查!<br />
+            </div>
+          </td>
+        </tr>
+      </table>
+      </td>
+      </tr>
+   <tr>
+<td class="footer">Extracted by Mass Download version 1.5.2 - E.G.Mellodew. 1998-2022. Sap Release 755</td>
+   </tr>
+</table>
+</body>
+</html>

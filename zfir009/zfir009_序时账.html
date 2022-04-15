@@ -1,0 +1,501 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=GB2312" />
+<title>ZFIR009</title>
+<style type="text/css">
+.code{ font-family:"Courier New", Courier, monospace; color:#000; font-size:14px; background-color:#F2F4F7 }
+  .codeComment {font-family:"Courier New", Courier, monospace; color:#0000F0; font-size:14px; background-color:#F2F4F7 }
+  .normalBold{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; font-weight:800 }
+  .normalBoldLarge{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+</style>
+<style type="text/css">
+  .normal{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px }
+  .footer{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; text-align: center }
+  h2{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+  h3{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:14px; font-weight:800 }
+  .outerTable{
+   background-color:#E0E7ED;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-right-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+  .innerTable{
+   background-color:#F2F4F7;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-bottom-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+</style>
+</head>
+<body>
+<table class="outerTable">
+  <tr class="normalBoldLarge">
+     <td><h2>Code listing for: ZFIR009</h2>
+<h3> Description: 序时账</h3></td>
+   </tr>
+  <tr>
+     <td>
+     <table class="innerTable">
+       <tr>
+          <td>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Report&nbsp;ZFIR009<br />
+*&---------------------------------------------------------------------*<br />
+*&<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+REPORT zfir009.<br />
+TABLES: bkpf,acdoca,kna1.<br />
+<br />
+DATA: is_layout_lvc  TYPE  lvc_s_layo.<br />
+DATA: it_fieldcat_lvc TYPE  lvc_t_fcat WITH HEADER LINE.<br />
+DATA:  it_sort_lvc  TYPE  lvc_t_sort WITH HEADER LINE.<br />
+<br />
+<br />
+DATA: BEGIN OF gs_out,<br />
+   </div>
+   <div class="codeComment">
+*****************&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;常规数据&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;************************************<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bukrs&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;bkpf-bukrs,&nbsp;"&nbsp;公司代码<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;budat&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;bkpf-budat,&nbsp;"&nbsp;过账日期<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;usnam&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;bkpf-usnam,&nbsp;"&nbsp;&nbsp;制单人<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;racct&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;acdoca-racct,&nbsp;"&nbsp;&nbsp;科目编号<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xblnr&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;bkpf-xblnr,&nbsp;"&nbsp;&nbsp;摘要<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;kunnr&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;acdoca-kunnr,&nbsp;"&nbsp;&nbsp;&nbsp;客户<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lifnr&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;acdoca-lifnr,&nbsp;"&nbsp;&nbsp;供应商<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;anln1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;acdoca-anln1,&nbsp;"&nbsp;资产<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ltext&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;t003t-ltext,&nbsp;"&nbsp;凭证描述<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;docln&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;acdoca-docln,&nbsp;"&nbsp;凭证行项目<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;hsl&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;acdoca-hsl,&nbsp;"&nbsp;总金额<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;name_text&nbsp;LIKE&nbsp;adrp-name_text,&nbsp;"&nbsp;制单人（描述）<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;txt50&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;skat-txt50,&nbsp;"&nbsp;会计科目描述<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;drcrk&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;acdoca-drcrk,&nbsp;"&nbsp;h/s<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;blart&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;acdoca-blart,&nbsp;"&nbsp;凭证类型<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;belnr&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;bkpf-belnr,&nbsp;"&nbsp;&nbsp;凭证编号<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bktxt&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;bkpf-bktxt,<br />
+   </div>
+   <div class="codeComment">
+***************&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;附加数据&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*****************************<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sel&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;c,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;zfux&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;acdoca-anln1,&nbsp;"辅助项<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;zfuxms&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;anla-txt50,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sdmhab&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;sdmhab,&nbsp;"&nbsp;总分类帐科目:借方金额<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sdmsol&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;sdmsol,&nbsp;"&nbsp;总分类帐科目:贷方金额<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;END&nbsp;OF&nbsp;gs_out.<br />
+DATA: gt_out LIKE TABLE OF gs_out.<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&----------------------------------------------------------------------&<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;选择屏幕<br />
+*&----------------------------------------------------------------------&<br />
+   </div>
+   <div class="code">
+SELECTION-SCREEN BEGIN OF BLOCK  b1  WITH FRAME TITLE TEXT-001.<br />
+<br />
+&nbsp;&nbsp;PARAMETERS:&nbsp;p_bukrs&nbsp;LIKE&nbsp;bkpf-bukrs&nbsp;OBLIGATORY.&nbsp;"公司代码<br />
+<br />
+&nbsp;&nbsp;SELECT-OPTIONS:&nbsp;&nbsp;s_budat&nbsp;FOR&nbsp;bkpf-budat&nbsp;OBLIGATORY,&nbsp;"过账日期<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;s_blart&nbsp;FOR&nbsp;bkpf-blart,&nbsp;"&nbsp;凭证类型<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;s_belnr&nbsp;FOR&nbsp;bkpf-belnr.&nbsp;"&nbsp;凭证编号<br />
+<br />
+&nbsp;&nbsp;SELECT-OPTIONS:&nbsp;p_usnam&nbsp;FOR&nbsp;bkpf-usnam&nbsp;NO-EXTENSION&nbsp;NO&nbsp;INTERVALS.&nbsp;&nbsp;"&nbsp;制单人<br />
+<br />
+&nbsp;&nbsp;SELECT-OPTIONS:&nbsp;s_racct&nbsp;FOR&nbsp;acdoca-racct.&nbsp;"&nbsp;科目编号<br />
+<br />
+&nbsp;&nbsp;SELECT-OPTIONS:&nbsp;p_xblnr&nbsp;FOR&nbsp;bkpf-xblnr&nbsp;NO-EXTENSION&nbsp;NO&nbsp;INTERVALS,&nbsp;"&nbsp;摘要<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;p_drcrk&nbsp;FOR&nbsp;acdoca-drcrk&nbsp;NO-EXTENSION&nbsp;NO&nbsp;INTERVALS.&nbsp;"&nbsp;方向<br />
+<br />
+&nbsp;&nbsp;SELECT-OPTIONS:&nbsp;&nbsp;s_kunnr&nbsp;FOR&nbsp;acdoca-kunnr,&nbsp;"&nbsp;客户<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;s_lifnr&nbsp;FOR&nbsp;acdoca-lifnr,&nbsp;"&nbsp;供应商<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;s_anln1&nbsp;FOR&nbsp;acdoca-anln1.&nbsp;&nbsp;"&nbsp;资产<br />
+<br />
+SELECTION-SCREEN END OF BLOCK b1.<br />
+<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&----------------------------------------------------------------------&<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;主程序<br />
+*&----------------------------------------------------------------------&<br />
+<br />
+   </div>
+   <div class="code">
+START-OF-SELECTION.<br />
+&nbsp;&nbsp;PERFORM:&nbsp;get_data.<br />
+&nbsp;&nbsp;PERFORM:&nbsp;alv_disp.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&----------------------------------------------------------------------&<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FORM&nbsp;GET_DATA<br />
+*&----------------------------------------------------------------------&<br />
+   </div>
+   <div class="code">
+FORM get_data.<br />
+<br />
+&nbsp;&nbsp;DATA:&nbsp;ls_out&nbsp;LIKE&nbsp;gs_out,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lt_out&nbsp;LIKE&nbsp;TABLE&nbsp;OF&nbsp;ls_out.<br />
+<br />
+<br />
+&nbsp;&nbsp;SELECT&nbsp;a~docln&nbsp;a~hsl&nbsp;a~racct&nbsp;a~drcrk&nbsp;a~kunnr&nbsp;a~lifnr&nbsp;a~anln1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;b~bukrs&nbsp;b~budat&nbsp;b~blart&nbsp;b~belnr&nbsp;b~usnam&nbsp;b~xblnr&nbsp;b~bktxt<br />
+&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;acdoca&nbsp;AS&nbsp;a&nbsp;INNER&nbsp;JOIN&nbsp;bkpf&nbsp;AS&nbsp;b<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ON&nbsp;&nbsp;&nbsp;a~rbukrs&nbsp;=&nbsp;b~bukrs<br />
+&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;a~gjahr&nbsp;=&nbsp;b~gjahr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;a~belnr&nbsp;=&nbsp;b~belnr<br />
+&nbsp;&nbsp;"&nbsp;&nbsp;AND&nbsp;a~rldnr&nbsp;=&nbsp;b~rldnr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;CORRESPONDING&nbsp;FIELDS&nbsp;OF&nbsp;TABLE&nbsp;gt_out<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;b~bukrs&nbsp;=&nbsp;p_bukrs<br />
+&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;b~budat&nbsp;IN&nbsp;s_budat<br />
+&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;b~blart&nbsp;IN&nbsp;s_blart<br />
+&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;b~belnr&nbsp;IN&nbsp;s_belnr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;b~usnam&nbsp;IN&nbsp;p_usnam<br />
+&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;a~racct&nbsp;IN&nbsp;s_racct<br />
+&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;b~xblnr&nbsp;IN&nbsp;p_xblnr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;a~drcrk&nbsp;IN&nbsp;p_drcrk<br />
+&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;a~kunnr&nbsp;IN&nbsp;s_kunnr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;a~lifnr&nbsp;IN&nbsp;s_lifnr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;a~anln1&nbsp;IN&nbsp;s_anln1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;gt_out[]&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;凭证类型描述LTEXT<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;blart,ltext&nbsp;&nbsp;FROM&nbsp;t003t<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;TABLE&nbsp;@DATA(lt_t003t)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;spras&nbsp;=&nbsp;'1'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;从表USR21中取人员编号PERSNUMBER<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;bname,persnumber&nbsp;FROM&nbsp;usr21<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;TABLE&nbsp;@DATA(lt_usr21).<br />
+&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;表ADRP中取制单人描述NAME_TEXT<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;lt_usr21[]&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;persnumber,name_text&nbsp;FROM&nbsp;adrp<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;TABLE&nbsp;@DATA(lt_adrp)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FOR&nbsp;ALL&nbsp;ENTRIES&nbsp;IN&nbsp;@lt_usr21<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;persnumber&nbsp;=&nbsp;@lt_usr21-persnumber.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;判断统驭科目<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;saknr,bukrs,mitkz<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;skb1&nbsp;INTO&nbsp;TABLE&nbsp;@DATA(lt_skb1)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FOR&nbsp;ALL&nbsp;ENTRIES&nbsp;IN&nbsp;@gt_out<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;saknr&nbsp;=&nbsp;@gt_out-racct<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;bukrs&nbsp;=&nbsp;@gt_out-bukrs.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;saknr,txt50&nbsp;FROM&nbsp;skat<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;TABLE&nbsp;@DATA(lt_skat)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FOR&nbsp;ALL&nbsp;ENTRIES&nbsp;IN&nbsp;@gt_out<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;saknr&nbsp;=&nbsp;@gt_out-racct<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;ktopl&nbsp;=&nbsp;'HXCN'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;spras&nbsp;=&nbsp;'1'.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;客户名称<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;name1,kunnr&nbsp;FROM&nbsp;kna1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;TABLE&nbsp;@DATA(lt_kna1)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FOR&nbsp;ALL&nbsp;ENTRIES&nbsp;IN&nbsp;@gt_out<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;kunnr&nbsp;=&nbsp;@gt_out-kunnr.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;供应商名称<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;name1,lifnr&nbsp;FROM&nbsp;lfa1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;TABLE&nbsp;@DATA(lt_lfa1)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FOR&nbsp;ALL&nbsp;ENTRIES&nbsp;IN&nbsp;@gt_out<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;lifnr&nbsp;=&nbsp;@gt_out-lifnr.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;资产描述。<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;txt50,bukrs,anln1&nbsp;FROM&nbsp;anla<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;TABLE&nbsp;@DATA(lt_anla)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FOR&nbsp;ALL&nbsp;ENTRIES&nbsp;IN&nbsp;@gt_out<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;bukrs&nbsp;=&nbsp;@gt_out-bukrs<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;anln1&nbsp;=&nbsp;@gt_out-anln1.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;"排序<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SORT&nbsp;lt_t003t&nbsp;BY&nbsp;blart.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SORT&nbsp;lt_usr21&nbsp;BY&nbsp;bname.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SORT&nbsp;lt_adrp&nbsp;BY&nbsp;persnumber.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SORT&nbsp;lt_skb1&nbsp;BY&nbsp;saknr&nbsp;bukrs.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SORT&nbsp;lt_skat&nbsp;BY&nbsp;saknr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SORT&nbsp;lt_kna1&nbsp;BY&nbsp;kunnr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SORT&nbsp;lt_lfa1&nbsp;BY&nbsp;lifnr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SORT&nbsp;lt_anla&nbsp;BY&nbsp;bukrs&nbsp;anln1.<br />
+<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;lt_out[]&nbsp;=&nbsp;gt_out[].<br />
+&nbsp;&nbsp;&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;gt_out&nbsp;INTO&nbsp;gs_out.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;lt_t003t&nbsp;INTO&nbsp;DATA(ls_t003t)&nbsp;WITH&nbsp;KEY&nbsp;blart&nbsp;=&nbsp;gs_out-blart&nbsp;BINARY&nbsp;SEARCH.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_out-ltext&nbsp;=&nbsp;ls_t003t-ltext.&nbsp;"&nbsp;凭证描述<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;lt_usr21&nbsp;INTO&nbsp;DATA(ls_usr21)&nbsp;WITH&nbsp;KEY&nbsp;bname&nbsp;=&nbsp;gs_out-usnam&nbsp;BINARY&nbsp;SEARCH.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;lt_adrp&nbsp;INTO&nbsp;DATA(ls_adrp)&nbsp;WITH&nbsp;KEY&nbsp;persnumber&nbsp;=&nbsp;ls_usr21-persnumber&nbsp;BINARY&nbsp;SEARCH.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_out-name_text&nbsp;=&nbsp;ls_adrp-name_text.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;判断是否为统驭科目（<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;lt_skb1&nbsp;INTO&nbsp;DATA(ls_skb1)&nbsp;WITH&nbsp;KEY&nbsp;saknr&nbsp;=&nbsp;gs_out-racct&nbsp;bukrs&nbsp;=&nbsp;gs_out-bukrs&nbsp;BINARY&nbsp;SEARCH.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;=&nbsp;0."表SKAT中取：科目描述TXT50<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;lt_skat&nbsp;INTO&nbsp;DATA(ls_skat)&nbsp;WITH&nbsp;KEY&nbsp;saknr&nbsp;=&nbsp;gs_out-racct&nbsp;BINARY&nbsp;SEARCH.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_out-txt50&nbsp;=&nbsp;ls_skat-txt50.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;ls_skb1-mitkz&nbsp;=&nbsp;'D'.&nbsp;&nbsp;"&nbsp;对于SKB1-MITKZ=D的，&nbsp;辅助项ACDOCA-KUNNR<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;SELECT&nbsp;SINGLE&nbsp;name1&nbsp;INTO&nbsp;gs_out-zfuxms&nbsp;FROM&nbsp;kna1&nbsp;WHERE&nbsp;kunnr&nbsp;=&nbsp;gs_out-kunnr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;lt_kna1&nbsp;INTO&nbsp;DATA(ls_kna1)&nbsp;WITH&nbsp;KEY&nbsp;kunnr&nbsp;=&nbsp;gs_out-kunnr&nbsp;BINARY&nbsp;SEARCH.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_out-zfuxms&nbsp;=&nbsp;ls_kna1-name1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_out-zfux&nbsp;=&nbsp;gs_out-kunnr.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ELSEIF&nbsp;ls_skb1-mitkz&nbsp;=&nbsp;'K'.&nbsp;&nbsp;&nbsp;"&nbsp;对于SKB1-MITKZ=K的,&nbsp;&nbsp;辅助项ACDOCA-LIFNR<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;SELECT&nbsp;SINGLE&nbsp;name1&nbsp;INTO&nbsp;gs_out-zfuxms&nbsp;FROM&nbsp;lfa1&nbsp;WHERE&nbsp;lifnr&nbsp;=&nbsp;gs_out-lifnr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;lt_lfa1&nbsp;INTO&nbsp;DATA(ls_lfa1)&nbsp;WITH&nbsp;KEY&nbsp;lifnr&nbsp;=&nbsp;gs_out-lifnr&nbsp;BINARY&nbsp;SEARCH.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_out-zfuxms&nbsp;=&nbsp;ls_lfa1-name1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_out-zfux&nbsp;=&nbsp;gs_out-lifnr.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ELSEIF&nbsp;ls_skb1-mitkz&nbsp;=&nbsp;'A'.&nbsp;&nbsp;"&nbsp;对于SKB1-MITKZ=A的，&nbsp;辅助项ACDOCA-ANLN1，<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;&nbsp;SELECT&nbsp;SINGLE&nbsp;txt50&nbsp;INTO&nbsp;gs_out-zfuxms&nbsp;FROM&nbsp;anla&nbsp;WHERE&nbsp;bukrs&nbsp;=&nbsp;gs_out-bukrs&nbsp;AND&nbsp;anln1&nbsp;=&nbsp;gs_out-anln1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;lt_anla&nbsp;INTO&nbsp;DATA(ls_anla)&nbsp;WITH&nbsp;KEY&nbsp;bukrs&nbsp;=&nbsp;gs_out-bukrs&nbsp;anln1&nbsp;=&nbsp;gs_out-anln1&nbsp;BINARY&nbsp;SEARCH.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_out-zfuxms&nbsp;=&nbsp;ls_anla-txt50.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_out-zfux&nbsp;=&nbsp;gs_out-anln1.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;gs_out-drcrk&nbsp;=&nbsp;'S'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_out-sdmhab&nbsp;=&nbsp;gs_out-hsl.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ELSEIF&nbsp;gs_out-drcrk&nbsp;=&nbsp;'H'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_out-sdmsol&nbsp;=&nbsp;gs_out-hsl.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CLEAR:&nbsp;gs_out-hsl.<br />
+<br />
+&nbsp;&nbsp;&nbsp;"&nbsp;行项目是1的才显示总金额，其余行项目显示空<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;gs_out-docln&nbsp;=&nbsp;'000001'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;lt_out&nbsp;INTO&nbsp;ls_out&nbsp;WHERE&nbsp;drcrk&nbsp;=&nbsp;'S'&nbsp;AND&nbsp;belnr&nbsp;=&nbsp;gs_out-belnr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_out-hsl&nbsp;=&nbsp;ls_out-hsl&nbsp;+&nbsp;gs_out-hsl.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDLOOP.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_out-hsl&nbsp;=&nbsp;abs(&nbsp;gs_out-hsl&nbsp;).<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MODIFY&nbsp;gt_out&nbsp;FROM&nbsp;gs_out.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CLEAR:&nbsp;gs_out.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+ENDFORM.<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Form&nbsp;ALV_DISP<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM alv_disp .<br />
+<br />
+&nbsp;&nbsp;PERFORM:&nbsp;fieldcat.<br />
+<br />
+&nbsp;&nbsp;is_layout_lvc-box_fname&nbsp;=&nbsp;'SEL'.<br />
+&nbsp;&nbsp;is_layout_lvc-cwidth_opt&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;is_layout_lvc-zebra&nbsp;=&nbsp;'X'.<br />
+<br />
+&nbsp;&nbsp;"&nbsp;输出前排序。<br />
+&nbsp;&nbsp;SORT&nbsp;gt_out&nbsp;BY&nbsp;bukrs&nbsp;budat&nbsp;belnr&nbsp;docln.<br />
+<br />
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'REUSE_ALV_GRID_DISPLAY_LVC'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;I_INTERFACE_CHECK&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'&nbsp;'<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;I_BYPASSING_BUFFER&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;I_BUFFER_ACTIVE&nbsp;=<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;I_CALLBACK_PROGRAM&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'&nbsp;'<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;I_CALLBACK_PF_STATUS_SET&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'&nbsp;'<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;I_CALLBACK_USER_COMMAND&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'&nbsp;'<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;I_CALLBACK_TOP_OF_PAGE&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'&nbsp;'<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;I_CALLBACK_HTML_TOP_OF_PAGE&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'&nbsp;'<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;I_CALLBACK_HTML_END_OF_LIST&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'&nbsp;'<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;I_STRUCTURE_NAME&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;I_BACKGROUND_ID&nbsp;=&nbsp;'&nbsp;'<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;I_GRID_TITLE&nbsp;&nbsp;&nbsp;&nbsp;=<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;I_GRID_SETTINGS&nbsp;=<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;is_layout_lvc&nbsp;&nbsp;&nbsp;=&nbsp;is_layout_lvc<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it_fieldcat_lvc&nbsp;=&nbsp;it_fieldcat_lvc[]<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IT_EXCLUDING&nbsp;&nbsp;&nbsp;&nbsp;=<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IT_SPECIAL_GROUPS_LVC&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it_sort_lvc&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;it_sort_lvc[]<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IT_FILTER_LVC&nbsp;&nbsp;&nbsp;=<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IT_HYPERLINK&nbsp;&nbsp;&nbsp;&nbsp;=<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IS_SEL_HIDE&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_default&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'X'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_save&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'A'<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IS_VARIANT&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IT_EVENTS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IT_EVENT_EXIT&nbsp;&nbsp;&nbsp;=<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IS_PRINT_LVC&nbsp;&nbsp;&nbsp;&nbsp;=<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IS_REPREP_ID_LVC&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;I_SCREEN_START_COLUMN&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;0<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;I_SCREEN_START_LINE&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;0<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;I_SCREEN_END_COLUMN&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;0<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;I_SCREEN_END_LINE&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;0<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;I_HTML_HEIGHT_TOP&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;I_HTML_HEIGHT_END&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IT_ALV_GRAPHICS&nbsp;=<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IT_EXCEPT_QINFO_LVC&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IR_SALV_FULLSCREEN_ADAPTER&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=<br />
+*&nbsp;IMPORTING<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;E_EXIT_CAUSED_BY_CALLER&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ES_EXIT_CAUSED_BY_USER&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;TABLES<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;t_outtab&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;gt_out[]<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;program_error&nbsp;&nbsp;&nbsp;=&nbsp;1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTHERS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;2.<br />
+&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;&lt;&gt;&nbsp;0.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Implement&nbsp;suitable&nbsp;error&nbsp;handling&nbsp;here<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+<br />
+ENDFORM.<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Form&nbsp;FIELDCAT<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM fieldcat .<br />
+<br />
+   </div>
+   <div class="codeComment">
+*it_sort_lvc-fieldname&nbsp;=&nbsp;'VBELN'.<br />
+*it_sort_lvc-spos&nbsp;=&nbsp;1.<br />
+*it_sort_lvc-UP&nbsp;=&nbsp;'X'.<br />
+*it_sort_lvc-subtot&nbsp;=&nbsp;'X'.<br />
+*APPEND&nbsp;it_sort_lvc&nbsp;.<br />
+<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;DEFINE&nbsp;fieldcat.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;it_fieldcat_lvc-tabname&nbsp;&nbsp;=&nbsp;'GT_OUT'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;it_fieldcat_lvc-fieldname&nbsp;=&nbsp;&1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;it_fieldcat_lvc-just&nbsp;=&nbsp;&2.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;it_fieldcat_lvc-coltext&nbsp;=&nbsp;&3.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;it_fieldcat_lvc-ref_field&nbsp;=&nbsp;&4.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;it_fieldcat_lvc-ref_table&nbsp;=&nbsp;&5.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;it_fieldcat_lvc-no_zero&nbsp;=&nbsp;'X'.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;it_fieldcat_lvc-fieldname&nbsp;=&nbsp;'SDMHAB'.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it_fieldcat_lvc-do_sum&nbsp;=&nbsp;'X'.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;it_fieldcat_lvc&nbsp;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR:&nbsp;it_fieldcat_lvc.<br />
+&nbsp;&nbsp;END-OF-DEFINITION.<br />
+&nbsp;&nbsp;fieldcat:<br />
+&nbsp;&nbsp;'BUKRS'&nbsp;&nbsp;&nbsp;&nbsp;'C'&nbsp;'公司代码'&nbsp;&nbsp;'BUKRS'&nbsp;'BKPF'&nbsp;&nbsp;,<br />
+&nbsp;&nbsp;'BUDAT'&nbsp;&nbsp;&nbsp;&nbsp;'C'&nbsp;'过账日期'&nbsp;&nbsp;'BUDAT'&nbsp;'BKPF'&nbsp;&nbsp;,<br />
+&nbsp;&nbsp;'BLART'&nbsp;&nbsp;&nbsp;&nbsp;'C'&nbsp;'凭证类型'&nbsp;&nbsp;'BLART'&nbsp;'BKPF'&nbsp;&nbsp;,<br />
+&nbsp;&nbsp;'LTEXT'&nbsp;&nbsp;&nbsp;&nbsp;'L'&nbsp;'凭证类型描述'&nbsp;&nbsp;'LTEXT'&nbsp;'T003T'&nbsp;,<br />
+&nbsp;&nbsp;'BELNR'&nbsp;&nbsp;&nbsp;&nbsp;'C'&nbsp;'凭证编码'&nbsp;&nbsp;'BELNR'&nbsp;'BKPF'&nbsp;&nbsp;,<br />
+&nbsp;&nbsp;'XBLNR'&nbsp;&nbsp;&nbsp;&nbsp;'L'&nbsp;'凭证摘要'&nbsp;&nbsp;'XBLNR'&nbsp;'BKPF'&nbsp;&nbsp;,<br />
+&nbsp;&nbsp;'DOCLN'&nbsp;&nbsp;&nbsp;&nbsp;'C'&nbsp;'凭证行项目'&nbsp;'DOCLN'&nbsp;'ACDOCA'&nbsp;&nbsp;,<br />
+&nbsp;&nbsp;'HSL'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'R'&nbsp;'总金额'&nbsp;'HSL'&nbsp;'ACDOCA'&nbsp;&nbsp;,<br />
+&nbsp;&nbsp;'NAME_TEXT'&nbsp;'L'&nbsp;'制单人（描述）'&nbsp;'NAME_TEXT'&nbsp;'ADRP'&nbsp;&nbsp;,<br />
+&nbsp;&nbsp;'RACCT'&nbsp;&nbsp;&nbsp;&nbsp;'C'&nbsp;'会计科目'&nbsp;&nbsp;'RACCT'&nbsp;'ACDOCA'&nbsp;&nbsp;,<br />
+&nbsp;&nbsp;'TXT50'&nbsp;&nbsp;&nbsp;&nbsp;'L'&nbsp;'会计科目描述'&nbsp;&nbsp;'TXT50'&nbsp;'SKAT',<br />
+&nbsp;&nbsp;'ZFUX'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'C'&nbsp;'辅助项'&nbsp;''&nbsp;&nbsp;'',<br />
+&nbsp;&nbsp;'ZFUXMS'&nbsp;&nbsp;&nbsp;'L'&nbsp;'辅助项描述'&nbsp;''&nbsp;&nbsp;'',<br />
+&nbsp;&nbsp;'SDMHAB'&nbsp;&nbsp;&nbsp;'R'&nbsp;'借方金额'&nbsp;&nbsp;'HSL'&nbsp;'ACDOCA',<br />
+&nbsp;&nbsp;'SDMSOL'&nbsp;&nbsp;&nbsp;'R'&nbsp;'贷方金额'&nbsp;&nbsp;'HSL'&nbsp;'ACDOCA'.<br />
+<br />
+<br />
+<br />
+ENDFORM.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*Text&nbsp;elements<br />
+*----------------------------------------------------------<br />
+*&nbsp;001&nbsp;选择条件<br />
+<br />
+<br />
+*Selection&nbsp;texts<br />
+*----------------------------------------------------------<br />
+*&nbsp;P_BUKRS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;公司代码<br />
+*&nbsp;P_DRCRK&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;方向<br />
+*&nbsp;P_USNAM&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;制单人<br />
+*&nbsp;P_XBLNR&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;摘要<br />
+*&nbsp;S_ANLN1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;资产<br />
+*&nbsp;S_BELNR&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;凭证编号<br />
+*&nbsp;S_BLART&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;凭证类型<br />
+*&nbsp;S_BUDAT&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;过账日期<br />
+*&nbsp;S_KUNNR&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;客户<br />
+*&nbsp;S_LIFNR&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;供应商<br />
+*&nbsp;S_RACCT&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;科目编号<br />
+            </div>
+          </td>
+        </tr>
+      </table>
+      </td>
+      </tr>
+   <tr>
+<td class="footer">Extracted by Mass Download version 1.5.2 - E.G.Mellodew. 1998-2022. Sap Release 755</td>
+   </tr>
+</table>
+</body>
+</html>
